@@ -68,40 +68,37 @@ const UpdateProfile = () => {
     // const isFormValid =
     //   formik.isValid && Object.keys(formik.touched).length > 0;
 
-    const isFormInvalid = formik.isValid;
-    if (formik.dirty) {
-      enqueueSnackbar("Please fill in all required fields", {
-        variant: "error",
-      });
-      formik.setTouched({
-        patient_first_name: true,
-        patient_last_name: true,
-        patient_email: true,
-        patient_gender: true,
-        patient_dob: true,
-        city_id: true,
-        state_id: true,
-        zip_code_id: true,
-        policy_number: true,
-        apartment: true,
-        address1: true,
-        insurance_company: true,
-      });
-      return;
-    }
+    // const isFormInvalid = formik.isValid;
+    // if (formik.dirty) {
+    //   enqueueSnackbar("Please fill in all required fields", {
+    //     variant: "error",
+    //   });
+    //   formik.setTouched({
+    //     patient_first_name: true,
+    //     patient_last_name: true,
+    //     patient_email: true,
+    //     patient_gender: true,
+    //     patient_dob: true,
+
+    //     policy_number: true,
+    //     apartment: true,
+    //     address1: true,
+    //   });
+    //   return;
+    // }
     const data = {
       patient_first_name: formik.values.patient_first_name,
       patient_last_name: formik.values.patient_last_name,
       patient_email: formik.values.patient_email,
-      insurance_company: selectedItemList.insurance,
+      insurance_company: selectedItemList.insurance.id,
       policy_number: formik.values.policy_number,
       address1: formik.values.address1,
-      zip_code_id: selectedItemList.zip_code_id,
+      zip_code_id: selectedItemList.zip_code_id.id,
       apartment: formik.values.apartment,
       patient_gender: formik.values.patient_gender,
       patient_dob: formik.values.patient_dob,
-      city_id: selectedItemList.city_id,
-      state_id: selectedItemList.state,
+      city_id: selectedItemList.city_id.id,
+      state_id: selectedItemList.state.id,
     };
     // console.log(data, "im data");
     console.log(data, "im data");
@@ -343,7 +340,9 @@ const UpdateProfile = () => {
                   id="insurance_company"
                   name="insurance_company"
                   onBlur={formik.handleBlur}
-                  value={selectedItemList.insurance || ""}
+                  value={
+                    selectedItemList.insurance.insurance_company_name || ""
+                  }
                   placeholder="select"
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
@@ -380,7 +379,14 @@ const UpdateProfile = () => {
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
                             onClick={() =>
-                              handleSelectedItem(item.id, "insurance")
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  insurance_company_name:
+                                    item.insurance_company_name,
+                                },
+                                "insurance"
+                              )
                             }
                           >
                             {item.insurance_company_name}
@@ -537,7 +543,7 @@ const UpdateProfile = () => {
                   type="text"
                   name="city_id"
                   id="city_id"
-                  value={selectedItemList.city_id}
+                  value={selectedItemList.city_id.city_name}
                   onFocus={() => setCityDropDown(true)}
                   placeholder="city"
                   autoComplete="nope"
@@ -559,7 +565,13 @@ const UpdateProfile = () => {
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
                             onClick={() =>
-                              handleSelectedItem(item.id, "city_id")
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  city_name: item.city_name,
+                                },
+                                "city_id"
+                              )
                             }
                           >
                             {item.city_name}
@@ -582,7 +594,7 @@ const UpdateProfile = () => {
                   type="text"
                   name="zip_code_id"
                   id="zip_code_id"
-                  value={selectedItemList.zip_code_id}
+                  value={selectedItemList.zip_code_id.zip}
                   placeholder="zip code"
                   autoComplete="nope"
                   onFocus={() => setZipCodeDropDown(true)}
@@ -609,7 +621,13 @@ const UpdateProfile = () => {
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
                             onClick={() =>
-                              handleSelectedItem(item.id, "zip_code_id")
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  zip: item.zip,
+                                },
+                                "zip_code_id"
+                              )
                             }
                           >
                             {item.zip}
@@ -630,7 +648,7 @@ const UpdateProfile = () => {
                   name="state"
                   id="state"
                   placeholder="select"
-                  value={selectedItemList.state || ""}
+                  value={selectedItemList.state.state_name || ""}
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 <img
@@ -655,7 +673,15 @@ const UpdateProfile = () => {
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
-                            onClick={() => handleSelectedItem(item.id, "state")}
+                            onClick={() =>
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  state_name: item.state_name,
+                                },
+                                "state"
+                              )
+                            }
                           >
                             {item.state_name}
                           </li>
@@ -670,7 +696,6 @@ const UpdateProfile = () => {
           <Button
             onClick={handleSubmit}
             type="submit"
-            disabled={!formik.isValid || !formik.dirty}
             className="bg-verifiCation cursor-pointer text-white font-sansMedium text-[14px] py-2 px-10 rounded-full"
           >
             Update

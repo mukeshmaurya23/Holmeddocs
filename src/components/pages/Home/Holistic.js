@@ -192,100 +192,6 @@ const Holistic = () => {
     navigate(url);
   };
 
-  //create a api calls for handleSearcg
-  // const [searchLocationItem, setSearchLocationItem] = useState([]);
-
-  // // const searchLocationItemData = async (searchValue) => {
-  // //   try {
-  // //     const response = await customAxios.post("patient/master/areas", {
-  // //       name: searchValue,
-  // //     });
-  // //     const data = response?.data?.data?.result || [];
-  // //     setSearchLocationItem(data);
-  // //     console.log(data);
-  // //   } catch (error) {
-  // //     console.log(error);
-  // //   }
-  // // };
-  // const [searchValue, setSearchValue] = useState("");
-
-  // const handleLocationSearch = (e) => {
-  //   setSearchValue(e.target.value);
-  // };
-
-  // useEffect(() => {
-  //   let isMounted = true; // Add a flag to track if the component is still mounted
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await customAxios.post("patient/master/areas", {
-  //         name: searchValue,
-  //       });
-
-  //       if (isMounted) {
-  //         const data = response?.data?.data?.result || [];
-  //         setSearchLocationItem(data);
-  //         console.log(data);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   if (searchValue) {
-  //     const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
-
-  //     return () => {
-  //       clearTimeout(timer);
-  //       isMounted = false;
-  //     };
-  //   }
-  // }, [searchValue]);
-
-  // const handleSearch = () => {
-  //   //
-  //   navigate(
-  //     `/doctor-listing?location=${selectedItemList.location}&speciality=${
-  //       selectedItemList.specialitycondition
-  //     }&conditions=${selectedItemList.specialitycondition}
-  //     &date=${startDate.toDateString()}`
-  //   );
-  // };
-  // const handleSearch = () => {
-  //   let url = "/doctor-listing?";
-
-  //   if (selectedItemList.location) {
-  //     url += `location=${selectedItemList.location}&`;
-  //   }
-  //   if (selectedItemList.specialitycondition) {
-  //     url += `speciality=${selectedItemList.specialitycondition}&`;
-
-  //   }
-
-  //   url += `date=${startDate.toDateString()}`;
-
-  //   navigate(url);
-  // };
-
-  // const locationItems = () => {
-  //   if (status === "loading") {
-  //     return <Spinner />;
-  //   }
-
-  //   return locationAreas?.map((item) => {
-  //     return (
-  //       <h1
-  //         key={item.id}
-  //         onClick={() =>
-  //           handleSelectedItem(item.city, "location", item.zip_code_id)
-  //         }
-  //         className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
-  //       >
-  //         {item.city}
-  //       </h1>
-  //     );
-  //   });
-  // };
   const locationItems = () => {
     if (status === "loading") {
       return <Spinner />;
@@ -490,7 +396,7 @@ const Holistic = () => {
             </div>
             {selectedItem === "location" && (
               <div
-                className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                className="absolute top-[4rem] 2xl:top-[5rem]  bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                 style={{
                   zIndex: 1,
                 }}
@@ -508,7 +414,7 @@ const Holistic = () => {
                   condSpecSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px] pr-8 pl-0  placeHolderText"
               />
               <div
                 className=" cursor-pointer"
@@ -524,7 +430,7 @@ const Holistic = () => {
               </div>
               {selectedItem === "speciality" && (
                 <div
-                  className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                  className="absolute top-[4rem] 2xl:top-[5rem]  bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                   style={{
                     zIndex: 1,
                   }}

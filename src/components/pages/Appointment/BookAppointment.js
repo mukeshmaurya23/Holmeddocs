@@ -4,8 +4,10 @@ import BookAppointmentStep2 from "./BookAppointmentStep2";
 
 const BookAppointment = () => {
   const [step, setStep] = useState(1);
-
-  const handleNextStep = () => {
+  const [responseData, setResponseData] = useState([]);
+  const handleNextStep = (response) => {
+    setResponseData(response?.data?.data?.result);
+    console.log(response);
     if (step === 3) {
       return;
     }
@@ -13,7 +15,7 @@ const BookAppointment = () => {
   };
   const steps = {
     1: <BookAppointmentStep1 handleNextStep={handleNextStep} />,
-    2: <BookAppointmentStep2 />,
+    2: <BookAppointmentStep2 responseData={responseData} />,
   };
 
   return <>{steps[step]}</>;

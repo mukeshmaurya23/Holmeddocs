@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 
 import loadingGif from "../../../images/icons/Loader.gif";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const DoctorsList = ({ doctorsList, status }) => {
-  //   const dispatch = useDispatch();
-  //   const { data: doctorsList, status } = useSelector((state) => state.api);
+  const { id, doctorName } = useParams();
+  console.log(id, doctorName, "doctorName a and id .........");
 
-  //   console.log(doctorsList, "doctorsList");
-
-  //   useEffect(() => {
-  //     dispatch(fetchData("/patient/doctors"));
-  //   }, [dispatch]);
   console.log(doctorsList, "doctorsList from listing");
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
@@ -109,13 +104,13 @@ const DoctorsList = ({ doctorsList, status }) => {
               ))}
             </div>
             <div className="flex gap-10 py-5 px-5 justify-between items-center">
-              <Link to={`/doctor-listing/${doctor?.id}`}>
+              <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
                 <button className="bg-verifiCation rounded-full font-sansBold text-xs text-white px-5 py-2">
                   SCHEDULE AN APPOINTMENT
                 </button>
               </Link>
 
-              <Link to={`/doctor-listing/${doctor?.id}`}>
+              <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
                 <p className="text-[#CF8B15] cursor-pointer underline">
                   View More
                 </p>
