@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: sansBold;
+  src: url("./assets/fonts/Sans/OpenSans-Bold.ttf");
+}
+
+@font-face {
+  font-family: sansRegular;
+  src: url("./assets/fonts/Sans/OpenSans-Regular.ttf");
+}
+@font-face {
+  font-family: sansLight;
+  src: url("./assets/fonts/Sans/OpenSans-Light.ttf");
+}
+
+@font-face {
+  font-family: sansSemiBold;
+  src: url("./assets/fonts/Sans/OpenSans-SemiBold.ttf");
+}
+@font-face {
+  font-family: bahnschrift;
+  src: url("./assets/fonts/Bahnschrift/Bahnschrift\ Regular.ttf");
+}
