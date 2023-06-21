@@ -4,7 +4,10 @@ import Label from "../../../util/Label";
 import eyeClose from "../../../images/Login/Eye.png";
 import eyeOpen from "../../../images/Login/EyeVisible.png";
 import Button from "../../../util/Button";
-const Step3Forgot = () => {
+// import { registerSchema } from "../../schema/formValidation";
+// import { useFormik } from "formik";
+
+const Step3Forgot = ({ formik }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -15,6 +18,18 @@ const Step3Forgot = () => {
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
+  // const formik = useFormik({
+  //   initialValues: {
+  //     password: "",
+  //     confirmPassword: "",
+  //   },
+
+  //   validationSchema: registerSchema,
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  // });
+  const { touched, errors, values } = formik;
   return (
     <>
       <div className="flex flex-col  py-2 px-14">
@@ -61,18 +76,26 @@ const Step3Forgot = () => {
         <div className="max-w-[500px] mt-12 mx-8">
           <div className="flex flex-col space-y-2 w-full relative p-[10px]">
             <Label
-              htmlFor="Password"
+              htmlFor="password"
               className="font-sansRegular text-formLabel text-sm"
             >
               Enter Password
             </Label>
             <Input
               type={isPasswordVisible ? "text" : "password"}
-              name="Password"
+              name="password"
               id="Password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              onBlur={formik.handleBlur}
               placeholder="●●●●●●●●"
               className="border border-verifiCation text-formLabel rounded-md py-1 px-4"
             />
+            {touched.password && errors.password ? (
+              <div className="text-red-600 text-xs mt-1">
+                {formik.errors.password}
+              </div>
+            ) : null}
             <Button
               type="button"
               className="absolute top-11 right-5"
@@ -97,9 +120,17 @@ const Step3Forgot = () => {
               type={isConfirmPasswordVisible ? "text" : "password"}
               name="confirmPassword"
               id="confirmPassword"
+              onChange={formik.handleChange}
+              value={formik.values.confirmPassword}
+              onBlur={formik.handleBlur}
               placeholder="●●●●●●●●"
               className="border border-verifiCation text-formLabel rounded-md py-1 px-4"
             />
+            {touched.confirmPassword && errors.confirmPassword ? (
+              <div className="text-red-600 text-xs mt-1 ml-2">
+                {formik.errors.confirmPassword}
+              </div>
+            ) : null}
             <Button
               type="button"
               className="absolute top-11 right-5"

@@ -31,27 +31,27 @@ const Otp = () => {
                 <div className="max-w-[500px]">
                   <div className="flex items-center justify-between mt-2 px-5">
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       className="border border-verifiCation rounded-md py-2  px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
                     />
                   </div>

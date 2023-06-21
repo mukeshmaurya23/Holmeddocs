@@ -7,6 +7,8 @@ import eyeClose from "../../../images/Login/Eye.png";
 import eyeOpen from "../../../images/Login/EyeVisible.png";
 import Aside from "../../../util/Aside";
 import Modal from "../../../UI/Modal";
+import { useFormik } from "formik";
+import { resetSchema } from "../../schema/formValidation";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -32,6 +34,29 @@ const ChangePassword = () => {
     setIsModalOpen(false);
   };
 
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+    validationSchema: resetSchema,
+  });
+  const handleContinue = () => {
+    formik.setTouched({
+      oldPassword: true,
+      newPassword: true,
+      confirmPassword: true,
+    });
+
+    if (formik.dirty && formik.isValid) {
+      openModal();
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col h-screen">
@@ -51,7 +76,7 @@ const ChangePassword = () => {
                   Change password?
                 </h2>
 
-                <form className="mb-6">
+                <form className="mb-6" onSubmit={formik.handleSubmit}>
                   <div className="flex flex-wrap  sm:px-24 py-4 ">
                     <div className="flex flex-col space-y-2 w-full relative py-[16px]">
                       <Label
@@ -65,8 +90,17 @@ const ChangePassword = () => {
                         name="oldPassword"
                         id="oldPassword"
                         placeholder="●●●●●●●●"
+                        onChange={formik.handleChange}
+                        value={formik.values.oldPassword}
+                        onBlur={formik.handleBlur}
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
+                      {formik.errors.oldPassword &&
+                      formik.touched.oldPassword ? (
+                        <div className="text-red-600 text-xs">
+                          {formik.errors.oldPassword}
+                        </div>
+                      ) : null}
                       <Button
                         type="button"
                         className="absolute top-[3.2rem] right-4"
@@ -92,8 +126,17 @@ const ChangePassword = () => {
                         name="newPassword"
                         id="newPassword"
                         placeholder="●●●●●●●●"
+                        onChange={formik.handleChange}
+                        value={formik.values.newPassword}
+                        onBlur={formik.handleBlur}
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
+                      {formik.errors.newPassword &&
+                      formik.touched.newPassword ? (
+                        <div className="text-red-600 text-xs">
+                          {formik.errors.newPassword}
+                        </div>
+                      ) : null}
                       <Button
                         type="button"
                         className="absolute top-[3.2rem] right-4"
@@ -118,9 +161,18 @@ const ChangePassword = () => {
                         type={isConfirmPasswordVisible ? "text" : "password"}
                         name="confirmPassword"
                         id="confirmPassword"
+                        onChange={formik.handleChange}
+                        value={formik.values.confirmPassword}
+                        onBlur={formik.handleBlur}
                         placeholder="●●●●●●●●"
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
+                      {formik.errors.confirmPassword &&
+                      formik.touched.confirmPassword ? (
+                        <div className="text-red-600 text-xs">
+                          {formik.errors.confirmPassword}
+                        </div>
+                      ) : null}
                       <Button
                         type="button"
                         className="absolute top-[3.2rem] right-4"
@@ -141,8 +193,9 @@ const ChangePassword = () => {
             <div className="sm:absolute bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">
               <div className="">
                 <Button
-                  className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
-                  onClick={openModal}
+                  className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black 
+                 `}
+                  onClick={handleContinue}
                 >
                   Continue
                 </Button>

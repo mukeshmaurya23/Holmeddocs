@@ -18,6 +18,8 @@ module.exports = {
         formLabel: "#757993",
         otpText: " #545871",
         forgotPassword: "#292F33",
+        navText: "#252525",
+        yellowText: "#CF8B15",
       },
     },
   },

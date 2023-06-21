@@ -1,8 +1,18 @@
 import React from "react";
 import Input from "../../../util/Input";
 import Label from "../../../util/Label";
-import step1 from "../../../images/Login/1.jpg";
-const Step1Forgot = () => {
+
+const Step1Forgot = ({ formik }) => {
+  // const formik = useFormik({
+  //   initialValues: {
+  //     mobileNumber: "",
+  //   },
+  //   validationSchema: loginSchema,
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  // });
+  const { touched, errors, values } = formik;
   return (
     <>
       <div className="flex flex-col px-3 sm:px-14 py-3">
@@ -58,9 +68,17 @@ const Step1Forgot = () => {
               type="number"
               name="mobileNumber"
               id="mobileNumber"
+              onChange={formik.handleChange}
+              value={values.mobileNumber}
+              onBlur={formik.handleBlur}
               placeholder="+1 xxx xxx xxxx"
               className="border border-verifiCation text-formLabel rounded-md py-1 px-4 outline-none focus:border-verifiCation"
             />
+            {touched.mobileNumber && errors.mobileNumber ? (
+              <div className="text-red-600 text-xs mt-1">
+                {formik.errors.mobileNumber}
+              </div>
+            ) : null}
           </div>
           <div className="max-w-[340px]">
             <p className="font-sansRegular text-xs text-[#757993] py-5 mt-2">

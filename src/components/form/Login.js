@@ -7,11 +7,33 @@ import Button from "../../util/Button";
 import image from "../../images/Login/Login.jpg";
 import { Link } from "react-router-dom";
 import Aside from "../../util/Aside";
+import { loginSchema } from "../schema/formValidation";
+import { useFormik } from "formik";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      mobileNumber: "",
+      Password: "",
+      checkbox: false,
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
+  const handleContinue = () => {
+    formik.setTouched({
+      mobileNumber: true,
+      Password: true,
+      checkbox: true,
+    });
   };
 
   return (
@@ -38,7 +60,7 @@ const Login = () => {
                   We care for your body. It’s the only place you have to live
                   in.
                 </p>
-                <form className="mb-6">
+                <form className="mb-6" onSubmit={formik.handleSubmit}>
                   <div className="flex flex-wrap  sm:px-24 py-4 ">
                     <div className="flex flex-col space-y-2 w-full py-[0px]">
                       <Label
@@ -51,9 +73,18 @@ const Login = () => {
                         type="number"
                         name="mobileNumber"
                         id="mobileNumber"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.mobileNumber}
                         placeholder="+1 xxx xxx xxxx"
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
+                      {formik.touched.mobileNumber &&
+                      formik.errors.mobileNumber ? (
+                        <div className="text-red-600 text-xs mt-1 ml-1">
+                          {formik.errors.mobileNumber}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="flex flex-col space-y-2 w-full relative py-[16px]">
                       <Label
@@ -67,8 +98,17 @@ const Login = () => {
                         name="Password"
                         id="Password"
                         placeholder="●●●●●●●●"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.Password}
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
+                      {formik.touched.Password && formik.errors.Password ? (
+                        <div className="text-red-600 text-xs mt-1 ml-1">
+                          {formik.errors.Password}
+                        </div>
+                      ) : null}
+
                       <Button
                         type="button"
                         className="absolute top-[3.2rem] right-4"
@@ -93,8 +133,13 @@ const Login = () => {
                     <div className="flex ">
                       <Input
                         type="checkbox"
+                        name="checkbox"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.checkbox}
                         className="rounded border-none outline-verifiCation w-4 h-4 accent-verifiCation transition-all delay-200"
                       />
+
                       <Label
                         htmlFor="terms"
                         className="font-sansRegular  ml-2 text-[0.8rem] text-[#757993]"
@@ -103,6 +148,11 @@ const Login = () => {
                         Service.
                       </Label>
                     </div>
+                    {formik.touched.checkbox && formik.errors.checkbox ? (
+                      <div className="text-red-600 text-xs mt-3 ml-0">
+                        {formik.errors.checkbox}
+                      </div>
+                    ) : null}
                   </div>
                 </form>
               </div>
@@ -115,8 +165,15 @@ const Login = () => {
                 Don’t have an account? Signup
               </Link>
               <Button
-                className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
+                className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full py-2 bg-white text-black `}
                 type="submit"
+                onClick={handleContinue}
+                // disabled={!(formik.isValid && formik.dirty)}
+                /**${
+                  !(formik.isValid && formik.dirty)
+                    ? "bg-gray-200 cursor-not-allowed"
+                    : "bg-white"
+                } */
               >
                 Login
               </Button>
