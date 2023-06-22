@@ -7,7 +7,7 @@ const Specialistic = () => {
   useEffect(() => {
     const getSpecialistData = async () => {
       const response = await fetch(
-        "http://192.168.1.35/holmeddoc/patient/master/speciality",
+        "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
         {
           method: "POST",
           headers: {
@@ -15,8 +15,6 @@ const Specialistic = () => {
             Authorization: basic_token,
             platform: "web",
           },
-          
-          
         }
       );
       const data = await response.json();
@@ -30,26 +28,42 @@ const Specialistic = () => {
 
   return (
     <>
-      <div className="container bg-[#ffffff]">
-        <div className="text-center">
-          <p className="font-sansBold tracking-[3px] font-semibold text-[#292F33]">
+      <div className=" bg-[#ffffff]">
+        <div className="text-center  mt-10">
+          <p className="font-sansBold tracking-[5px] text-4xl text-[#292F33]">
             Holistic fields
           </p>
-          <div>
-            <p className="font-sansBold text-sm tracking-[3px] text-[#292F33]">
+          <div className="flex mt-7">
+            <p className="font-sansBold items-center flex-1 tracking-[3px] text-xl ml-[6rem] text-[#292F33]">
               15 + Specialities
             </p>
-            <button className="text-yellowText tracking-[3px] font-sansRegular">
+            <button className=" pr-10 text-yellowText tracking-[3px] text-md font-semibold font-sansRegular">
               See More
             </button>
           </div>
         </div>
-        <div className="flex flex-row  flex-wrap px-10 py-10 mt-10">
-          {specialistData?.data?.result.map((item, index) => (
-            <div className="flex flex-col w-1/5 items-center mb-6" key={index}>
-              <img src={item.image} alt="" className="h-16 w-16" />
-              <h2>{item.medical_speciality_name}</h2>
-              <p>{item.description}</p>
+
+        <div className="flex ml-24 py-2  flex-wrap  mt-[5rem]">
+          {specialistData?.data?.result.slice(0, 5).map((item, index) => (
+            <div className="flex flex-col w-1/5  " key={index}>
+              <div className="">
+                <img
+                  src={item.image}
+                  alt=""
+                  className="sm:h-[120px] sm:w-[134px]"
+                />
+              </div>
+              <div className>
+                <h2 className="font-sansBold text-xl text-[#292F33] tracking-[3px] mt-5">
+                  {item.medical_speciality_name}
+                </h2>
+              </div>
+              <div className="mt-4"></div>{" "}
+              <div className="">
+                <p className="text-[#545871] font-sans text-sm">
+                  {item.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>

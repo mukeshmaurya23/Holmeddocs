@@ -1,33 +1,88 @@
-/**<nav class="flex items-center justify-between px-9 py-8">
-  <div class="flex items-center">
-    <ul class="flex gap-4">
-      <li>MAKE AN APPOINTMENT</li>
-      <div class="mt-1 h-4 border-l border-black"></div>
-      <li>BROWSE</li>
-    </ul>
-  </div>
+export const SCHEDULE_DUMMY_DATA = [
+  {
+    id: "0",
+    date: "Saturday Feburary 20th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    dogName: "Ginger Fisher",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYwqLItU-WEM04wB8BjhB01Mgl1hk-Mf_I_PlSE9NPCqbvxjbQw2mf7L1gep6Pq8RoBjg&usqp=CAU",
+    address: "123 Fluffypants Lane Pawtown FL 32789 123-468-8901",
+    text: "Please be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: "Andrew Couldwell",
+    rating: "4.8",
+  },
+  {
+    id: "1",
+    date: "Sunday Feburary 21th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    dogName: "Horse Fisher",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEQPmLXIAWoZWYvvv1eJVU0AUonKfv3HPQWC8hYEbseG61iwvGAJmTlTtqWEu2n7Gc4ig&usqp=CAU",
 
-  <div class="relative flex items-center">
-    <div class="absolute -right-5 -top-0 bottom-0 flex h-16 w-16 items-center justify-center rounded-full bg-gray-300">
-      <!-- Logo -->
-      <!-- <img src="logo.png" alt="Logo"> -->
-    </div>
-  </div>
+    address: "124 Fluffypants Lane Pawtown FL 32789 123-468-8901",
+    text: "Please be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: "Max Couldwell",
+    rating: "4.7",
+  },
+  {
+    id: "2",
+    date: "Monday Feburary 22th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    dogName: "Holiver",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLZxjvb77TvWUNW6qe5uUpDIl1G1TiL_k8nD7HFA39xS2Ha-bxivdJMqplPoMuP0ev0s&usqp=CAU",
 
-  <div class="flex items-center">
-    <ul class="flex gap-4">
-      <li class="uppercase">about us</li>
-      <div class="mt-1 h-4 border-l border-black"></div>
-      <li class="uppercase">Login/Signup</li>
-      <li class="h-6 w-6 rounded-full bg-black" />
-    </ul>
-  </div>
-</nav>
+    address: "321 Fluffypants Lane Pawtown FL 32789 123-468-8901",
+    text: "Please be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: "John Doe",
+    rating: "4.9",
+  },
+];
 
-<div class="h-screen bg-[#E2F6F3]">
-  <div class="h flex justify-center bg-[#E2F6F3]">
-    <div class="h-[5rem] w-[10rem] rounded-b-full bg-white"></div>
-  </div>
-  <p class="mt-8 text-center">hello</p>
-</div>
- */
+export const COMPLETED_DUMMY_DATA = [
+  {
+    id: "0",
+    date: "Saturday Feburary 20th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEQPmLXIAWoZWYvvv1eJVU0AUonKfv3HPQWC8hYEbseG61iwvGAJmTlTtqWEu2n7Gc4ig&usqp=CAU",
+
+    text: "Please be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: "Andrew Couldwell",
+    rating: "4.8",
+    arrivalTime: "10:00",
+    departureTime: "10:45",
+  },
+  {
+    id: "1",
+    date: "Saturday Feburary 21th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLZxjvb77TvWUNW6qe5uUpDIl1G1TiL_k8nD7HFA39xS2Ha-bxivdJMqplPoMuP0ev0s&usqp=CAU",
+
+    text: "Please be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: "Max Couldwell",
+    rating: "4.8",
+    arrivalTime: "11:00",
+    departureTime: "12:45",
+  },
+  {
+    id: "2",
+    date: "Saturday Feburary 22th",
+    tag1: "Dog walk",
+    tag2: "Morning",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLZxjvb77TvWUNW6qe5uUpDIl1G1TiL_k8nD7HFA39xS2Ha-bxivdJMqplPoMuP0ev0s&usqp=CAU",
+
+    text: "Hello There be sure to give he the antibiotics they are on the kitchen counter ",
+    sitterName: " Couldwell",
+    rating: "4.8",
+    arrivalTime: "11:00",
+    departureTime: "12:45",
+  },
+];

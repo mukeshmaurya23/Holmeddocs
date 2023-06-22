@@ -6,6 +6,8 @@ import ForgotPassword from "./components/form/ForgotPassword";
 import ChangePassword from "./components/pages/forgotSteps/ChangePassword";
 import Navbar from "./UI/Navbar";
 import Specialistic from "./components/pages/Home/Specialistic/Specialistic";
+import SideBar from "./components/pages/Home/pages/Sidebar";
+import Appointment from "./components/pages/Home/Appointment/Appointment";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -35,6 +37,16 @@ const appRouter = createBrowserRouter([
   {
     path: "/special",
     element: <Specialistic />,
+  },
+  {
+    path: "/sidebar",
+    element: <SideBar />,
+    children: [
+      {
+        index: true,
+        element: <Appointment />,
+      },
+    ],
   },
 ]);
 function App() {
