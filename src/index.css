@@ -24,3 +24,8 @@
   font-family: bahnschrift;
   src: url("./assets/fonts/Bahnschrift/Bahnschrift\ Regular.ttf");
 }
+
+@font-face {
+  font-family: poppinRegular;
+  src: url("./assets/fonts/poppins/Poppins-Regular.ttf");
+}

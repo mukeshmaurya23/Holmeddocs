@@ -9,6 +9,7 @@ module.exports = {
         sansSemibold: ["sansSemibold", "sans-serif"],
         bahnschrift: ["bahnschrift", "sans-serif"],
         sansLight: ["sansLight", "sans-serif"],
+        poppinRegular: ["poppinRegular", "sans-serif"],
       },
       colors: {
         greenMain: "#e2f6f3",

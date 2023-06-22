@@ -8,10 +8,23 @@ import Navbar from "./UI/Navbar";
 import Specialistic from "./components/pages/Home/Specialistic/Specialistic";
 import SideBar from "./components/pages/Home/pages/Sidebar";
 import Appointment from "./components/pages/Home/Appointment/Appointment";
+import AllSpecialistic from "./components/pages/Home/Specialistic/AllSpecialistic";
+import Navbar2 from "./UI/Navbar2";
+import MainContainer from "./UI/MainContainer";
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navbar />,
+    element: <Navbar2 />,
+    children: [
+      {
+        path: "/",
+        element: <MainContainer />,
+      },
+      {
+        path: "/specialist",
+        element: <AllSpecialistic />,
+      },
+    ],
   },
   {
     path: "/register",
@@ -38,6 +51,7 @@ const appRouter = createBrowserRouter([
     path: "/special",
     element: <Specialistic />,
   },
+
   {
     path: "/sidebar",
     element: <SideBar />,

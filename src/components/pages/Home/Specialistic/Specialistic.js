@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
+import SpecialistCard from "./SpecialistCard";
+import Footer from "../../../../UI/Footer";
 const Specialistic = () => {
   const [specialistData, setSpecialistData] = useState([]);
-  const basic_token = "Basic YWRtaW46bXlwY290";
 
   useEffect(() => {
-    const getSpecialistData = async () => {
+    const fetchData = async () => {
       const response = await fetch(
         "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: basic_token,
+            Authorization: "Basic YWRtaW46bXlwY290",
             platform: "web",
           },
         }
       );
       const data = await response.json();
-      console.log(data);
-      setSpecialistData(data);
+      setSpecialistData(data?.data?.result.slice(0, 4));
     };
-    getSpecialistData();
-  }, []);
 
-  console.log(specialistData, "specialistData");
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -37,36 +36,14 @@ const Specialistic = () => {
             <p className="font-sansBold items-center flex-1 tracking-[3px] text-xl ml-[6rem] text-[#292F33]">
               15 + Specialities
             </p>
-            <button className=" pr-10 text-yellowText tracking-[3px] text-md font-semibold font-sansRegular">
-              See More
-            </button>
+            <Link to="/specialist">
+              <button className=" pr-10 text-[#CF8B15] tracking-[3px] text-md font-semibold font-sansRegular">
+                See More
+              </button>
+            </Link>
           </div>
         </div>
-
-        <div className="flex ml-24 py-2  flex-wrap  mt-[5rem]">
-          {specialistData?.data?.result.slice(0, 5).map((item, index) => (
-            <div className="flex flex-col w-1/5  " key={index}>
-              <div className="">
-                <img
-                  src={item.image}
-                  alt=""
-                  className="sm:h-[120px] sm:w-[134px]"
-                />
-              </div>
-              <div className>
-                <h2 className="font-sansBold text-xl text-[#292F33] tracking-[3px] mt-5">
-                  {item.medical_speciality_name}
-                </h2>
-              </div>
-              <div className="mt-4"></div>{" "}
-              <div className="">
-                <p className="text-[#545871] font-sans text-sm">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <SpecialistCard specialistData={specialistData} />
       </div>
     </>
   );

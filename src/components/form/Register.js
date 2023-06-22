@@ -82,11 +82,14 @@ const Register = () => {
                           placeholder="Enter your first name"
                           className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4"
                         />
-                        {formik.touched.firstName && formik.errors.firstName ? (
-                          <div className="text-red-600 text-xs mt-1">
-                            {formik.errors.firstName}
-                          </div>
-                        ) : null}
+                        <div className="text-red-600 text-xs ">
+                          {formik.touched.firstName &&
+                          formik.errors.firstName ? (
+                            formik.errors.firstName
+                          ) : (
+                            <>&nbsp;</>
+                          )}
+                        </div>
                       </div>
                       <div className="flex flex-col space-y-2 w-1/2 sm:w-1/2 p-[10px]">
                         <Label
