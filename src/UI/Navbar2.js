@@ -20,9 +20,11 @@ const Navbar2 = () => {
               Make an Appointment
             </div>
             <div class="xl:mx-6 mx-2 text-gray-400">|</div>
-            <div class="font-sansBold  font-semibold text-sm lg:text-navbarLg tracking-[.15rem]  cursor-pointer">
-              Browse
-            </div>
+            <Link to="/browse">
+              <div class="font-sansBold  font-semibold text-sm lg:text-navbarLg tracking-[.15rem]  cursor-pointer">
+                Browse
+              </div>
+            </Link>
           </div>
           <div class="bg-white flex items-center justify-center rounded-full absolute top-[100%]  left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]">
             <img

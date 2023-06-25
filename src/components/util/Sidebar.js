@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import profileLogo from "../../images/profile/Logo.png";
+import Modal from "../../UI/Modal";
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [modal, setModal] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -75,7 +77,12 @@ const SideBar = () => {
             <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
               Delete Account
             </span>
-            <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
+            <span
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              onClick={() => {
+                setModal(true);
+              }}
+            >
               Sign out
             </span>
           </div>
@@ -90,6 +97,15 @@ const SideBar = () => {
           </main>
         ) : null}
       </div>
+      {modal && (
+        <Modal
+          title="Sign out"
+          description="Are you sure you want to sign out?"
+          onClose={() => {
+            setModal(false);
+          }}
+        />
+      )}
     </div>
   );
 };

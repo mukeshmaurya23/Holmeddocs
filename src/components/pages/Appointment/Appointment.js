@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { COMPLETED_DUMMY_DATA, SCHEDULE_DUMMY_DATA } from "../../../constant";
 import Button from "../../util/Button";
-
+import ListCalendar from "../../../images/profile/ListCalender.png";
 const Appointment = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -76,8 +76,8 @@ const Appointment = () => {
             <h1 className="text-md text-[#9597A6] font-sansLight mr-auto ">
               My Appointments
             </h1>
-            <div className="flex bg-white px-2 py-1">
-              <div className="w-7 h-6 bg-appointmentColor  rounded mr-2 cursor-pointer">
+            <div className="flex ">
+              {/* <div className="w-7 h-6 bg-appointmentColor  rounded mr-2 cursor-pointer">
                 <i
                   class="fa fa-bars py-1 px-2"
                   aria-hidden="true"
@@ -86,7 +86,12 @@ const Appointment = () => {
               </div>
               <div className="w-8 h-8  rounded">
                 <i class="fa fa-film" aria-hidden="true"></i>
-              </div>
+              </div> */}
+              <img
+                src={ListCalendar}
+                className="w-18 h-10 cursor-pointer"
+                onClick={toggleSidebar}
+              />
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Slider.css";
 const Slider = () => {
   const slides = [
@@ -23,8 +23,8 @@ const Slider = () => {
   ];
   const delay = 2500;
 
-  const [index, setIndex] = React.useState(0);
-  const timeoutRef = React.useRef(null);
+  const [index, setIndex] = useState(0);
+  const timeoutRef = useRef(null);
 
   function resetTimeout() {
     if (timeoutRef.current) {
@@ -32,7 +32,7 @@ const Slider = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     resetTimeout();
     timeoutRef.current = setTimeout(
       () =>
