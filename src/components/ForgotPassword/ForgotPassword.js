@@ -99,13 +99,13 @@
 // export default ForgotPassword;
 
 import React, { useEffect, useState } from "react";
-import Button from "../../util/Button";
+import Button from "../util/Button";
 import { Link } from "react-router-dom";
 
-import Aside from "../../util/Aside";
-import Step1Forgot from "../pages/forgotSteps/Step1Forgot";
-import Step2Forgot from "../pages/forgotSteps/Step2Forgot";
-import Step3Forgot from "../pages/forgotSteps/Step3Forgot";
+import Aside from "../util/Aside";
+import Step1Forgot from "./Step1Forgot";
+import Step2Forgot from "./Step2Forgot";
+import Step3Forgot from "./Step3Forgot";
 import forgot from "../../images/Login/Forgot.jpg";
 import Modal from "../../UI/Modal";
 import { forgotSchema } from "../schema/formValidation";
@@ -133,7 +133,7 @@ const ForgotPassword = () => {
   const formik = useFormik({
     initialValues: {
       mobileNumber: "",
-      otp: Array.from({ length: 6 }).fill(""),
+      // otp: Array.from({ length: 6 }).fill(""),
     },
     // validate,
     validationSchema: forgotSchema,
@@ -161,17 +161,19 @@ const ForgotPassword = () => {
       if (!formik.errors.mobileNumber) {
         setStep((prev) => prev + 1);
       }
+    } else {
+      setStep((prev) => prev + 1);
     }
-    if (step === 2) {
-      if (!formik.dirty) {
-        formik.setTouched({ otp: true });
-        return;
-      }
+    // if (step === 2) {
+    //   if (!formik.dirty) {
+    //     formik.setTouched({ otp: true });
+    //     return;
+    //   }
 
-      if (!formik.errors.otp) {
-        setStep((prev) => prev + 1);
-      }
-    }
+    // if (!formik.errors.otp) {
+    //   setStep((prev) => prev + 1);
+    // }
+    // }
   };
 
   return (
@@ -195,7 +197,7 @@ const ForgotPassword = () => {
                     <Button
                       className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black ${
                         (step === 1 && formik.errors.mobileNumber) ||
-                        (step === 2 && formik.errors.otp) ||
+                        // (step === 2 && formik.errors.otp) ||
                         step === 3
                           ? "bg-gray-200 cursor-not-allowed"
                           : "bg-white"
@@ -209,7 +211,7 @@ const ForgotPassword = () => {
                     <Button
                       className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
                       onClick={openModal}
-                      disabled={!formik.isValid && formik.dirty}
+                      // disabled={!formik.isValid && formik.dirty}
                     >
                       {step === 3 && "Reset"}
                     </Button>

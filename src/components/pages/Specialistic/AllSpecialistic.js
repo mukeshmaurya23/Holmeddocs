@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../../../UI/Navbar";
+
 import SpecialistCard from "./SpecialistCard";
-import Navbar2 from "../../../../UI/Navbar2";
-import loadingGif from "../../../../images/icons/Loader.gif";
-import Footer from "../../../../UI/Footer";
+
+import loadingGif from "../../../images/icons/Loader.gif";
+import Footer from "../../../UI/Footer";
 const AllSpecialistic = () => {
   const [specialistData, setSpecialistData] = useState([]);
 

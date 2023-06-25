@@ -1,16 +1,17 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Login from "./components/form/Login";
-import Register from "./components/form/Register";
-import Otp from "./components/form/Otp";
-import ForgotPassword from "./components/form/ForgotPassword";
-import ChangePassword from "./components/pages/forgotSteps/ChangePassword";
-import Navbar from "./UI/Navbar";
-import Specialistic from "./components/pages/Home/Specialistic/Specialistic";
-import SideBar from "./components/pages/Home/pages/Sidebar";
-import Appointment from "./components/pages/Home/Appointment/Appointment";
-import AllSpecialistic from "./components/pages/Home/Specialistic/AllSpecialistic";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import Otp from "./components/util/Otp";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
+
+import Specialistic from "./components/pages/Specialistic/Specialistic";
+import SideBar from "./components/util/Sidebar";
+import Appointment from "./components/pages/Appointment/Appointment";
+import AllSpecialistic from "./components/pages/Specialistic/AllSpecialistic";
 import Navbar2 from "./UI/Navbar2";
-import MainContainer from "./UI/MainContainer";
+import MainContainer from "./components/pages/Home/MainContainer";
+import RegisterOtp from "./components/Register/RegisterOtp";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +33,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/otp",
-    element: <Otp />,
+    element: <RegisterOtp />,
   },
 
   {

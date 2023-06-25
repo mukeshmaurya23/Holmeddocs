@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import userLogo from "../images/home/User.png";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import logo from "../images/home/Logo.png";
 const Navbar2 = () => {
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const handleDropdownClick = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+  const handleOptionClick = (option) => {
+    console.log(option);
+  };
+
   return (
     <>
       <div class="px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  lg:py-5 grid grid-col-12 py-1 md:py-3 bg-white z-10  h-[7rem] relative drop-shadow-lg">
@@ -15,11 +24,11 @@ const Navbar2 = () => {
               Browse
             </div>
           </div>
-          <div class="bg-white flex items-center justify-center rounded-full absolute top-[100%] tall:top-[108%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]   tall:h-[13rem] tall:w-[13rem] lg:h-[15rem] lg:w-[15rem]">
+          <div class="bg-white flex items-center justify-center rounded-full absolute top-[100%]  left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]">
             <img
-              class="h-[8rem] md:h-[10rem] tall:h-[13rem] lg:h-[15rem] cursor-pointer"
+              class="h-[8rem] md:h-[10rem]  lg:h-[15rem] cursor-pointer"
               alt="Logo"
-              src="https://holmeddoc-static.s3.ap-south-1.amazonaws.com/home/Logo.png"
+              src={logo}
             />
           </div>
           <div class="flex items-center justify-between">
@@ -32,14 +41,60 @@ const Navbar2 = () => {
                 <div class="mx-auto w-full max-w-md">
                   <div>
                     <div class="relative z-20">
-                      <button class="flex w-full justify-between items-center  px-0 pt-0  text-left text-sm text-black focus:outline-none font-semibold z-50">
+                      <button
+                        class="flex w-full justify-between items-center  px-0 pt-0  text-left text-sm text-black focus:outline-none font-semibold z-50"
+                        onClick={handleDropdownClick}
+                      >
                         <span class="font-sansBold  font-semibold text-sm lg:text-navbarLg  mr-2 tracking-[.15rem] cursor-pointer">
                           LOGIN/SIGNUP
                         </span>
+
                         <div>
                           <img class="h-7" alt="user" src={userLogo} />
                         </div>
                       </button>
+                      {dropdownVisible && (
+                        <div className="absolute bg-white rounded-md shadow-lg mt-2 py-2 w-48">
+                          <div className="flex">
+                            <Link
+                              to="/login"
+                              className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left "
+                            >
+                              <button
+                                onClick={() => handleOptionClick("User Login")}
+                              >
+                                User Login
+                              </button>
+                            </Link>
+                            <div class="mt-1 text-gray-400">|</div>
+                            <Link
+                              to="/register"
+                              className="block pl-[10px] ml py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                            >
+                              <button
+                                onClick={() => handleOptionClick("User Signup")}
+                              >
+                                User Signup
+                              </button>
+                            </Link>
+                          </div>
+                          <div className="flex ">
+                            <button
+                              className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                              onClick={() => handleOptionClick("Doctor Login")}
+                            >
+                              Doctor Login
+                            </button>
+                            <div class="mt-1 text-gray-400">|</div>
+                            <button
+                              className="block pl-[2px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                              onClick={() => handleOptionClick("Doctor Signup")}
+                            >
+                              Doctor Signup
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

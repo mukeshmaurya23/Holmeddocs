@@ -34,7 +34,7 @@
 import React from "react";
 import success from "../images/Login/Success.png";
 
-import Button from "../util/Button";
+import Button from "../components/util/Button";
 import { Link } from "react-router-dom";
 import cross from "../images/icons/Cross.png";
 const Modal = ({ closeModal, text, title }) => {

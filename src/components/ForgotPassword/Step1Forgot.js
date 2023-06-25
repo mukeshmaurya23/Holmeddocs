@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "../../../util/Input";
-import Label from "../../../util/Label";
+import Input from "../util/Input";
+import Label from "../util/Label";
 
 const Step1Forgot = ({ formik }) => {
   // const formik = useFormik({
@@ -72,7 +72,7 @@ const Step1Forgot = ({ formik }) => {
               value={values.mobileNumber}
               onBlur={formik.handleBlur}
               placeholder="+1 xxx xxx xxxx"
-              className="border border-verifiCation text-formLabel rounded-md py-1 px-4 outline-none focus:border-verifiCation"
+              className="border border-verifiCation text-formLabel rounded-md py-2 px-4 outline-none focus:border-verifiCation"
             />
             {touched.mobileNumber && errors.mobileNumber ? (
               <div className="text-red-600 text-xs mt-1">

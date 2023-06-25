@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import profileLogo from "../../../../images/profile/Logo.png";
+import profileLogo from "../../images/profile/Logo.png";
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

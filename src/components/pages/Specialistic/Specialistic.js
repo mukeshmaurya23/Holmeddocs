@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SpecialistCard from "./SpecialistCard";
-import Footer from "../../../../UI/Footer";
+import loadingGif from "../../../images/icons/Loader.gif";
 const Specialistic = () => {
   const [specialistData, setSpecialistData] = useState([]);
 
@@ -43,6 +43,13 @@ const Specialistic = () => {
             </Link>
           </div>
         </div>
+        {specialistData.length === 0 ? (
+          <>
+            <div className="flex justify-center  ">
+              <img src={loadingGif} alt="" />
+            </div>
+          </>
+        ) : null}
         <SpecialistCard specialistData={specialistData} />
       </div>
     </>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import ChangePasswordimg from "../../../images/Login/ChangePassword.jpg";
-import Label from "../../../util/Label";
-import Input from "../../../util/Input";
-import Button from "../../../util/Button";
-import eyeClose from "../../../images/Login/Eye.png";
-import eyeOpen from "../../../images/Login/EyeVisible.png";
-import Aside from "../../../util/Aside";
-import Modal from "../../../UI/Modal";
+import ChangePasswordimg from "../../images/Login/ChangePassword.jpg";
+import Label from "../util/Label";
+import Input from "../util/Input";
+import Button from "../util/Button";
+import eyeClose from "../../images/Login/Eye.png";
+import eyeOpen from "../../images/Login/EyeVisible.png";
+import Aside from "../util/Aside";
+import Modal from "../../UI/Modal";
 import { useFormik } from "formik";
-import { resetSchema } from "../../schema/formValidation";
+import { resetSchema } from "../schema/formValidation";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -65,7 +65,7 @@ const ChangePassword = () => {
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
               <img
-                src={require("../../../images/icons/Logo.png")}
+                src={require("../../images/icons/Logo.png")}
                 alt="logo"
                 className="w-24 h-24 mx-4 sm:mx-10"
               />

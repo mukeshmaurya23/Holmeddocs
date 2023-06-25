@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Label from "../../util/Label";
-import Input from "../../util/Input";
+import Label from "../util/Label";
+import Input from "../util/Input";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Button from "../../util/Button";
+import Button from "../util/Button";
 import image from "../../images/Login/Login.jpg";
 import { Link } from "react-router-dom";
-import Aside from "../../util/Aside";
+import Aside from "../util/Aside";
 import { loginSchema } from "../schema/formValidation";
 import { useFormik } from "formik";
 const Login = () => {
@@ -44,11 +44,13 @@ const Login = () => {
 
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
-              <img
-                src={require("../../images/icons/Logo.png")}
-                alt="logo"
-                className="w-24 h-24 mx-4 sm:mx-10"
-              />
+              <Link to="/">
+                <img
+                  src={require("../../images/icons/Logo.png")}
+                  alt="logo"
+                  className="w-24 h-24 mx-4 sm:mx-10"
+                />
+              </Link>
             </div>
             <div className="flex-grow">
               <div className="ml-5 max-w-[620px]">
@@ -159,7 +161,7 @@ const Login = () => {
             </div>
             <div className="sm:absolute bottom-0 left-0 right-0  flex justify-between bg-verifiCation p-5 ">
               <Link
-                to="/"
+                to="/register"
                 className="text-white font-sansLight ml-[4rem] text-sm mt-3"
               >
                 Don’t have an account? Signup

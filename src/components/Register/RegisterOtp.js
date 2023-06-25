@@ -1,11 +1,11 @@
 import React from "react";
-
-import Input from "../../util/Input";
+import Input from "../util/Input";
 import otp from "../../images/home/otp.jpg";
 
-import Button from "../../util/Button";
-import Aside from "../../util/Aside";
-const Otp = () => {
+import Button from "../util/Button";
+import Aside from "../util/Aside";
+import Otp from "../util/Otp";
+const RegisterOtp = () => {
   return (
     <>
       <div className="flex flex-col h-screen">
@@ -30,30 +30,7 @@ const Otp = () => {
                 </p>
                 <div className="max-w-[500px]">
                   <div className="flex items-center justify-between mt-2 px-5">
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2 px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
-                    <Input
-                      type="number"
-                      className="border border-verifiCation rounded-md py-2  px-4 text-formLabel w-12 sm:w-12 md:w-15 mr-2"
-                    />
+                    <Otp />
                   </div>
                   <div className="flex justify-end mr-7 ">
                     <p className="ml-1 text-verifiCation mt-2">00:59</p>
@@ -82,4 +59,4 @@ const Otp = () => {
   );
 };
 
-export default Otp;
+export default RegisterOtp;

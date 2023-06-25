@@ -10,6 +10,7 @@ module.exports = {
         bahnschrift: ["bahnschrift", "sans-serif"],
         sansLight: ["sansLight", "sans-serif"],
         poppinRegular: ["poppinRegular", "sans-serif"],
+        poppinItalic: ["poppinItalic", "sans-serif"],
       },
       colors: {
         greenMain: "#e2f6f3",
@@ -22,6 +23,8 @@ module.exports = {
         navText: "#252525",
         yellowText: "#CF8B15",
         appointmentColor: "#F0F0F0",
+
+        healthConcern: " #E2F6F3",
       },
     },
   },

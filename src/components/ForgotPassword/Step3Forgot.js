@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Input from "../../../util/Input";
-import Label from "../../../util/Label";
-import eyeClose from "../../../images/Login/Eye.png";
-import eyeOpen from "../../../images/Login/EyeVisible.png";
-import Button from "../../../util/Button";
+import Input from "../util/Input";
+import Label from "../util/Label";
+import eyeClose from "../../images/Login/Eye.png";
+import eyeOpen from "../../images/Login/EyeVisible.png";
+import Button from "../util/Button";
 // import { registerSchema } from "../../schema/formValidation";
 // import { useFormik } from "formik";
 
@@ -89,7 +89,7 @@ const Step3Forgot = ({ formik }) => {
               value={formik.values.password}
               onBlur={formik.handleBlur}
               placeholder="●●●●●●●●"
-              className="border border-verifiCation text-formLabel rounded-md py-1 px-4"
+              className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
             />
             {touched.password && errors.password ? (
               <div className="text-red-600 text-xs mt-1">
@@ -124,7 +124,7 @@ const Step3Forgot = ({ formik }) => {
               value={formik.values.confirmPassword}
               onBlur={formik.handleBlur}
               placeholder="●●●●●●●●"
-              className="border border-verifiCation text-formLabel rounded-md py-1 px-4"
+              className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
             />
             {touched.confirmPassword && errors.confirmPassword ? (
               <div className="text-red-600 text-xs mt-1 ml-2">

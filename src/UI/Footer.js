@@ -108,7 +108,7 @@ const Footer = () => {
                     src="https://www.pngmart.com/files/10/Download-On-The-App-Store-PNG-Image.png"
                   />
                   <img
-                    className=" mr-2 w-[40%] h-auto"
+                    className=" mr-2 w-[40%] h-[40%]"
                     alt="playstore"
                     src="https://e7.pngegg.com/pngimages/918/845/png-clipart-google-play-logo-google-play-app-store-android-google-play-text-logo.png"
                   />
@@ -130,7 +130,7 @@ const Footer = () => {
           <div className="bg-transparent flex justify-center items-center pt-8 md:py-0">
             <img
               className="bg-transparent h-[7rem] md:h-[8rem] xl:h-[8.5rem] mb-2 cursor-pointer"
-              src="https://holmeddoc-static.s3.ap-south-1.amazonaws.com/home/Footer.png"
+              src={require("../images/home/Footer.png")}
             />
           </div>
           <div className="flex px-6 sm:px-8 py-4 lg:pb-10 justify-center items-center">

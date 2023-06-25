@@ -29,3 +29,8 @@
   font-family: poppinRegular;
   src: url("./assets/fonts/poppins/Poppins-Regular.ttf");
 }
+
+@font-face {
+  font-family: poppinItalic;
+  src: url("./assets/fonts/poppins/Poppins-Italic.ttf");
+}

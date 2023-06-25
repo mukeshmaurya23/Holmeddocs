@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Label from "../../util/Label";
-import Input from "../../util/Input";
-import Button from "../../util/Button";
+import Label from "../util/Label";
+import Input from "../util/Input";
+import Button from "../util/Button";
 import { Link } from "react-router-dom";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Aside from "../../util/Aside";
+import Aside from "../util/Aside";
 import register from "../../images/Login/ChangePassword.jpg";
 import { useFormik } from "formik";
 import { registerSchema } from "../schema/formValidation";
@@ -46,11 +46,13 @@ const Register = () => {
           {/* <Aside image={step === 1 ? register : otp} /> */}
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-5 sm:mr-[4rem]">
-              <img
-                src={require("../../images/icons/Logo.png")}
-                alt="logo"
-                className="w-24 h-24 mx-4 sm:mx-10"
-              />
+              <Link to="/">
+                <img
+                  src={require("../../images/icons/Logo.png")}
+                  alt="logo"
+                  className="w-24 h-24 mx-4 sm:mx-10"
+                />
+              </Link>
             </div>
             <div className="flex-grow overflow-y-auto">
               <div className="ml-5">
