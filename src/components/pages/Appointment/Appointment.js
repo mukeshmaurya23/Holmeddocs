@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { COMPLETED_DUMMY_DATA, SCHEDULE_DUMMY_DATA } from "../../../constant";
-import Button from "../../util/Button";
+import Button from "../../../util/Button";
 import ListCalendar from "../../../images/profile/ListCalender.png";
 const Appointment = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -3,15 +3,15 @@ import practiseLogo from "../../../images/home/OBJECTS.png";
 const HolPractise = () => {
   return (
     <>
-      <div className="grid grid-cols-2 bg-[#E2F6F3] mb-5">
-        <div className="ml-4 mb-10 md:ml-24 ">
+      <div className="flex bg-[#E2F6F3] mb-5">
+        <div className="ml-6  ">
           <img
             src={practiseLogo}
             alt=""
-            className="w-[100%] h-auto md:w-[100%]"
+            className="w-[100%] h-[30rem] md:w-[100%]"
           />
         </div>
-        <div className="mt-20">
+        <div className="mt-20 flex-1">
           <h2 className="text-[#030303] font-sansRegular tracking-[3px] font-semibold text-[1.8rem]">
             Let's connect your practice
           </h2>

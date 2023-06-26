@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Label from "../util/Label";
-import Input from "../util/Input";
+import Label from "../../util/Label";
+import Input from "../../util/Input";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Button from "../util/Button";
+import Button from "../../util/Button";
 import image from "../../images/Login/Login.jpg";
 import { Link } from "react-router-dom";
-import Aside from "../util/Aside";
-import { loginSchema } from "../schema/formValidation";
+import Aside from "../../util/Aside";
+import { loginSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -64,13 +64,16 @@ const Login = () => {
                 </p>
                 <form className="mb-6" onSubmit={formik.handleSubmit}>
                   <div className="flex flex-wrap  sm:px-24 py-4 ">
-                    <div className="flex flex-col space-y-2 w-full py-[0px]">
+                    <div className="flex flex-col space-y-2 w-full py-[0px] relative">
                       <Label
                         htmlFor="mobileNumber"
                         className="font-sansRegular text-formLabel text-sm"
                       >
                         Mobile Number
                       </Label>
+                      <div className="absolute left-0 top-[1.8rem] w-3 pl-2  h-full text-md text-formLabel">
+                        +1
+                      </div>
                       <Input
                         type="number"
                         name="mobileNumber"
@@ -78,15 +81,18 @@ const Login = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.mobileNumber}
-                        placeholder="+1 xxx xxx xxxx"
-                        className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
+                        placeholder="XXXX XXXX XXXX"
+                        className="border border-verifiCation text-formLabel rounded-md py-2 px-9 outline-verifiCation"
                       />
-                      {formik.touched.mobileNumber &&
-                      formik.errors.mobileNumber ? (
-                        <div className="text-red-600 text-xs mt-1 ml-1">
-                          {formik.errors.mobileNumber}
-                        </div>
-                      ) : null}
+
+                      <div className="text-red-600 text-xs ml-1">
+                        {formik.touched.mobileNumber &&
+                        formik.errors.mobileNumber ? (
+                          formik.errors.mobileNumber
+                        ) : (
+                          <>&nbsp;</>
+                        )}
+                      </div>
                     </div>
                     <div className="flex flex-col space-y-2 w-full relative py-[16px]">
                       <Label
@@ -99,17 +105,19 @@ const Login = () => {
                         type={isPasswordVisible ? "text" : "password"}
                         name="Password"
                         id="Password"
-                        placeholder="●●●●●●●●"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.Password}
-                        className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
+                        className="border border-verifiCation text-formLabel rounded-md py-2 px-4 outline-verifiCation"
                       />
-                      {formik.touched.Password && formik.errors.Password ? (
-                        <div className="text-red-600 text-xs mt-1 ml-1">
-                          {formik.errors.Password}
-                        </div>
-                      ) : null}
+                      <div className="text-red-600 text-xs ml-1">
+                        {formik.touched.Password && formik.errors.Password ? (
+                          formik.errors.Password
+                        ) : (
+                          <>&nbsp;</>
+                        )}
+                      </div>
 
                       <Button
                         type="button"

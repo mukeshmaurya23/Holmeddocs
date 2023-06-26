@@ -86,3 +86,95 @@ export const COMPLETED_DUMMY_DATA = [
     departureTime: "12:45",
   },
 ];
+
+export const healthConcern = [
+  {
+    id:1,
+    title: "Fatigue",
+    dropDown: [
+      {
+        id: 1,
+        title: "Treat Fatigue",
+      },
+      {
+        id: 2,
+        title: "Treat Cancer",
+      },
+      {
+        id: 3,
+        title: "Cure and Prevent",
+      },
+      {
+        id: 4,
+        title: "Prevent and cure",
+      },
+    ],
+  },
+  {
+    id:2,
+    title: "High Blood Pressure",
+    dropDown: [
+      {
+        id: 1,
+        title: "Treat Fatigue",
+      },
+      {
+        id: 2,
+        title: "Treat Cancer",
+      },
+      {
+        id: 3,
+        title: "Cure and Prevent",
+      },
+      {
+        id: 4,
+        title: "Prevent and cure",
+      },
+    ],
+  },
+
+  {
+    id:3,
+    title: "Diabetes",
+    dropDown: [
+      {
+        id: 1,
+        title: "Treat Fatigue",
+      },
+      {
+        id: 2,
+        title: "Treat Cancer",
+      },
+      {
+        id: 3,
+        title: "Cure and Prevent",
+      },
+      {
+        id: 4,
+        title: "Prevent and cure",
+      },
+    ],
+  },
+  {
+    id:4,
+    title: "Obesity",
+    dropDown: [
+      {
+        id: 1,
+        title: "Treat Fatigue",
+      },
+      {
+        id: 2,
+        title: "Treat Cancer",
+      },
+      {
+        id: 3,
+        title: "Cure and Prevent",
+      },
+      {
+        id: 4,
+        title: "Prevent and cure",
+      },
+    ],
+  },
+];

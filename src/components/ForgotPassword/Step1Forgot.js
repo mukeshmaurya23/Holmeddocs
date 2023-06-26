@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "../util/Input";
-import Label from "../util/Label";
+import Input from "../../util/Input";
+import Label from "../../util/Label";
 
 const Step1Forgot = ({ formik }) => {
   // const formik = useFormik({
@@ -57,13 +57,16 @@ const Step1Forgot = ({ formik }) => {
         </div>
 
         <div className="max-w-[500px] mt-10 mx-8">
-          <div className="flex flex-col space-y-2 w-10/12 py-0">
+          <div className="flex flex-col space-y-2 w-10/12 py-0 relative">
             <Label
               htmlFor="mobileNumber"
               className="font-sansRegular text-[#757993] text-xs"
             >
               Mobile Number
             </Label>
+            <div className="absolute left-0 top-[1.5rem] w-3 pl-2  h-full text-md text-formLabel">
+              +1
+            </div>
             <Input
               type="number"
               name="mobileNumber"
@@ -71,14 +74,16 @@ const Step1Forgot = ({ formik }) => {
               onChange={formik.handleChange}
               value={values.mobileNumber}
               onBlur={formik.handleBlur}
-              placeholder="+1 xxx xxx xxxx"
-              className="border border-verifiCation text-formLabel rounded-md py-2 px-4 outline-none focus:border-verifiCation"
+              placeholder="XXX XXX XXXX"
+              className="border border-verifiCation text-formLabel rounded-md py-2 px-8 outline-none focus:border-verifiCation"
             />
-            {touched.mobileNumber && errors.mobileNumber ? (
-              <div className="text-red-600 text-xs mt-1">
-                {formik.errors.mobileNumber}
-              </div>
-            ) : null}
+            <div className="text-red-600 text-xs ml-1">
+              {formik.touched.mobileNumber && formik.errors.mobileNumber ? (
+                formik.errors.mobileNumber
+              ) : (
+                <>&nbsp;</>
+              )}
+            </div>
           </div>
           <div className="max-w-[340px]">
             <p className="font-sansRegular text-xs text-[#757993] py-5 mt-2">

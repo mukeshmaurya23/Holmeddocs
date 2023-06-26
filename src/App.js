@@ -6,13 +6,13 @@ import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 
 import Specialistic from "./components/pages/Specialistic/Specialistic";
-import SideBar from "./components/util/Sidebar";
+import SideBar from "./util/Sidebar";
 import Appointment from "./components/pages/Appointment/Appointment";
 import AllSpecialistic from "./components/pages/Specialistic/AllSpecialistic";
 import Navbar2 from "./UI/Navbar2";
 import MainContainer from "./components/pages/Home/MainContainer";
 import RegisterOtp from "./components/Register/RegisterOtp";
-import useOnline from "./components/hooks/useOnline";
+import useOnline from "./hooks/useOnline";
 import Browse from "./components/Browse";
 const appRouter = createBrowserRouter([
   {

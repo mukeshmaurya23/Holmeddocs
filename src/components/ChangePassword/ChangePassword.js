@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import ChangePasswordimg from "../../images/Login/ChangePassword.jpg";
-import Label from "../util/Label";
-import Input from "../util/Input";
-import Button from "../util/Button";
+import Label from "../../util/Label";
+import Input from "../../util/Input";
+import Button from "../../util/Button";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Aside from "../util/Aside";
+import Aside from "../../util/Aside";
 import Modal from "../../UI/Modal";
 import { useFormik } from "formik";
-import { resetSchema } from "../schema/formValidation";
+import { resetSchema } from "../../schema/formValidation";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);

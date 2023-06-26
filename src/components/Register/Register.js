@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Label from "../util/Label";
-import Input from "../util/Input";
-import Button from "../util/Button";
+import Label from "../../util/Label";
+import Input from "../../util/Input";
+import Button from "../../util/Button";
 import { Link } from "react-router-dom";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Aside from "../util/Aside";
+import Aside from "../../util/Aside";
 import register from "../../images/Login/ChangePassword.jpg";
 import { useFormik } from "formik";
-import { registerSchema } from "../schema/formValidation";
+import { registerSchema } from "../../schema/formValidation";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =

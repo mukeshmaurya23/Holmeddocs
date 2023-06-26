@@ -99,16 +99,16 @@
 // export default ForgotPassword;
 
 import React, { useEffect, useState } from "react";
-import Button from "../util/Button";
+import Button from "../../util/Button";
 import { Link } from "react-router-dom";
 
-import Aside from "../util/Aside";
+import Aside from "../../util/Aside";
 import Step1Forgot from "./Step1Forgot";
 import Step2Forgot from "./Step2Forgot";
 import Step3Forgot from "./Step3Forgot";
 import forgot from "../../images/Login/Forgot.jpg";
 import Modal from "../../UI/Modal";
-import { forgotSchema } from "../schema/formValidation";
+import { forgotSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
 // const validate = (values) => {
 //   const errors = {};
@@ -182,11 +182,13 @@ const ForgotPassword = () => {
         <Aside image={forgot} />
         <main className="flex flex-1 flex-col relative overflow-y-auto">
           <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
-            <img
-              src={require("../../images/icons/Logo.png")}
-              alt="logo"
-              className="w-24 h-24 mx-4 sm:mx-10"
-            />
+            <Link to="/">
+              <img
+                src={require("../../images/icons/Logo.png")}
+                alt="logo"
+                className="w-24 h-24 mx-4 sm:mx-10"
+              />
+            </Link>
           </div>
           <div className="flex-grow">{steps[step]}</div>
           <div className="sm:absolute bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">

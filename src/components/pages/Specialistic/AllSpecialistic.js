@@ -36,16 +36,25 @@ const AllSpecialistic = () => {
     </>
   ) : (
     <>
-      <div className="flex flex-col justify-center items-center mt-[8rem] ">
-        <h2 className="font-sansBold text-2xl ml-6 text-[#292F33] font-semibold tracking-[3px]">
-          Speciality
-        </h2>
-        <p className="text-center text-[#545871] text-sm px-[10rem] py-7">
-          Every medical specialist shares one common goal: to help patients get
-          healthy or stay healthy. But each one has very specific skills and{" "}
-          competencies that make them an integral member of the medical field.
-          Browse through each specialty and select as per your need.
-        </p>
+      <div class="flex flex-col items-center justify-center tracking-[0.25rem] md:mt-12 ">
+        <div class="mt-5 pt-10 md:pt-16">
+          <h1
+            class="font-basic-sans-bold leading-[70px] font-bold
+ text-3xl md:text-[32px] text-gray-900 tracking-[7.8px] text-center "
+          >
+            Speciality
+          </h1>
+        </div>
+        <div class="mt-4 px-2 sm:px-5 lg:px-0 max-w-[1000px]">
+          <p class="text-gray-500	font-basic-sans-regular md:text-base text-size-6 text-center md:mb-10 mb-8 tracking-[1.5px]">
+            Every medical specialist shares one common goal: to help patients
+            get healthy or stay healthy. But each one has very specific skills
+            and <br class="hidden specialityMd:block" /> competencies that make
+            them an integral member of the medical field.{" "}
+            <br class="hidden specialityMd:block" /> Browse through each
+            specialist and select as per your need.
+          </p>
+        </div>
       </div>
       <div>
         <SpecialistCard specialistData={specialistData} />

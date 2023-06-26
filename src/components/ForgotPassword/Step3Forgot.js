@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Input from "../util/Input";
-import Label from "../util/Label";
+import Input from "../../util/Input";
+import Label from "../../util/Label";
 import eyeClose from "../../images/Login/Eye.png";
 import eyeOpen from "../../images/Login/EyeVisible.png";
-import Button from "../util/Button";
+import Button from "../../util/Button";
 // import { registerSchema } from "../../schema/formValidation";
 // import { useFormik } from "formik";
 

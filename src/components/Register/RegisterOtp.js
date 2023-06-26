@@ -1,10 +1,10 @@
 import React from "react";
-import Input from "../util/Input";
+import Input from "../../util/Input";
 import otp from "../../images/home/otp.jpg";
 
-import Button from "../util/Button";
-import Aside from "../util/Aside";
-import Otp from "../util/Otp";
+import Button from "../../util/Button";
+import Aside from "../../util/Aside";
+import Otp from "../../util/Otp";
 const RegisterOtp = () => {
   return (
     <>

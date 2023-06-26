@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import Label from "../util/Label";
-import Input from "../util/Input";
-import Otp from "../util/Otp";
+import Label from "../../util/Label";
+import Input from "../../util/Input";
+import Otp from "../../util/Otp";
 
 const Step2Forgot = ({ formik }) => {
   const { handleChange, handleBlur, values, errors, touched } = formik;
