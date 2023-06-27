@@ -12,14 +12,16 @@ import HolisticProcess from "./HolisticProcess";
 const MainContainer = () => {
   return (
     <>
-      <Holistic />
-      <Specialistic />
-      <HealthConcern />
-      <HolisticFeatured />
-      <HolisticProcess />
-      <HolPractise />
-      <HolMobApp />
-      <Footer />
+      <div className="overflow-hidden">
+        <Holistic />
+        <Specialistic />
+        <HealthConcern />
+        <HolisticFeatured />
+        <HolisticProcess />
+        <HolPractise />
+        <HolMobApp />
+        <Footer />
+      </div>
     </>
   );
 };

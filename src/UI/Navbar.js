@@ -60,7 +60,7 @@
 import React from "react";
 import logo from "../images/home/Logo.png";
 import userLogo from "../images/home/User.png";
-
+import { Outlet } from "react-router-dom";
 const Navbar = () => {
   return (
     <>
@@ -78,7 +78,7 @@ const Navbar = () => {
         </div>
 
         <div className="relative flex items-center justify-center">
-          <div className="absolute -top-[48px] bottom-0 flex h-[8rem] w-[8rem] md:h-[10rem] md:w-[10rem] items-center justify-center rounded-full z-50">
+          <div className="absolute top-[100%] bottom-0 flex h-[8rem] w-[8rem] md:h-[11rem] md:w-[11rem] items-center justify-center rounded-full z-50">
             <img
               src={logo}
               alt="Logo"
@@ -103,6 +103,7 @@ const Navbar = () => {
           </ul>
         </div>
       </nav>
+      <Outlet />
     </>
   );
 };

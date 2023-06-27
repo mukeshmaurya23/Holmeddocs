@@ -3,6 +3,10 @@ import userLogo from "../images/home/User.png";
 import { Link, Outlet } from "react-router-dom";
 import logo from "../images/home/Logo.png";
 import PortalModal from "./PortalModal";
+import hamBurger from "../images/icons/Hamburger.png";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "../store/mobileAppSlice";
+import cross from "../images/icons/Cross.png";
 const Navbar2 = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const handleDropdownClick = () => {
@@ -20,6 +24,14 @@ const Navbar2 = () => {
   const closeModal = () => {
     setShowModal(false);
   };
+
+  const dispatch = useDispatch();
+
+  const toggleMenuHandler = () => {
+    dispatch(toggleMenu());
+  };
+
+  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
 
   return (
     <>
@@ -40,7 +52,15 @@ const Navbar2 = () => {
               </div>
             </Link>
           </div>
-          <div class="bg-white flex items-center justify-center rounded-full absolute top-[100%]  left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]">
+          <div
+            class="bg-white flex items-center justify-center rounded-full  h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]"
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
             <Link to="/">
               <img
                 class="h-[8rem] md:h-[10rem]  lg:h-[15rem] cursor-pointer"
@@ -120,8 +140,96 @@ const Navbar2 = () => {
             </div>
           </div>
         </div>
+        {/* Mobile View */}
+        <div class="md:hidden flex  items-center text-gray-900 relative">
+          <Link to="/">
+            <img
+              class=" w-[105px] h-auto cursor-pointer mr-auto"
+              alt="Logo"
+              src={logo}
+            />
+          </Link>
+
+          <img
+            src={hamBurger}
+            alt="hamburger"
+            className="h-6 w-7 ml-auto cursor-pointer"
+            onClick={toggleMenuHandler}
+          />
+
+          {isMenuOpen && (
+            <div
+              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
+            >
+              <div className="relative">
+                <button
+                  onClick={toggleMenuHandler}
+                  className="absolute top-5 right-5 h-10 w-10 bg-gray-200 flex justify-center items-center rounded-full rounded-full"
+                >
+                  <img src={cross} className=" h-4" />
+                </button>
+                <div className="absolute top-20 left-10 w-full">
+                  {/* Content of the popup */}
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex gap-7 items-center ">
+                      <h2 className="font-sansBold text-[14px]">Patients</h2>
+                      <Link
+                        to="/login"
+                        className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
+                      >
+                        Log In
+                      </Link>
+                      <Link
+                        to="/register"
+                        className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
+                      >
+                        Sign up
+                      </Link>
+                    </div>
+                    <div className=" border-b " />
+                    <div className="flex gap-7">
+                      <h2 className="font-sansBold text-[14px]">Doctors</h2>
+                      <Link
+                        to="/login"
+                        className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
+                      >
+                        Log In
+                      </Link>
+                      <Link
+                        to="/register"
+                        className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
+                      >
+                        Sign up
+                      </Link>
+                    </div>
+                    <div className=" border-b " />
+                    <Link to="/">
+                      <h2 className="font-sansBold text-[14px]">
+                        Make an appointment
+                      </h2>
+                    </Link>
+                    <div className=" border-b " />
+                    <div>
+                      <h2 className="font-sansBold text-[14px]">Browse</h2>
+                    </div>
+                    <div className=" border-b " />
+                    <Link to="/about">
+                      <h2 className="font-sansBold text-[14px]">About Us</h2>
+                    </Link>
+                    <div className=" border-b " />
+                    <Link to="/" onClick={toggleMenuHandler}>
+                      <h2 className="font-sansBold text-[14px]">Home</h2>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <Outlet />
+      {!isMenuOpen && <Outlet />}
     </>
   );
 };

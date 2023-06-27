@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import blackDropDown from "../../../images/home/BlackDropdown.png";
 import { healthConcern } from "../../../constant";
+import Accordion from "../../../util/Accordian";
 
 const HealthConcern = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -12,12 +13,12 @@ const HealthConcern = () => {
   };
 
   return (
-    <div className="bg-healthConcern py-12 px-16 p-3 h-[250px]">
-      <h2 className="text-[1.9rem] tracking-[4px] font-sansBold ">
+    <div className="bg-healthConcern py-12 px-4 sm:px-16 md:px-16 lg:px-16 p-3 ">
+      <h2 className="text-[1rem]  tracking-[1px] sm:text-[1.4rem] md:text-[1.7rem] xsm:text-[1rem] xs:text-[1.1rem] md:tracking-[4px] font-sansBold ">
         Most common health concerns
       </h2>
-      <div className="flex flex-col md:flex-row justify-between gap-4 mt-7 cursor-pointer">
-        {healthConcern.map((item, index) => (
+      <div className="mt-10">
+        {/* {healthConcern.map((item, index) => (
           <div
             className="border-b-2 flex border-gray-400 pb-7 relative"
             key={item.id}
@@ -31,7 +32,7 @@ const HealthConcern = () => {
                 alt=""
                 className={`${
                   selectedItem === item.id ? "rotate-180" : ""
-                } cursor-pointer`}
+                } cursor-pointer h-3 w-3`}
               />
             </div>
             {selectedItem === item.id && (
@@ -47,7 +48,8 @@ const HealthConcern = () => {
               </div>
             )}
           </div>
-        ))}
+        ))} */}
+        <Accordion items={healthConcern} showBorder={true} />
       </div>
     </div>
   );

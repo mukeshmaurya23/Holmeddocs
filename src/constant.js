@@ -89,7 +89,7 @@ export const COMPLETED_DUMMY_DATA = [
 
 export const healthConcern = [
   {
-    id:1,
+    id: 1,
     title: "Fatigue",
     dropDown: [
       {
@@ -111,7 +111,7 @@ export const healthConcern = [
     ],
   },
   {
-    id:2,
+    id: 2,
     title: "High Blood Pressure",
     dropDown: [
       {
@@ -134,7 +134,7 @@ export const healthConcern = [
   },
 
   {
-    id:3,
+    id: 3,
     title: "Diabetes",
     dropDown: [
       {
@@ -156,7 +156,7 @@ export const healthConcern = [
     ],
   },
   {
-    id:4,
+    id: 4,
     title: "Obesity",
     dropDown: [
       {
@@ -174,6 +174,53 @@ export const healthConcern = [
       {
         id: 4,
         title: "Prevent and cure",
+      },
+    ],
+  },
+];
+
+export const LocSpec = [
+  {
+    id: 1,
+    title: "Location",
+    dropDown: [
+      {
+        id: 1,
+        title: "Mumbai",
+      },
+      {
+        id: 2,
+        title: "Delhi",
+      },
+      {
+        id: 3,
+        title: "Banglore",
+      },
+      {
+        id: 4,
+        title: "Chennai",
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "Speciality",
+    dropDown: [
+      {
+        id: 1,
+        title: "Cancer",
+      },
+      {
+        id: 2,
+        title: "Heart Disease",
+      },
+      {
+        id: 3,
+        title: "Diabetes",
+      },
+      {
+        id: 4,
+        title: "Obesity",
       },
     ],
   },

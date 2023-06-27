@@ -14,6 +14,7 @@ import MainContainer from "./components/pages/Home/MainContainer";
 import RegisterOtp from "./components/Register/RegisterOtp";
 import useOnline from "./hooks/useOnline";
 import Browse from "./components/Browse";
+import Navbar from "./UI/Navbar";
 const appRouter = createBrowserRouter([
   {
     path: "/",
