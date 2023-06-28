@@ -225,3 +225,129 @@ export const LocSpec = [
     ],
   },
 ];
+
+export const Footeritems = [
+  {
+    id: 1,
+    title: "Holmeddoc",
+    list: [
+      {
+        id: 1,
+        title: "Home",
+      },
+      {
+        id: 2,
+        title: "About Us",
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: " Contact Us",
+    list: [
+      {
+        id: 1,
+        title: "info@holmeddoc.com",
+      },
+      {
+        id: 2,
+        title: "+1 000 000 0000",
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: " Insurance Providers",
+    list: [
+      {
+        id: 1,
+        title: "UHC",
+      },
+      {
+        id: 2,
+        title: "Humana",
+      },
+      {
+        id: 3,
+        title: "Aetna",
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: " Major Specialities",
+    list: [
+      {
+        id: 1,
+        title: "Acupuncture ",
+      },
+      {
+        id: 2,
+        title: "Aromatherapy ",
+      },
+      {
+        id: 3,
+        title: "Alternative Medicine ",
+      },
+      {
+        id: 4,
+        title: "Yoga  ",
+      },
+      {
+        id: 5,
+        title: "Reiki   ",
+      },
+      {
+        id: 6,
+        title: "Holistic Medicine  ",
+      },
+      {
+        id: "viewall",
+        title: "View All  ",
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: " For Doctor and Healthcare providers",
+    list: [
+      {
+        id: 1,
+        title: "Sign up with Holmeddoc ",
+      },
+      {
+        id: 2,
+        title: "Sign up with Holmeddoc ",
+      },
+      {
+        id: 3,
+        title: "For Developer Teams ",
+      },
+      {
+        id: 4,
+        title: "Get the Holmeddoc App",
+      },
+    ],
+  },
+];
+
+export const slides = [
+  {
+    image: require("./images/home/Doctor.jpg"),
+    title: "Lindsay M.",
+    subtitle: "Vancouver, BC",
+    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
+  },
+  {
+    image: require("./images/home/Doctor.jpg"),
+    title: "Lindsay M.",
+    subtitle: "Vancouver, BC",
+    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
+  },
+  {
+    image: require("./images/home/Doctor.jpg"),
+    title: "Lindsay M.",
+    subtitle: "Vancouver, BC",
+    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
+  },
+];

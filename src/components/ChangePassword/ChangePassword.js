@@ -89,7 +89,7 @@ const ChangePassword = () => {
                         type={isoldPasswordVisible ? "text" : "password"}
                         name="oldPassword"
                         id="oldPassword"
-                        placeholder="●●●●●●●●"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         onChange={formik.handleChange}
                         value={formik.values.oldPassword}
                         onBlur={formik.handleBlur}
@@ -125,7 +125,7 @@ const ChangePassword = () => {
                         type={isnewPasswordVisible ? "text" : "password"}
                         name="newPassword"
                         id="newPassword"
-                        placeholder="●●●●●●●●"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         onChange={formik.handleChange}
                         value={formik.values.newPassword}
                         onBlur={formik.handleBlur}
@@ -164,7 +164,7 @@ const ChangePassword = () => {
                         onChange={formik.handleChange}
                         value={formik.values.confirmPassword}
                         onBlur={formik.handleBlur}
-                        placeholder="●●●●●●●●"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
                       />
                       {formik.errors.confirmPassword &&

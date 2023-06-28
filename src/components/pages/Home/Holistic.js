@@ -23,7 +23,7 @@ const Holistic = () => {
     <div className="p-5 bg-[#E2F6F3]">
       <div className="bg-[#E2F6F3]">
         <div className="md:pt-44 sm:pt-28 xs:pt-28 xsm:pt-16 mb-24 space-y-2">
-          <h1 className="flex font-poppinRegular justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem]  font-medium tracking-widest text-[#0C0B0B] sm:text-[2rem] xs:text-[1.5rem] xsm:text-[0.9rem] ">
+          <h1 className="flex font-poppinRegular justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem]  font-medium tracking-widest text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
             <span>HOLISTIC</span>
             <div className="flex items-center justify-center">
               <div className="relative">

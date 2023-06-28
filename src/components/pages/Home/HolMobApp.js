@@ -42,7 +42,7 @@ const HolMobApp = () => {
           <img
             src={mobileLogo}
             alt=""
-            className="w-[18rem] md:w-[80%] lg:w-[85%] xl:w-[85%]"
+            className="w-[18rem] md:w-[80%] lg:w-[85%] xl:w-[85%] xsm:ml-5 xs:ml-5"
           />
         </div>
       </div>

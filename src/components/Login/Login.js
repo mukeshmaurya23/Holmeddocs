@@ -42,7 +42,7 @@ const Login = () => {
         <div className="flex flex-col lg:flex-row flex-1">
           <Aside image={image} />
 
-          <main className="flex flex-1 flex-col relative overflow-y-auto">
+          <main className="flex flex-1 flex-col relative ">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
               <Link to="/">
                 <img
@@ -52,19 +52,19 @@ const Login = () => {
                 />
               </Link>
             </div>
-            <div className="flex-grow">
-              <div className="ml-5 max-w-[620px]">
-                <h2 className="text-3xl font-sansRegular tracking-[3px] pt-[2rem] sm:pt-0 px-4 py-2 sm:px-24">
+            <div className="flex-grow p-5">
+              <div className="max-w-[620px]">
+                <h2 className="text-3xl font-sansRegular tracking-[3px] pt-[2rem] sm:pt-0  py-2 sm:px-24">
                   Login
                 </h2>
 
-                <p className="px-4 py-2 sm:px-24 font-sansRegular text-sm  text-otpText">
+                <p className="py-2 sm:px-24 font-sansRegular text-sm  text-otpText">
                   We care for your body. It’s the only place you have to live
                   in.
                 </p>
                 <form className="mb-6" onSubmit={formik.handleSubmit}>
-                  <div className="flex flex-wrap  sm:px-24 py-4 ">
-                    <div className="flex flex-col space-y-2 w-full py-[0px] relative">
+                  <div className="flex flex-wrap  sm:px-24  py-4 ">
+                    <div className="flex flex-col w-full py-[0px] relative">
                       <Label
                         htmlFor="mobileNumber"
                         className="font-sansRegular text-formLabel text-sm"
@@ -94,7 +94,7 @@ const Login = () => {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col space-y-2 w-full relative py-[16px]">
+                    <div className="flex flex-col  w-full relative py-[16px]">
                       <Label
                         htmlFor="Password"
                         className="font-sansRegular text-formLabel text-sm"
@@ -147,7 +147,7 @@ const Login = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.checkbox}
-                        className="rounded border-none outline-verifiCation w-4 h-4 accent-verifiCation transition-all delay-200"
+                        className="rounded border-none outline-verifiCation  accent-verifiCation transition-all delay-200"
                       />
 
                       <Label
@@ -170,9 +170,10 @@ const Login = () => {
             <div className="sm:absolute bottom-0 left-0 right-0  flex justify-between bg-verifiCation p-5 ">
               <Link
                 to="/register"
-                className="text-white font-sansLight ml-[4rem] text-sm mt-3"
+                className="text-white font-sansLight md:ml-[4rem] text-sm mt-3 xsm:text-[13px]"
               >
-                Don’t have an account? Signup
+                Don’t have an account ?{" "}
+                <span className="underline">Sign Up</span>
               </Link>
               <Button
                 className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full py-2 bg-white text-black `}

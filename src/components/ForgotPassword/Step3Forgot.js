@@ -32,15 +32,15 @@ const Step3Forgot = ({ formik }) => {
   const { touched, errors, values } = formik;
   return (
     <>
-      <div className="flex flex-col  py-2 px-14">
-        <p className="font-sansRegular text-[#292F33] font-semibold text-2xl tracking-[3px] mb-2 px-5">
+      <div className="flex flex-col  py-2 px-2 sm:px-14">
+        <p className="font-sansRegular text-[#292F33] font-semibold text-2xl tracking-[3px] mt-4 mb-2 px-2 sm:px-4 text-[16px] sm:text-2xl">
           Forgot your password?
         </p>
-        <p className="font-sansRegular text-sm text-[#545871] py-2 px-5 mt-3">
+        <p className="font-sansRegular text-sm text-[#545871] py-2 px-2 sm:px-4 mt-3">
           Don’t worry, we will help you to reset.
         </p>
 
-        <div className="px-5 py-2">
+        <div className="px-1 sm:px-5 py-2">
           <div className="mx-4 p-4 max-w-[500px]">
             <div className="flex items-center justify-center">
               <div className="flex items-center text-white relative">
@@ -73,8 +73,8 @@ const Step3Forgot = ({ formik }) => {
           </div>
         </div>
 
-        <div className="max-w-[500px] mt-12 mx-8">
-          <div className="flex flex-col space-y-2 w-full relative p-[10px]">
+        <div className="max-w-[500px] mt-12 mx-3 sm:mx-8">
+          <div className="flex flex-col  w-full relative p-[10px]">
             <Label
               htmlFor="password"
               className="font-sansRegular text-formLabel text-sm"
@@ -88,14 +88,16 @@ const Step3Forgot = ({ formik }) => {
               onChange={formik.handleChange}
               value={formik.values.password}
               onBlur={formik.handleBlur}
-              placeholder="●●●●●●●●"
+              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
               className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
             />
-            {touched.password && errors.password ? (
-              <div className="text-red-600 text-xs mt-1">
-                {formik.errors.password}
-              </div>
-            ) : null}
+            <div className="text-red-600 text-xs ">
+              {formik.touched.password && formik.errors.password ? (
+                formik.errors.password
+              ) : (
+                <>&nbsp;</>
+              )}
+            </div>
             <Button
               type="button"
               className="absolute top-11 right-5"
@@ -109,7 +111,7 @@ const Step3Forgot = ({ formik }) => {
               />
             </Button>
           </div>
-          <div className="flex flex-col space-y-2 w-full relative p-[10px]">
+          <div className="flex flex-col  w-full relative p-[10px]">
             <Label
               htmlFor="confirmPassword"
               className="font-sansRegular text-formLabel text-sm"
@@ -123,14 +125,17 @@ const Step3Forgot = ({ formik }) => {
               onChange={formik.handleChange}
               value={formik.values.confirmPassword}
               onBlur={formik.handleBlur}
-              placeholder="●●●●●●●●"
+              placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
               className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
             />
-            {touched.confirmPassword && errors.confirmPassword ? (
-              <div className="text-red-600 text-xs mt-1 ml-2">
-                {formik.errors.confirmPassword}
-              </div>
-            ) : null}
+            <div className="text-red-600 text-xs ">
+              {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword ? (
+                formik.errors.confirmPassword
+              ) : (
+                <>&nbsp;</>
+              )}
+            </div>
             <Button
               type="button"
               className="absolute top-11 right-5"

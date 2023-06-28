@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import { Footeritems } from "../constant";
+import addIcon from "../images/icons/Add.png";
+import { Link } from "react-router-dom";
+//import minusIcon from "../images/icons/Minus.png";
 
 const Footer = () => {
+  const [isVisible, setIsVisible] = useState(1);
+
+  const handleItemClick = (id) => {
+    setIsVisible((prevIsVisible) => (prevIsVisible === id ? null : id));
+    console.log(id);
+  };
+
   return (
     <>
       <div className="bg-greenMain  text-black lg:pt-16 pt-8 tracking-[0.1rem] ">
-        <div className=" lg:flex lg:justify-between space-x-2 lg:px-16 xl:px-20">
+        <div className="hidden   lg:flex lg:justify-between space-x-2 lg:px-16 xl:px-20">
           <section>
             <ul>
               <li className="mb-10">
@@ -13,10 +24,10 @@ const Footer = () => {
                     <h6 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                       Holmeddoc
                     </h6>
-                    <li className="font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black">
                       Home
                     </li>
-                    <li className="font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                       About us
                     </li>
                   </ul>
@@ -28,10 +39,10 @@ const Footer = () => {
                     <h6 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                       Contact Us
                     </h6>
-                    <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                       info@holmeddoc.com
                     </li>
-                    <li className="font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li className=" hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                       +1 000 000 0000
                     </li>
                   </ul>
@@ -44,13 +55,13 @@ const Footer = () => {
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Insurance Providers
               </h2>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 UHC
               </li>
-              <li className="font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className=" hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Humana
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Aetna
               </li>
             </ul>
@@ -60,30 +71,31 @@ const Footer = () => {
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Major Specialities
               </h2>
-              <li className=" cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Acupuncture
               </li>
-              <li className="font-semibold   font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold   font-sansRegular text-sm text-[11px] text-black">
                 Aromatherapy{" "}
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Alternative Medicine
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Yoga
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 {" "}
                 Reiki
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px]  text-black">
                 {" "}
                 Holistic Medicine
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black underline">
-                {" "}
-                View All
-              </li>
+              <Link to="/specialist">
+                <li className=" font-semibold font-sansRegular text-sm text-[11px] pt-3 text-black underline">
+                  View All
+                </li>
+              </Link>
             </ul>
           </section>
           <section>
@@ -91,13 +103,13 @@ const Footer = () => {
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 For Doctor and Healthcare providers
               </h2>
-              <li className=" cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Sign up with Holmeddoc
               </li>
-              <li className="font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className=" hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 For Developer Teams
               </li>
-              <li className=" font-semibold font-sansRegular text-sm text-[11px] text-black">
+              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                 Get the Holmeddoc App
               </li>
               <li>
@@ -117,7 +129,64 @@ const Footer = () => {
             </ul>
           </section>
         </div>
-        <p className=" px-20 py-10 text-[#000000] leading-6 font-sansRegular text-[13px]">
+        {/**Mobile Footer */}
+        <div className="block lg:hidden">
+          <section>
+            <ul>
+              <li className="mb-10 p-3">
+                <section>
+                  {Footeritems.map((item, index) => {
+                    return (
+                      <>
+                        <ul className="font-sansRegular py-5 " key={item.id}>
+                          <div className="flex justify-between mr-6">
+                            <h6 className="white font-sansRegular font-semibold text-footerHeader text-[12px]">
+                              {item.title}
+                            </h6>
+
+                            <i
+                              className={`${
+                                isVisible === item.id
+                                  ? "fa fa-minus"
+                                  : "fa fa-plus"
+                              } text-[16px] cursor-pointer`}
+                              aria-hidden="true"
+                              onClick={() => handleItemClick(item.id)}
+                            ></i>
+                          </div>
+                          {isVisible === item.id && (
+                            <ul>
+                              {item.list.map((data) => {
+                                const isViewAll = data.id === "viewall";
+                                const linkStyle = isViewAll ? "underline" : "";
+
+                                return (
+                                  <li
+                                    key={data.id}
+                                    className={`text-[13px] mt-3 ${linkStyle}`}
+                                  >
+                                    {isViewAll ? (
+                                      <a href="/specialist" className="">
+                                        {data.title}
+                                      </a>
+                                    ) : (
+                                      data.title
+                                    )}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </ul>
+                      </>
+                    );
+                  })}
+                </section>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <p className=" px-20 py-10 text-[#000000] leading-6 font-sansRegular text-[13px] hidden sm:block md:block lg:block xl:block 2xl:block">
           The content provided here or elsewhere on the Holmeddoc website,
           mobile application, newsletters or similar communication is provided
           for general informational purpose only. Holmeddoc Inc does not provide
@@ -155,7 +224,7 @@ const Footer = () => {
               lg="4"
               class="hidden lg:flex justify-end absolute lg:right-10 xl:right-16"
             >
-              <ul class=" flex flex-row">
+              <ul class=" flex flex-row ">
                 <li class="mr-2 p-[4px]  border-black border-[1px] rounded-full cursor-pointer">
                   <svg
                     stroke="currentColor"

@@ -5,6 +5,7 @@ import otp from "../../images/home/otp.jpg";
 import Button from "../../util/Button";
 import Aside from "../../util/Aside";
 import Otp from "../../util/Otp";
+import { Link } from "react-router-dom";
 const RegisterOtp = () => {
   return (
     <>
@@ -13,11 +14,13 @@ const RegisterOtp = () => {
           <Aside image={otp} />
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
-              <img
-                src={require("../../images/icons/Logo.png")}
-                alt="logo"
-                className="w-24 h-24 mx-4 sm:mx-10"
-              />
+              <Link to="/">
+                <img
+                  src={require("../../images/icons/Logo.png")}
+                  alt="logo"
+                  className="w-24 h-24 mx-4 sm:mx-10"
+                />
+              </Link>
             </div>
             <div className="flex-grow">
               <div className="flex flex-col px-3 py-5 sm:p-10 mt-[8rem] sm:mt-9 sm:ml-5">

@@ -1,26 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Slider.css";
+import { slides } from "../constant";
 const Slider = () => {
-  const slides = [
-    {
-      image: require("../images/home/Doctor.jpg"),
-      title: "Lindsay M.",
-      subtitle: "Vancouver, BC",
-      text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-    },
-    {
-      image: require("../images/home/Doctor.jpg"),
-      title: "Lindsay M.",
-      subtitle: "Vancouver, BC",
-      text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-    },
-    {
-      image: require("../images/home/Doctor.jpg"),
-      title: "Lindsay M.",
-      subtitle: "Vancouver, BC",
-      text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-    },
-  ];
   const delay = 2500;
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef(null);
@@ -53,15 +34,12 @@ const Slider = () => {
         style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
       >
         {slides.map((item, index) => (
-          <div
-            className="inline-block h-[200px] w-[100%] rounded-md"
-            key={index}
-          >
+          <div className="inline-block  w-[100%] rounded-md" key={index}>
             <div className="flex flex-col md:flex-row">
               <img
                 src={item.image}
                 alt=""
-                className=" h-[120px] md:w-[170px] md:h-[150px] w-[100px] rounded-md"
+                className=" h-[120px] md:w-[170px] md:h-[150px] w-[100px] xsm:w-full xsm:h-auto sm:w-[200px] xs:w-[200px] rounded-md"
               />
 
               <div className="flex flex-col mt-5 px-4">
