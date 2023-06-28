@@ -27,7 +27,7 @@ const HolisticProcess = () => {
           </p>
           <div className="flex justify-evenly px-10 mt-10 sm:flex-col sm:items-center xs:flex-col xs:items-center xsm:flex-col xsm:items-center md:flex-row md:items-start lg:flex-row lg:items-start ">
             <div className="flex flex-col  sm:items-center xs:items-center xsm:items-center sm:space-y-3 sm:mb-2 xsm:space-y-2 xs:space-y-3">
-              <div className="md:self-start relative">
+              <div className=" relative">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">
                   01
                 </h1>
@@ -52,7 +52,7 @@ const HolisticProcess = () => {
             <div className="sm:block xs:block xsm:block border-b w-full mt-3 border-gray-300 md:hidden"></div>
             {/* <div className="h-[900px]">|</div> */}
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center sm:space-y-3 xsm:space-y-2 xs:space-y-3 sm:mb-2 ">
-              <div className="md:self-start relative">
+              <div className=" relative">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">
                   02
                 </h1>
@@ -70,7 +70,7 @@ const HolisticProcess = () => {
             <div className="sm:hidden xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[240px] border-gray-300"></div>
             <div className="sm:block xs:block xsm:block border-b w-full mt-4 border-gray-300 md:hidden"></div>
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center xsm:space-y-2 xs:space-y-3 sm:space-y-3 sm:mb-2">
-              <div className="md:self-start relative">
+              <div className=" relative">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">
                   03
                 </h1>

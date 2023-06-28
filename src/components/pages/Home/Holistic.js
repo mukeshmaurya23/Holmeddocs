@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import leaf from "../../../images/home/Leaf.png";
 import svgSearch from "../../../images/home/SearchBarIcon.svg";
 import calendarSvg from "../../../images/home/Calendar.svg";
-import grayDropDown from "../../../images/home/BlackDropdown.png";
+import grayDropDown from "../../../images/Login/GrayDropdown.png";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { LocSpec } from "../../../constant";
 import Accordion from "../../../util/Accordian";
@@ -43,33 +43,48 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="hidden md:block mb-10 bg-white px-5 rounded-full mx-auto md:max-w-[1000px] w-full">
-          <div className="flex ">
-            <Accordion items={LocSpec} showBorder={false} />
+        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[1000px] w-full">
+          <div className="flex flex-col md:flex-row">
+            <Accordion
+              items={LocSpec}
+              showBorder={false}
+              image={grayDropDown}
+              className="text-gray-600"
+            />
 
             {/* <div className="flex flex-row justify-between items-center flex-1 gap-[20px]">
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
-            <div className="flex gap-5 items-center justify-between">
-              <img
-                src={calendarSvg}
-                alt=""
-                className="w-6 h-6 cursor-pointer"
-              />
-              <p>{selectedDate ? selectedDate.toDateString() : "Today"}</p>
-              {showDatePicker && (
-                <DatePickerComponent onDateChange={handleDateChange} />
-              )}
+            <div className="flex gap-5 items-center mt-1 justify-between py-4 md:py-0 ">
+              <div className="flex gap-5">
+                <img
+                  src={calendarSvg}
+                  alt=""
+                  className="w-6 h-6 cursor-pointer"
+                />
+                {selectedDate &&
+                  selectedDate.toDateString() !== new Date().toDateString() && (
+                    <p>{selectedDate.toDateString()}</p>
+                  )}
+                {showDatePicker && (
+                  <DatePickerComponent onDateChange={handleDateChange} />
+                )}
+              </div>
 
-              <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
-
               <img
-                src={svgSearch}
-                alt=""
-                className="w-20 h-16 cursor-pointer"
-                onClick={toggleCalendar}
+                src={grayDropDown}
+                alt="dropdown"
+                className="h-3 w-3 ml-auto mr-[60px]"
               />
+              <div className="hidden md:block">
+                <img
+                  src={svgSearch}
+                  alt=""
+                  className="w-20 h-16  cursor-pointer "
+                  onClick={toggleCalendar}
+                />
+              </div>
             </div>
           </div>
         </div>

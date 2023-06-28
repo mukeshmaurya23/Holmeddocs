@@ -6,7 +6,7 @@ const DatePickerComponent = () => {
   const [startDate, setStartDate] = useState(new Date());
   const customInput = (
     <input
-      style={{ outline: "none", border: "none", width: "100px" }}
+      style={{ outline: "none", border: "none", width: "100px", color: "gray" }}
       value={startDate.toDateString()}
       readOnly
     />

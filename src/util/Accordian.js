@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import blackDropDown from "../images/home/BlackDropdown.png";
 
-const Accordion = ({ items, showBorder }) => {
+const Accordion = ({ items, showBorder, image, className }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleItemClick = (id) => {
@@ -11,28 +10,28 @@ const Accordion = ({ items, showBorder }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center  justify-between md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1">
+    <div className="flex flex-col  md:flex-row md:items-center  justify-between md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1">
       {items.map((item) => (
         <div
           className={`${
             showBorder ? "border-b-2 border-gray-400 pb-7" : ""
-          } flex relative items-center `}
+          } flex relative items-center  `}
           key={item.id}
         >
           <h2
-            className={`font-sansBold text-[#292F33] text-[.8rem] md:text-[.9rem] tracking-[2px] ${
+            className={`font-sansBold  text-[.8rem] md:text-[.9rem] tracking-[2px] ${
               showBorder ? "mt-3" : ""
-            } `}
+            } ${className} `}
           >
             {item.title}
           </h2>
-
+          {/**ml-auto */}
           <div
             className="ml-auto md:ml-5 xl:pl-28"
             onClick={() => handleItemClick(item.id)}
           >
             <img
-              src={blackDropDown}
+              src={image}
               alt=""
               className={`${
                 selectedItem === item.id ? "rotate-180" : ""
@@ -41,7 +40,8 @@ const Accordion = ({ items, showBorder }) => {
           </div>
           <div
             className={`${
-              !showBorder && "border-l border-gray-400 h-[50px] ml-10 mr-5"
+              !showBorder &&
+              "border-l  border-none md:border-l lg:border-l border-gray-400 h-[50px] ml-10 mr-5"
             }`}
           ></div>
           {selectedItem === item.id && (

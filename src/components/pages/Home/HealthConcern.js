@@ -49,7 +49,11 @@ const HealthConcern = () => {
             )}
           </div>
         ))} */}
-        <Accordion items={healthConcern} showBorder={true} />
+        <Accordion
+          items={healthConcern}
+          showBorder={true}
+          image={blackDropDown}
+        />
       </div>
     </div>
   );
