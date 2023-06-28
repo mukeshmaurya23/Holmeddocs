@@ -87,6 +87,11 @@ const Holistic = () => {
               </div>
             </div>
           </div>
+          <div className="md:hidden pb-6 pt-3 pr-6">
+            <button className="bg-gray-600 text-white w-full py-2 rounded">
+              Search
+            </button>
+          </div>
         </div>
       </div>
     </div>
