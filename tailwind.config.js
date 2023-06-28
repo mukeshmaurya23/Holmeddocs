@@ -31,6 +31,7 @@ module.exports = {
         sansLight: ["sansLight", "sans-serif"],
         poppinRegular: ["poppinRegular", "sans-serif"],
         poppinItalic: ["poppinItalic", "sans-serif"],
+        Henriette: ["Henriette", "sans-serif"],
       },
       colors: {
         greenMain: "#e2f6f3",

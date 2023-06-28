@@ -34,3 +34,7 @@
   font-family: poppinItalic;
   src: url("./assets/fonts/poppins/Poppins-Italic.ttf");
 }
+@font-face {
+  font-family: Henriette;
+  src: url("./assets/fonts/Henriette/Henriette-Bold.ttf");
+}

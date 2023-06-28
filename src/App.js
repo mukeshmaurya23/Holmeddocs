@@ -15,6 +15,8 @@ import RegisterOtp from "./components/Register/RegisterOtp";
 import useOnline from "./hooks/useOnline";
 import Browse from "./components/Browse";
 import Navbar from "./UI/Navbar";
+import ProfileDetails from "./components/pages/MyProfile/ProfileDetails";
+import UpdateProfile from "./components/pages/MyProfile/UpdateProfile";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -66,7 +68,12 @@ const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Appointment />,
+        // element: <Appointment />,
+        element: <ProfileDetails />,
+      },
+      {
+        path: "update-profile",
+        element: <UpdateProfile />,
       },
     ],
   },
