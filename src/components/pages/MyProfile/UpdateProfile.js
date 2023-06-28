@@ -184,7 +184,7 @@ const UpdateProfile = () => {
               <Input
                 type="text"
                 name="city"
-                id="city"
+                id="citty"
                 placeholder="city"
                 className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
               />
