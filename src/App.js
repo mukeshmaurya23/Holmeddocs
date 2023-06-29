@@ -7,16 +7,17 @@ import ChangePassword from "./components/ChangePassword/ChangePassword";
 
 import Specialistic from "./components/pages/Specialistic/Specialistic";
 import SideBar from "./util/Sidebar";
-import Appointment from "./components/pages/Appointment/Appointment";
+import MakeAppointment from "./components/pages/Appointment/MakeAppointment";
 import AllSpecialistic from "./components/pages/Specialistic/AllSpecialistic";
 import Navbar2 from "./UI/Navbar2";
 import MainContainer from "./components/pages/Home/MainContainer";
 import RegisterOtp from "./components/Register/RegisterOtp";
 import useOnline from "./hooks/useOnline";
-import Browse from "./components/Browse";
-import Navbar from "./UI/Navbar";
+
 import ProfileDetails from "./components/pages/MyProfile/ProfileDetails";
 import UpdateProfile from "./components/pages/MyProfile/UpdateProfile";
+import AboutUs from "./components/pages/AboutUs/AboutUs";
+import DoctorListing from "./components/pages/DoctorListing/DoctorListing";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -30,12 +31,21 @@ const appRouter = createBrowserRouter([
         path: "/specialist",
         element: <AllSpecialistic />,
       },
+      {
+        path: "/about-us",
+        element: <AboutUs />,
+      },
+      {
+        path: "/make-appointment",
+        element: <MakeAppointment />,
+      },
+      {
+        path: "/doctor-listing",
+        element: <DoctorListing />,
+      },
     ],
   },
-  {
-    path: "/browse",
-    element: <Browse />,
-  },
+
   {
     path: "/register",
     element: <Register />,

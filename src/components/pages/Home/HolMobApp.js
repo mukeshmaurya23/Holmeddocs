@@ -7,7 +7,10 @@ const HolMobApp = () => {
       <div className="grid grid-cols-1 md:grid-cols-2">
         <div className="px-8 md:px-20 py-3">
           <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px]">
-            Download Holmeddoc Mobile App
+            Download Holmeddoc
+          </h2>
+          <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px]">
+            Mobile App
           </h2>
           <ul className="font-sansRegular text-sm text-[#545871] p-4 mt-2 md:mt-6 md:mt-8 py-3">
             <li className="py-2 md:py-3">

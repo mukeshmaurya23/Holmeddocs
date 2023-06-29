@@ -32,6 +32,7 @@ module.exports = {
         poppinRegular: ["poppinRegular", "sans-serif"],
         poppinItalic: ["poppinItalic", "sans-serif"],
         Henriette: ["Henriette", "sans-serif"],
+        poppinsMedium: ["poppinsMedium", "sans-serif"],
       },
       colors: {
         greenMain: "#e2f6f3",
@@ -46,6 +47,7 @@ module.exports = {
         appointmentColor: "#F0F0F0",
 
         healthConcern: " #E2F6F3",
+        aboutUsBorder: "#C58B36",
       },
     },
   },
