@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../../util/Button";
+import { Link } from "react-router-dom";
 
 const ProfileDetails = () => {
   return (
@@ -78,9 +79,11 @@ const ProfileDetails = () => {
             if you have given your consent.
           </p>
         </div>
-        <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold">
-          Edit Profile
-        </Button>
+        <Link to="update-profile">
+          <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold">
+            Edit Profile
+          </Button>
+        </Link>
       </div>
     </>
   );

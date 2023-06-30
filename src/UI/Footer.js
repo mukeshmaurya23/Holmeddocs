@@ -20,7 +20,7 @@ const Footer = () => {
             <ul>
               <li className="mb-10">
                 <section>
-                  <ul className="font-sansRegular space-y-5">
+                  <ul className="font-sansRegular space-y-5 cursor-pointer">
                     <h6 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                       Holmeddoc
                     </h6>
@@ -35,10 +35,13 @@ const Footer = () => {
               </li>
               <li>
                 <section>
-                  <ul className="font-sansRegular space-y-5">
-                    <h6 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
+                  <ul className="font-sansRegular space-y-5 cursor-pointer">
+                    <Link
+                      to="/contact-us"
+                      className="white font-sansRegular font-semibold mb-8 text-footerHeader"
+                    >
                       Contact Us
-                    </h6>
+                    </Link>
                     <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
                       info@holmeddoc.com
                     </li>
@@ -51,7 +54,7 @@ const Footer = () => {
             </ul>
           </section>
           <section>
-            <ul className="font-sansRegular space-y-5">
+            <ul className="font-sansRegular space-y-5 cursor-pointer">
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Insurance Providers
               </h2>
@@ -67,7 +70,7 @@ const Footer = () => {
             </ul>
           </section>
           <section>
-            <ul className="font-sansRegular space-y-5">
+            <ul className="font-sansRegular space-y-5 cursor-pointer">
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Major Specialities
               </h2>
@@ -100,7 +103,7 @@ const Footer = () => {
           </section>
           <section>
             <ul className="font-sansRegular space-y-5">
-              <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
+              <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader cursor-pointer">
                 For Doctor and Healthcare providers
               </h2>
               <li className="hidden sm:block  cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">

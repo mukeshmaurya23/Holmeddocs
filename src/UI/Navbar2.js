@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import userLogo from "../images/home/User.png";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../images/home/Logo.png";
 import PortalModal from "./PortalModal";
 import hamBurger from "../images/icons/Hamburger.png";
@@ -16,8 +16,9 @@ const Navbar2 = () => {
   const handleDropdownClick = () => {
     setDropdownVisible(!dropdownVisible);
   };
+  const navigate = useNavigate();
   const handleOptionClick = (option) => {
-    console.log(option);
+    navigate(option);
   };
   const [showModal, setShowModal] = useState(false);
 
@@ -55,6 +56,7 @@ const Navbar2 = () => {
             <div className="flex">
               <Link
                 to="/login"
+                onClick={() => handleOptionClick("User Login")}
                 className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 <button onClick={() => handleOptionClick("User Login")}>
@@ -169,17 +171,17 @@ const Navbar2 = () => {
               <div className="border-[1px] flex items-center rounded-lg border-[#b5b1b1] ">
                 <div className="flex items-center">
                   <input
-                    className=" py-2 w-[200px] h-[40px] mr-1 outline-none border-r border-[#b5b1b1] pl-2"
+                    className=" py-1 w-[200px] h-[40px] mr-1 outline-none border-r border-[#b5b1b1] pl-2"
                     placeholder="New York, NY"
                   />
 
                   <input
-                    className="outline-none border-r border-[#b5b1b1] py-2 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
+                    className="outline-none border-r border-[#b5b1b1] py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
                     placeholder="Dentist"
                   />
 
                   <input
-                    className="outline-none  py-2 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
+                    className="outline-none  py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
                     placeholder="Other"
                   />
                 </div>

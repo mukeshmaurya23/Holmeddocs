@@ -9,6 +9,7 @@ import Aside from "../../util/Aside";
 import Modal from "../../UI/Modal";
 import { useFormik } from "formik";
 import { resetSchema } from "../../schema/formValidation";
+import Success from "../../images/Login/Success.png";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -209,6 +210,9 @@ const ChangePassword = () => {
           closeModal={closeModal}
           text={"Your password has been changed successfully."}
           title={"Password Changed!"}
+          image={Success}
+          btnText={"Login"}
+          link={"/login"}
         />
       )}
     </>

@@ -5,10 +5,12 @@ import Modal from "../UI/Modal";
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
   const navigate = useNavigate();
   return (
     <div className="flex flex-col h-screen">
@@ -65,16 +67,30 @@ const SideBar = () => {
             </Link>
           </div>
           <div className="flex flex-col absolute bottom-0 w-full mb-10">
-            <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
+            <Link
+              to="/sidebar"
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+            >
               My Profile
-            </span>
-            <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
+            </Link>
+            <Link
+              to="appointment-list"
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+            >
               My Appointments
-            </span>
-            <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
+            </Link>
+            <Link
+              to="/change-password"
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+            >
               Change Password
-            </span>
-            <span className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs">
+            </Link>
+            <span
+              onClick={() => {
+                setDeleteModal(true);
+              }}
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+            >
               Delete Account
             </span>
             <span
@@ -99,10 +115,23 @@ const SideBar = () => {
       </div>
       {modal && (
         <Modal
-          title="Sign out"
-          description="Are you sure you want to sign out?"
-          onClose={() => {
+          title="Log out"
+          text="Are you sure you want to Logout?"
+          btnText="Yes"
+          btnText2="No"
+          closeModal={() => {
             setModal(false);
+          }}
+        />
+      )}
+      {deleteModal && (
+        <Modal
+          title="Are you sure you want to delete your account?"
+          text="Your account and all of its data will be permanently deleted."
+          btnText="Yes"
+          btnText2="No"
+          closeModal={() => {
+            setDeleteModal(false);
           }}
         />
       )}

@@ -43,7 +43,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[1000px] w-full">
+        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[1080px]">
           <div className="flex flex-col md:flex-row">
             <Accordion
               items={LocSpec}
@@ -56,12 +56,12 @@ const Holistic = () => {
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
-            <div className="flex gap-5 items-center mt-1 justify-between py-4 md:py-0 ">
-              <div className="flex gap-5">
+            <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
+              <div className="flex ml-0 md:ml-5">
                 <img
                   src={calendarSvg}
                   alt=""
-                  className="w-6 h-6 cursor-pointer"
+                  className="w-6 h-6 cursor-pointer mr-5"
                 />
                 {selectedDate &&
                   selectedDate.toDateString() !== new Date().toDateString() && (

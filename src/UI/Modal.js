@@ -37,7 +37,7 @@ import success from "../images/Login/Success.png";
 import Button from "../util/Button";
 import { Link } from "react-router-dom";
 import cross from "../images/icons/Cross.png";
-const Modal = ({ closeModal, text, title }) => {
+const Modal = ({ closeModal, text, title, btnText, btnText2, image, link }) => {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -47,19 +47,24 @@ const Modal = ({ closeModal, text, title }) => {
         ></div>
         <div className="relative bg-white rounded-lg shadow-lg sm:w-[400px]">
           <div className="flex flex-col justify-center items-center p-8">
-            <img
-              src={success}
-              alt="success"
-              className="w-1/2 h-28 transition-all duration-300 ease-in-out transform hover:scale-110"
-            />
+            {image && <img src={image} alt="success" className="w-1/2 h-28" />}
 
             <p className="text-xl font-sansBold text-center mt-4  text-verifiCation tracking-[3px]">
               {title}
             </p>
             <p className="text-center mt-4 text-sm text-gray-500">{text}</p>
-            <Button className="mt-4 px-16 py-1 bg-verifiCation text-white rounded-full">
-              <Link to="/login">Login</Link>
-            </Button>
+            <div className="flex justify-between">
+              {btnText && (
+                <Button className="mt-4 px-16 py-1 bg-verifiCation text-white rounded-full">
+                  <Link to="/login">{btnText}</Link>
+                </Button>
+              )}
+              {btnText2 && (
+                <Button className="mt-4 px-16 py-1 ml-3 bg-verifiCation text-white rounded-full">
+                  <Link to={link}>{btnText2}</Link>
+                </Button>
+              )}
+            </div>
             <img
               src={cross}
               alt="close"

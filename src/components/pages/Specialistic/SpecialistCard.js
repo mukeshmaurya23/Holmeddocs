@@ -21,13 +21,13 @@ const SpecialistCard = ({ specialistData }) => {
               </div>
               <div className="md:h-[120px] sm:h-[80px] xs:h-[40px] xsm:h-[30px]">
                 <h2 className="font-sansBold text-[12px] sm:text-center xs:text-center xsm:text-center md:text-left md:text-[18px] lg:text-[18px] sm:text-[14px] text-[#292F33] md:tracking-[3px] sm:tracking-[2px] mt-5">
-                  {item.medical_speciality_name}
+                  {item?.medical_speciality_name}
                 </h2>
               </div>
 
               <div className="hidden md:block basis-[50%]">
                 <p className="text-[#545871] font-sans text-sm">
-                  {item.description}
+                  {item?.description}
                 </p>
               </div>
             </div>

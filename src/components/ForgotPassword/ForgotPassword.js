@@ -8,6 +8,7 @@ import Step2Forgot from "./Step2Forgot";
 import Step3Forgot from "./Step3Forgot";
 import forgot from "../../images/Login/Forgot.jpg";
 import Modal from "../../UI/Modal";
+import Success from "../../images/Login/Success.png";
 import { forgotSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
 // const validate = (values) => {
@@ -129,6 +130,9 @@ const ForgotPassword = () => {
           closeModal={closeModal}
           text={"Your password has been changed successfully."}
           title={"Success!"}
+          image={Success}
+          btnText={"Login"}
+          link={"/login"}
         />
       )}
     </div>

@@ -21,7 +21,7 @@ const PortalModal = ({ closeModal }) => {
               src={cross}
               alt="close"
               onClick={closeModal}
-              className="absolute right-10 top-10 cursor-pointer h-5 w-5"
+              className="absolute right-10 top-10 cursor-pointer h-4 w-4"
             />
           </div>
           <div className="flex flex-wrap mb-10 ml-7">

@@ -48,7 +48,7 @@ const HolPractise = () => {
           <img
             src={practiseLogo}
             alt=""
-            className="w-[100%] lg:h-[28rem] xl:h-[29rem] 2xl:h-[28rem] md:h-[27rem] sm:h-[25rem] xs:h-[20rem] xsm:h-[17rem] md:w-[100%]"
+            className="w-[100%] lg:h-[28rem] xl:h-[28rem] 2xl:h-[28rem] md:h-[27rem] sm:h-[25rem] xs:h-[20rem] xsm:h-[17rem] md:w-[100%]"
           />
         </div>
         <div className="mt-10 sm:mt-[28rem] xs:mt-[19rem] xsm:mt-[17rem] md:mt-20 lg:mt-20 xl:mt-20 md:ml-[35rem]">

@@ -351,3 +351,120 @@ export const slides = [
     text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
   },
 ];
+
+export const dummyData = [
+  {
+    id: 1,
+    title: "Languages",
+    data: [
+      {
+        id: 1,
+        name: "English",
+      },
+      {
+        id: 2,
+        name: "Hindi",
+      },
+      {
+        id: 3,
+        name: "French",
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "Speciality",
+    data: [
+      {
+        id: 1,
+        name: "Dentist",
+      },
+      {
+        id: 2,
+        name: "Physician",
+      },
+      {
+        id: 3,
+        name: "Cardiologist",
+      },
+      {
+        id: 4,
+        name: "Oncologist",
+      },
+      {
+        id: 5,
+        name: "Pulmonologist",
+      },
+      {
+        id: 6,
+        name: "Oral Surgeon",
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "Conditions",
+    data: [
+      {
+        id: 1,
+        name: "Allergic Cough",
+      },
+      {
+        id: 2,
+        name: "Acne",
+      },
+      {
+        id: 3,
+        name: "Abdominal Pain",
+      },
+      {
+        id: 4,
+        name: "Foot Consultations",
+      },
+      {
+        id: 5,
+        name: "Eye Doctors",
+      },
+      {
+        id: 6,
+        name: "Heart Failure",
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: "Appointment Type",
+    data: [
+      {
+        id: 1,
+        name: "Virtual",
+      },
+      {
+        id: 2,
+        name: "InPerson",
+      },
+    ],
+  },
+  {
+    id: 5,
+    title: "Insurance",
+    data: [
+      {
+        id: 1,
+        name: "Aetna",
+      },
+      {
+        id: 2,
+        name: "Humana",
+      },
+      {
+        id: 3,
+        name: "UHC",
+      },
+      {
+        id: 4,
+        name: "Other",
+      },
+    ],
+  },
+];
