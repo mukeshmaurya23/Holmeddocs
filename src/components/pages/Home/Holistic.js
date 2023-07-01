@@ -6,7 +6,11 @@ import grayDropDown from "../../../images/Login/GrayDropdown.png";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { LocSpec } from "../../../constant";
 import Accordion from "../../../util/Accordian";
+import useFetch from "../../../hooks/useFetch";
 const Holistic = () => {
+  const { data: LocSpecd } = useFetch("/patient/master/state");
+  console.log(LocSpecd?.data?.result);
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -15,6 +19,11 @@ const Holistic = () => {
     setSelectedDate(date);
     setShowDatePicker(false);
   };
+
+  const toggleDatePicker = () => {
+    setShowDatePicker(!showDatePicker);
+  };
+
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
@@ -47,6 +56,7 @@ const Holistic = () => {
           <div className="flex flex-col md:flex-row">
             <Accordion
               items={LocSpec}
+              items2={LocSpecd?.data?.result}
               showBorder={false}
               image={grayDropDown}
               className="text-gray-600"
@@ -59,6 +69,7 @@ const Holistic = () => {
             <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
               <div className="flex ml-0 md:ml-5">
                 <img
+                  onClick={toggleCalendar}
                   src={calendarSvg}
                   alt=""
                   className="w-6 h-6 cursor-pointer mr-5"
@@ -82,7 +93,6 @@ const Holistic = () => {
                   src={svgSearch}
                   alt=""
                   className="w-20 h-16  cursor-pointer "
-                  onClick={toggleCalendar}
                 />
               </div>
             </div>

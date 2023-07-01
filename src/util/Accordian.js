@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Accordion = ({ items, showBorder, image, className }) => {
+const Accordion = ({ items, items2, showBorder, image, className }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleItemClick = (id) => {
@@ -51,12 +51,12 @@ const Accordion = ({ items, showBorder, image, className }) => {
                 zIndex: 1,
               }}
             >
-              {item.dropDown.map((data) => (
+              {items2.map((data) => (
                 <h1
                   key={data.id}
-                  className="hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+                  className="cursor-pointer hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
                 >
-                  {data.title}
+                  {data?.state_name}
                 </h1>
               ))}
             </div>

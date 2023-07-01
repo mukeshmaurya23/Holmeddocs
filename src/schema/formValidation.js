@@ -1,16 +1,11 @@
 import * as Yup from "yup";
 
 export const loginSchema = Yup.object().shape({
-  mobileNumber: Yup.string()
+  phone: Yup.string()
     .required("Phone number is required")
     .matches(/^\d{10}$/, "Phone number must be 10 digits"),
-  Password: Yup.string()
-    .min(5)
-    .required("Please Enter your password")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "Must Contain 8 Characters, One Uppercase, Lowercase, Number and One Special Case Character"
-    ),
+  password: Yup.string().min(5).required("Please Enter your password"),
+
   checkbox: Yup.boolean()
     .oneOf([true], "Please accept the terms and conditions")
     .required("Please accept the terms and conditions"),

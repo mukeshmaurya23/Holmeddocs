@@ -11,11 +11,24 @@ import { useLocation } from "react-router-dom";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 
 import { LoginSignup } from "../constant";
+
 const Navbar2 = () => {
+  const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const handleDropdownClick = () => {
-    setDropdownVisible(!dropdownVisible);
+  const openHandleDropdown = () => {
+    setDropdownVisible(true);
   };
+  const closeHandleDropdown = () => {
+    setDropdownVisible(false);
+  };
+  const handleDropdownClick = () => {
+    if (dropdownVisible) {
+      closeHandleDropdown();
+    } else {
+      openHandleDropdown();
+    }
+  };
+
   const navigate = useNavigate();
   const handleOptionClick = (option) => {
     navigate(option);
@@ -35,8 +48,18 @@ const Navbar2 = () => {
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+  const loggedInToggleDropdown = () => {
+    setIsLoggedInDropdown(!isLoggedInDropdown);
+  };
 
   const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
+  const isLoggedIn = localStorage.getItem("token");
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    setIsLoggedInDropdown(false);
+  };
+
   const location = useLocation();
   console.log(location.pathname);
   const LoginSignup = (
@@ -46,46 +69,70 @@ const Navbar2 = () => {
           className="flex items-center px-0 text-sm text-black focus:outline-none font-semibold"
           onClick={handleDropdownClick}
         >
-          <span className="font-sansBold font-semibold text-sm lg:text-navbarLg mr-2 tracking-[.15rem] cursor-pointer">
-            LOGIN/SIGNUP
-          </span>
-          <img className="h-7" alt="user" src={userLogo} />
+          {!isLoggedIn ? (
+            <span className="font-sansBold font-semibold text-sm lg:text-navbarLg mr-2 tracking-[.15rem] cursor-pointer">
+              LOGIN/SIGNUP
+            </span>
+          ) : null}
+          {isLoggedIn ? (
+            <img
+              className="h-7"
+              alt="user"
+              src={userLogo}
+              onClick={loggedInToggleDropdown}
+            />
+          ) : (
+            <img className="h-7" alt="user" src={userLogo} />
+          )}
         </button>
-        {dropdownVisible && (
+        {!isLoggedIn && dropdownVisible && (
           <div className="absolute bg-white rounded-md shadow-lg mt-2 py-2 w-48">
             <div className="flex">
               <Link
                 to="/login"
-                onClick={() => handleOptionClick("User Login")}
                 className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
               >
-                <button onClick={() => handleOptionClick("User Login")}>
-                  User Login
-                </button>
+                <button>User Login</button>
               </Link>
               <div className="mt-1 text-gray-400">|</div>
               <Link
                 to="/register"
                 className="block pl-[10px] ml py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
               >
-                <button onClick={() => handleOptionClick("User Signup")}>
-                  User Signup
-                </button>
+                <button>User Signup</button>
               </Link>
             </div>
             <div className="flex">
-              <button
-                className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
-                onClick={() => handleOptionClick("Doctor Login")}
-              >
+              <button className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left">
                 Doctor Login
               </button>
               <div className="mt-1 text-gray-400">|</div>
-              <button
-                className="block pl-[2px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
-                onClick={() => handleOptionClick("Doctor Signup")}
-              >
+              <button className="block pl-[2px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left">
                 Doctor Signup
+              </button>
+            </div>
+          </div>
+        )}
+        {isLoggedIn && isLoggedInDropdown && (
+          <div className="absolute -left-[11rem] w-[200px] px-3 bg-white rounded-md shadow-lg mt-2 py-2">
+            <div className="flex flex-col">
+              <Link
+                to="/sidebar"
+                className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+              >
+                My Profile
+              </Link>
+              <Link
+                to="/sidebar/appointment-list"
+                className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+              >
+                My Appointments
+              </Link>
+              <button
+                className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                onClick={logOutHandler}
+              >
+                Logout
               </button>
             </div>
           </div>
@@ -106,7 +153,7 @@ const Navbar2 = () => {
           location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-        } bg-white z-10  h-[7rem] relative drop-shadow-lg`}
+        } bg-white z-10  h-[7rem] relative drop-shadow-lg cursor-pointer`}
       >
         <div class="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -274,37 +321,58 @@ const Navbar2 = () => {
                 <div className="absolute top-20 left-10 w-full">
                   {/* Content of the popup */}
                   <div className="flex flex-col space-y-4">
-                    <div className="flex gap-7 items-center ">
-                      <h2 className="font-sansBold text-[14px]">Patients</h2>
-                      <Link
-                        to="/login"
-                        className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
-                      >
-                        Log In
-                      </Link>
-                      <Link
-                        to="/register"
-                        className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
-                      >
-                        Sign up
-                      </Link>
-                    </div>
-                    <div className=" border-b " />
-                    <div className="flex gap-7">
-                      <h2 className="font-sansBold text-[14px]">Doctors</h2>
-                      <Link
-                        to="/login"
-                        className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
-                      >
-                        Log In
-                      </Link>
-                      <Link
-                        to="/register"
-                        className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
-                      >
-                        Sign up
-                      </Link>
-                    </div>
+                    {/*checkLogged in in mobile */}
+                    {isLoggedIn ? (
+                      <>
+                        <Link to="/sidebar">
+                          <h2 className="font-sansBold text-[14px]">
+                            My Profile
+                          </h2>
+                        </Link>
+                        <div className=" border-b " />
+                        <Link to="/sidebar/appointment-list">
+                          <h2 className="font-sansBold text-[14px]">
+                            My Appointment
+                          </h2>
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex gap-7 items-center ">
+                          <h2 className="font-sansBold text-[14px]">
+                            Patients
+                          </h2>
+                          <Link
+                            to="/login"
+                            className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
+                          >
+                            Log In
+                          </Link>
+                          <Link
+                            to="/register"
+                            className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
+                          >
+                            Sign up
+                          </Link>
+                        </div>
+                        <div className=" border-b " />
+                        <div className="flex gap-7">
+                          <h2 className="font-sansBold text-[14px]">Doctors</h2>
+                          <Link
+                            to="/login"
+                            className="text-[11px] font-sansBold text-black border-b border-dotted border-gray-600"
+                          >
+                            Log In
+                          </Link>
+                          <Link
+                            to="/register"
+                            className=" text-[11px] text-black font-sansBold  border-b border-dotted border-gray-600"
+                          >
+                            Sign up
+                          </Link>
+                        </div>
+                      </>
+                    )}
                     <div className=" border-b " />
                     <Link to="/">
                       <h2 className="font-sansBold text-[14px]">
@@ -323,6 +391,18 @@ const Navbar2 = () => {
                     <Link to="/" onClick={toggleMenuHandler}>
                       <h2 className="font-sansBold text-[14px]">Home</h2>
                     </Link>
+                    {isLoggedIn && (
+                      <>
+                        {" "}
+                        <div className=" border-b " />
+                        <h2
+                          className="font-sansBold text-[14px]"
+                          onClick={logOutHandler}
+                        >
+                          Logout
+                        </h2>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

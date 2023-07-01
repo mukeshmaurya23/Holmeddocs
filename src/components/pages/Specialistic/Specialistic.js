@@ -2,29 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
+import useFetch from "../../../hooks/useFetch";
 const Specialistic = () => {
-  const [specialistData, setSpecialistData] = useState([]);
+  const { data: specialistData } = useFetch("/patient/master/speciality");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(
-        "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46bXlwY290",
-            platform: "web",
-          },
-        }
-      );
-      const data = await response.json();
-      setSpecialistData(data?.data?.result.slice(0, 4));
-    };
+  // const [specialistData, setSpecialistData] = useState([]);
 
-    fetchData();
-  }, []);
-  console.log(specialistData);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch(
+  //       "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: "Basic YWRtaW46bXlwY290",
+  //           platform: "web",
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     setSpecialistData(data?.data?.result.slice(0, 4));
+  //   };
+
+  //   fetchData();
+  // }, []);
+  // console.log(specialistData);
 
   return (
     <>
@@ -44,14 +47,17 @@ const Specialistic = () => {
             </Link>
           </div>
         </div>
-        {specialistData.length === 0 ? (
+        {specialistData === null ? (
           <>
             <div className="flex justify-center  ">
               <img src={loadingGif} alt="" />
             </div>
           </>
-        ) : null}
-        <SpecialistCard specialistData={specialistData} />
+        ) : (
+          <SpecialistCard
+            specialistData={specialistData?.data?.result?.slice(0, 4)}
+          />
+        )}
       </div>
     </>
   );

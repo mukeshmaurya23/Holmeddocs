@@ -3,6 +3,8 @@ import Button from "../../../util/Button";
 import { Link } from "react-router-dom";
 
 const ProfileDetails = () => {
+  const getUserName = localStorage.getItem("userName");
+  const newName = JSON.parse(getUserName);
   return (
     <>
       <div className="flex justify-center items-center flex-col px-24 py-16">
@@ -10,16 +12,12 @@ const ProfileDetails = () => {
           Profile Details
         </h2>
         <div className="border border-verifiCation rounded-xl  p-[30px]">
-          <h2 className="text-center font-Henriette text-[20px]">
-            Alexander O. Babazadeh
-          </h2>
+          <h2 className="text-center font-Henriette text-[20px]">{newName}</h2>
           <div class="flex justify-between mx-3  mb-4 ">
             <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
               <div class="border-r border-verifiCation p-6 ">
                 <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
-                <p className="text-[10px] font-sansBold text-gray-600">
-                  Female
-                </p>
+                <p className="text-[10px] font-sansBold text-gray-600">Male</p>
               </div>
               <div class=" border-r border-verifiCation p-7">
                 <p class="text-center text-[10px] font-sansBold text-gray-600">

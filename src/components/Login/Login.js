@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 import Aside from "../../util/Aside";
 import { loginSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
+import customAxios from "../../axios/custom";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../store/loginSlice";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -16,22 +20,71 @@ const Login = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
-      mobileNumber: "",
-      Password: "",
+      phone: "",
+      password: "",
       checkbox: false,
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      console.log(values, "formik.values");
+      const { phone, password } = values;
+      const data = {
+        phone,
+        password,
+      };
+      console.log(data, "data");
+      try {
+        const response = await customAxios.post("/patient/login", data);
+        console.log(response, "response");
+        if (response.status === 200) {
+          console.log(response?.data?.data?.result, "response.data.data");
+          // localStorage.setItem(
+          //   "token",
+          //   response?.data?.data?.result?.remember_token
+          // );
+          // localStorage.setItem(
+          //   "userName",
+          //   JSON.stringify(response?.data?.data?.result?.patient_first_name)
+          // );
+          dispatch(login(response?.data?.data?.result));
+          navigate("/");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
+  // const HandleSubmit = async (values) => {
+  //   const { mobileNumber, Password } = values;
+  //   const data = {
+  //     mobileNumber,
+  //     Password,
+  //   };
+  //   try {
+  //     const response = await customAxios.post("/patient/login", data);
+  //     console.log(response, "response");
+  //     if (response.data.status === 200) {
+  //       console.log(response.data.data, "response.data.data");
+  //       localStorage.setItem("token", response.data.data.token);
+  //       localStorage.setItem("user", JSON.stringify(response.data.data.user));
+  //       window.location.href = "/";
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const handleContinue = () => {
     formik.setTouched({
-      mobileNumber: true,
-      Password: true,
+      phone: true,
+      password: true,
       checkbox: true,
     });
   };
@@ -66,7 +119,7 @@ const Login = () => {
                   <div className="flex flex-wrap  sm:px-24  py-4 ">
                     <div className="flex flex-col w-full py-[0px] relative">
                       <Label
-                        htmlFor="mobileNumber"
+                        htmlFor="phone"
                         className="font-sansRegular text-formLabel text-sm"
                       >
                         Mobile Number
@@ -75,20 +128,19 @@ const Login = () => {
                         +1
                       </div>
                       <Input
-                        type="number"
-                        name="mobileNumber"
-                        id="mobileNumber"
+                        type="text"
+                        name="phone"
+                        id="phone"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.mobileNumber}
+                        value={formik.values.phone}
                         placeholder="XXXX XXXX XXXX"
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-9 outline-verifiCation"
                       />
 
                       <div className="text-red-600 text-xs ml-1">
-                        {formik.touched.mobileNumber &&
-                        formik.errors.mobileNumber ? (
-                          formik.errors.mobileNumber
+                        {formik.touched.phone && formik.errors.phone ? (
+                          formik.errors.phone
                         ) : (
                           <>&nbsp;</>
                         )}
@@ -96,24 +148,24 @@ const Login = () => {
                     </div>
                     <div className="flex flex-col  w-full relative py-[16px]">
                       <Label
-                        htmlFor="Password"
+                        htmlFor="password"
                         className="font-sansRegular text-formLabel text-sm"
                       >
                         Password
                       </Label>
                       <Input
                         type={isPasswordVisible ? "text" : "password"}
-                        name="Password"
-                        id="Password"
+                        name="password"
+                        id="password"
                         placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.Password}
+                        value={formik.values.password}
                         className="border border-verifiCation text-formLabel rounded-md py-2 px-4 outline-verifiCation"
                       />
                       <div className="text-red-600 text-xs ml-1">
-                        {formik.touched.Password && formik.errors.Password ? (
-                          formik.errors.Password
+                        {formik.touched.password && formik.errors.password ? (
+                          formik.errors.password
                         ) : (
                           <>&nbsp;</>
                         )}
@@ -164,30 +216,30 @@ const Login = () => {
                       </div>
                     ) : null}
                   </div>
-                </form>
-              </div>
-            </div>
-            <div className="sm:absolute bottom-0 left-0 right-0  flex justify-between bg-verifiCation p-5 ">
-              <Link
-                to="/register"
-                className="text-white font-sansLight md:ml-[4rem] text-sm mt-3 xsm:text-[13px]"
-              >
-                Don’t have an account ?{" "}
-                <span className="underline">Sign Up</span>
-              </Link>
-              <Button
-                className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full py-2 bg-white text-black `}
-                type="submit"
-                onClick={handleContinue}
-                // disabled={!(formik.isValid && formik.dirty)}
-                /**${
+                  <div className="absolute bottom-0 left-0 right-0  flex justify-between bg-verifiCation p-5 ">
+                    <Link
+                      to="/register"
+                      className="text-white font-sansLight md:ml-[4rem] text-sm mt-3 xsm:text-[13px]"
+                    >
+                      Don’t have an account ?{" "}
+                      <span className="underline">Sign Up</span>
+                    </Link>
+                    <Button
+                      className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full py-2 bg-white text-black `}
+                      type="submit"
+                      onClick={handleContinue}
+                      // disabled={!(formik.isValid && formik.dirty)}
+                      /**${
                   !(formik.isValid && formik.dirty)
                     ? "bg-gray-200 cursor-not-allowed"
                     : "bg-white"
                 } */
-              >
-                Login
-              </Button>
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </main>
         </div>
