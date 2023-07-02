@@ -1,10 +1,12 @@
 import React from "react";
 import Button from "../../../util/Button";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 const ProfileDetails = () => {
-  const getUserName = localStorage.getItem("userName");
-  const newName = JSON.parse(getUserName);
+  // const getUserName = localStorage.getItem("userName");
+  // const newName = JSON.parse(getUserName);
+
+  const user = useSelector((state) => state.login.user);
   return (
     <>
       <div className="flex justify-center items-center flex-col px-24 py-16">
@@ -12,7 +14,7 @@ const ProfileDetails = () => {
           Profile Details
         </h2>
         <div className="border border-verifiCation rounded-xl  p-[30px]">
-          <h2 className="text-center font-Henriette text-[20px]">{newName}</h2>
+          <h2 className="text-center font-Henriette text-[20px]">{user}</h2>
           <div class="flex justify-between mx-3  mb-4 ">
             <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
               <div class="border-r border-verifiCation p-6 ">

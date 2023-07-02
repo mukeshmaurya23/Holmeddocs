@@ -9,8 +9,7 @@ import { toggleMenu } from "../store/mobileAppSlice";
 import cross from "../images/icons/Cross.png";
 import { useLocation } from "react-router-dom";
 import searchIcon from "../images/home/SearchBarIcon.svg";
-
-import { LoginSignup } from "../constant";
+import { logout } from "../store/loginSlice";
 
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
@@ -53,11 +52,10 @@ const Navbar2 = () => {
   };
 
   const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
-  const isLoggedIn = localStorage.getItem("token");
+  //const isLoggedIn = localStorage.getItem("token");
+  const isLoggedIn = useSelector((state) => state.login.remember_token);
   const logOutHandler = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-    setIsLoggedInDropdown(false);
+    dispatch(logout());
   };
 
   const location = useLocation();
