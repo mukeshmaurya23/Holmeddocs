@@ -10,7 +10,7 @@ const loginSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.isLogin = true;
-      state.user = action.payload.patient_first_name;
+      state.user = action.payload;
       state.remember_token = action.payload.remember_token;
 
       // localStorage.setItem("remember_token", state.remember_token);

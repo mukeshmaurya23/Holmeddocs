@@ -3,8 +3,15 @@ import { Link } from "react-router-dom";
 import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
 import useFetch from "../../../hooks/useFetch";
+import { useSelector, useDispatch } from "react-redux";
+import { apiActions } from "../../../services/apiActions";
 const Specialistic = () => {
+  //const dispatch = useDispatch();
+  //const { data: specialistData } = useSelector((state) => state.api);
   const { data: specialistData } = useFetch("/patient/master/speciality");
+  //useEffect(() => {
+  //   dispatch(apiActions("/patient/master/speciality"));
+  // }, []);
 
   // const [specialistData, setSpecialistData] = useState([]);
 

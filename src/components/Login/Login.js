@@ -34,6 +34,7 @@ const Login = () => {
     onSubmit: async (values) => {
       console.log(values, "formik.values");
       const { phone, password } = values;
+      localStorage.setItem("phoneNumber", phone);
       const data = {
         phone,
         password,

@@ -7,6 +7,18 @@ const ProfileDetails = () => {
   // const newName = JSON.parse(getUserName);
 
   const user = useSelector((state) => state.login.user);
+  const dob = user.patient_dob;
+  const calcularteDob = (dob) => {
+    const today = new Date();
+    const birthDate = new Date(dob);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m > 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+  console.log(calcularteDob(dob), "age");
   return (
     <>
       <div className="flex justify-center items-center flex-col px-24 py-16">
@@ -14,16 +26,20 @@ const ProfileDetails = () => {
           Profile Details
         </h2>
         <div className="border border-verifiCation rounded-xl  p-[30px]">
-          <h2 className="text-center font-Henriette text-[20px]">{user}</h2>
+          <h2 className="text-center font-Henriette text-[20px]">
+            {user.patient_first_name}
+          </h2>
           <div class="flex justify-between mx-3  mb-4 ">
             <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
               <div class="border-r border-verifiCation p-6 ">
                 <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
-                <p className="text-[10px] font-sansBold text-gray-600">Male</p>
+                <p className="text-[10px] font-sansBold text-gray-600">
+                  {user.patient_gender}
+                </p>
               </div>
               <div class=" border-r border-verifiCation p-7">
                 <p class="text-center text-[10px] font-sansBold text-gray-600">
-                  25
+                  {calcularteDob(dob)}
                 </p>
                 <p className="text-[10px] font-sansBold text-gray-600">
                   Years Old
@@ -32,13 +48,13 @@ const ProfileDetails = () => {
               <div class=" border-r border-verifiCation p-6">
                 <i class="fa fa-phone" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600">
-                  +1 789955412
+                  {localStorage.getItem("phoneNumber") || "1234567890"}
                 </p>
               </div>
               <div class=" ">
                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600 ml-2">
-                  xyz@email.com
+                  {user.patient_email}
                 </p>
               </div>
             </div>
