@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "../../util/Input";
 import otp from "../../images/home/otp.jpg";
 
@@ -6,7 +6,28 @@ import Button from "../../util/Button";
 import Aside from "../../util/Aside";
 import Otp from "../../util/Otp";
 import { Link } from "react-router-dom";
+import customAxios from "../../axios/custom";
 const RegisterOtp = () => {
+  const [otpValue, setOtpValue] = useState("");
+
+  const handleOtpChange = (otpValue) => {
+    setOtpValue(parseInt(otpValue));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(otpValue, "From RegisterOtp");
+    try {
+      const response = customAxios.post("/patient/verify_otp", {
+        token: otpValue,
+        request_type: "register",
+        phone: "8104618565",
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <div className="flex flex-col h-screen">
@@ -33,7 +54,7 @@ const RegisterOtp = () => {
                 </p>
                 <div className="max-w-[500px]">
                   <div className="flex items-center justify-between mt-2 px-5">
-                    <Otp />
+                    <Otp onOtpChange={handleOtpChange} />
                   </div>
                   <div className="flex justify-end mr-7 ">
                     <p className="ml-1 text-verifiCation mt-2">00:59</p>
@@ -50,7 +71,11 @@ const RegisterOtp = () => {
             </div>
             <div className="sm:absolute bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">
               <div className="">
-                <Button className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black">
+                <Button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
+                >
                   Verify
                 </Button>
               </div>

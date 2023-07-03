@@ -4,11 +4,12 @@ import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
 import useFetch from "../../../hooks/useFetch";
 import { useSelector, useDispatch } from "react-redux";
-import { apiActions } from "../../../services/apiActions";
+import { fetchData } from "../../../store/apiSlice";
+//import { apiActions } from "../../../services/apiActions";
 const Specialistic = () => {
   //const dispatch = useDispatch();
   //const { data: specialistData } = useSelector((state) => state.api);
-  const { data: specialistData } = useFetch("/patient/master/speciality");
+  //const { data: specialistData } = useFetch("/patient/master/speciality");
   //useEffect(() => {
   //   dispatch(apiActions("/patient/master/speciality"));
   // }, []);
@@ -36,6 +37,16 @@ const Specialistic = () => {
   // }, []);
   // console.log(specialistData);
 
+  const dispatch = useDispatch();
+  const {
+    data: specialistData,
+    error,
+    status,
+  } = useSelector((state) => state.api);
+  useEffect(() => {
+    dispatch(fetchData("/patient/master/speciality"));
+  }, []);
+
   return (
     <>
       <div className=" bg-[#ffffff]">
@@ -54,12 +65,16 @@ const Specialistic = () => {
             </Link>
           </div>
         </div>
-        {specialistData === null ? (
+        {status === "loading" ? (
           <>
             <div className="flex justify-center  ">
               <img src={loadingGif} alt="" />
             </div>
           </>
+        ) : status == "failed" ? (
+          <div className="flex justify-center  ">
+            <p className="text-red-500">{error}</p>
+          </div>
         ) : (
           <SpecialistCard
             specialistData={specialistData?.data?.result?.slice(0, 4)}

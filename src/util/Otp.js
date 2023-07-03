@@ -1,12 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
-const Otp = () => {
+const Otp = ({ onOtpChange }) => {
   const inputRef = useRef({});
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   console.log(otp);
+  let otpValue = "";
+  otp.map((item) => {
+    otpValue += item;
+  });
+  console.log(parseInt(otpValue), "otpValue");
 
   useEffect(() => {
     inputRef.current[0].focus();
   }, []);
+  useEffect(() => {
+    const otpValue = otp.join("");
+    onOtpChange(otpValue);
+  }, [otp, onOtpChange]);
   const handleChnage = (e, index) => {
     const { name, value } = e.target;
 
@@ -14,10 +23,6 @@ const Otp = () => {
     const updatedOtp = [...otp];
     updatedOtp[index] = value.slice(-1);
     setOtp(updatedOtp);
-
-    const updatedValues = {
-      otp: updatedOtp.join(""), // Combine the otp array into a string
-    };
 
     // const currentIndex = Object.keys(otp).indexOf(name);
     // const nextIndex = currentIndex + 1;

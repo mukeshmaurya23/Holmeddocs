@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../store/loginSlice";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const [error, setError] = useState("");
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -43,6 +43,7 @@ const Login = () => {
       try {
         const response = await customAxios.post("/patient/login", data);
         console.log(response, "response");
+        setError(response?.data?.message);
         if (response.status === 200) {
           console.log(response?.data?.data?.result, "response.data.data");
           // localStorage.setItem(
@@ -57,10 +58,11 @@ const Login = () => {
           navigate("/");
         }
       } catch (error) {
-        console.log(error);
+        console.log(error, "Im error");
       }
     },
   });
+  console.log(error, "useState Error");
 
   // const HandleSubmit = async (values) => {
   //   const { mobileNumber, Password } = values;
@@ -94,7 +96,7 @@ const Login = () => {
     <>
       <div className="flex flex-col h-screen">
         <div className="flex flex-col lg:flex-row flex-1">
-          <Aside image={image} />
+          <Aside image={image} error={error} />
 
           <main className="flex flex-1 flex-col relative ">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">

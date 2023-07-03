@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const customAxios = axios.create({
-  baseURL: "http://skyonliners.com/demo/holmeddoc",
+  baseURL:
+    "http://skyonliners.com/demo/holmeddoc" || "http://192.168.1.31/holmeddoc",
   headers: {
     "Content-Type": "application/json",
   },

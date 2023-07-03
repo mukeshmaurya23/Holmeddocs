@@ -12,11 +12,11 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const registerSchema = Yup.object().shape({
-  firstName: Yup.string()
+  first_name: Yup.string()
     .required("First Name is required")
     .min(3, "First Name must be at least 3 characters")
     .matches(/^[a-zA-Z]+$/, "Must be only alphabets"),
-  lastName: Yup.string()
+  last_name: Yup.string()
     .required("Last Name is required")
     .min(3, "Last Name must be at least 3 characters")
     .matches(/^[a-zA-Z]+$/, "Must be only alphabets"),
@@ -24,7 +24,7 @@ export const registerSchema = Yup.object().shape({
     .email("Invalid email")
     .required("Email is required")
     .matches(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/, "Invalid email"),
-  mobile: Yup.string()
+  phone: Yup.string()
     .required("Phone number is required")
     .matches(/^\d{10}$/, "Phone number must be 10 digits"),
   password: Yup.string()
@@ -39,7 +39,10 @@ export const registerSchema = Yup.object().shape({
     .required("Please confirm your password"),
   dob: Yup.string()
     .required("Date of Birth is required")
-    .matches(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/, "Invalid Date of Birth"),
+    .matches(
+      /^\d{4}\/\d{2}\/\d{2}$/,
+      "Invalid Date of Birth. Please use the format YYYY/MM/DD"
+    ),
   gender: Yup.string().required("Gender selection is required"),
 });
 

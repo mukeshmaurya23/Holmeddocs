@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../util/Button";
 import { dummyData } from "../../../constant";
 import Pagination from "./Pagination";
 import { usePagination } from "../../../hooks/usePagination";
 import useFetch from "../../../hooks/useFetch";
+import { useDispatch, useSelector } from "react-redux";
 import loadingGif from "../../../images/icons/Loader.gif";
+import { fetchData } from "../../../store/apiSlice";
 const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: filterData } = useFetch("/patient/filters");
+
+  const dispatch = useDispatch();
+  const { data: filterData, error, status } = useSelector((state) => state.api);
+  //const { data: filterData } = useFetch("/patient/filters");
+
+  useEffect(() => {
+    dispatch(fetchData("/patient/filters"));
+  }, []);
+
   console.log(filterData?.data?.result, "filterData");
   const [viewAll, setViewAll] = useState(false);
 
@@ -73,12 +83,18 @@ const DoctorListing = () => {
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters
             </h2>
-            {filterData === null ? (
+            {status === "loading" ? (
               <>
-                <div className="flex justify-center  ">
+                <div className="flex justify-start ">
                   <img src={loadingGif} alt="" />
                 </div>
               </>
+            ) : status === "failed" ? (
+              <div className="flex justify-center  ">
+                <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
+                  {error}
+                </h2>
+              </div>
             ) : (
               <>
                 {filterData?.data?.result.map((item, index) => (

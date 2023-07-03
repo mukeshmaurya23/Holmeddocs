@@ -149,6 +149,8 @@ import DoctorListing from "./components/pages/DoctorListing/DoctorListing";
 import Appointment from "./components/pages/Appointment/Appointment";
 import NetworkError from "./util/NetworkError";
 import ContactUs from "./components/ContactUs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const isOnline = useOnline();
 
@@ -189,6 +191,7 @@ function App() {
           </Route>
         </Routes>
       )}
+      <ToastContainer />
     </>
   );
 }

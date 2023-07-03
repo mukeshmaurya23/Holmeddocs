@@ -1,30 +1,43 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import customAxios from "../axios/custom";
 const initialState = {
   loading: false,
   data: null,
-  error: null,
+  error: "",
+  status: "idle",
 };
+
+const fetchData = createAsyncThunk("api/fetchData", async (url) => {
+  try {
+    const response = await customAxios.post(url);
+    const resData = await response.data;
+    return resData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+});
 
 const apiSlice = createSlice({
   name: "api",
   initialState,
   reducers: {
-    fetchDataRequest: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchDataSuccess: (state, action) => {
-      state.loading = false;
+
+  },
+  extraReducers(builder) {
+    builder.addCase(fetchData.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchData.fulfilled, (state, action) => {
+      state.status = "succeeded";
       state.data = action.payload;
-    },
-    fetchDataFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
+    });
+    builder.addCase(fetchData.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { fetchDataRequest, fetchDataSuccess, fetchDataFailure } =
-  apiSlice.actions;
+export { fetchData };
 export default apiSlice.reducer;
