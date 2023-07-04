@@ -10,6 +10,7 @@ import loadingGif from "../../../images/icons/Loader.gif";
 import { fetchData } from "../../../store/apiSlice";
 const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [categoryData, setCategoryData] = useState([]);
 
   const dispatch = useDispatch();
   const { data: filterData, error, status } = useSelector((state) => state.api);
@@ -19,7 +20,7 @@ const DoctorListing = () => {
     dispatch(fetchData("/patient/filters"));
   }, []);
 
-  console.log(filterData?.data?.result, "filterData");
+  console.log(filterData, "filterData");
   const [viewAll, setViewAll] = useState(false);
 
   const toggleViewAll = () => {
@@ -31,7 +32,7 @@ const DoctorListing = () => {
     setCurrentPage(pageNumber);
     // You can perform any other actions here, such as fetching data for the new page.
   };
-
+  console.log(filterData?.data?.result, "filterData");
   // Dummy data
   const totalCount = 1000;
   const pageSize = 10;
@@ -57,6 +58,7 @@ const DoctorListing = () => {
     </label>
   );
   const generateLabels = (category) => {
+    console.log(category.value, "category bbnbnbnb");
     const values = category.value;
     let displayedValues = values;
 
@@ -83,60 +85,57 @@ const DoctorListing = () => {
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters
             </h2>
-            {status === "loading" ? (
+            {filterData === null ? (
               <>
                 <div className="flex justify-start ">
                   <img src={loadingGif} alt="" />
                 </div>
               </>
-            ) : status === "failed" ? (
-              <div className="flex justify-center  ">
-                <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
-                  {error}
-                </h2>
-              </div>
             ) : (
               <>
-                {filterData?.data?.result.map((item, index) => (
-                  <div className="mt-5 cursor-pointer" key={item.id}>
-                    <h2 className="font-sansBold text-[.8rem] text-[#292F33] tracking-[2px] mb-3">
-                      {item.title}
-                    </h2>
+                {filterData?.data?.result.map((item, index) => {
+                  console.log(item.value, "item value");
+                  return (
+                    <div className="mt-5 cursor-pointer" key={item.id}>
+                      <h2 className="font-sansBold text-[.8rem] text-[#292F33] tracking-[2px] mb-3">
+                        {item.title}
+                      </h2>
 
-                    <div className="">
-                      <div className="flex flex-col">
-                        {generateLabels(item)}
-                        {/* {item?.value?.map((data, index) => (
-                          <label
-                            className="inline-flex items-center mt-3"
-                            key={data.id}
-                          >
-                            <input
-                              type="checkbox"
-                              className="form-checkbox h-3 w-3 text-gray-600"
-                            />
-                            <span className="ml-2 text-gray-700 text-[.8rem] tracking-[2px] font-sansRegular">
-                              {data.language_title ||
-                                data.medical_speciality_name ||
-                                data.medical_condition_name ||
-                                data.insurance_company_name ||
-                                data}
-                            </span>
-                          </label>
-                        ))} */}
+                      <div className="">
+                        <div className="flex flex-col">
+                          {generateLabels(item)}
+                          {/* {item?.value?.map((data, index) => (
+                            <label
+                              className="inline-flex items-center mt-3"
+                              key={data.id}
+                            >
+                              <input
+                                type="checkbox"
+                                className="form-checkbox h-3 w-3 text-gray-600"
+                              />
+                              <span className="ml-2 text-gray-700 text-[.8rem] tracking-[2px] font-sansRegular">
+                                {data.language_title ||
+                                  data.medical_speciality_name ||
+                                  data.medical_condition_name ||
+                                  data.insurance_company_name ||
+                                  data}
+                              </span>
+                            </label>
+                          ))} */}
+                        </div>
+                        {item.title !== "Appointment Type" &&
+                          item.value.length > 3 && (
+                            <label
+                              onClick={toggleViewAll}
+                              className="inline-flex items-center mt-3 text-[#CF8B15] underline cursor-pointer"
+                            >
+                              View all
+                            </label>
+                          )}
                       </div>
-                      {item.title !== "Appointment Type" &&
-                        item.value.length > 3 && (
-                          <label
-                            onClick={toggleViewAll}
-                            className="inline-flex items-center mt-3 text-[#CF8B15] underline cursor-pointer"
-                          >
-                            View all
-                          </label>
-                        )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </>
             )}
           </aside>

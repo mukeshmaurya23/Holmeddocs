@@ -13,12 +13,14 @@ import { useDispatch } from "react-redux";
 import customAxios from "../../axios/custom";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/loginSlice";
+import { useSnackbar } from "notistack";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [error, setError] = useState("");
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -43,7 +45,12 @@ const Login = () => {
       try {
         const response = await customAxios.post("/patient/login", data);
         console.log(response, "response");
-        setError(response?.data?.message);
+        // setMessage(response?.data?.message);
+
+        enqueueSnackbar(response?.data?.message, {
+          variant: response?.data?.success ? "success" : "error",
+        });
+
         if (response.status === 200) {
           console.log(response?.data?.data?.result, "response.data.data");
           // localStorage.setItem(
@@ -62,7 +69,7 @@ const Login = () => {
       }
     },
   });
-  console.log(error, "useState Error");
+  // console.log(error, "useState Error");
 
   // const HandleSubmit = async (values) => {
   //   const { mobileNumber, Password } = values;
@@ -96,7 +103,7 @@ const Login = () => {
     <>
       <div className="flex flex-col h-screen">
         <div className="flex flex-col lg:flex-row flex-1">
-          <Aside image={image} error={error} />
+          <Aside image={image} />
 
           <main className="flex flex-1 flex-col relative ">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
@@ -233,10 +240,10 @@ const Login = () => {
                       onClick={handleContinue}
                       // disabled={!(formik.isValid && formik.dirty)}
                       /**${
-                  !(formik.isValid && formik.dirty)
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-white"
-                } */
+                    !(formik.isValid && formik.dirty)
+                      ? "bg-gray-200 cursor-not-allowed"
+                      : "bg-white"
+                  } */
                     >
                       Login
                     </Button>

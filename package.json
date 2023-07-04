@@ -2,6 +2,7 @@
   "name": "holmeddocs",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://755b-110-227-197-199.ngrok-free.app/holemeddoc",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
@@ -9,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "formik": "^2.4.2",
+    "notistack": "^3.0.1",
     "react": "^18.2.0",
     "react-datepicker": "^4.14.1",
     "react-dom": "^18.2.0",

@@ -5,25 +5,39 @@ import otp from "../../images/home/otp.jpg";
 import Button from "../../util/Button";
 import Aside from "../../util/Aside";
 import Otp from "../../util/Otp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import customAxios from "../../axios/custom";
+import OtpCountDown from "../../util/OtpCountDown";
+import { useSnackbar } from "notistack";
 const RegisterOtp = () => {
   const [otpValue, setOtpValue] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
 
   const handleOtpChange = (otpValue) => {
     setOtpValue(parseInt(otpValue));
   };
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(otpValue, "From RegisterOtp");
+    if (!otpValue) return alert("Please enter the OTP");
+    if (otpValue !== 123456) return alert("Please enter the correct OTP");
     try {
-      const response = customAxios.post("/patient/verify_otp", {
+      const response = await customAxios.post("/patient/verify_otp", {
         token: otpValue,
         request_type: "register",
-        phone: "8104618565",
+        phone: location.state.phone,
       });
-      console.log(response);
+
+      console.log(response.data, "im response from registerotp");
+      enqueueSnackbar(response.data.message, {
+        variant: response.data.success ? "success" : "error",
+      });
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -32,7 +46,7 @@ const RegisterOtp = () => {
     <>
       <div className="flex flex-col h-screen">
         <div className="flex flex-col lg:flex-row flex-1">
-          <Aside image={otp} />
+          <Aside image={otp} success={otpMessage} />
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
               <Link to="/">
@@ -49,15 +63,18 @@ const RegisterOtp = () => {
                   OTP Verification
                 </p>
                 <p className="font-sansRegular text-sm text-otpText py-2 px-5">
-                  Enter the 4-digit verification code sent to your mobile number
-                  +1 XXXXX XXX25
+                  Enter the 4-digit verification code sent to your mobile number{" "}
+                  {location.state.phone}
                 </p>
                 <div className="max-w-[500px]">
                   <div className="flex items-center justify-between mt-2 px-5">
                     <Otp onOtpChange={handleOtpChange} />
                   </div>
                   <div className="flex justify-end mr-7 ">
-                    <p className="ml-1 text-verifiCation mt-2">00:59</p>
+                    <p className="ml-1 text-verifiCation mt-2 flex">
+                      0:
+                      <OtpCountDown />
+                    </p>
                   </div>
                 </div>
 

@@ -8,19 +8,19 @@ import store from "./store/store";
 import { BrowserRouter as Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-
+import { SnackbarProvider } from "notistack";
 const persistor = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Router>
-      <Provider store={store}>
-        <PersistGate persistor={persistor} loading={null}>
+  <Router>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <SnackbarProvider maxSnack={3}>
           <App />
-        </PersistGate>
-      </Provider>
-    </Router>
-  </React.StrictMode>
+        </SnackbarProvider>
+      </PersistGate>
+    </Provider>
+  </Router>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import { registerSchema } from "../../schema/formValidation";
 import customAxios from "../../axios/custom";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -18,6 +19,7 @@ const Register = () => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
@@ -63,13 +65,22 @@ const Register = () => {
       try {
         const response = await customAxios.post("/patient/register", data);
         console.log(response);
+        enqueueSnackbar(response?.data?.message, {
+          variant: response?.data?.success ? "success" : "error",
+        });
         if (response.status === 200) {
-          // if (response.success === 1) {
-          //   navigate("/otp");
-          // } else {
-          //   alert(response.message);
-          // }
-          navigate("/otp");
+          if (response.data.success === 1) {
+            //console.log(response.data.message, "im 200 response success");
+            // if (response.success === 1) {
+            //   navigate("/otp");
+            // } else {
+            //   alert(response.message);
+            // }
+            // navigate("/otp");
+            navigate("/otp", {
+              state: { phone: phone },
+            });
+          }
         }
       } catch (err) {
         console.log(err);

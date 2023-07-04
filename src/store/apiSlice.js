@@ -10,7 +10,9 @@ const initialState = {
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
   try {
     const response = await customAxios.post(url);
+    console.log(response, "im response from apiSlice");
     const resData = await response.data;
+    console.log(resData, "im resData from apiSlice");
     return resData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -21,9 +23,7 @@ const fetchData = createAsyncThunk("api/fetchData", async (url) => {
 const apiSlice = createSlice({
   name: "api",
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchData.pending, (state) => {
       state.status = "loading";
