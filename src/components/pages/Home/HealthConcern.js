@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import blackDropDown from "../../../images/home/BlackDropdown.png";
 import { healthConcern } from "../../../constant";
 import Accordion from "../../../util/Accordian";
-
+import { getAllMedicalCondition } from "../../../services/services";
 const HealthConcern = () => {
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const [medicalConditionData, setMedicalConditionData] = useState([]);
   const handleItemClick = (id) => {
     setSelectedItem((prevSelectedItem) =>
       prevSelectedItem === id ? null : id
     );
   };
+
+  useEffect(() => {
+    try {
+      const getAllMedicalConditionData = async () => {
+        const res = await getAllMedicalCondition();
+        setMedicalConditionData(res);
+      };
+      getAllMedicalConditionData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
+
+  console.log(medicalConditionData, "im medicalConditionData");
 
   return (
     <div className="bg-healthConcern py-12 px-4 sm:px-16 md:px-16 lg:px-16 p-3 ">
@@ -50,7 +64,7 @@ const HealthConcern = () => {
           </div>
         ))} */}
         <Accordion
-          items={healthConcern}
+          items={medicalConditionData}
           showBorder={true}
           image={blackDropDown}
         />

@@ -9,7 +9,9 @@ import Accordion from "../../../util/Accordian";
 import useFetch from "../../../hooks/useFetch";
 const Holistic = () => {
   const { data: LocSpecd } = useFetch("/patient/master/state");
+  const { data: specialistData } = useFetch("/patient/master/speciality");
   console.log(LocSpecd?.data?.result);
+  console.log(specialistData?.data?.result);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(true);
@@ -56,7 +58,9 @@ const Holistic = () => {
           <div className="flex flex-col md:flex-row">
             <Accordion
               items={LocSpec}
+              items3={specialistData?.data?.result}
               items2={LocSpecd?.data?.result}
+              //items2={LocSpecd?.data?.result}
               showBorder={false}
               image={grayDropDown}
               className="text-gray-600"

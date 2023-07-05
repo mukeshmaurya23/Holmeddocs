@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import userLogo from "../images/home/User.png";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import logo from "../images/home/Logo.png";
@@ -14,24 +14,24 @@ import { logout } from "../store/loginSlice";
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const openHandleDropdown = () => {
-    setDropdownVisible(true);
-  };
-  const closeHandleDropdown = () => {
-    setDropdownVisible(false);
-  };
-  const handleDropdownClick = () => {
-    if (dropdownVisible) {
-      closeHandleDropdown();
-    } else {
-      openHandleDropdown();
-    }
-  };
+  // const openHandleDropdown = () => {
+  //   setDropdownVisible(true);
+  // };
+  // const closeHandleDropdown = () => {
+  //   setDropdownVisible(false);
+  // };
+  // const handleDropdownClick = () => {
+  //   if (dropdownVisible) {
+  //     closeHandleDropdown();
+  //   } else {
+  //     openHandleDropdown();
+  //   }
+  // };
 
-  const navigate = useNavigate();
-  const handleOptionClick = (option) => {
-    navigate(option);
-  };
+  // const onFocusOut = () => {
+  //   setDropdownVisible(false);
+  // };
+
   const [showModal, setShowModal] = useState(false);
 
   const openModal = () => {
@@ -50,22 +50,57 @@ const Navbar2 = () => {
   const loggedInToggleDropdown = () => {
     setIsLoggedInDropdown(!isLoggedInDropdown);
   };
-
+  const navigate = useNavigate();
   const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
   //const isLoggedIn = localStorage.getItem("token");
   const isLoggedIn = useSelector((state) => state.login.remember_token);
   const logOutHandler = () => {
     dispatch(logout());
   };
+  const ref = useRef();
+  const loginRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref?.current?.contains(event.target)) {
+        setDropdownVisible(false);
+      }
+      if (!loginRef?.current?.contains(event.target)) {
+        setIsLoggedInDropdown(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
+
+  // useEffect(() => {
+  //   if (dropdownVisible) {
+  //     document.addEventListener("click", () => {
+  //       setDropdownVisible(true);
+  //     });
+  //     return () => {
+  //       document.removeEventListener("click", () => {
+  //         setDropdownVisible(false);
+  //       });
+  //     };
+  //   }
+  // }, [dropdownVisible]);
 
   const location = useLocation();
   console.log(location.pathname);
   const LoginSignup = (
-    <div className="font-sansBold font-semibold text-sm lg:text-navbarLg">
+    <div
+      className="font-sansBold font-semibold text-sm lg:text-navbarLg"
+      ref={ref}
+    >
       <div className="relative">
         <button
           className="flex items-center px-0 text-sm text-black focus:outline-none font-semibold"
-          onClick={handleDropdownClick}
+          onClick={() => {
+            setDropdownVisible(!dropdownVisible);
+          }}
         >
           {!isLoggedIn ? (
             <span className="font-sansBold font-semibold text-sm lg:text-navbarLg mr-2 tracking-[.15rem] cursor-pointer">
@@ -78,35 +113,34 @@ const Navbar2 = () => {
               alt="user"
               src={userLogo}
               onClick={loggedInToggleDropdown}
+              ref={loginRef}
             />
           ) : (
             <img className="h-7" alt="user" src={userLogo} />
           )}
         </button>
         {!isLoggedIn && dropdownVisible && (
-          <div className="absolute bg-white rounded-md shadow-lg mt-2 py-2 w-48">
-            <div className="flex">
+          <div className="absolute bg-white rounded-md shadow-lg mt-2 py-2 w-48 p-3">
+            <div className="flex gap-2">
+              <p className=" text-gray-800">Patients</p>
               <Link
                 to="/login"
-                className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                className="block text-sm text-gray-900 hover:bg-gray-100 border-b border-dotted border-gray-900 "
               >
-                <button>User Login</button>
+                Log in
               </Link>
-              <div className="mt-1 text-gray-400">|</div>
+              {/* <div className="mt-1 text-gray-400">|</div> */}
               <Link
                 to="/register"
-                className="block pl-[10px] ml py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
+                className="block   text-sm text-gray-700 hover:bg-gray-100 border-b border-dotted border-gray-900 "
               >
-                <button>User Signup</button>
+                Sign up
               </Link>
             </div>
-            <div className="flex">
-              <button className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left">
-                Doctor Login
-              </button>
-              <div className="mt-1 text-gray-400">|</div>
-              <button className="block pl-[2px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left">
-                Doctor Signup
+            <div className="flex gap-2 py-2">
+              <p className=" text-gray-800 text-sm">Doctors</p>
+              <button className="block  text-sm text-gray-700 hover:bg-gray-100  border-b border-dotted border-gray-900">
+                Log in
               </button>
             </div>
           </div>

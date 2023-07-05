@@ -12,13 +12,13 @@ const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
 
-  const dispatch = useDispatch();
-  const { data: filterData, error, status } = useSelector((state) => state.api);
-  //const { data: filterData } = useFetch("/patient/filters");
+  //const dispatch = useDispatch();
+  //const { data: filterData, error, status } = useSelector((state) => state.api);
+  const { data: filterData } = useFetch("/patient/filters");
 
-  useEffect(() => {
-    dispatch(fetchData("/patient/filters"));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchData("/patient/filters"));
+  // }, []);
 
   console.log(filterData, "filterData");
   const [viewAll, setViewAll] = useState(false);

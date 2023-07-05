@@ -181,48 +181,12 @@ export const healthConcern = [
 
 export const LocSpec = [
   {
-    id: 1,
+    id: "location",
     title: "Location",
-    dropDown: [
-      {
-        id: 1,
-        title: "Mumbai",
-      },
-      {
-        id: 2,
-        title: "Delhi",
-      },
-      {
-        id: 3,
-        title: "Banglore",
-      },
-      {
-        id: 4,
-        title: "Chennai",
-      },
-    ],
   },
   {
-    id: 2,
+    id: "speciality",
     title: "Speciality",
-    dropDown: [
-      {
-        id: 1,
-        title: "Cancer",
-      },
-      {
-        id: 2,
-        title: "Heart Disease",
-      },
-      {
-        id: 3,
-        title: "Diabetes",
-      },
-      {
-        id: 4,
-        title: "Obesity",
-      },
-    ],
   },
 ];
 
