@@ -42,7 +42,7 @@ const Accordion = ({ items, items2, items3, showBorder, image, className }) => {
   return (
     <div
       ref={ref}
-      className="flex flex-col  md:flex-row md:items-center  justify-between md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1"
+      className="flex flex-col  md:flex-row   justify-evenly md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1"
     >
       {items && items.length === 0 ? (
         <h2>Loading</h2>
@@ -63,7 +63,7 @@ const Accordion = ({ items, items2, items3, showBorder, image, className }) => {
             </h2>
             {/**ml-auto */}
             <div
-              className="ml-auto md:ml-5 xl:pl-28"
+              className="ml-auto md:ml-5 xl:pl-[4rem]"
               onClick={() => handleItemClick(item.id)}
             >
               <img

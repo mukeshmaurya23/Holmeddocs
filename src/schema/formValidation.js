@@ -71,6 +71,10 @@ export const forgotSchema = Yup.object().shape({
 export const resetSchema = Yup.object().shape({
   oldPassword: Yup.string()
     .required("Old Password is required")
+    .notOneOf(
+      [Yup.ref("newPassword")],
+      "Old Password cannot be the same as New Password"
+    )
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/,
       "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
@@ -83,6 +87,7 @@ export const resetSchema = Yup.object().shape({
       "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
     )
     .required("Password is required"),
+
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
     .required("Please confirm your password"),

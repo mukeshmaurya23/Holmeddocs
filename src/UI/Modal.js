@@ -37,7 +37,16 @@ import success from "../images/Login/Success.png";
 import Button from "../util/Button";
 import { Link } from "react-router-dom";
 import cross from "../images/icons/Cross.png";
-const Modal = ({ closeModal, text, title, btnText, btnText2, image, link }) => {
+const Modal = ({
+  closeModal,
+  text,
+  title,
+  btnText,
+  btnText2,
+  image,
+  link,
+  logOutHandler,
+}) => {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -55,12 +64,18 @@ const Modal = ({ closeModal, text, title, btnText, btnText2, image, link }) => {
             <p className="text-center mt-4 text-sm text-gray-500">{text}</p>
             <div className="flex justify-between">
               {btnText && (
-                <Button className="mt-4 px-16 py-1 bg-verifiCation text-white rounded-full">
+                <Button
+                  className="mt-4 px-16 py-1 bg-verifiCation text-white rounded-full"
+                  onClick={logOutHandler ? logOutHandler : closeModal}
+                >
                   <Link to="/login">{btnText}</Link>
                 </Button>
               )}
               {btnText2 && (
-                <Button className="mt-4 px-16 py-1 ml-3 bg-verifiCation text-white rounded-full">
+                <Button
+                  className="mt-4 px-16 py-1 ml-3 bg-verifiCation text-white rounded-full"
+                  onClick={closeModal}
+                >
                   <Link to={link}>{btnText2}</Link>
                 </Button>
               )}

@@ -45,7 +45,7 @@ const Specialistic = () => {
   } = useSelector((state) => state.api);
   useEffect(() => {
     dispatch(fetchData("/patient/master/speciality"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

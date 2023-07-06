@@ -10,6 +10,7 @@ import cross from "../images/icons/Cross.png";
 import { useLocation } from "react-router-dom";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
+import Modal from "./Modal";
 
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
@@ -33,6 +34,7 @@ const Navbar2 = () => {
   // };
 
   const [showModal, setShowModal] = useState(false);
+  const [logOutmodal, setlogOutModal] = useState(false);
 
   const openModal = () => {
     setShowModal(true);
@@ -162,7 +164,9 @@ const Navbar2 = () => {
               </Link>
               <button
                 className="block pl-[10px] py-2 text-xs text-gray-700 hover:bg-gray-100 w-full text-left"
-                onClick={logOutHandler}
+                onClick={() => {
+                  setlogOutModal(true);
+                }}
               >
                 Logout
               </button>
@@ -429,7 +433,9 @@ const Navbar2 = () => {
                         <div className=" border-b " />
                         <h2
                           className="font-sansBold text-[14px]"
-                          onClick={logOutHandler}
+                          onClick={() => {
+                            setlogOutModal(true);
+                          }}
                         >
                           Logout
                         </h2>
@@ -443,6 +449,19 @@ const Navbar2 = () => {
         </div>
       </div>
       {!isMenuOpen && <Outlet />}
+
+      {logOutmodal && (
+        <Modal
+          title="Log out"
+          text="Are you sure you want to Logout?"
+          btnText="Yes"
+          btnText2="No"
+          logOutHandler={logOutHandler}
+          closeModal={() => {
+            setlogOutModal(false);
+          }}
+        />
+      )}
     </>
   );
 };

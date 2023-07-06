@@ -6,7 +6,7 @@ import Register from "./components/Register/Register";
 
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
-import Specialistic from "./components/pages/Specialistic/Specialistic";
+// import Specialistic from "./components/pages/Specialistic/Specialistic";
 import SideBar from "./util/Sidebar";
 import MakeAppointment from "./components/pages/Appointment/MakeAppointment";
 import AllSpecialistic from "./components/pages/Specialistic/AllSpecialistic";
@@ -39,11 +39,7 @@ function App() {
         { path: "/contact-us", element: <ContactUs /> },
       ],
     },
-    { path: "/register", element: <Register /> },
-    { path: "/otp", element: <RegisterOtp /> },
-    { path: "/forgot-password", element: <ForgotPassword /> },
-    { path: "/login", element: <Login /> },
-    { path: "/change-password", element: <ChangePassword /> },
+
     // { path: "/special", element: <Specialistic /> },
   ];
 
@@ -57,11 +53,18 @@ function App() {
         { path: "appointment-list", element: <Appointment /> },
       ],
     },
+    { path: "/change-password", element: <ChangePassword /> },
   ];
 
   const routes = isLoggedIn
     ? [...commonRoutes, ...authenticatedRoutes]
-    : commonRoutes;
+    : [
+        ...commonRoutes,
+        { path: "/register", element: <Register /> },
+        { path: "/otp", element: <RegisterOtp /> },
+        { path: "/login", element: <Login /> },
+        { path: "/forgot-password", element: <ForgotPassword /> },
+      ];
 
   return (
     <>

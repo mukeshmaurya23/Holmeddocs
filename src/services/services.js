@@ -4,7 +4,7 @@ export const getAllMedicalCondition = async () => {
   try {
     const response = await customAxios.post("/patient/master/condition", {
       paginate: 4,
-      featured: 1,
+      featured: "1",
     });
     const resData = await response?.data?.data?.result;
     console.log(resData, "im resData from services");
@@ -16,7 +16,7 @@ export const getAllMedicalCondition = async () => {
 };
 
 export const getAllMedicalConditionList = async (id) => {
-  console.log(id, "im id from services");   
+  console.log(id, "im id from services");
   try {
     const response = await customAxios.post("/patient/master/mapped", {
       paginate: 4,

@@ -31,7 +31,7 @@ const Holistic = () => {
   };
 
   return (
-    <div className="p-5 bg-[#E2F6F3]">
+    <div className="p-5 bg-[#E2F6F3]  md:h-[calc(100vh_-_7rem)] ">
       <div className="bg-[#E2F6F3]">
         <div className="md:pt-44 sm:pt-28 xs:pt-28 xsm:pt-16 mb-24 space-y-2">
           <h1 className="flex font-poppinRegular justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem]  font-medium tracking-widest text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
@@ -54,8 +54,8 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[1080px]">
-          <div className="flex flex-col md:flex-row">
+        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[927px] lg:max-w-[1000px]">
+          <div className="flex flex-col md:flex-row justify-evenly">
             <Accordion
               items={LocSpec}
               items3={specialistData?.data?.result}
