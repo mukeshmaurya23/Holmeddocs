@@ -1,24 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import customAxios from "../axios/custom";
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  // const memoizedUrl = useMemo(() => url, [url]);
+  // useEffect(() => {
+  console.log("screen mount");
+  const fetchData = async () => {
+    console.log("fetchData");
+    try {
+      setLoading(true);
+      const response = await customAxios.post(url);
 
+      const resData = await response.data;
+      setData(resData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // }, []);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await customAxios.post(url);
-        const resData = await response.data;
-        setData(resData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, [url]);
 
-  return { data };
+  return { data, loading, fetchData };
 };
 
 export default useFetch;

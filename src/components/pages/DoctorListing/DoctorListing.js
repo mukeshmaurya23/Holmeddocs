@@ -8,6 +8,7 @@ import useFetch from "../../../hooks/useFetch";
 import { useDispatch, useSelector } from "react-redux";
 import loadingGif from "../../../images/icons/Loader.gif";
 import { fetchData } from "../../../store/apiSlice";
+import DoctorsList from "./DoctorsList";
 const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryData, setCategoryData] = useState([]);
@@ -27,15 +28,21 @@ const DoctorListing = () => {
     console.log("toggleViewAll");
     setViewAll(!viewAll);
   };
+  const dispatch = useDispatch();
+  const { data: doctorsList, status } = useSelector((state) => state.api);
 
+  console.log(doctorsList, "doctorsList from listing");
+
+  useEffect(() => {
+    dispatch(fetchData("/patient/doctors"));
+  }, [dispatch]);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // You can perform any other actions here, such as fetching data for the new page.
   };
   console.log(filterData?.data?.result, "filterData");
-  // Dummy data
-  const totalCount = 1000;
-  const pageSize = 10;
+
+  const totalCount = doctorsList?.data?.result?.length;
+  const pageSize = 4;
   const siblingCount = 1;
 
   const paginationRange = usePagination({
@@ -44,6 +51,23 @@ const DoctorListing = () => {
     siblingCount,
     currentPage,
   });
+  console.log(paginationRange, "paginationRange");
+  const renderDoctorsList = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    if (status === "loading") {
+      return <img src={loadingGif} alt="loading" />;
+    }
+
+    if (doctorsList?.data?.result) {
+      const paginatedData = doctorsList?.data?.result?.slice(
+        startIndex,
+        endIndex
+      );
+      return <DoctorsList doctorsList={paginatedData} status={status} />;
+    }
+    return null;
+  };
 
   const generateLabel = (data) => (
     <label className="inline-flex items-center mt-3" key={data.id || data}>
@@ -104,24 +128,6 @@ const DoctorListing = () => {
                       <div className="">
                         <div className="flex flex-col">
                           {generateLabels(item)}
-                          {/* {item?.value?.map((data, index) => (
-                            <label
-                              className="inline-flex items-center mt-3"
-                              key={data.id}
-                            >
-                              <input
-                                type="checkbox"
-                                className="form-checkbox h-3 w-3 text-gray-600"
-                              />
-                              <span className="ml-2 text-gray-700 text-[.8rem] tracking-[2px] font-sansRegular">
-                                {data.language_title ||
-                                  data.medical_speciality_name ||
-                                  data.medical_condition_name ||
-                                  data.insurance_company_name ||
-                                  data}
-                              </span>
-                            </label>
-                          ))} */}
                         </div>
                         {item.title !== "Appointment Type" &&
                           item.value.length > 3 && (
@@ -140,7 +146,10 @@ const DoctorListing = () => {
             )}
           </aside>
           <main className="ml-10 ">
-            <div className="flex justify-center items-center">
+            {/* Render your content based on the current page */}
+
+            {renderDoctorsList()}
+            <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}
                 totalCount={totalCount}
@@ -148,11 +157,6 @@ const DoctorListing = () => {
                 siblingCount={siblingCount}
                 currentPage={currentPage}
               />
-              {/* Render your content based on the current page */}
-
-              {paginationRange.map((pageNumber) => (
-                <div key={pageNumber}>{/* Render content for each page */}</div>
-              ))}
             </div>
           </main>
         </div>

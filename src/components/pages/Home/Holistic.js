@@ -1,37 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import leaf from "../../../images/home/Leaf.png";
 import svgSearch from "../../../images/home/SearchBarIcon.svg";
 import calendarSvg from "../../../images/home/Calendar.svg";
 import grayDropDown from "../../../images/Login/GrayDropdown.png";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { LocSpec } from "../../../constant";
-import Accordion from "../../../util/Accordian";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 const Holistic = () => {
-  const { data: LocSpecd } = useFetch("/patient/master/state");
-  const { data: specialistData } = useFetch("/patient/master/speciality");
-  console.log(LocSpecd?.data?.result);
-  console.log(specialistData?.data?.result);
+  const { data: LocSpecd, loading: locLoading } = useFetch(
+    "/patient/master/state"
+  );
 
+  const { data: specialistData, loading: specialityLoading } = useFetch(
+    "/patient/master/speciality"
+  );
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+
     setShowDatePicker(false);
   };
+  const ref = useRef();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref?.current?.contains(event.target)) {
+        setSelectedItem(null);
+      }
+    };
 
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
   };
-
+  const [selectedItem, setSelectedItem] = useState(null);
+  const handleItemClick = (id) => {
+    console.log(id, "id");
+    setSelectedItem((prevSelectedItem) =>
+      prevSelectedItem === id ? null : id
+    );
+  };
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
   };
+  const [selectedItemList, setSelectedItemList] = useState({
+    location: "",
+    speciality: "",
+  });
 
+  const handleSelectedItem = (name, type) => {
+    // setSelectedItemList(name);
+    setSelectedItemList((prevSelectedItemList) => {
+      return { ...prevSelectedItemList, [type]: name };
+    });
+  };
+  const handleSearch = () => {
+    setSearchParams({
+      location: selectedItemList.location,
+      speciality: selectedItemList.speciality,
+      date: selectedDate?.toDateString() || new Date().toDateString(),
+    });
+   
+  };
+  console.log(selectedDate?.toDateString(), "selectedDate");
+  const locationItems = () => {
+    if (locLoading) {
+      return <p>Loading...</p>;
+    }
+
+    return LocSpecd?.data?.result.map((item) => (
+      <h1
+        key={item.id}
+        onClick={() => handleSelectedItem(item.state_name, "location")}
+        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+      >
+        {item.state_name}
+      </h1>
+    ));
+  };
+  const specialityItems = () => {
+    if (specialityLoading) {
+      return <p>Loading...</p>;
+    }
+    return specialistData?.data?.result?.map((item) => (
+      <h1
+        key={item.id}
+        onClick={() =>
+          handleSelectedItem(item.medical_speciality_name, "speciality")
+        }
+        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+      >
+        {item.medical_speciality_name}
+      </h1>
+    ));
+  };
   return (
-    <div className="p-5 bg-[#E2F6F3]  md:h-[calc(100vh_-_7rem)] ">
+    <div className="p-5 bg-[#E2F6F3]  md:h-[calc(100vh_-_7rem)] overflow-auto">
       <div className="bg-[#E2F6F3]">
         <div className="md:pt-44 sm:pt-28 xs:pt-28 xsm:pt-16 mb-24 space-y-2">
           <h1 className="flex font-poppinRegular justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem]  font-medium tracking-widest text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
@@ -54,18 +127,67 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[927px] lg:max-w-[1000px]">
-          <div className="flex flex-col md:flex-row justify-evenly">
-            <Accordion
+        <div className=" mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto md:max-w-[1050px] lg:max-w-[1080px]">
+          <div
+            className="flex flex-col md:flex-row  justify-between px-4"
+            ref={ref}
+          >
+            {/* <Accordion
               items={LocSpec}
-              items3={specialistData?.data?.result}
               items2={LocSpecd?.data?.result}
+              items3={specialistData?.data?.result}
+              locLoading={locLoading}
+              specialityLoading={specialityLoading}
               //items2={LocSpecd?.data?.result}
+              // value={value}
               showBorder={false}
               image={grayDropDown}
               className="text-gray-600"
-            />
+            /> */}
+            {LocSpec.map((item) => {
+              return (
+                <>
+                  <div
+                    className="flex relative justify-between items-center "
+                    key={item.id}
+                  >
+                    <h2
+                      className={`font-sansBold text-[.8rem] md:text-[.9rem] text-gray-500 tracking-[2px] pr-8 `}
+                    >
+                      {selectedItemList[item.id] || item.title}
+                    </h2>
+                    <div
+                      className="ml-auto md:ml-5 cursor-pointer"
+                      onClick={() => handleItemClick(item.id)}
+                    >
+                      <img
+                        src={grayDropDown}
+                        alt=""
+                        className={`${
+                          selectedItem === item.id ? "rotate-180" : ""
+                        } cursor-pointer h-3 w-3`}
+                      />
+                    </div>
 
+                    <div
+                      className={`${"border-l  border-none md:border-l lg:border-l border-gray-400 h-[50px] ml-10 mr-5"}`}
+                    ></div>
+                    {selectedItem === item.id && (
+                      <div
+                        className="absolute top-12 bg-white  p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                        style={{
+                          zIndex: 1,
+                        }}
+                      >
+                        {item.id === "location" && locationItems()}
+
+                        {item.id === "speciality" && specialityItems()}
+                      </div>
+                    )}
+                  </div>
+                </>
+              );
+            })}
             {/* <div className="flex flex-row justify-between items-center flex-1 gap-[20px]">
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
@@ -92,11 +214,12 @@ const Holistic = () => {
                 alt="dropdown"
                 className="h-3 w-3 ml-auto mr-[60px]"
               />
-              <div className="hidden md:block">
+
+              <div className="hidden md:block" onClick={handleSearch}>
                 <img
                   src={svgSearch}
                   alt=""
-                  className="w-20 h-16  cursor-pointer "
+                  className="w-20 h-16 cursor-pointer"
                 />
               </div>
             </div>
