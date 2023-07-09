@@ -3,10 +3,13 @@ import leaf from "../../../images/home/Leaf.png";
 import svgSearch from "../../../images/home/SearchBarIcon.svg";
 import calendarSvg from "../../../images/home/Calendar.svg";
 import grayDropDown from "../../../images/Login/GrayDropdown.png";
-import DatePickerComponent from "../../../UI/DatePicker";
+
 import { LocSpec } from "../../../constant";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 const Holistic = () => {
   const { data: LocSpecd, loading: locLoading } = useFetch(
     "/patient/master/state"
@@ -19,13 +22,10 @@ const Holistic = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-
-    setShowDatePicker(false);
-  };
   const ref = useRef();
+  const calendarRef = useRef();
   const navigate = useNavigate();
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -39,8 +39,12 @@ const Holistic = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
-  const toggleDatePicker = () => {
-    setShowDatePicker(!showDatePicker);
+  const handleDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const closeDatePicker = () => {
+    setShowDatePicker(false);
   };
   const [selectedItem, setSelectedItem] = useState(null);
   const handleItemClick = (id) => {
@@ -49,9 +53,7 @@ const Holistic = () => {
       prevSelectedItem === id ? null : id
     );
   };
-  const toggleCalendar = () => {
-    setShowCalendar(!showCalendar);
-  };
+
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
@@ -69,7 +71,6 @@ const Holistic = () => {
       speciality: selectedItemList.speciality,
       date: selectedDate?.toDateString() || new Date().toDateString(),
     });
-   
   };
   console.log(selectedDate?.toDateString(), "selectedDate");
   const locationItems = () => {
@@ -104,8 +105,8 @@ const Holistic = () => {
     ));
   };
   return (
-    <div className="p-5 bg-[#E2F6F3]  md:h-[calc(100vh_-_7rem)] overflow-auto">
-      <div className="bg-[#E2F6F3]">
+    <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)]">
+      <div className="bg-[#E2F6F3] ">
         <div className="md:pt-44 sm:pt-28 xs:pt-28 xsm:pt-16 mb-24 space-y-2">
           <h1 className="flex font-poppinRegular justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem]  font-medium tracking-widest text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
             <span>HOLISTIC</span>
@@ -193,19 +194,35 @@ const Holistic = () => {
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
             <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
-              <div className="flex ml-0 md:ml-5">
+              <div className="flex ml-0 md:ml-5" ref={calendarRef}>
                 <img
-                  onClick={toggleCalendar}
+                  onChange={handleDateChange}
                   src={calendarSvg}
                   alt=""
-                  className="w-6 h-6 cursor-pointer mr-5"
+                  className="w-6 h-6 cursor-pointer mr-5 mt-2"
                 />
                 {selectedDate &&
                   selectedDate.toDateString() !== new Date().toDateString() && (
                     <p>{selectedDate.toDateString()}</p>
                   )}
                 {showDatePicker && (
-                  <DatePickerComponent onDateChange={handleDateChange} />
+                  <DatePicker
+                    selected={startDate}
+                    onChange={handleDateChange}
+                    customInput={
+                      <input
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          color: "gray",
+                        }}
+                        value={startDate.toDateString()}
+                        readOnly
+                        contentEditable={false}
+                        className="w-40 h-10 border-2 border-gray-300 rounded-md"
+                      />
+                    }
+                  />
                 )}
               </div>
 

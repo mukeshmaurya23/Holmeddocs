@@ -84,7 +84,7 @@ const Step3Forgot = ({ formik }) => {
             <Input
               type={isPasswordVisible ? "text" : "password"}
               name="password"
-              id="Password"
+              id="password"
               onChange={formik.handleChange}
               value={formik.values.password}
               onBlur={formik.handleBlur}
@@ -113,25 +113,25 @@ const Step3Forgot = ({ formik }) => {
           </div>
           <div className="flex flex-col  w-full relative p-[10px]">
             <Label
-              htmlFor="confirmPassword"
+              htmlFor="password_confirmation"
               className="font-sansRegular text-formLabel text-sm"
             >
               Confirm Password
             </Label>
             <Input
               type={isConfirmPasswordVisible ? "text" : "password"}
-              name="confirmPassword"
-              id="confirmPassword"
+              name="password_confirmation"
+              id="password_confirmation"
               onChange={formik.handleChange}
-              value={formik.values.confirmPassword}
+              value={formik.values.password_confirmation}
               onBlur={formik.handleBlur}
               placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
               className="border border-verifiCation text-formLabel rounded-md py-2 px-4"
             />
             <div className="text-red-600 text-xs ">
-              {formik.touched.confirmPassword &&
-              formik.errors.confirmPassword ? (
-                formik.errors.confirmPassword
+              {formik.touched.password_confirmation &&
+              formik.errors.password_confirmation ? (
+                formik.errors.password_confirmation
               ) : (
                 <>&nbsp;</>
               )}

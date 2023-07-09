@@ -148,7 +148,7 @@ const DoctorListing = () => {
           <main className="ml-10 ">
             {/* Render your content based on the current page */}
 
-            {renderDoctorsList()}
+            {doctorsList?.data?.result?.length !== 0 && renderDoctorsList()}
             <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}

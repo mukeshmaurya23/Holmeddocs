@@ -26,7 +26,7 @@ const DoctorsList = ({ doctorsList, status }) => {
     );
   };
 
-  return status === "loading" ? (
+  return doctorsList === null ? (
     <>
       <div className="flex justify-start ">
         <img src={loadingGif} alt="" />

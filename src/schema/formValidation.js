@@ -47,12 +47,10 @@ export const registerSchema = Yup.object().shape({
 });
 
 export const forgotSchema = Yup.object().shape({
-  mobileNumber: Yup.string()
+  phone: Yup.string()
     .required("Phone number is required")
     .matches(/^\d{10}$/, "Phone number must be 10 digits"),
-  otp: Yup.string()
-    .required("OTP is required")
-    .matches(/^\d{6}$/, "Invalid OTP. Please enter a 6-digit OTP"),
+
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(
@@ -60,12 +58,9 @@ export const forgotSchema = Yup.object().shape({
       "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
     )
     .required("Password is required"),
-  confirmPassword: Yup.string()
+  password_confirmation: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Please confirm your password"),
-  mobileNumber: Yup.string()
-    .required("Phone number is required")
-    .matches(/^\d{10}$/, "Phone number must be 10 digits"),
 });
 
 export const resetSchema = Yup.object().shape({

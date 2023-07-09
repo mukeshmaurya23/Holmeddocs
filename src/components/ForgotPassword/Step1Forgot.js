@@ -59,7 +59,7 @@ const Step1Forgot = ({ formik }) => {
         <div className="max-w-[500px] mt-10 sm:mx-4 xsm:px-2 xsm:mx-0 xs:mx-0 xs:px-2">
           <div className="flex flex-col space-y-2 w-10/12 py-0 relative">
             <Label
-              htmlFor="mobileNumber"
+              htmlFor="phone"
               className="font-sansRegular text-[#757993] text-xs"
             >
               Mobile Number
@@ -69,17 +69,17 @@ const Step1Forgot = ({ formik }) => {
             </div>
             <Input
               type="number"
-              name="mobileNumber"
-              id="mobileNumber"
+              name="phone"
+              id="phone"
               onChange={formik.handleChange}
-              value={values.mobileNumber}
+              value={values.phone}
               onBlur={formik.handleBlur}
               placeholder="XXX XXX XXXX"
               className="border border-verifiCation text-formLabel rounded-md py-2 px-8  outline-none focus:border-verifiCation sm:w-[400px] xsm:w-[310px]"
             />
             <div className="text-red-600 text-xs ml-1">
-              {formik.touched.mobileNumber && formik.errors.mobileNumber ? (
-                formik.errors.mobileNumber
+              {formik.touched.phone && formik.errors.phone ? (
+                formik.errors.phone
               ) : (
                 <>&nbsp;</>
               )}
