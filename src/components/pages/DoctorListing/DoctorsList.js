@@ -11,6 +11,7 @@ const DoctorsList = ({ doctorsList, status }) => {
   //   useEffect(() => {
   //     dispatch(fetchData("/patient/doctors"));
   //   }, [dispatch]);
+  console.log(doctorsList, "doctorsList from listing");
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
     const day = date.getDate();

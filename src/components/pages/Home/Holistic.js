@@ -66,11 +66,12 @@ const Holistic = () => {
     });
   };
   const handleSearch = () => {
-    setSearchParams({
-      location: selectedItemList.location,
-      speciality: selectedItemList.speciality,
-      date: selectedDate?.toDateString() || new Date().toDateString(),
-    });
+    //
+    navigate(
+      `/doctor-listing?location=${selectedItemList.location}&speciality=${
+        selectedItemList.speciality
+      }&date=${startDate.toDateString()}`
+    );
   };
   console.log(selectedDate?.toDateString(), "selectedDate");
   const locationItems = () => {

@@ -64,9 +64,15 @@ const DoctorListing = () => {
         startIndex,
         endIndex
       );
-      return <DoctorsList doctorsList={paginatedData} status={status} />;
+      return doctorsList?.data?.result?.length > 0 ? (
+        <>
+          <DoctorsList doctorsList={paginatedData} status={status} />
+        </>
+      ) : (
+        <h1>No doctors found</h1>
+      );
     }
-    return null;
+    return <h1>No doctors found</h1>;
   };
 
   const generateLabel = (data) => (
@@ -102,7 +108,7 @@ const DoctorListing = () => {
     <>
       <section className=" ">
         <h2 className="px-10  font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
-          We have found 75 Doctors for your search criteria.
+          We have found {totalCount} Doctors for your search criteria.
         </h2>
         <div className="flex mt-10 mb-10">
           <aside className="flex flex-col px-10 py-3  border-r">
@@ -148,7 +154,7 @@ const DoctorListing = () => {
           <main className="ml-10 ">
             {/* Render your content based on the current page */}
 
-            {doctorsList?.data?.result?.length !== 0 && renderDoctorsList()}
+            {renderDoctorsList()}
             <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}
