@@ -105,7 +105,7 @@ const Holistic = () => {
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] ">
       <div className="bg-[#E2F6F3] ">
-        <div className="md:mt-[5rem] sm:pt-28 xs:pt-28 xsm:pt-16 mt-0 2xl:mt-[8rem] space-y-2">
+        <div className="md:mt-[5rem] sm:pt-28 xs:pt-28 xsm:pt-16 mt-0 lg:mt-[6rem] 2xl:mt-[8rem] space-y-2">
           <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2rem] 2xl:text-[2.5rem]  font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
             <span>HOLISTIC</span>
             <div className="flex items-center justify-center">
@@ -126,7 +126,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 md:mt-[calc(100vh_-_72vh)] 2xl:mt-[calc(100vh_-_65vh)] mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_0%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 md:mt-[calc(100vh_-_45vh)] 2xl:mt-[calc(100vh_-_85vh)]  mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_0%)] xsm:w-[calc(100%_-_2%)]">
           <div
             className="flex flex-col md:flex-row  justify-between px-4"
             ref={ref}
@@ -235,7 +235,7 @@ const Holistic = () => {
                 <img
                   src={svgSearch}
                   alt=""
-                  className=" w-16 2xl:w-24 h-auto cursor-pointer"
+                  className=" w-16 2xl:w-20 h-auto cursor-pointer"
                 />
               </div>
             </div>

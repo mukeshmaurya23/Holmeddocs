@@ -18,14 +18,14 @@ const HolisticProcess = () => {
           />
         </div>
         <div className="py-7 md:py-16 sm:py-16 lg:py-16 xl:py-16 2xl:py-16  flex-1">
-          <h2 className=" font-sansRegular text-[1rem] md:text-[1.7rem] sm:text-[1.5rem] xl:text-[1.9rem] 2xl:text-[2rem] text-gray-800   xl:leading-[3rem] pb-3 text-center md:text-left ">
+          <h2 className="px-16 font-sansRegular text-[1rem] md:text-[1.7rem] sm:text-[1.5rem] xl:text-[1.9rem] 2xl:text-[2rem] text-gray-800   xl:leading-[3rem] pb-3 text-center md:text-left ">
             Instant appointment with Holistic Practitioners
           </h2>
-          <p className="text-[#545871] text-[.8rem] md:text-[1.1rem]  text-center md:text-left">
+          <p className="text-[#545871] text-[.8rem] md:text-[1.1rem] px-16  text-center md:text-left">
             Get onboarded and allow us to connect you a with a holistic
             practitioner near you!
           </p>
-          <div className="flex justify-evenly px-10 mt-10 sm:flex-col sm:items-center xs:flex-col xs:items-center xsm:flex-col xsm:items-center md:flex-row md:items-start lg:flex-row lg:items-start ">
+          <div className="flex justify-between px-16 mt-10 sm:flex-col sm:items-center xs:flex-col xs:items-center xsm:flex-col xsm:items-center md:flex-row md:items-start lg:flex-row lg:items-start ">
             <div className="flex flex-col  sm:items-center xs:items-center xsm:items-center sm:space-y-3 sm:mb-2 xsm:space-y-2 xs:space-y-3">
               <div className=" relative">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">

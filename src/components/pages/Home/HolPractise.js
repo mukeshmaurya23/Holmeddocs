@@ -51,7 +51,7 @@ const HolPractise = () => {
             className="w-[100%]  lg:h-[28rem] xl:h-[28rem]  md:h-[27rem] sm:h-[25rem] xs:h-[20rem] xsm:h-[17rem] 2xl:h-[38rem] md:w-[100%]"
           />
         </div>
-        <div className="mt-10 sm:mt-[28rem] xs:mt-[19rem] xsm:mt-[17rem] md:mt-20 lg:mt-20 xl:mt-20 md:ml-[35rem] 2xl:ml-[60rem]">
+        <div className="mt-10 sm:mt-[28rem] xs:mt-[19rem] xsm:mt-[17rem] md:mt-20 lg:mt-20 xl:mt-20 md:ml-[35rem] 2xl:ml-[45rem]">
           <h2 className="text-[#030303] font-sansRegular tracking-[3px] font-semibold text-[1.3rem] sm:text-[1.8rem] 2xl:text-[2.5rem] lg:text-[1.8rem] xl:text-[2rem]">
             Let's connect your practice
           </h2>
