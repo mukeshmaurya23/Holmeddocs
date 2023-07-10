@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import userLogo from "../images/home/User.png";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../images/home/Logo.png";
 import PortalModal from "./PortalModal";
 import hamBurger from "../images/icons/Hamburger.png";
@@ -11,10 +11,15 @@ import { useLocation } from "react-router-dom";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
-
+import { fetchData } from "../store/apiSlice";
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({
+    location: "",
+    speciality: "",
+    date: "",
+  });
   // const openHandleDropdown = () => {
   //   setDropdownVisible(true);
   // };
@@ -62,6 +67,11 @@ const Navbar2 = () => {
   const ref = useRef();
   const loginRef = useRef();
 
+  //search params getting data from url
+  const locationSearchParams = searchParams.get("location");
+  const specialitySearchParams = searchParams.get("speciality");
+  const dateSearchParams = searchParams.get("date");
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!ref?.current?.contains(event.target)) {
@@ -89,6 +99,30 @@ const Navbar2 = () => {
   //     };
   //   }
   // }, [dropdownVisible]);
+  //for location and speciality data
+  const locDataDispatch = useDispatch();
+  const { data: locationData } = useSelector((state) => state.api);
+  useEffect(() => {
+    locDataDispatch(fetchData("/patient/master/state"));
+  }, [locDataDispatch]);
+
+  const { data: specialityData } = useSelector((state) => state.api);
+  const specialityDispatch = useDispatch();
+  useEffect(() => {
+    specialityDispatch(fetchData("/patient/master/speciality"));
+  }, [specialityDispatch]);
+
+  const handleLocationChange = (e) => {
+    setSearchParams({ ...searchParams, location: e.target.value });
+  };
+
+  const handleSpecialityChange = (e) => {
+    setSearchParams({ ...searchParams, speciality: e.target.value });
+  };
+
+  const handleDateChange = (e) => {
+    setSearchParams({ ...searchParams, date: e.target.value });
+  };
 
   const location = useLocation();
   console.log(location.pathname);
@@ -252,20 +286,21 @@ const Navbar2 = () => {
               </div> */}
 
               <div className="border-[1px] flex items-center rounded-lg border-[#b5b1b1] ">
-                <div className="flex items-center">
+                <div className="flex items-center relative">
                   <input
                     className=" py-1 w-[200px] h-[40px] mr-1 outline-none border-r border-[#b5b1b1] pl-2"
-                    placeholder="New York, NY"
+                    placeholder={locationSearchParams}
                   />
 
                   <input
                     className="outline-none border-r border-[#b5b1b1] py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
-                    placeholder="Dentist"
+                    placeholder={specialitySearchParams}
                   />
 
                   <input
                     className="outline-none  py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
-                    placeholder="Other"
+                    placeholder={dateSearchParams}
+                    onChange={handleDateChange}
                   />
                 </div>
                 <img

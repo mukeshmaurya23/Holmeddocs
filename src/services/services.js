@@ -1,5 +1,5 @@
 import customAxios from "../axios/custom";
-
+import { useDispatch,useSelector } from "react-redux";
 export const getAllMedicalCondition = async () => {
   try {
     const response = await customAxios.post("/patient/master/condition", {
@@ -30,3 +30,5 @@ export const getAllMedicalConditionList = async (id) => {
     return error.message;
   }
 };
+
+

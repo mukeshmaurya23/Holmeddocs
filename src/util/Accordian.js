@@ -193,13 +193,13 @@ const Accordion = ({
     );
   };
 
-  const handleSelectedItem = (name, type) => {
-    // setSelectedItemList(name);
-    setSelectedItemList((prevSelectedItemList) => {
-      return { ...prevSelectedItemList, [type]: name };
-    });
-  };
-  console.log(selectedItemList, "selectedItemList");
+  // const handleSelectedItem = (name, type) => {
+  //   // setSelectedItemList(name);
+  //   setSelectedItemList((prevSelectedItemList) => {
+  //     return { ...prevSelectedItemList, [type]: name };
+  //   });
+  // };
+  // console.log(selectedItemList, "selectedItemList");
 
   useEffect(() => {
     const getAllMedicalConditionListData = async () => {
@@ -237,65 +237,63 @@ const Accordion = ({
     [medicalConditionListData]
   );
 
-  const locationItems = () => {
-    return items2.map((item) => (
-      <h1
-        key={item.id}
-        onClick={() => handleSelectedItem(item.state_name, "location")}
-        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
-      >
-        {item.state_name}
-      </h1>
-    ));
-  };
+  // const locationItems = () => {
+  //   return items2.map((item) => (
+  //     <h1
+  //       key={item.id}
+  //       onClick={() => handleSelectedItem(item.state_name, "location")}
+  //       className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+  //     >
+  //       {item.state_name}
+  //     </h1>
+  //   ));
+  // };
 
-  const specialityItems = () => {
-    return items3?.map((item) => (
-      <h1
-        key={item.id}
-        onClick={() =>
-          handleSelectedItem(item.medical_speciality_name, "speciality")
-        }
-        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
-      >
-        {item.medical_speciality_name}
-      </h1>
-    ));
-  };
+  // const specialityItems = () => {
+  //   return items3?.map((item) => (
+  //     <h1
+  //       key={item.id}
+  //       onClick={() =>
+  //         handleSelectedItem(item.medical_speciality_name, "speciality")
+  //       }
+  //       className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+  //     >
+  //       {item.medical_speciality_name}
+  //     </h1>
+  //   ));
+  // };
 
   return (
     <div
       ref={ref}
-      className="flex flex-col md:flex-row justify-between md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1"
+      className="w-full flex flex-col md:flex-row justify-between md:gap-10 sm:gap-4 xs:gap-2 xsm:gap-1"
     >
-      {items.map((item) => (
+      {items?.map((item) => (
         <div
           className={`${
             showBorder ? "border-b-2 border-gray-400 pb-7" : ""
-          } flex relative items-center  `}
+          } flex relative  w-full items-center justify-between  `}
           key={item.id}
         >
-          <h2
-            className={`font-sansBold text-[.8rem]  tracking-[2px] ${
-              showBorder ? "mt-3" : ""
-            } ${className} `}
-          >
-            {selectedItemList[item.id] ||
-              item.medical_condition_name ||
-              item.title}
-          </h2>
-          <div
-            className="ml-auto md:ml-5 cursor-pointer xl:pl-[4rem]"
-            onClick={() => handleItemClick(item.id)}
-          >
+          <div className="flex justify-between items-center flex-1">
+            {" "}
+            <h2
+              className={`font-sansBold 2xl:text-[1.2rem] lg:text-[1rem] text-[.9rem] tracking-[2px] ${
+                showBorder ? "mt-3" : ""
+              } ${className} `}
+            >
+              {selectedItemList[item.id] || item.medical_condition_name}
+            </h2>
             <img
               src={image}
               alt=""
+              onClick={() => handleItemClick(item.id)}
               className={`${
                 selectedItem === item.id ? "rotate-180" : ""
-              } cursor-pointer h-3 w-3`}
+              } cursor-pointer h-3 w-3 `}
             />
           </div>
+
           <div
             className={`${
               !showBorder &&
@@ -304,7 +302,7 @@ const Accordion = ({
           ></div>
           {selectedItem === item.id && (
             <div
-              className="absolute top-10 bg-white w-full p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+              className="absolute top-20 bg-white w-full p-5 rounded-lg max-h-[30vh] overflow-y-auto"
               style={{
                 zIndex: 1,
               }}
@@ -322,9 +320,9 @@ const Accordion = ({
                   </h1>
                 ))
               )}
-              {item.id === "location" && locationItems()}
+              {/* {item.id === "location" && locationItems()}
 
-              {item.id === "speciality" && specialityItems()}
+              {item.id === "speciality" && specialityItems()} */}
             </div>
           )}
         </div>

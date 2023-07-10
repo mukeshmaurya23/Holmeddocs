@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchData } from "../../../store/apiSlice";
 import loadingGif from "../../../images/icons/Loader.gif";
+import { Link } from "react-router-dom";
 const DoctorsList = ({ doctorsList, status }) => {
   //   const dispatch = useDispatch();
   //   const { data: doctorsList, status } = useSelector((state) => state.api);
@@ -14,8 +15,8 @@ const DoctorsList = ({ doctorsList, status }) => {
   console.log(doctorsList, "doctorsList from listing");
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "short" });
+    const day = date?.getDate();
+    const month = date?.toLocaleString("en-US", { month: "short" });
     //const formattedDate = `${day} ${month}`;
     return (
       <>
@@ -27,13 +28,7 @@ const DoctorsList = ({ doctorsList, status }) => {
     );
   };
 
-  return doctorsList === null ? (
-    <>
-      <div className="flex justify-start ">
-        <img src={loadingGif} alt="" />
-      </div>
-    </>
-  ) : (
+  return (
     <>
       {doctorsList?.map((doctor) => (
         <div className="flex flex-wrap gap-6 mb-6" key={doctor?.id}>
@@ -50,12 +45,14 @@ const DoctorsList = ({ doctorsList, status }) => {
             </h2>
             <div className="flex gap-4 flex-row py-1 text-[#292F33]">
               <h3 className="font-sansRegular text-sm">
-                {doctor?.medical_speciality[0]}
+                {doctor?.medical_speciality?.[0]}
               </h3>
-              <h3 className="font-sansRegular text-sm">{doctor?.country[0]}</h3>
+              <h3 className="font-sansRegular text-sm">
+                {doctor?.country?.[0]}
+              </h3>
             </div>
             <h3 class="max-w-[200px] break-words text-sm text-[#292F33]">
-              Doctor of Medicine ({doctor?.education[0]})
+              Doctor of Medicine ({doctor?.education?.[0]})
             </h3>
 
             <p className="gap-2 flex py-1 font-sansSemibold text-[13px]">
@@ -63,27 +60,37 @@ const DoctorsList = ({ doctorsList, status }) => {
                 <i class="fa fa-language  "></i>
               </div>
 
-              {doctor?.languages_spoken.map((language) => (
-                <span key={language}>{language}</span>
+              {doctor?.languages_spoken?.map((language, index) => (
+                <span key={language}>
+                  {language}
+                  {index !== doctor?.languages_spoken?.length - 1 && " ,"}
+                </span>
               ))}
             </p>
             <div className="flex gap-3 py-1 px-2">
               <i className="fa fa-user h-2 w-5" aria-hidden="true"></i>
               <p className="text-sm text-[#292F33]">
-                {doctor?.available_in[0]}
+                {doctor?.available_in?.map((available, index) => (
+                  <span key={available}>
+                    {available}
+                    {index !== doctor?.available_in?.length - 1 && " , "}
+                  </span>
+                ))}
               </p>
             </div>
           </div>
-          <div className="px-16">
+          <div className="px-6">
             <h2 className="px-3 font-Henriette text-[1.2rem] cursor-pointer">
               Availability
             </h2>
             <div className="flex flex-row flex-wrap gap-4 px-4 py-3 cursor-pointer">
-              {doctor?.time_slots.InPerson.map((timeSlot, index) => (
+              {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
                 <div key={index} className="bg-[#F2FCFE]">
-                  <p className="px-3 text-[14px]">{timeSlot.day.slice(0, 3)}</p>
+                  <p className="px-3 text-[14px]">
+                    {timeSlot?.day?.slice(0, 3)}
+                  </p>
                   <p className="px-3">
-                    <DateComp timeSlotDate={timeSlot.date} />
+                    <DateComp timeSlotDate={timeSlot?.date} />
                   </p>
                 </div>
               ))}
@@ -92,9 +99,12 @@ const DoctorsList = ({ doctorsList, status }) => {
               <button className="bg-verifiCation rounded-full font-sansBold text-xs text-white px-5 py-2">
                 SCHEDULE AN APPOINTMENT
               </button>
-              <p className="text-[#CF8B15] cursor-pointer underline">
-                View More
-              </p>
+
+              <Link to={`/doctor-listing/${doctor?.id}`}>
+                <p className="text-[#CF8B15] cursor-pointer underline">
+                  View More
+                </p>
+              </Link>
             </div>
           </div>
         </div>

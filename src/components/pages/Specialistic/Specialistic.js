@@ -51,11 +51,11 @@ const Specialistic = () => {
     <>
       <div className=" bg-[#ffffff]">
         <div className="text-center  mt-10">
-          <p className="font-sansBold tracking-[5px] md:text-[30px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] text-[#292F33]">
+          <p className="font-sansBold tracking-[5px] md:text-[30px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.2rem] 2xl:tracking-[6px] text-[#292F33]">
             Holistic fields
           </p>
           <div className="flex mt-7">
-            <p className="font-sansBold items-center flex-1 tracking-[3px] text-xl md:ml-[6rem] text-[#292F33]">
+            <p className="font-sansBold items-center flex-1 tracking-[3px] text-xl md:ml-[6rem] 2xl:text-[1.6rem] text-[#292F33]">
               15 + Specialities
             </p>
             <Link to="/specialist" className="hidden md:block">

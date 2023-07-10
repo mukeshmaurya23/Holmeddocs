@@ -21,6 +21,7 @@ import DoctorListing from "./components/pages/DoctorListing/DoctorListing";
 import Appointment from "./components/pages/Appointment/Appointment";
 import NetworkError from "./util/NetworkError";
 import ContactUs from "./components/ContactUs";
+import DoctorDetails from "./components/pages/DoctorListing/DoctorDetails";
 
 function App() {
   const isOnline = useOnline();
@@ -36,6 +37,7 @@ function App() {
         { path: "/about-us", element: <AboutUs /> },
         { path: "/make-appointment", element: <MakeAppointment /> },
         { path: "/doctor-listing", element: <DoctorListing /> },
+        { path: "/doctor-listing/:id", element: <DoctorDetails /> },
         { path: "/contact-us", element: <ContactUs /> },
       ],
     },

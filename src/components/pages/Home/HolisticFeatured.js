@@ -34,7 +34,7 @@ import Slider from "../../../UI/Slider";
 const HolisticFeatured = () => {
   return (
     <div className="flex flex-col lg:flex-row sm:flex-col mb-3 py-12 p-2 2xl:justify-between">
-      <div className="max-w-[100%]  2xl:max-w-[50%] px-4 md:px-24">
+      <div className="max-w-[100%] md:max-w-[50%] 2xl:max-w-[50%] px-4 md:px-24">
         <h2 className="text-[#030303] font-sansBold tracking-[3px] font-semibold text-[1.1rem] md:text-[2.1rem]">
           Featured Holistic
         </h2>

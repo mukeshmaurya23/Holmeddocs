@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 const SpecialistCard = ({ specialistData }) => {
   return (
     <>
-      <div className="w-full flex justify-center px-5 md:px-0">
-        <div className="mt-10 md:mt-20 sm:px-24 pb-6 w-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 grid-flow-row gap-2 justify-between justify-items-center">
+      <div className=" flex justify-center items-center px-5 md:px-0">
+        <div className="mt-10 md:mt-20 sm:px-24 pb-6  grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 grid-flow-row xl:gap-5 md:gap-5 xsm:gap-2 lg:gap-5 2xl:gap-10 justify-between justify-items-center">
           {specialistData?.map((item, index) => (
             <div
-              className="flex flex-col items-center md:items-start justify-between sm:items-center
+              className="flex flex-col items-center md:items-start justify-center sm:items-center
               rounded-3xl pt-6 md:pl-6 pr-0 hover:border-[#b4dbd5] hover:shadow-xl border-2 border-white hover:cursor-pointer  md:max-w-[18rem] "
               key={index}
             >

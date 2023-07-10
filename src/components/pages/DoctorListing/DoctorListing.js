@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Button from "../../../util/Button";
-import { dummyData } from "../../../constant";
+
 import Pagination from "./Pagination";
 import { usePagination } from "../../../hooks/usePagination";
 import useFetch from "../../../hooks/useFetch";
@@ -9,17 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import loadingGif from "../../../images/icons/Loader.gif";
 import { fetchData } from "../../../store/apiSlice";
 import DoctorsList from "./DoctorsList";
+import Footer from "../../../UI/Footer";
+
 const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [categoryData, setCategoryData] = useState([]);
 
   //const dispatch = useDispatch();
   //const { data: filterData, error, status } = useSelector((state) => state.api);
   const { data: filterData } = useFetch("/patient/filters");
-
-  // useEffect(() => {
-  //   dispatch(fetchData("/patient/filters"));
-  // }, []);
 
   console.log(filterData, "filterData");
   const [viewAll, setViewAll] = useState(false);
@@ -55,24 +50,19 @@ const DoctorListing = () => {
   const renderDoctorsList = () => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    if (status === "loading") {
-      return <img src={loadingGif} alt="loading" />;
-    }
 
-    if (doctorsList?.data?.result) {
+    if (doctorsList?.data?.result.length > 0) {
       const paginatedData = doctorsList?.data?.result?.slice(
         startIndex,
         endIndex
       );
-      return doctorsList?.data?.result?.length > 0 ? (
+      return (
         <>
-          <DoctorsList doctorsList={paginatedData} status={status} />
+          <DoctorsList doctorsList={paginatedData} status={status} />;
         </>
-      ) : (
-        <h1>No doctors found</h1>
       );
     }
-    return <h1>No doctors found</h1>;
+    return null;
   };
 
   const generateLabel = (data) => (
@@ -117,9 +107,7 @@ const DoctorListing = () => {
             </h2>
             {filterData === null ? (
               <>
-                <div className="flex justify-start ">
-                  <img src={loadingGif} alt="" />
-                </div>
+                <h2>Loading ...</h2>
               </>
             ) : (
               <>
@@ -153,8 +141,22 @@ const DoctorListing = () => {
           </aside>
           <main className="ml-10 ">
             {/* Render your content based on the current page */}
-
-            {renderDoctorsList()}
+            {status === "loading" ? (
+              <div className="flex justify-center items-center h-screen">
+                <img src={loadingGif} alt="" />
+              </div>
+            ) : (
+              <>{renderDoctorsList()}</>
+            )}
+            {/* {totalCount > 0 ? (
+              renderDoctorsList()
+            ) : (
+              <div className="flex justify-center items-center h-screen">
+                <h2 className="font-sansBold text-[1.3rem] text-[#292F33] tracking-[2px]">
+                  No Doctors Found
+                </h2>
+              </div>
+            )} */}
             <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}
@@ -167,6 +169,7 @@ const DoctorListing = () => {
           </main>
         </div>
       </section>
+      <Footer />
     </>
   );
 };
