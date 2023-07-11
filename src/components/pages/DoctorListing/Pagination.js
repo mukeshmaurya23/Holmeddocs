@@ -19,7 +19,7 @@ const Pagination = (props) => {
     pageSize,
   });
 
-  if (currentPage === 0 || paginationRange.length < 2) {
+  if (currentPage === 0 || paginationRange?.length < 2) {
     return null;
   }
 
@@ -30,8 +30,14 @@ const Pagination = (props) => {
   const onPrevious = () => {
     onPageChange(currentPage - 1);
   };
+  let lastPage;
 
-  let lastPage = paginationRange[paginationRange.length - 1];
+  if (paginationRange && paginationRange.length > 0) {
+    lastPage = paginationRange[paginationRange.length - 1];
+  } else {
+    lastPage = 0; // Set a default value when paginationRange is undefined or empty
+  }
+  // let lastPage = paginationRange[paginationRange?.length - 1];
   return (
     <ul className={`flex justify-center items-center m-0 p-0`}>
       <li
@@ -42,7 +48,7 @@ const Pagination = (props) => {
       >
         <img src={greenArrowLeft} alt="Previous" className="w-4 h-4" />
       </li>
-      {paginationRange.map((pageNumber, index) => {
+      {paginationRange?.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
           return (
             <li

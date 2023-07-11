@@ -8,6 +8,7 @@ const customAxios = axios.create({
   //"https://755b-110-227-197-199.ngrok-free.app/holemeddoc",
   headers: {
     "Content-Type": "application/json",
+
     // origin: "https://755b-110-227-197-199.ngrok-free.app/holemeddoc",
     // "Access-Control-Allow-Origin":
     //   "https://755b-110-227-197-199.ngrok-free.app/holemeddoc",

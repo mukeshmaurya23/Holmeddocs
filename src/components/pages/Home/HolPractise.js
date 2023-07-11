@@ -43,7 +43,7 @@ import practiseLogo from "../../../images/home/OBJECTS.png";
 const HolPractise = () => {
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between bg-[#E2F6F3] mb-5 p-[20px] relative h-0 2xl:h-[36rem]">
+      <div className="flex flex-col md:flex-row justify-between bg-[#E2F6F3] mb-5 p-[20px] relative 2xl:h-[36rem]">
         <div className="absolute left-3 -top-8">
           <img
             src={practiseLogo}

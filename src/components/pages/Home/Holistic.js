@@ -173,7 +173,7 @@ const Holistic = () => {
                     ></div>
                     {selectedItem === item.id && (
                       <div
-                        className="absolute top-20 bg-white w-full p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                        className="absolute top-14 bg-white w-full p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                         style={{
                           zIndex: 1,
                         }}

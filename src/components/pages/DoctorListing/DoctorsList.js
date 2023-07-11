@@ -28,10 +28,17 @@ const DoctorsList = ({ doctorsList, status }) => {
     );
   };
 
-  return (
+  return doctorsList.length === 0 ? (
+    <div className="flex justify-center items-center">
+      <img src={loadingGif} alt="loading" />
+    </div>
+  ) : (
     <>
       {doctorsList?.map((doctor) => (
-        <div className="flex flex-wrap gap-6 mb-6" key={doctor?.id}>
+        <div
+          className="flex flex-wrap sm:gap-5 2xl:gap-[3rem] 2xl:px-[5rem] px-4 mb-6"
+          key={doctor?.id}
+        >
           <div className="h-auto w-[160px] mb-3">
             <img
               src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww&w=1000&q=80"
@@ -79,7 +86,7 @@ const DoctorsList = ({ doctorsList, status }) => {
               </p>
             </div>
           </div>
-          <div className="px-6">
+          <div className="px-6 2xl:px-[8rem]">
             <h2 className="px-3 font-Henriette text-[1.2rem] cursor-pointer">
               Availability
             </h2>
@@ -96,9 +103,11 @@ const DoctorsList = ({ doctorsList, status }) => {
               ))}
             </div>
             <div className="flex gap-10 py-5 px-5 justify-between items-center">
-              <button className="bg-verifiCation rounded-full font-sansBold text-xs text-white px-5 py-2">
-                SCHEDULE AN APPOINTMENT
-              </button>
+              <Link to={`/doctor-listing/${doctor?.id}`}>
+                <button className="bg-verifiCation rounded-full font-sansBold text-xs text-white px-5 py-2">
+                  SCHEDULE AN APPOINTMENT
+                </button>
+              </Link>
 
               <Link to={`/doctor-listing/${doctor?.id}`}>
                 <p className="text-[#CF8B15] cursor-pointer underline">
