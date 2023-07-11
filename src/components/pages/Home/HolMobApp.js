@@ -5,11 +5,11 @@ const HolMobApp = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="px-8 md:px-20 py-14">
-          <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px]">
+        <div className="px-8 2xl:ml-[5rem] md:px-20 py-14">
+          <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px] 2xl:text-[2.3rem]">
             Download Holmeddoc
           </h2>
-          <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px]">
+          <h2 className="font-sansBold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2rem] tracking-[1px] md:tracking-[4px] 2xl:text-[2.3rem]">
             Mobile App
           </h2>
           <ul className="font-sansRegular text-sm text-[#545871] p-4 mt-2 md:mt-6 md:mt-8 py-3">
@@ -30,12 +30,12 @@ const HolMobApp = () => {
           </ul>
           <div className="flex mt-5 ml-5">
             <img
-              className="mr-4 w-[100px] h-[2rem]"
+              className="mr-4 w-[100px] h-[2rem] 2xl:h-[3rem] 2xl:w-[150px] cursor-pointer"
               alt="appstore"
               src="https://www.pngmart.com/files/10/Download-On-The-App-Store-PNG-Image.png"
             />
             <img
-              className="mr-2 w-[100px] h-[2rem]"
+              className="mr-2 w-[100px] h-[2rem] 2xl:h-[3rem] 2xl:w-[150px] cursor-pointer"
               alt="playstore"
               src="https://e7.pngegg.com/pngimages/918/845/png-clipart-google-play-logo-google-play-app-store-android-google-play-text-logo.png"
             />

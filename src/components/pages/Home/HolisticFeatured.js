@@ -34,7 +34,7 @@ import Slider from "../../../UI/Slider";
 const HolisticFeatured = () => {
   return (
     <div className="flex flex-col lg:flex-row sm:flex-col mb-3 py-12 p-2">
-      <div className="max-w-[55%]  2xl:max-w-[50%] px-4 md:px-24">
+      <div className="max-w-[55%]  2xl:max-w-[45%] px-4 md:px-24">
         <h2 className="text-[#030303] font-sansBold tracking-[3px] font-semibold text-[1.1rem] md:text-[2.1rem]">
           Featured Holistic
         </h2>
@@ -49,7 +49,7 @@ const HolisticFeatured = () => {
         <img
           src={tree}
           alt=""
-          className="object-contain lg:h-[26rem] md:h-[25rem] sm:h-[20rem] h-[12rem]"
+          className="object-contain 2xl:h-[35rem] lg:h-[26rem] md:h-[25rem] sm:h-[20rem] h-[12rem]"
         />
       </div>
     </div>
