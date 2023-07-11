@@ -36,7 +36,7 @@ const DoctorsList = ({ doctorsList, status }) => {
     <>
       {doctorsList?.map((doctor) => (
         <div
-          className="flex flex-wrap sm:gap-5 2xl:gap-[3rem] 2xl:px-[5rem] px-4 mb-6"
+          className="flex flex-wrap sm:gap-5 2xl:gap-[3rem] 2xl:px-[2rem] px-4 mb-6"
           key={doctor?.id}
         >
           <div className="h-auto w-[160px] mb-3">
@@ -86,7 +86,7 @@ const DoctorsList = ({ doctorsList, status }) => {
               </p>
             </div>
           </div>
-          <div className="px-6 2xl:px-[8rem]">
+          <div className="px-6 2xl:px-[4rem]">
             <h2 className="px-3 font-Henriette text-[1.2rem] cursor-pointer">
               Availability
             </h2>

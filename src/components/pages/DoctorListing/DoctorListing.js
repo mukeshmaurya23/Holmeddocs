@@ -317,8 +317,6 @@ const DoctorListing = () => {
       console.log(e.target.checked, "e.target.checked");
 
       if (e.target.checked) {
-        checkArr.push(data.id);
-        console.log(checkArr, "checkArr");
         console.log(data.id, "data.id");
         setStatus("loading");
         //get the params from the url and add the new param
@@ -361,13 +359,13 @@ const DoctorListing = () => {
         );
         navigate(`?${searchParams.toString()}`);
         try {
-          const filterResponse = await customAxios.post("/patient/doctors", {
-            language: ["5", "2"],
-          });
-          // const filterResponse = await customAxios.post(
-          //   "/patient/doctors",
-          //   reqBody
-          // );
+          // const filterResponse = await customAxios.post("/patient/doctors", {
+          //   language: ["5", "2"],
+          // });
+          const filterResponse = await customAxios.post(
+            "/patient/doctors",
+            reqBody
+          );
           const filterData = filterResponse?.data?.data?.result;
           console.log(filterData, "filterData");
           setDoctorsList(filterData);
@@ -383,7 +381,7 @@ const DoctorListing = () => {
         params.delete(category.title.toLowerCase());
         navigate(`?${params.toString()}`);
 
-        // fetchDoctorsData();
+        await fetchDoctorsData();
       }
     };
     console.log(data, "data meeeee");
@@ -466,20 +464,21 @@ const DoctorListing = () => {
           </aside>
           <main className="ml-10">
             {renderDoctorsList()}
-            {doctorsList.length === 0 && (
-              <div className="flex justify-center flex-row, items-center">
-                <div className="flex flex-col flex-1 justify-center items-center">
+            {totalCount && doctorsList.length === 0 && (
+              <div className="flex justify-center items-center">
+                <div className="flex flex-col items-center">
                   <img
                     src={noDoctor}
                     alt="no doctors"
-                    className="w-[400px] h-[400px] object-contain"
+                    className="w-[25%] h-auto object-contain"
                   />
-                  <h2 className="font-sansBold text-[1.3rem] text-[#292F33] tracking-[2px]">
+                  <h2 className="font-sansBold text-center px-16 text-[1.3rem] text-[#292F33] tracking-[2px]">
                     No doctors found.
                   </h2>
                 </div>
               </div>
             )}
+
             <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}

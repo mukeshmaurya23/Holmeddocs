@@ -1,42 +1,54 @@
 import React, { useEffect, useRef, useState } from "react";
 import userLogo from "../images/home/User.png";
-import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import logo from "../images/home/Logo.png";
 import PortalModal from "./PortalModal";
 import hamBurger from "../images/icons/Hamburger.png";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../store/mobileAppSlice";
 import cross from "../images/icons/Cross.png";
-import { useLocation } from "react-router-dom";
+
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
 import { fetchData } from "../store/apiSlice";
+import { fetchLocationAreas, fetchSpecialties } from "../store/LocSpecSlice";
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
+  const [isLocationDropdown, setIsLocationDropdown] = useState(false);
+  const [isSpecialityDropdown, setIsSpecialityDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams({
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
-    date: "",
   });
-  // const openHandleDropdown = () => {
-  //   setDropdownVisible(true);
-  // };
-  // const closeHandleDropdown = () => {
-  //   setDropdownVisible(false);
-  // };
-  // const handleDropdownClick = () => {
-  //   if (dropdownVisible) {
-  //     closeHandleDropdown();
-  //   } else {
-  //     openHandleDropdown();
-  //   }
+
+  const handleSelectedItem = (name, type) => {
+    // setSelectedItemList(name);
+    setSelectedItemList((prevSelectedItemList) => {
+      return { ...prevSelectedItemList, [type]: name };
+    });
+  };
+  // const handleSelectedItem = (name, type) => {
+  //   setSelectedItemList((prevSelectedItemList) => {
+  //     const updatedItemList = {
+  //       ...prevSelectedItemList,
+  //       [type]: name,
+  //     };
+
+  //     return updatedItemList;
+  //   });
   // };
 
-  // const onFocusOut = () => {
-  //   setDropdownVisible(false);
-  // };
+  const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
   const [logOutmodal, setlogOutModal] = useState(false);
@@ -57,18 +69,22 @@ const Navbar2 = () => {
   const loggedInToggleDropdown = () => {
     setIsLoggedInDropdown(!isLoggedInDropdown);
   };
-  const navigate = useNavigate();
+
   const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
   //const isLoggedIn = localStorage.getItem("token");
   const isLoggedIn = useSelector((state) => state.login.remember_token);
   const logOutHandler = () => {
     dispatch(logout());
   };
+
   const ref = useRef();
   const loginRef = useRef();
+  const locAreasRef = useRef();
+  const specialityRef = useRef();
 
   //search params getting data from url
   const locationSearchParams = searchParams.get("location");
+  console.log(locationSearchParams, "locationSearchParams");
   const specialitySearchParams = searchParams.get("speciality");
   const dateSearchParams = searchParams.get("date");
 
@@ -80,6 +96,12 @@ const Navbar2 = () => {
       if (!loginRef?.current?.contains(event.target)) {
         setIsLoggedInDropdown(false);
       }
+      if (!locAreasRef?.current?.contains(event.target)) {
+        setIsLocationDropdown(false);
+      }
+      if (!specialityRef?.current?.contains(event.target)) {
+        setIsSpecialityDropdown(false);
+      }
     };
     document.addEventListener("click", handleClickOutside);
     return () => {
@@ -87,37 +109,67 @@ const Navbar2 = () => {
     };
   }, [ref]);
 
-  // useEffect(() => {
-  //   if (dropdownVisible) {
-  //     document.addEventListener("click", () => {
-  //       setDropdownVisible(true);
-  //     });
-  //     return () => {
-  //       document.removeEventListener("click", () => {
-  //         setDropdownVisible(false);
-  //       });
-  //     };
-  //   }
-  // }, [dropdownVisible]);
   //for location and speciality data
-  const locDataDispatch = useDispatch();
-  const { data: locationData } = useSelector((state) => state.api);
-  useEffect(() => {
-    locDataDispatch(fetchData("/patient/master/state"));
-  }, [locDataDispatch]);
 
-  const { data: specialityData } = useSelector((state) => state.api);
+  const locationAreasDispatch = useDispatch();
+
+  const { locationAreas, status } = useSelector((state) => state.data);
+
   const specialityDispatch = useDispatch();
-  useEffect(() => {
-    specialityDispatch(fetchData("/patient/master/speciality"));
-  }, [specialityDispatch]);
+  const { specialties, status: specStatus } = useSelector(
+    (state) => state.data
+  );
 
+  console.log(specialties, "specialties from navbar2");
+
+  // useEffect(() => {
+  //   locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+  // }, [locationAreasDispatch]);
+
+  // const handleLocationChange = (e) => {
+  //   const locationValue = e.target.value;
+  //   setSelectedItemList((prevState) => ({
+  //     ...prevState,
+  //     location: locationValue,
+  //   }));
+
+  //   // Update URL parameter for location
+  //   const params = new URLSearchParams(location.search);
+  //   params.set("location", locationValue);
+  //   navigate(`?${params.toString()}`);
+  //   locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+  // };
   const handleLocationChange = (e) => {
-    setSearchParams({ ...searchParams, location: e.target.value });
+    const locationValue = e.target.value;
+    setSelectedItemList((prevState) => ({
+      ...prevState,
+      location: locationValue,
+    }));
+
+    // Update URL parameter for location
+    const params = new URLSearchParams(location.search);
+    console.log(params, "params");
+    navigate(`?${params.toString()}`);
+    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
   };
 
   const handleSpecialityChange = (e) => {
-    setSearchParams({ ...searchParams, speciality: e.target.value });
+    //get the speciality from the url and set it to the state
+    const specialityValue = e.target.value;
+    setSelectedItemList((prevState) => ({
+      ...prevState,
+      speciality: specialityValue,
+    }));
+
+    // Update URL parameter for speciality
+    //i want to get the speciality from the url and set the value to that
+
+    const params = new URLSearchParams(location.search);
+    console.log(params, "params");
+    params.set("speciality", specialityValue);
+    navigate(`?${params.toString()}`);
+
+    specialityDispatch(fetchSpecialties("/patient/master/speciality"));
   };
 
   const handleDateChange = (e) => {
@@ -287,20 +339,110 @@ const Navbar2 = () => {
 
               <div className="border-[1px] flex items-center rounded-lg border-[#b5b1b1] ">
                 <div className="flex items-center relative">
+                  {/* <input
+                    className="relative py-1 w-[250px] h-[40px] mr-1 outline-none border-r text-[1.2rem] border-[#b5b1b1] pl-2 text-[#b5b1b1]"
+                    placeholder={locationSearchParams || "Location"}
+                    onChange={handleLocationChange}
+                    value={locationSearchParams || selectedItemList.location}
+                    ref={locAreasRef}
+                    onClick={() => {
+                      setIsLocationDropdown(!isLocationDropdown);
+                    }}
+                  /> */}
                   <input
-                    className=" py-1 w-[200px] h-[40px] mr-1 outline-none border-r border-[#b5b1b1] pl-2"
-                    placeholder={locationSearchParams}
+                    className={`relative py-1 w-[250px] h-[40px] mr-1 text-[#b5b1b1] outline-none border-r  border-[#b5b1b1] pl-2 ${
+                      selectedItemList.location || locationSearchParams
+                        ? "text-[15px]"
+                        : "text-[1.2rem]"
+                    }`}
+                    placeholder={locationSearchParams || "Location"}
+                    onChange={handleLocationChange}
+                    value={selectedItemList.location || ""}
+                    ref={locAreasRef}
+                    onClick={() => {
+                      setIsLocationDropdown(!isLocationDropdown);
+                    }}
                   />
 
+                  <ul
+                    className={`${
+                      isLocationDropdown
+                        ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
+                  >
+                    {isLocationDropdown
+                      ? locationAreas?.map((item) => (
+                          <h6
+                            className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(item?.city, "location")
+                            }
+                          >
+                            {item?.city}
+                          </h6>
+                        ))
+                      : null}
+                  </ul>
+
+                  {/* <input
+                    className="relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] text-[1.2rem] h-[40px] pl-2 text-[#b5b1b1]"
+                    placeholder={specialitySearchParams || "Speciality"}
+                    onChange={handleSpecialityChange}
+                    ref={specialityRef}
+                    value={
+                      specialitySearchParams || selectedItemList.speciality
+                    }
+                    onClick={() => {
+                      setIsSpecialityDropdown(!isSpecialityDropdown);
+                    }}
+                  /> */}
                   <input
-                    className="outline-none border-r border-[#b5b1b1] py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
-                    placeholder={specialitySearchParams}
+                    className={`relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#b5b1b1] ${
+                      selectedItemList.speciality || specialitySearchParams
+                        ? "text-[15px]"
+                        : "text-[1.2rem]"
+                    }`}
+                    placeholder={specialitySearchParams || "Speciality"}
+                    onChange={handleSpecialityChange}
+                    ref={specialityRef}
+                    value={selectedItemList.speciality || ""}
+                    onClick={() => {
+                      setIsSpecialityDropdown(!isSpecialityDropdown);
+                    }}
                   />
 
+                  <ul
+                    className={`${
+                      isSpecialityDropdown
+                        ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
+                  >
+                    {isSpecialityDropdown
+                      ? specialties?.map((item) => (
+                          <h6
+                            className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(
+                                item?.medical_speciality_name,
+                                "speciality"
+                              )
+                            }
+                          >
+                            {item?.medical_speciality_name}
+                          </h6>
+                        ))
+                      : null}
+                  </ul>
                   <input
                     className="outline-none  py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
                     placeholder={dateSearchParams}
+                    type="date"
                     onChange={handleDateChange}
+                    value={dateSearchParams || ""}
                   />
                 </div>
                 <img
