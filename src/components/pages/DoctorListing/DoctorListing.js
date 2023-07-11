@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Button from "../../../util/Button";
-import { dummyData } from "../../../constant";
+
 import Pagination from "./Pagination";
 import { usePagination } from "../../../hooks/usePagination";
 import useFetch from "../../../hooks/useFetch";
 import { useDispatch, useSelector } from "react-redux";
 import loadingGif from "../../../images/icons/Loader.gif";
 import { fetchData } from "../../../store/apiSlice";
+import DoctorsList from "./DoctorsList";
+import Footer from "../../../UI/Footer";
+
 const DoctorListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [categoryData, setCategoryData] = useState([]);
 
   //const dispatch = useDispatch();
   //const { data: filterData, error, status } = useSelector((state) => state.api);
   const { data: filterData } = useFetch("/patient/filters");
-
-  // useEffect(() => {
-  //   dispatch(fetchData("/patient/filters"));
-  // }, []);
 
   console.log(filterData, "filterData");
   const [viewAll, setViewAll] = useState(false);
@@ -27,15 +23,21 @@ const DoctorListing = () => {
     console.log("toggleViewAll");
     setViewAll(!viewAll);
   };
+  const dispatch = useDispatch();
+  const { data: doctorsList, status } = useSelector((state) => state.api);
 
+  console.log(doctorsList, "doctorsList from listing");
+
+  useEffect(() => {
+    dispatch(fetchData("/patient/doctors"));
+  }, [dispatch]);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // You can perform any other actions here, such as fetching data for the new page.
   };
   console.log(filterData?.data?.result, "filterData");
-  // Dummy data
-  const totalCount = 1000;
-  const pageSize = 10;
+
+  const totalCount = doctorsList?.data?.result?.length;
+  const pageSize = 4;
   const siblingCount = 1;
 
   const paginationRange = usePagination({
@@ -44,6 +46,24 @@ const DoctorListing = () => {
     siblingCount,
     currentPage,
   });
+  console.log(paginationRange, "paginationRange");
+  const renderDoctorsList = () => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    if (doctorsList?.data?.result.length > 0) {
+      const paginatedData = doctorsList?.data?.result?.slice(
+        startIndex,
+        endIndex
+      );
+      return (
+        <>
+          <DoctorsList doctorsList={paginatedData} status={status} />;
+        </>
+      );
+    }
+    return null;
+  };
 
   const generateLabel = (data) => (
     <label className="inline-flex items-center mt-3" key={data.id || data}>
@@ -78,7 +98,7 @@ const DoctorListing = () => {
     <>
       <section className=" ">
         <h2 className="px-10  font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
-          We have found 75 Doctors for your search criteria.
+          We have found {totalCount} Doctors for your search criteria.
         </h2>
         <div className="flex mt-10 mb-10">
           <aside className="flex flex-col px-10 py-3  border-r">
@@ -87,9 +107,7 @@ const DoctorListing = () => {
             </h2>
             {filterData === null ? (
               <>
-                <div className="flex justify-start ">
-                  <img src={loadingGif} alt="" />
-                </div>
+                <h2>Loading ...</h2>
               </>
             ) : (
               <>
@@ -104,24 +122,6 @@ const DoctorListing = () => {
                       <div className="">
                         <div className="flex flex-col">
                           {generateLabels(item)}
-                          {/* {item?.value?.map((data, index) => (
-                            <label
-                              className="inline-flex items-center mt-3"
-                              key={data.id}
-                            >
-                              <input
-                                type="checkbox"
-                                className="form-checkbox h-3 w-3 text-gray-600"
-                              />
-                              <span className="ml-2 text-gray-700 text-[.8rem] tracking-[2px] font-sansRegular">
-                                {data.language_title ||
-                                  data.medical_speciality_name ||
-                                  data.medical_condition_name ||
-                                  data.insurance_company_name ||
-                                  data}
-                              </span>
-                            </label>
-                          ))} */}
                         </div>
                         {item.title !== "Appointment Type" &&
                           item.value.length > 3 && (
@@ -140,7 +140,24 @@ const DoctorListing = () => {
             )}
           </aside>
           <main className="ml-10 ">
-            <div className="flex justify-center items-center">
+            {/* Render your content based on the current page */}
+            {status === "loading" ? (
+              <div className="flex justify-center items-center h-screen">
+                <img src={loadingGif} alt="" />
+              </div>
+            ) : (
+              <>{renderDoctorsList()}</>
+            )}
+            {/* {totalCount > 0 ? (
+              renderDoctorsList()
+            ) : (
+              <div className="flex justify-center items-center h-screen">
+                <h2 className="font-sansBold text-[1.3rem] text-[#292F33] tracking-[2px]">
+                  No Doctors Found
+                </h2>
+              </div>
+            )} */}
+            <div className="mt-10">
               <Pagination
                 onPageChange={handlePageChange}
                 totalCount={totalCount}
@@ -148,15 +165,11 @@ const DoctorListing = () => {
                 siblingCount={siblingCount}
                 currentPage={currentPage}
               />
-              {/* Render your content based on the current page */}
-
-              {paginationRange.map((pageNumber) => (
-                <div key={pageNumber}>{/* Render content for each page */}</div>
-              ))}
             </div>
           </main>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

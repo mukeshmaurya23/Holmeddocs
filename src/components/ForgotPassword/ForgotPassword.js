@@ -11,6 +11,8 @@ import Modal from "../../UI/Modal";
 import Success from "../../images/Login/Success.png";
 import { forgotSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
+import customAxios from "../../axios/custom";
+import { enqueueSnackbar } from "notistack";
 // const validate = (values) => {
 //   const errors = {};
 //   if (Object.values(values.otp).some((data) => data === "")) {
@@ -22,7 +24,12 @@ import { useFormik } from "formik";
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [otpValue, setOtpValue] = useState(""); // New state variable to hold otpValue
 
+  // Function to update otpValue
+  const handleOtpChange = (otpValue) => {
+    setOtpValue(parseInt(otpValue));
+  };
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -33,7 +40,7 @@ const ForgotPassword = () => {
 
   const formik = useFormik({
     initialValues: {
-      mobileNumber: "",
+      phone: "",
       // otp: Array.from({ length: 6 }).fill(""),
     },
     // validate,
@@ -45,7 +52,13 @@ const ForgotPassword = () => {
 
   const steps = {
     1: <Step1Forgot formik={formik} />,
-    2: <Step2Forgot formik={formik} />,
+    2: (
+      <Step2Forgot
+        formik={formik}
+        otpValue={otpValue}
+        handleOtpChange={handleOtpChange}
+      />
+    ),
     3: <Step3Forgot formik={formik} />,
   };
 
@@ -55,11 +68,11 @@ const ForgotPassword = () => {
     }
     if (step === 1) {
       if (!formik.dirty) {
-        formik.setTouched({ mobileNumber: true });
+        formik.setTouched({ phone: true });
         return;
       }
 
-      if (!formik.errors.mobileNumber) {
+      if (!formik.errors.phone) {
         setStep((prev) => prev + 1);
       }
     } else {
@@ -75,6 +88,80 @@ const ForgotPassword = () => {
     //   setStep((prev) => prev + 1);
     // }
     // }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //check if form is not dirty and touched or valid then return
+    if (!formik.values.phone || formik.errors.phone) {
+      formik.setTouched({ phone: true });
+      return;
+    }
+    if (!formik.values.password || formik.errors.password) {
+      formik.setTouched({ password: true });
+      return;
+    }
+    if (
+      !formik.values.password_confirmation ||
+      formik.errors.password_confirmation
+    ) {
+      formik.setTouched({ password_confirmation: true });
+      return;
+    }
+
+    if (step === 1) {
+      try {
+        const response = await customAxios.post("/patient/forgot_password", {
+          phone: formik.values.phone,
+        });
+        enqueueSnackbar(response.data.message, {
+          variant: response.data.success ? "success" : "error",
+        });
+        console.log(response.data, "im response from forgot password");
+        if (response.data.success) {
+          //setOtpValue(response.data.token);
+          handleNextStep();
+        }
+      } catch (err) {
+        console.log(err);
+        return err;
+      }
+    }
+    if (step === 2) {
+      try {
+        const response = await customAxios.post("/patient/verify_otp", {
+          token: otpValue,
+          request_type: "forget_password",
+          phone: formik.values.phone,
+        });
+
+        enqueueSnackbar(response.data.message, {
+          variant: response.data.success ? "success" : "error",
+        });
+        if (response.data.success) {
+          handleNextStep();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    if (step === 3) {
+      try {
+        const response = await customAxios.post("/patient/update_password", {
+          phone: formik.values.phone,
+          token: otpValue,
+          password: formik.values.password,
+          password_confirmation: formik.values.password_confirmation,
+        });
+        enqueueSnackbar(response.data.message, {
+          variant: response.data.success ? "success" : "error",
+        });
+        if (response.data.success) {
+          openModal();
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   return (
@@ -93,19 +180,19 @@ const ForgotPassword = () => {
           </div>
           <div className="flex-grow">{steps[step]}</div>
           <div className="absolute xsm:relative xs:relative  sm:relative bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">
-            <div className="">
+            <form className="">
               {Object.keys(steps).length ? (
                 <>
                   {step <= 2 && (
                     <Button
                       className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black ${
-                        (step === 1 && formik.errors.mobileNumber) ||
+                        (step === 1 && formik.errors.phone) ||
                         // (step === 2 && formik.errors.otp) ||
                         step === 3
                           ? "bg-gray-200 cursor-not-allowed"
                           : "bg-white"
                       }`}
-                      onClick={handleNextStep}
+                      onClick={handleSubmit}
                     >
                       {step === 1 ? "Next" : step === 2 ? "Next" : false}
                     </Button>
@@ -113,7 +200,7 @@ const ForgotPassword = () => {
                   {step === 3 && (
                     <Button
                       className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
-                      onClick={openModal}
+                      onClick={handleSubmit}
                       // disabled={!formik.isValid && formik.dirty}
                     >
                       {step === 3 && "Reset"}
@@ -121,7 +208,7 @@ const ForgotPassword = () => {
                   )}
                 </>
               ) : null}
-            </div>
+            </form>
           </div>
         </main>
       </div>

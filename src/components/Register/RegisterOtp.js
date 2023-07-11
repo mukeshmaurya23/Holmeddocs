@@ -30,14 +30,16 @@ const RegisterOtp = () => {
       const response = await customAxios.post("/patient/verify_otp", {
         token: otpValue,
         request_type: "register",
-        phone: location.state.phone,
+        phone: location?.state?.phone,
       });
 
       console.log(response.data, "im response from registerotp");
       enqueueSnackbar(response.data.message, {
         variant: response.data.success ? "success" : "error",
       });
-      navigate("/");
+      if (response.data.success) {
+        navigate("/login");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +66,7 @@ const RegisterOtp = () => {
                 </p>
                 <p className="font-sansRegular text-sm text-otpText py-2 px-5">
                   Enter the 4-digit verification code sent to your mobile number{" "}
-                  {location.state.phone}
+                  {location?.state?.phone}
                 </p>
                 <div className="max-w-[500px]">
                   <div className="flex items-center justify-between mt-2 px-5">

@@ -9,9 +9,7 @@ const initialState = {
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
   try {
-    const response = await customAxios.post(url,{
-      paginate:100
-    });
+    const response = await customAxios.post(url);
     console.log(response, "im response from apiSlice");
     const resData = await response.data;
     console.log(resData, "im resData from apiSlice");

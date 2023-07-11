@@ -3,76 +3,13 @@ import Label from "../../util/Label";
 import Input from "../../util/Input";
 import Otp from "../../util/Otp";
 
-const Step2Forgot = ({ formik }) => {
+const Step2Forgot = ({ formik, otpValue, handleOtpChange }) => {
   const { handleChange, handleBlur, values, errors, touched } = formik;
 
-  // const inputRef = useRef({});
-  // const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  // console.log(otp);
+  // const [otpValue, setOtpValue] = useState("");
 
-  // console.log(formik.values);
-
-  // useEffect(() => {
-  //   inputRef.current[0].focus();
-  // }, []);
-  // const handleChnage = (e, index) => {
-  //   const { name, value } = e.target;
-
-  //   if (/[a-zA-Z]/gi.test(value)) return;
-  //   const updatedOtp = [...otp];
-  //   updatedOtp[index] = value.slice(-1);
-  //   setOtp(updatedOtp);
-
-  //   const updatedValues = {
-  //     ...values,
-  //     otp: updatedOtp.join(""), // Combine the otp array into a string
-  //   };
-  //   formik.setValues(updatedValues);
-
-  //   // const currentIndex = Object.keys(otp).indexOf(name);
-  //   // const nextIndex = currentIndex + 1;
-  //   // const nextInput = inputRef.current[nextIndex];
-  //   // if (nextInput) {
-  //   //   nextInput.focus();
-  //   // }
-  //   if (value && index < 5) {
-  //     inputRef.current[index + 1].focus();
-  //   }
-  // };
-
-  // // const handleBackspace = (e, index) => {
-  // //   const { name, value } = e.target;
-  // //   if (e.keyCode === 8 && !value) {
-  // //     const prevIndex = index - 1;
-  // //     const prevInput = inputRef.current[prevIndex];
-  // //     if (prevInput) {
-  // //       prevInput.focus();
-  // //     }
-  // //   }
-  // // };
-
-  // const handleBackspace = (event, index) => {
-  //   if (event.key === "Backspace") {
-  //     if (index > 0) {
-  //       inputRef.current[index - 1].focus();
-  //     }
-  //   }
-  // };
-
-  // const renderInput = () => {
-  //   return Object.keys(otp).map((key, index) => (
-  //     <input
-  //       key={index}
-  //       ref={(element) => (inputRef.current[index] = element)}
-  //       maxlength="1"
-  //       onChange={(e) => handleChnage(e, index)}
-  //       className={`border outline-verifiCation border-verifiCation rounded-md py-2 px-3 focus:border-verifiCation text-formLabel w-10 sm:w-10 md:w-10 mr-2 `}
-  //       type="text"
-  //       name={key}
-  //       value={formik.values.otp[index]}
-  //       onKeyUp={(event) => handleBackspace(event, index)}
-  //     />
-  //   ));
+  // const handleOtpChange = (otpValue) => {
+  //   setOtpValue(parseInt(otpValue));
   // };
   return (
     <>
@@ -120,7 +57,7 @@ const Step2Forgot = ({ formik }) => {
         <div className="max-w-[500px] mt-12 mx-3 sm:mx-8">
           <div className="flex flex-col space-y-2 w-10/12 py-0 relative">
             <Label
-              htmlFor="mobileNumber"
+              htmlFor="phone"
               className="font-sansRegular text-[#757993] text-xs"
             >
               Mobile Number
@@ -130,9 +67,9 @@ const Step2Forgot = ({ formik }) => {
             </div>
             <Input
               type="number"
-              name="mobileNumber"
-              id="mobileNumber"
-              value={values.mobileNumber}
+              name="phone"
+              id="phone"
+              value={values.phone}
               placeholder="+1 xxx xxx xxxx"
               className="border border-verifiCation text-formLabel rounded-md py-2 px-8 outline-none focus:border-verifiCation sm:w-[400px] xsm:w-[310px]"
             />
@@ -148,7 +85,7 @@ const Step2Forgot = ({ formik }) => {
 
             <div className="max-w-[430px]">
               <div className="flex justify-between mt-4">
-                <Otp />
+                <Otp onOtpChange={handleOtpChange} />
               </div>
               {/* {errors.otp && touched.otp && (
                 <div className="text-red-600 text-sm">{formik.errors.otp}</div>

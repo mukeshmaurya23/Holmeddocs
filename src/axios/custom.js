@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import { login } from "../store/loginSlice";
+import store from "../store/store";
 const customAxios = axios.create({
   //baseURL: "http://192.168.1.35/holmeddoc",
   baseURL:
@@ -17,6 +18,9 @@ customAxios.interceptors.request.use((config) => {
   config.headers.Authorization = `Basic YWRtaW46bXlwY290`;
   config.headers.platform = "web";
   config.headers["device-id"] = 14;
+  config.headers["access-token"] = `${
+    store?.getState()?.login?.remember_token
+  }`;
   return config;
 });
 

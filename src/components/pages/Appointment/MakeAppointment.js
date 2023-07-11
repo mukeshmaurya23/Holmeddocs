@@ -60,18 +60,7 @@ const MakeAppointment = () => {
                   className="w-3 h-3 mr-2 cursor-pointer"
                 />
               </div>
-              <div className="border border-verifiCation w-full py-2 mt-8 flex justify-between items-center">
-                <Input
-                  type="text"
-                  placeholder="Reason for visit"
-                  className="outline-none px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] tracking-[2px] font-sansRegular"
-                />
-                <img
-                  src={greenArrowDown}
-                  alt=""
-                  className="w-3 h-3 mr-2 cursor-pointer"
-                />
-              </div>
+
               <div className="border border-verifiCation w-full py-2 mt-8 flex justify-between items-center">
                 {/* <Input
                   type="Today"

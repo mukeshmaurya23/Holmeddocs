@@ -5,7 +5,7 @@ const loginSlice = createSlice({
   initialState: {
     isLogin: false,
     user: {},
-    remember_token: "",
+    remember_token: null,
   },
   reducers: {
     login: (state, action) => {
@@ -19,7 +19,7 @@ const loginSlice = createSlice({
     logout: (state) => {
       state.isLogin = false;
       state.user = {};
-      state.remember_token = "";
+      state.remember_token = null;
       // localStorage.removeItem("remember_token");
       // localStorage.removeItem("userName");
     },

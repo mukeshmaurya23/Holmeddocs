@@ -10,6 +10,9 @@ import Modal from "../../UI/Modal";
 import { useFormik } from "formik";
 import { resetSchema } from "../../schema/formValidation";
 import Success from "../../images/Login/Success.png";
+import { Link } from "react-router-dom";
+import customAxios from "../../axios/custom";
+import { enqueueSnackbar } from "notistack";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -41,8 +44,30 @@ const ChangePassword = () => {
       newPassword: "",
       confirmPassword: "",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+
+      const data = {
+        current_password: values.oldPassword,
+        new_password: values.newPassword,
+        confirm_password: values.confirmPassword,
+      };
+      console.log(data);
+      try {
+        const response = await customAxios.post(
+          "/patient/change_password",
+          data
+        );
+        console.log(response.data);
+        enqueueSnackbar(response?.data?.message, {
+          variant: response.data.success ? "success" : "error",
+        });
+        if (response.success === 1) {
+          openModal();
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     validationSchema: resetSchema,
   });
@@ -52,10 +77,6 @@ const ChangePassword = () => {
       newPassword: true,
       confirmPassword: true,
     });
-
-    if (formik.dirty && formik.isValid) {
-      openModal();
-    }
   };
 
   return (
@@ -65,11 +86,13 @@ const ChangePassword = () => {
           <Aside image={ChangePasswordimg} />
           <main className="flex flex-1 flex-col relative overflow-y-auto">
             <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
-              <img
-                src={require("../../images/icons/Logo.png")}
-                alt="logo"
-                className="w-24 h-24 mx-4 sm:mx-10"
-              />
+              <Link to="/">
+                <img
+                  src={require("../../images/icons/Logo.png")}
+                  alt="logo"
+                  className="w-24 h-24 mx-4 sm:mx-10"
+                />
+              </Link>
             </div>
             <div className="flex-grow">
               <div className="ml-5 max-w-[620px]">
@@ -188,18 +211,22 @@ const ChangePassword = () => {
                       </Button>
                     </div>
                   </div>
-                </form>
-              </div>
-            </div>
-            <div className="sm:absolute bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">
-              <div className="">
-                <Button
-                  className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black 
+                  <div className="absolute bottom-0 left-0 right-0  flex justify-end bg-verifiCation p-5 ">
+                    <div className="">
+                      <Button
+                        className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black ${
+                          !(formik.isValid && formik.dirty) &&
+                          "opacity-50 cursor-not-allowed"
+                        }
                  `}
-                  onClick={handleContinue}
-                >
-                  Continue
-                </Button>
+                        onClick={handleContinue}
+                        disabled={!(formik.isValid && formik.dirty)}
+                      >
+                        Continue
+                      </Button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </main>
