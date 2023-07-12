@@ -87,3 +87,19 @@ export const resetSchema = Yup.object().shape({
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
     .required("Please confirm your password"),
 });
+
+export const updateProfileSchema = Yup.object().shape({
+  patient_first_name: Yup.string().required("First Name is required"),
+  patient_last_name: Yup.string().required("Last Name is required"),
+  patient_email: Yup.string()
+    .required("Email is required")
+    .matches(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/, "Invalid email"),
+  patient_phone: Yup.string().required("Phone number is required"),
+  patient_gender: Yup.string().required("Phone is required"),
+  patient_dob: Yup.string().required("Date of Birth is required"),
+  policy_number: Yup.string().required("Policy Number is required"),
+  apartment: Yup.string().required("Apartment is required"),
+  address1: Yup.string().required("Address is required"),
+  zip_code_id: Yup.string().required("Zip Code is required"),
+  insurance_company: Yup.string().required("Insurance Company is required"),
+});
