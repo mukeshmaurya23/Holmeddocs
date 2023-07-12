@@ -1,21 +1,51 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../../UI/Footer";
 import calendar from "../../../images/Calendar.png";
 import Button from "../../../util/Button";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData } from "../../../store/apiSlice";
 import loadingGif from "../../../images/icons/Loader.gif";
+
+import Modal from "../../../UI/Modal";
+import DatePickerComponent from "../../../UI/DatePicker";
 const DoctorDetails = ({}) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { data: doctorsList, status } = useSelector((state) => state.api);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+
+  const handleDateSelection = (date, timeSlots) => {
+    setSelectedDate(date);
+    setAvailableTimeSlots(timeSlots);
+  };
+  const [modal, setModal] = useState(false);
+  const openModal = () => {
+    setModal(true);
+  };
+  const closeModal = () => {
+    setModal(false);
+  };
 
   useEffect(() => {
     dispatch(fetchData("/patient/doctors"));
   }, [dispatch]);
-
+  const navigate = useNavigate();
   console.log(doctorsList, "doctorsList from details");
+
+  const isLoggedIn = useSelector((state) => state.login.remember_token);
+
+  const handleAppointment = () =>
+    isLoggedIn
+      ? navigate("/book-appointment", {
+          state: {
+            doctor: doctorsList?.data?.result?.filter(
+              (doctor) => doctor.id == id
+            ),
+          },
+        })
+      : openModal();
 
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
@@ -23,6 +53,17 @@ const DoctorDetails = ({}) => {
     const month = date?.toLocaleString("en-US", { month: "short" });
     //const formattedDate = `${day} ${month}`;
     return `${day} ${month}`;
+  };
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (e) => {
+    setIsOpen(!isOpen);
+    setStartDate(e);
+  };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
   };
   return status === "loading" ? (
     <div className="flex justify-center items-center h-screen">
@@ -108,10 +149,13 @@ const DoctorDetails = ({}) => {
                     Availability
                   </h2>
                   <div className="flex flex-row flex-wrap ">
-                    <div className=" py-2  flex flex-row flex-wrap gap-3 ">
+                    <div className=" py-2  flex flex-row flex-wrap gap-3  ">
                       {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
                         <div
                           key={index}
+                          onClick={() => {
+                            handleDateSelection(timeSlot.date, timeSlot.value);
+                          }}
                           className="bg-[#F2FCFE] flex justify-center items-center hover:bg-verifiCation hover:text-white rounded cursor-pointer"
                         >
                           <p className="px-5  text-xs font-semibold">
@@ -119,40 +163,44 @@ const DoctorDetails = ({}) => {
                           </p>
                         </div>
                       ))}
-                      <img
-                        src={calendar}
-                        alt="calendar"
-                        className="h-auto w-12 "
-                      />
+                      <div className="relative ">
+                        <img
+                          src={calendar}
+                          alt="calendar"
+                          className="h-auto w-12 cursor-pointer"
+                          onClick={handleClick}
+                        />
+                        {isOpen && (
+                          <div className="absolute top-[62px] right-2 z-[100] h-full">
+                            <DatePickerComponent
+                              handleChange={handleChange}
+                              startDate={startDate}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="cursor-pointer">
                       <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
-                        Sep 1, 2021
+                        {selectedDate}
                       </h2>
                       <ul className="flex flex-wrap gap-5 py-3">
-                        <li className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          10:00 AM
-                        </li>
-                        <li className="font-sansRegular py-2 text-[13px] px-5 bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          11:00 AM
-                        </li>
-                        <li className="font-sansRegular py-2 text-[13px] px-5 bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          12:00 AM
-                        </li>
-                        <li className="font-sansRegular py-2 text-[13px] px-5 bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          1:00 AM
-                        </li>
-                        <li className="font-sansRegular py-2 text-[13px] px-5 bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          10:00 AM
-                        </li>
-                        <li className="font-sansRegular py-2 text-[13px] px-5 bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          2:00 AM
-                        </li>
+                        {availableTimeSlots.map((timeSlot, index) => (
+                          <li
+                            key={index}
+                            className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md"
+                          >
+                            {timeSlot?.to}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
-                  <div className="flex justify-end">
-                    <Button className="bg-verifiCation rounded-full text-white  text-[13px] py-2 px-5 font-sansLight">
+                  <div className="flex justify-end mt-4">
+                    <Button
+                      className="bg-verifiCation rounded-full text-white  text-[13px] py-2 px-5 font-sansLight"
+                      onClick={handleAppointment}
+                    >
                       Schedule an Appointment
                     </Button>
                   </div>
@@ -182,6 +230,15 @@ const DoctorDetails = ({}) => {
             </section>
           );
         })}
+      {modal && (
+        <Modal
+          closeModal={closeModal}
+          text={"This action requires you to Login."}
+          title={"Authentication Required"}
+          btnText2={"Browse"}
+          btnText={"Login"}
+        />
+      )}
 
       <Footer />
     </>

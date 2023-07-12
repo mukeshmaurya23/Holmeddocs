@@ -112,7 +112,7 @@ const Holistic = () => {
               <div className="relative">
                 <p>M</p>
                 <img
-                  className="absolute md:top-2 md:h-[40px] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[18px] xsm:top-[.12rem] xsm:font-sansBold"
+                  className="absolute md:top-2 md:h-[29px] md:left-[1.2px] 2xl:h-[40px] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[18px] xsm:top-[.12rem] xsm:font-sansBold"
                   alt=""
                   src={leaf}
                 />
@@ -199,11 +199,14 @@ const Holistic = () => {
                   alt=""
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                {selectedDate &&
-                  selectedDate?.toDateString() !==
-                    new Date()?.toDateString() && (
-                    <p className="text-[1rem]">{selectedDate.toDateString()}</p>
-                  )}
+                {selectedDate && (
+                  <p className="text-[1rem]">
+                    {selectedDate.toDateString() === new Date().toDateString()
+                      ? "Today"
+                      : selectedDate.toDateString()}
+                  </p>
+                )}
+
                 {showDatePicker && (
                   <DatePicker
                     selected={startDate}

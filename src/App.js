@@ -22,6 +22,7 @@ import Appointment from "./components/pages/Appointment/Appointment";
 import NetworkError from "./util/NetworkError";
 import ContactUs from "./components/ContactUs";
 import DoctorDetails from "./components/pages/DoctorListing/DoctorDetails";
+import BookAppointment from "./components/pages/Appointment/BookAppointment";
 
 function App() {
   const isOnline = useOnline();
@@ -39,6 +40,7 @@ function App() {
         { path: "/doctor-listing", element: <DoctorListing /> },
         { path: "/doctor-listing/:id", element: <DoctorDetails /> },
         { path: "/contact-us", element: <ContactUs /> },
+        { path: "/book-appointment", element: <BookAppointment /> },
       ],
     },
 
