@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import profileLogo from "../images/profile/Logo.png";
 import Modal from "../UI/Modal";
+import { enqueueSnackbar } from "notistack";
+import customAxios from "../axios/custom";
+import { useDispatch } from "react-redux";
+import { logout } from "../store/loginSlice";
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -11,7 +15,30 @@ const SideBar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await customAxios.post("/patient/delete_account");
+      console.log(response.data, "im response from delete account");
+
+      enqueueSnackbar("Account deleted successfully!", {
+        variant: "success",
+        autoHideDuration: 1500,
+      });
+      dispatch(logout()) && navigate("/register");
+
+      console.log("Account deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete account:", error.message);
+      enqueueSnackbar("Failed to delete account!", {
+        variant: "error",
+        autoHideDuration: 1500,
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-col md:flex-row h-screen">
@@ -128,8 +155,9 @@ const SideBar = () => {
         <Modal
           title="Are you sure you want to delete your account?"
           text="Your account and all of its data will be permanently deleted."
-          btnText="Yes"
+          btnTextDelete="Yes"
           btnText2="No"
+          onConfirm={handleDeleteAccount}
           closeModal={() => {
             setDeleteModal(false);
           }}

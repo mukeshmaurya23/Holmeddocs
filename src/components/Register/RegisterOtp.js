@@ -36,6 +36,7 @@ const RegisterOtp = () => {
       console.log(response.data, "im response from registerotp");
       enqueueSnackbar(response.data.message, {
         variant: response.data.success ? "success" : "error",
+        autoHideDuration: 1000,
       });
       if (response.data.success) {
         navigate("/login");

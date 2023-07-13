@@ -3,8 +3,12 @@ import customAxios from "../axios/custom";
 const initialState = {
   loading: false,
   data: null,
+  insuranceData: null,
+  stateData: null,
   error: "",
   status: "idle",
+  insuranceStatus: "idle",
+  stateStatus: "idle",
 };
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
@@ -13,6 +17,31 @@ const fetchData = createAsyncThunk("api/fetchData", async (url) => {
     console.log(response, "im response from apiSlice");
     const resData = await response.data;
     console.log(resData, "im resData from apiSlice");
+    return resData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+});
+
+const fetchInsuranceData = createAsyncThunk(
+  "api/fetchInsuranceData",
+  async (url) => {
+    try {
+      const response = await customAxios.post(url);
+      const resData = await response.data.data.result;
+      return resData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return error.message;
+    }
+  }
+);
+
+const fetchStateData = createAsyncThunk("api/fetchStateData", async (url) => {
+  try {
+    const response = await customAxios.post(url);
+    const resData = await response.data.data.result;
     return resData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -36,8 +65,30 @@ const apiSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message;
     });
+    builder.addCase(fetchInsuranceData.pending, (state) => {
+      state.insuranceStatus = "loading";
+    });
+    builder.addCase(fetchInsuranceData.fulfilled, (state, action) => {
+      state.insuranceStatus = "succeeded";
+      state.insuranceData = action.payload;
+    });
+    builder.addCase(fetchInsuranceData.rejected, (state, action) => {
+      state.insuranceStatus = "failed";
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchStateData.pending, (state) => {
+      state.stateStatus = "loading";
+    });
+    builder.addCase(fetchStateData.fulfilled, (state, action) => {
+      state.stateStatus = "succeeded";
+      state.stateData = action.payload;
+    });
+    builder.addCase(fetchStateData.rejected, (state, action) => {
+      state.stateStatus = "failed";
+      state.error = action.error.message;
+    });
   },
 });
 
-export { fetchData };
+export { fetchData, fetchInsuranceData, fetchStateData };
 export default apiSlice.reducer;

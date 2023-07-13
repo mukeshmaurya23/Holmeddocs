@@ -115,6 +115,7 @@ const ForgotPassword = () => {
         });
         enqueueSnackbar(response.data.message, {
           variant: response.data.success ? "success" : "error",
+          autoHideDuration: 1000,
         });
         console.log(response.data, "im response from forgot password");
         if (response.data.success) {
@@ -136,6 +137,7 @@ const ForgotPassword = () => {
 
         enqueueSnackbar(response.data.message, {
           variant: response.data.success ? "success" : "error",
+          autoHideDuration: 1000,
         });
         if (response.data.success) {
           handleNextStep();
@@ -154,6 +156,7 @@ const ForgotPassword = () => {
         });
         enqueueSnackbar(response.data.message, {
           variant: response.data.success ? "success" : "error",
+          autoHideDuration: 1000,
         });
         if (response.data.success) {
           openModal();

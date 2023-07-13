@@ -18,8 +18,11 @@ const Pagination = (props) => {
     siblingCount,
     pageSize,
   });
-
-  if (currentPage === 0 || paginationRange?.length < 2) {
+  // i want tif page is 0 then also shhow page 1
+  if (totalCount === 0) {
+    return null;
+  }
+  if (currentPage === 0 || paginationRange.length > 2) {
     return null;
   }
 
@@ -63,9 +66,9 @@ const Pagination = (props) => {
         return (
           <li
             key={index}
-            className={`inline-flex items-center justify-center cursor-pointer px-4 py-1 m-1 rounded-md ${
+            className={`inline-flex items-center justify-center cursor-pointer px-4 py-[2px] m-1 rounded-md ${
               pageNumber === currentPage
-                ? "bg-gray-400 text-white"
+                ? "bg-gray-300 text-black font-semibold"
                 : "bg-gray-100"
             }`}
             onClick={() => onPageChange(pageNumber)}

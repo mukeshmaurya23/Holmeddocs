@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../util/Button";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import customAxios from "../../../axios/custom";
+import loadingGif from "../../../images/icons/Loader.gif";
 const ProfileDetails = () => {
   // const getUserName = localStorage.getItem("userName");
   // const newName = JSON.parse(getUserName);
 
-  const user = useSelector((state) => state.login.user);
-  const dob = user.patient_dob;
+  // const user = useSelector((state) => state.login.user);
+  // const dob = user.patient_dob;
+
+  const [profileData, setProfileData] = useState({});
+  const [loading, setLoading] = useState(false);
   const calcularteDob = (dob) => {
     const today = new Date();
     const birthDate = new Date(dob);
@@ -19,8 +24,28 @@ const ProfileDetails = () => {
     }
     return age;
   };
-  console.log(calcularteDob(dob), "age");
-  return (
+  console.log(calcularteDob(profileData?.patient_dob), "age");
+
+  useEffect(() => {
+    const fetchUserProfileData = async () => {
+      setLoading(true);
+      try {
+        const response = await customAxios.post("/patient/profile");
+        setProfileData(response?.data?.data?.result);
+        setLoading(false);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
+    fetchUserProfileData();
+  }, []);
+
+  console.log(profileData, "profileData");
+  return loading ? (
+    <div className="flex justify-center  ">
+      <img src={loadingGif} alt="" />
+    </div>
+  ) : (
     <>
       <div className="flex justify-center items-center flex-col px-24 py-16">
         <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10">
@@ -28,19 +53,19 @@ const ProfileDetails = () => {
         </h2>
         <div className="border border-verifiCation rounded-xl  p-[30px]">
           <h2 className="text-center font-Henriette text-[20px]">
-            {user.patient_first_name}
+            {profileData?.patient_first_name}
           </h2>
           <div class="flex justify-between mx-3  mb-4 ">
             <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
               <div class="border-r border-verifiCation p-6 ">
                 <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600">
-                  {user.patient_gender}
+                  {profileData?.patient_gender}
                 </p>
               </div>
               <div class=" border-r border-verifiCation p-7">
                 <p class="text-center text-[10px] font-sansBold text-gray-600">
-                  {calcularteDob(dob)}
+                  {calcularteDob(profileData.patient_dob)}
                 </p>
                 <p className="text-[10px] font-sansBold text-gray-600">
                   Years Old
@@ -49,13 +74,13 @@ const ProfileDetails = () => {
               <div class=" border-r border-verifiCation p-6">
                 <i class="fa fa-phone" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600">
-                  {localStorage.getItem("phoneNumber") || "1234567890"}
+                  {profileData?.patient_phone}
                 </p>
               </div>
               <div class=" ">
                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600 ml-2">
-                  {user.patient_email}
+                  {profileData?.patient_email}
                 </p>
               </div>
             </div>
@@ -69,6 +94,9 @@ const ProfileDetails = () => {
                 aria-hidden="true"
               ></i>
               <p className="ml-4 text-[#9597A6] text-[13px] ">Address</p>
+              <p className="ml-4 text-[#292F33] font-sansRegular text-[13px] font-semibold">
+                {profileData?.address1}
+              </p>
             </div>
             <div className="flex  mt-5">
               <i

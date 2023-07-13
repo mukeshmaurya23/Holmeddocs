@@ -178,6 +178,8 @@ const Navbar2 = () => {
 
   const location = useLocation();
   console.log(location.pathname);
+
+  const showShadow = location.pathname !== "/";
   const LoginSignup = (
     <div
       className="font-sansBold font-semibold text-sm lg:text-navbarLg"
@@ -268,14 +270,16 @@ const Navbar2 = () => {
         class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
           location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
-            ? ""
+            ? "drop-shadow-lg"
             : "lg:py-5"
         } grid grid-col-12 py-1  ${
           location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-        } bg-white z-10  h-[7rem] relative drop-shadow-lg cursor-pointer`}
+        } ${
+          showShadow ? "drop-shadow-md" : ""
+        } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
         <div class="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -353,7 +357,7 @@ const Navbar2 = () => {
                     className={`relative py-1 w-[250px] h-[40px] mr-1 text-[#b5b1b1] outline-none border-r  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[15px]"
-                        : "text-[1.2rem]"
+                        : "text-[1rem]"
                     }`}
                     placeholder={locationSearchParams || "Location"}
                     onChange={handleLocationChange}
@@ -402,7 +406,7 @@ const Navbar2 = () => {
                     className={`relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#b5b1b1] ${
                       selectedItemList.speciality || specialitySearchParams
                         ? "text-[15px]"
-                        : "text-[1.2rem]"
+                        : "text-[1rem]"
                     }`}
                     placeholder={specialitySearchParams || "Speciality"}
                     onChange={handleSpecialityChange}

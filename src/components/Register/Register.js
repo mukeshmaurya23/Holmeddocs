@@ -67,6 +67,7 @@ const Register = () => {
         console.log(response);
         enqueueSnackbar(response?.data?.message, {
           variant: response?.data?.success ? "success" : "error",
+          autoHideDuration: 1000,
         });
         if (response.status === 200) {
           if (response.data.success === 1) {

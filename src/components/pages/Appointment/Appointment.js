@@ -21,9 +21,12 @@ const Appointment = () => {
   useEffect(() => {
     dispatch(fetchData("/patient/appointments"));
   }, [dispatch]);
+  const appointmentDataResult = appointmentData?.data?.result[0]?.id;
+
+  console.log(appointmentDataResult, "appointmentDataResult");
 
   const [currentIndex, setCurrentIndex] = useState(
-    appointmentData?.data?.result[0]?.id || null
+    appointmentDataResult || null
   );
   console.log(currentIndex, "currentIndex");
   const handleCardClick = (id) => {
@@ -35,8 +38,6 @@ const Appointment = () => {
   const [isSidebarOpenForSchedule, setIsSidebarOpenForSchedule] =
     useState(true);
 
-  const [isSidebarOpenForCompleted, setIsSidebarOpenForCompleted] =
-    useState(true);
   const toggleSidebar = () => {
     console.log("toggle");
     setIsSidebarOpen(!isSidebarOpen);
@@ -45,7 +46,7 @@ const Appointment = () => {
   const [initialMobileState, setInitialMobileState] = useState(false);
   const [flag, setFlag] = useState(false);
 
-  const toggleMobileSidebar = (index) => {
+  const toggleMobileSidebar = () => {
     // setInitialMobileState((prevState) => {
     //   return {
     //     ...prevState,
@@ -121,37 +122,39 @@ const Appointment = () => {
 
                   {isSidebarOpenForSchedule && (
                     <>
-                      {appointmentData?.data?.result?.map((data, index) => (
-                        <div
-                          className={`flex flex-col border-b p-5  border-gray-300  ${
-                            currentIndex === data.id ? "bg-white" : ""
-                          }
-                    
-                      
-                      `}
-                          key={data.id}
-                          onClick={() => handleCardClick(data.id)}
-                          // onClick={() =>
-                          //   handleCardClick(data.id) || toggleMobileSidebar()
-                          // }
-                          style={{ cursor: "pointer" }}
-                          role="button"
-                        >
-                          <p className="text-[#292F33] font-sansSemibold text-[15px]">
-                            {data?.doctor_name}
-                            {/* Alexander O. Babazadeh */}
-                          </p>
-                          <p className="text-[#9597A6] font-sansLight text-xs py-1">
-                            {/* {data.tag1} */}
-                            Scheduled for:{" "}
-                            {data?.appointment_date || "Thurs, Feb 18th"}
-                          </p>
-                          <p className="text-[#292F33] text-sm py-1">
-                            {/* {data.tag2} */}
-                            {data?.medical_condition}
-                          </p>
-                        </div>
-                      ))}
+                      {appointmentData?.data?.result?.map((data, index) => {
+                        return (
+                          <div
+                            className={`flex flex-col border-b p-5  border-gray-300  ${
+                              currentIndex === data.id ? "bg-white" : ""
+                            }
+              
+                
+                `}
+                            key={data.id}
+                            onClick={() => handleCardClick(data.id)}
+                            // onClick={() =>
+                            //   handleCardClick(data.id) || toggleMobileSidebar()
+                            // }
+                            style={{ cursor: "pointer" }}
+                            role="button"
+                          >
+                            <p className="text-[#292F33] font-sansSemibold text-[15px]">
+                              {data?.doctor_name}
+                              {/* Alexander O. Babazadeh */}
+                            </p>
+                            <p className="text-[#9597A6] font-sansLight text-xs py-1">
+                              {/* {data.tag1} */}
+                              Scheduled for:{" "}
+                              {data?.appointment_date || "Thurs, Feb 18th"}
+                            </p>
+                            <p className="text-[#292F33] text-sm py-1">
+                              {/* {data.tag2} */}
+                              {data?.medical_condition}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </>
                   )}
                 </>
@@ -494,13 +497,17 @@ const Appointment = () => {
                               } */}
                                 {item.clinic_address}
                               </p>
-                              <iframe
+
+                              <p className="text-[#292F33] text-sm py-3 font-semibold tracking-tighter">
+                                Location Not Available
+                              </p>
+                              {/* <iframe
                                 class="h-60 w-full mt-5"
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15080.731037074034!2d72.87535869905422!3d19.099636713754155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8773cb2f051%3A0x40576ac944236b34!2sSaki%20Naka%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1686410711545!5m2!1sen!2sin"
                                 allowfullscreen=""
                                 loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"
-                              ></iframe>
+                              ></iframe> */}
                             </div>
                           </div>
                         </div>

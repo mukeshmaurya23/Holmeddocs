@@ -13,6 +13,8 @@ import Success from "../../images/Login/Success.png";
 import { Link } from "react-router-dom";
 import customAxios from "../../axios/custom";
 import { enqueueSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/loginSlice";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -37,7 +39,7 @@ const ChangePassword = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       oldPassword: "",
@@ -61,9 +63,14 @@ const ChangePassword = () => {
         console.log(response.data);
         enqueueSnackbar(response?.data?.message, {
           variant: response.data.success ? "success" : "error",
+          autoHideDuration: 1500,
         });
-        if (response.success === 1) {
+        if (response.data.success === 1) {
+          formik.resetForm();
           openModal();
+          setTimeout(() => {
+            dispatch(logout());
+          }, 3000);
         }
       } catch (err) {
         console.log(err);

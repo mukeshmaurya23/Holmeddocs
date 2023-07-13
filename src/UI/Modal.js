@@ -13,6 +13,8 @@ const Modal = ({
   image,
   link,
   logOutHandler,
+  btnTextDelete,
+  onConfirm,
 }) => {
   return (
     <>
@@ -43,6 +45,14 @@ const Modal = ({
                   }
                 >
                   <Link to="/login">{btnText}</Link>
+                </Button>
+              )}
+              {btnTextDelete && (
+                <Button
+                  className="mt-4 px-12 py-1 bg-verifiCation text-white rounded-full"
+                  onClick={onConfirm}
+                >
+                  {btnTextDelete}
                 </Button>
               )}
               {btnText2 && (
