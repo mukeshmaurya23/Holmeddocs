@@ -90,23 +90,24 @@ const ForgotPassword = () => {
     // }
   };
   const handleSubmit = async (e) => {
+    console.log("clicked");
     e.preventDefault();
     //check if form is not dirty and touched or valid then return
     if (!formik.values.phone || formik.errors.phone) {
       formik.setTouched({ phone: true });
       return;
     }
-    if (!formik.values.password || formik.errors.password) {
-      formik.setTouched({ password: true });
-      return;
-    }
-    if (
-      !formik.values.password_confirmation ||
-      formik.errors.password_confirmation
-    ) {
-      formik.setTouched({ password_confirmation: true });
-      return;
-    }
+    // if (!formik.values.password || formik.errors.password) {
+    //   formik.setTouched({ password: true });
+    //   return;
+    // }
+    // if (
+    //   !formik.values.password_confirmation ||
+    //   formik.errors.password_confirmation
+    // ) {
+    //   formik.setTouched({ password_confirmation: true });
+    //   return;
+    // }
 
     if (step === 1) {
       try {
@@ -187,7 +188,7 @@ const ForgotPassword = () => {
               {Object.keys(steps).length ? (
                 <>
                   {step <= 2 && (
-                    <Button
+                    <button
                       className={`mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black ${
                         (step === 1 && formik.errors.phone) ||
                         // (step === 2 && formik.errors.otp) ||
@@ -198,7 +199,7 @@ const ForgotPassword = () => {
                       onClick={handleSubmit}
                     >
                       {step === 1 ? "Next" : step === 2 ? "Next" : false}
-                    </Button>
+                    </button>
                   )}
                   {step === 3 && (
                     <Button
