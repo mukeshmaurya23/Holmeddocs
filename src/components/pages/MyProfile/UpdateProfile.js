@@ -119,6 +119,8 @@ const UpdateProfile = () => {
     };
     // console.log(data, "im data");
     console.log(data, "im data");
+    //check if all filed required if any of field is not filled then  show msg to user
+
     try {
       const response = await customAxios.post("/patient/edit_profile", data);
       console.log(response);
