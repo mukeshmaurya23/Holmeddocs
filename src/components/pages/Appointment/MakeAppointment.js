@@ -206,7 +206,7 @@ import {
   fetchLocationAreas,
   fetchSpecialties,
 } from "../../../store/LocSpecSlice";
-
+import Spinner from "../../../UI/Spinner";
 const MakeAppointment = () => {
   console.log("pathname", window.location.pathname);
   const [isActive, setIsActive] = useState(false);

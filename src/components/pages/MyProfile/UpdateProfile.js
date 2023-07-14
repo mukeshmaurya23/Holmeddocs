@@ -8,6 +8,7 @@ import customAxios from "../../../axios/custom";
 import { enqueueSnackbar } from "notistack";
 import greenArrowDown from "../../../images/GreenArrowDown.png";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   fetchCityData,
   fetchInsuranceData,
@@ -23,11 +24,8 @@ const UpdateProfile = () => {
     city_id: "",
     zip_code_id: "",
   });
-  const [cityDropDown, setCityDropDown] = useState(false);
-
-  const handleCityDropdown = () => {
-    setCityDropDown(true);
-  };
+  const [IscityDropDown, setCityDropDown] = useState(false);
+  const [IsZipCodeDropDown, setZipCodeDropDown] = useState(false);
   const handleSelectedItem = (name, type) => {
     console.log(name, type);
     // setSelectedItemList(name);
@@ -35,9 +33,15 @@ const UpdateProfile = () => {
       return { ...prevSelectedItemList, [type]: name };
     });
   };
+
+  const location = useLocation();
+  const { phone } = location.state;
+
   console.log(selectedItemList);
   const insuranceRef = useRef();
   const stateRef = useRef();
+  const cityRef = useRef();
+  const zipCodeRef = useRef();
   const formik = useFormik({
     initialValues: {
       patient_first_name: "",
@@ -56,53 +60,35 @@ const UpdateProfile = () => {
       insurance_company: "",
     },
     validationSchema: updateProfileSchema,
-    onSubmit: async (values) => {
-      // const data = {
-      //   patient_first_name: values.patient_first_name,
-      //   patient_last_name: values.patient_last_name,
-      //   patient_email: values.patient_email,
-      //   insurance_company: selectedItemList.insurance,
-      //   policy_number: values.policy_number,
-      //   address1: values.address1,
-      //   zip_code_id: selectedItemList.zip_code_id,
-      //   apartment: values.apartment,
-      //   patient_gender: values.patient_gender,
-      //   patient_dob: values.patient_dob,
-      //   city_id: selectedItemList.city_id,
-      //   state_id: selectedItemList.state,
-      // };
-      // console.log(data, "im data");
-      // console.log(values, "im values");
-      // // try {
-      //   const response = await customAxios.post("/patient/edit_profile", data);
-      //   console.log(response);
-      //   enqueueSnackbar(response?.data?.message, {
-      //     variant: response.data.success ? "success" : "error",
-      //   });
-      //   if (response.success === 1) {
-      //     formik.resetForm();
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
-    },
+    onSubmit: async (values) => {},
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const data = new FormData();
-    // data.append("patient_first_name", formik.values.patient_first_name);
-    // data.append("patient_last_name", formik.values.patient_last_name);
-    // data.append("patient_email", formik.values.patient_email);
-    // data.append("insurance_company", selectedItemList.insurance);
-    // data.append("policy_number", formik.values.policy_number);
-    // data.append("address1", formik.values.address1);
-    // data.append("zip_code_id", selectedItemList.zip_code_id);
-    // data.append("apartment", formik.values.apartment);
-    // data.append("patient_gender", formik.values.patient_gender);
-    // data.append("patient_dob", formik.values.patient_dob);
-    // data.append("city_id", selectedItemList.city_id);
-    // data.append("state_id", selectedItemList.state);
+    // const isFormValid =
+    //   formik.isValid && Object.keys(formik.touched).length > 0;
+
+    const isFormInvalid = formik.isValid;
+    if (formik.dirty) {
+      enqueueSnackbar("Please fill in all required fields", {
+        variant: "error",
+      });
+      formik.setTouched({
+        patient_first_name: true,
+        patient_last_name: true,
+        patient_email: true,
+        patient_gender: true,
+        patient_dob: true,
+        city_id: true,
+        state_id: true,
+        zip_code_id: true,
+        policy_number: true,
+        apartment: true,
+        address1: true,
+        insurance_company: true,
+      });
+      return;
+    }
     const data = {
       patient_first_name: formik.values.patient_first_name,
       patient_last_name: formik.values.patient_last_name,
@@ -133,25 +119,6 @@ const UpdateProfile = () => {
     } catch (error) {
       console.log(error);
     }
-    // formik.setTouched({
-    //   patient_first_name: true,
-    //   patient_last_name: true,
-    //   patient_gender: true,
-
-    //   patient_dob: true,
-    //   patient_email: true,
-    //   patient_phone: true,
-
-    //   policy_number: true,
-    //   apartment: true,
-    //   address1: true,
-
-    //   zip_code_id: true,
-    //   city_id: true,
-    //   state_id: true,
-
-    //   insurance_company: true,
-    // });
   };
 
   useEffect(() => {
@@ -162,12 +129,18 @@ const UpdateProfile = () => {
       if (!stateRef?.current?.contains(event.target)) {
         setIsStateDropDown(false);
       }
+      if (!cityRef?.current?.contains(event.target)) {
+        setCityDropDown(false);
+      }
+      if (!zipCodeRef?.current?.contains(event.target)) {
+        setZipCodeDropDown(false);
+      }
     };
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [insuranceRef, stateRef]);
+  }, [insuranceRef, stateRef, cityRef, zipCodeRef]);
 
   const insuranceDispatch = useDispatch();
   const stateDispatch = useDispatch();
@@ -199,7 +172,7 @@ const UpdateProfile = () => {
       <h2 className="text-[1.4rem] mt-14 font-sansRegular tracking-[2px] text-black  text-center">
         Update Profile
       </h2>
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-2">
           <div>
             <div className="flex flex-wrap px-4 sm:px-24 py-5">
@@ -320,10 +293,11 @@ const UpdateProfile = () => {
                   name="patient_phone"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_phone}
+                  value={phone}
                   id="patient_phone"
+                  disabled
                   placeholder="XXX XXX XXXX"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation bg-gray-200 text-formLabel rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
                 />
                 {formik.errors.patient_phone &&
                   formik.touched.patient_phone && (
@@ -549,7 +523,10 @@ const UpdateProfile = () => {
                       ))
                   : null}
               </div> */}
-              <div className="relative flex flex-col w-1/3 p-[10px]">
+              <div
+                className="relative flex flex-col w-1/3 p-[10px]"
+                ref={cityRef}
+              >
                 <Label
                   htmlFor="city_id"
                   className="font-sansRegular text-formLabel text-sm py-1"
@@ -562,12 +539,18 @@ const UpdateProfile = () => {
                   id="city_id"
                   value={selectedItemList.city_id}
                   onFocus={() => setCityDropDown(true)}
-                  onBlur={() => setCityDropDown(false)}
                   placeholder="city"
+                  autoComplete="nope"
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
-                {!cityDropDown ? (
-                  <ul className="absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {IscityDropDown ? (
+                  <ul
+                    className={`${
+                      IscityDropDown
+                        ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
+                  >
                     {cityStatus === "loading"
                       ? "Loading..."
                       : cityData &&
@@ -585,7 +568,10 @@ const UpdateProfile = () => {
                   </ul>
                 ) : null}
               </div>
-              <div className="flex relative flex-col w-1/3 p-[10px]">
+              <div
+                className="flex relative flex-col w-1/3 p-[10px]"
+                ref={zipCodeRef}
+              >
                 <Label
                   htmlFor="zip_code_id"
                   className="font-sansRegular text-formLabel text-sm py-1"
@@ -598,6 +584,8 @@ const UpdateProfile = () => {
                   id="zip_code_id"
                   value={selectedItemList.zip_code_id}
                   placeholder="zip code"
+                  autoComplete="nope"
+                  onFocus={() => setZipCodeDropDown(true)}
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.zip_code_id && formik.touched.zip_code_id && (
@@ -606,22 +594,28 @@ const UpdateProfile = () => {
                   </div>
                 )}
                 <ul
-                  className={`${"absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"}`}
+                  className={`${
+                    IsZipCodeDropDown
+                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                  }`}
                 >
-                  {zipCodeStatus === "loading"
-                    ? "Loading..."
-                    : zipCodeData &&
-                      zipCodeData.map((item) => (
-                        <li
-                          className="text-formLabel text-[12px] cursor-pointer relative"
-                          key={item.id}
-                          onClick={() =>
-                            handleSelectedItem(item.id, "zip_code_id")
-                          }
-                        >
-                          {item.zip}
-                        </li>
-                      ))}
+                  {IsZipCodeDropDown
+                    ? zipCodeStatus === "loading"
+                      ? "Loading..."
+                      : zipCodeData &&
+                        zipCodeData.map((item) => (
+                          <li
+                            className="text-formLabel text-[12px] cursor-pointer relative"
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(item.id, "zip_code_id")
+                            }
+                          >
+                            {item.zip}
+                          </li>
+                        ))
+                    : null}
                 </ul>
               </div>
               <div className="flex relative flex-col w-1/3 p-[10px]">
@@ -676,6 +670,7 @@ const UpdateProfile = () => {
           <Button
             onClick={handleSubmit}
             type="submit"
+            disabled={!formik.isValid || !formik.dirty}
             className="bg-verifiCation cursor-pointer text-white font-sansMedium text-[14px] py-2 px-10 rounded-full"
           >
             Update

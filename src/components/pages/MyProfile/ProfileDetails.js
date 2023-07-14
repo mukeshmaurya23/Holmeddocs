@@ -40,7 +40,7 @@ const ProfileDetails = () => {
     fetchUserProfileData();
   }, []);
 
-  console.log(profileData, "profileData");
+  console.log(profileData.patient_phone, "profileData");
   return loading ? (
     <div className="flex justify-center  ">
       <img src={loadingGif} alt="" />
@@ -124,7 +124,12 @@ const ProfileDetails = () => {
             if you have given your consent.
           </p>
         </div>
-        <Link to="update-profile">
+        <Link
+          to="update-profile"
+          state={{
+            phone: profileData?.patient_phone,
+          }}
+        >
           <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold">
             Edit Profile
           </Button>

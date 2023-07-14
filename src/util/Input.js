@@ -17,6 +17,8 @@ const Input = ({
   pattern,
   defaultValue,
   style,
+  autoComplete,
+  onFocus,
 }) => {
   return (
     <input
@@ -35,6 +37,8 @@ const Input = ({
       defaultValue={defaultValue}
       pattern={pattern}
       ref={ref}
+      onFocus={onFocus}
+      autoComplete={autoComplete}
       style={style}
     />
   );

@@ -178,7 +178,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 md:absolute 2xl:bottom-[5rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
           <div
             className="flex flex-col md:flex-row  justify-between px-4"
             ref={ref}
@@ -262,7 +262,7 @@ const Holistic = () => {
                 </span>
 
                 {isOpen && (
-                  <div className="absolute top-[4.3rem] right-10 z-[100] h-full">
+                  <div className="absolute top-[6rem] right-10 z-[100] h-full">
                     <DatePickerComponent
                       handleChange={handleChange}
                       startDate={startDate}
