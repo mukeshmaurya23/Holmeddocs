@@ -105,14 +105,14 @@ const Holistic = () => {
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] ">
-        <div className="md:mt-[5rem] sm:pt-28 xs:pt-28 xsm:pt-16 mt-0 lg:mt-[6rem] 2xl:mt-[4rem] space-y-2">
-          <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2rem] 2xl:text-[2.5rem]  font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] ">
+        <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  h-[50vh] space-y-2">
+          <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center h-fit sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
             <span>HOLISTIC</span>
             <div className="flex items-center justify-center">
               <div className="relative">
                 <p>M</p>
                 <img
-                  className="absolute md:top-2 md:h-[29px] md:left-[1.2px] 2xl:h-[40px] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[18px] xsm:top-[.12rem] xsm:font-sansBold"
+                  className="absolute md:top-2 md:h-[3rem] md:left-[1.2px] 2xl:h-[3.4rem] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[18px] xsm:top-[.12rem] xsm:font-sansBold"
                   alt=""
                   src={leaf}
                 />
@@ -126,7 +126,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 absolute bottom-14 right-0 left-0 mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_0%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 md:absolute 2xl:bottom-[5rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
           <div
             className="flex flex-col md:flex-row  justify-between px-4"
             ref={ref}
@@ -238,7 +238,7 @@ const Holistic = () => {
                 <img
                   src={svgSearch}
                   alt=""
-                  className=" w-16 2xl:w-20 h-auto cursor-pointer"
+                  className=" w-16 2xl:w-24 h-auto cursor-pointer"
                 />
               </div>
             </div>
