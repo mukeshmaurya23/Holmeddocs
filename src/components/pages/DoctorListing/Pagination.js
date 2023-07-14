@@ -19,12 +19,12 @@ const Pagination = (props) => {
     pageSize,
   });
   // i want tif page is 0 then also shhow page 1
-  if (totalCount === 0) {
-    return null;
-  }
-  if (currentPage === 0 || paginationRange.length > 2) {
-    return null;
-  }
+  // if (totalCount === 0) {
+  //   return null;
+  // }
+  // if (currentPage === 0 || paginationRange.length < 2) {
+  //   return null;
+  // }
 
   const onNext = () => {
     onPageChange(currentPage + 1);

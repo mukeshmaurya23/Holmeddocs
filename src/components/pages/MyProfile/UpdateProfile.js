@@ -8,15 +8,26 @@ import customAxios from "../../../axios/custom";
 import { enqueueSnackbar } from "notistack";
 import greenArrowDown from "../../../images/GreenArrowDown.png";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchInsuranceData, fetchStateData } from "../../../store/apiSlice";
+import {
+  fetchCityData,
+  fetchInsuranceData,
+  fetchStateData,
+  fetchZipCodeData,
+} from "../../../store/apiSlice";
 const UpdateProfile = () => {
   const [isInsuranceDropdown, setIsInsuranceDropDown] = useState(false);
   const [isStateDropdown, setIsStateDropDown] = useState(false);
   const [selectedItemList, setSelectedItemList] = useState({
     insurance: "",
     state: "",
+    city_id: "",
+    zip_code_id: "",
   });
+  const [cityDropDown, setCityDropDown] = useState(false);
 
+  const handleCityDropdown = () => {
+    setCityDropDown(true);
+  };
   const handleSelectedItem = (name, type) => {
     console.log(name, type);
     // setSelectedItemList(name);
@@ -31,81 +42,114 @@ const UpdateProfile = () => {
     initialValues: {
       patient_first_name: "",
       patient_last_name: "",
+
+      patient_email: "",
       patient_gender: "",
       patient_dob: "",
-      patient_email: "",
-      patient_phone: "",
+      city_id: "",
+      state_id: "",
+      zip_code_id: "",
       policy_number: "",
       apartment: "",
       address1: "",
-      zip_code_id: "",
+
       insurance_company: "",
     },
     validationSchema: updateProfileSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      if (!formik.isValid) return;
-
-      const data = {
-        patient_first_name: values.patient_first_name,
-        patient_last_name: values.patient_last_name,
-        patient_email: values.patient_email,
-        patient_phone: values.patient_phone,
-        insurance_company: values.insurance_company,
-        policy_number: values.policy_number,
-        address1: values.address1,
-        zip_code_id: values.zip_code_id,
-        apartment: values.apartment,
-        patient_gender: values.patient_gender,
-        patient_dob: values.patient_dob,
-      };
-
-      console.log(data);
-      try {
-        const response = await customAxios.post("/patient/edit_profile", data);
-        console.log(response);
-        enqueueSnackbar(response?.data?.message, {
-          variant: response.data.success ? "success" : "error",
-        });
-        if (response.success === 1) {
-          formik.resetForm();
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      // const data = {
+      //   patient_first_name: values.patient_first_name,
+      //   patient_last_name: values.patient_last_name,
+      //   patient_email: values.patient_email,
+      //   insurance_company: selectedItemList.insurance,
+      //   policy_number: values.policy_number,
+      //   address1: values.address1,
+      //   zip_code_id: selectedItemList.zip_code_id,
+      //   apartment: values.apartment,
+      //   patient_gender: values.patient_gender,
+      //   patient_dob: values.patient_dob,
+      //   city_id: selectedItemList.city_id,
+      //   state_id: selectedItemList.state,
+      // };
+      // console.log(data, "im data");
+      // console.log(values, "im values");
+      // // try {
+      //   const response = await customAxios.post("/patient/edit_profile", data);
+      //   console.log(response);
+      //   enqueueSnackbar(response?.data?.message, {
+      //     variant: response.data.success ? "success" : "error",
+      //   });
+      //   if (response.success === 1) {
+      //     formik.resetForm();
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     },
   });
 
-  const handleSubmit = () => {
-    formik.setTouched({
-      patient_first_name: true,
-      patient_last_name: true,
-      patient_gender: true,
-      patient_dob: true,
-      patient_email: true,
-      patient_phone: true,
-      policy_number: true,
-      apartment: true,
-      address1: true,
-      zip_code_id: true,
-      insurance_company: true,
-    });
-  };
-  const [searchInsuranceQuery, setSearchInsuranceQuery] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // const data = new FormData();
+    // data.append("patient_first_name", formik.values.patient_first_name);
+    // data.append("patient_last_name", formik.values.patient_last_name);
+    // data.append("patient_email", formik.values.patient_email);
+    // data.append("insurance_company", selectedItemList.insurance);
+    // data.append("policy_number", formik.values.policy_number);
+    // data.append("address1", formik.values.address1);
+    // data.append("zip_code_id", selectedItemList.zip_code_id);
+    // data.append("apartment", formik.values.apartment);
+    // data.append("patient_gender", formik.values.patient_gender);
+    // data.append("patient_dob", formik.values.patient_dob);
+    // data.append("city_id", selectedItemList.city_id);
+    // data.append("state_id", selectedItemList.state);
+    const data = {
+      patient_first_name: formik.values.patient_first_name,
+      patient_last_name: formik.values.patient_last_name,
+      patient_email: formik.values.patient_email,
+      insurance_company: selectedItemList.insurance,
+      policy_number: formik.values.policy_number,
+      address1: formik.values.address1,
+      zip_code_id: selectedItemList.zip_code_id,
+      apartment: formik.values.apartment,
+      patient_gender: formik.values.patient_gender,
+      patient_dob: formik.values.patient_dob,
+      city_id: selectedItemList.city_id,
+      state_id: selectedItemList.state,
+    };
+    // console.log(data, "im data");
+    console.log(data, "im data");
+    try {
+      const response = await customAxios.post("/patient/edit_profile", data);
+      console.log(response);
+      enqueueSnackbar(response?.data?.message, {
+        variant: response.data.success ? "success" : "error",
+      });
+      if (response.success === 1) {
+        formik.resetForm();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // formik.setTouched({
+    //   patient_first_name: true,
+    //   patient_last_name: true,
+    //   patient_gender: true,
 
-  const handleInsuranceChange = (e) => {
-    setSearchInsuranceQuery(e.target.value);
-  };
+    //   patient_dob: true,
+    //   patient_email: true,
+    //   patient_phone: true,
 
-  useEffect(() => {
-    setSelectedItemList((prevSelectedItemList) => {
-      return { ...prevSelectedItemList, insurance: "" };
-    });
-  }, [searchInsuranceQuery]);
-  const handleStateChange = (e) => {
-    setSelectedItemList((prevSelectedItemList) => {
-      return { ...prevSelectedItemList, state: e.target.value };
-    });
+    //   policy_number: true,
+    //   apartment: true,
+    //   address1: true,
+
+    //   zip_code_id: true,
+    //   city_id: true,
+    //   state_id: true,
+
+    //   insurance_company: true,
+    // });
   };
 
   useEffect(() => {
@@ -125,6 +169,8 @@ const UpdateProfile = () => {
 
   const insuranceDispatch = useDispatch();
   const stateDispatch = useDispatch();
+  const cityDispatch = useDispatch();
+  const zipCodeDispatch = useDispatch();
   const { insuranceData, insuranceStatus } = useSelector((state) => state.api);
 
   const { stateData, stateStatus } = useSelector((state) => state.api);
@@ -136,15 +182,22 @@ const UpdateProfile = () => {
     stateDispatch(fetchStateData("/patient/master/state"));
   }, [stateDispatch]);
 
-  console.log(insuranceData, "Insurance Dattttttttttttttt");
-  console.log(stateData, "state Dattttttttttttttt");
+  const { cityData, cityStatus } = useSelector((state) => state.api);
+  useEffect(() => {
+    cityDispatch(fetchCityData("/patient/master/city"));
+  }, [cityDispatch]);
+
+  const { zipCodeData, zipCodeStatus } = useSelector((state) => state.api);
+  useEffect(() => {
+    zipCodeDispatch(fetchZipCodeData("/patient/master/zip"));
+  }, [zipCodeDispatch]);
 
   return (
     <>
       <h2 className="text-[1.4rem] mt-14 font-sansRegular tracking-[2px] text-black  text-center">
         Update Profile
       </h2>
-      <form onSubmit={formik.handleSubmit}>
+      <form>
         <div className="grid grid-cols-2">
           <div>
             <div className="flex flex-wrap px-4 sm:px-24 py-5">
@@ -313,7 +366,6 @@ const UpdateProfile = () => {
                   type="text"
                   id="insurance_company"
                   name="insurance_company"
-                  onChange={handleInsuranceChange}
                   onBlur={formik.handleBlur}
                   value={selectedItemList.insurance || ""}
                   placeholder="select"
@@ -336,7 +388,7 @@ const UpdateProfile = () => {
                       {formik.errors.insurance_company}
                     </div>
                   )}
-                {/* <ul
+                <ul
                   className={`${
                     isInsuranceDropdown
                       ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
@@ -352,19 +404,16 @@ const UpdateProfile = () => {
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
                             onClick={() =>
-                              handleSelectedItem(
-                                item.insurance_company_name,
-                                "insurance"
-                              )
+                              handleSelectedItem(item.id, "insurance")
                             }
                           >
                             {item.insurance_company_name}
                           </li>
                         ))
                     : null}
-                </ul> */}
+                </ul>
 
-                <ul
+                {/* <ul
                   className={`${
                     isInsuranceDropdown
                       ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
@@ -372,29 +421,23 @@ const UpdateProfile = () => {
                   }`}
                 >
                   {isInsuranceDropdown &&
-                    (insuranceStatus === "loading"
-                      ? "Loading..."
-                      : insuranceData
-                          .filter((item) =>
-                            item.insurance_company_name
-                              .toLowerCase()
-                              .includes(searchInsuranceQuery.toLowerCase())
+                    (insuranceStatus === "loading" ? (
+                      "Loading..."
+                    ) : (
+                      <li
+                        className="text-formLabel text-[12px] cursor-pointer relative"
+                        key={item.id}
+                        onClick={() =>
+                          handleSelectedItem(
+                            item.insurance_company_name,
+                            "insurance"
                           )
-                          .map((item) => (
-                            <li
-                              className="text-formLabel text-[12px] cursor-pointer relative"
-                              key={item.id}
-                              onClick={() =>
-                                handleSelectedItem(
-                                  item.insurance_company_name,
-                                  "insurance"
-                                )
-                              }
-                            >
-                              {item.insurance_company_name}
-                            </li>
-                          )))}
-                </ul>
+                        }
+                      >
+                        {item.insurance_company_name}
+                      </li>
+                    ))}
+                </ul> */}
               </div>
               <div className="flex flex-col  w-1/2 relative p-[10px]">
                 <Label
@@ -472,22 +515,75 @@ const UpdateProfile = () => {
               </div>
             </div>
             <div className="flex flex-wrap px-4 sm:px-24">
-              <div className="flex flex-col w-1/3 p-[10px]">
+              {/* <div className="relative flex flex-col w-1/3 p-[10px]">
                 <Label
-                  htmlFor="city"
+                  htmlFor="city_id"
                   className="font-sansRegular text-formLabel text-sm py-1"
                 >
                   City
                 </Label>
                 <Input
                   type="text"
-                  name="Locality"
-                  id="Locality"
-                  placeholder="Locality"
+                  name="city_id"
+                  id="city_id"
+                  onFocus={() => setCityDropDown(true)}
+                  placeholder="city"
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
+                {cityDropDown
+                  ? cityStatus === "loading"
+                    ? "Loading..."
+                    : cityData &&
+                      cityData.map((item) => (
+                        <li
+                          className="text-formLabel text-[12px] cursor-pointer relative"
+                          key={item.id}
+                          onClick={() =>
+                            handleSelectedItem(item?.id, "city_id")
+                          }
+                        >
+                          {item.city_name}
+                        </li>
+                      ))
+                  : null}
+              </div> */}
+              <div className="relative flex flex-col w-1/3 p-[10px]">
+                <Label
+                  htmlFor="city_id"
+                  className="font-sansRegular text-formLabel text-sm py-1"
+                >
+                  City
+                </Label>
+                <Input
+                  type="text"
+                  name="city_id"
+                  id="city_id"
+                  value={selectedItemList.city_id}
+                  onFocus={() => setCityDropDown(true)}
+                  onBlur={() => setCityDropDown(false)}
+                  placeholder="city"
+                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                />
+                {!cityDropDown ? (
+                  <ul className="absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    {cityStatus === "loading"
+                      ? "Loading..."
+                      : cityData &&
+                        cityData.map((item) => (
+                          <li
+                            className="text-formLabel text-[12px] cursor-pointer relative"
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(item.id, "city_id")
+                            }
+                          >
+                            {item.city_name}
+                          </li>
+                        ))}
+                  </ul>
+                ) : null}
               </div>
-              <div className="flex flex-col w-1/3 p-[10px]">
+              <div className="flex relative flex-col w-1/3 p-[10px]">
                 <Label
                   htmlFor="zip_code_id"
                   className="font-sansRegular text-formLabel text-sm py-1"
@@ -498,10 +594,8 @@ const UpdateProfile = () => {
                   type="text"
                   name="zip_code_id"
                   id="zip_code_id"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.zip_code_id}
-                  placeholder="34567"
+                  value={selectedItemList.zip_code_id}
+                  placeholder="zip code"
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.zip_code_id && formik.touched.zip_code_id && (
@@ -509,6 +603,24 @@ const UpdateProfile = () => {
                     {formik.errors.zip_code_id}
                   </div>
                 )}
+                <ul
+                  className={`${"absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"}`}
+                >
+                  {zipCodeStatus === "loading"
+                    ? "Loading..."
+                    : zipCodeData &&
+                      zipCodeData.map((item) => (
+                        <li
+                          className="text-formLabel text-[12px] cursor-pointer relative"
+                          key={item.id}
+                          onClick={() =>
+                            handleSelectedItem(item.id, "zip_code_id")
+                          }
+                        >
+                          {item.zip}
+                        </li>
+                      ))}
+                </ul>
               </div>
               <div className="flex relative flex-col w-1/3 p-[10px]">
                 <Label
@@ -522,7 +634,6 @@ const UpdateProfile = () => {
                   name="state"
                   id="state"
                   placeholder="select"
-                  onChange={handleStateChange}
                   value={selectedItemList.state || ""}
                   className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
@@ -548,9 +659,7 @@ const UpdateProfile = () => {
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
-                            onClick={() =>
-                              handleSelectedItem(item.state_name, "state")
-                            }
+                            onClick={() => handleSelectedItem(item.id, "state")}
                           >
                             {item.state_name}
                           </li>

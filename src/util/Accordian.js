@@ -164,6 +164,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { getAllMedicalConditionList } from "../services/services";
 import useFetch from "../hooks/useFetch";
+import Spinner from "../UI/Spinner";
 
 const Accordion = ({
   items,
@@ -308,13 +309,13 @@ const Accordion = ({
               }}
             >
               {loader ? (
-                <h1>Loading..</h1>
+                <Spinner />
               ) : (
                 memoizedMedicalConditionListData &&
                 memoizedMedicalConditionListData?.map((data) => (
                   <h1
                     key={data.id}
-                    className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+                    className="cursor-pointer text-[13px] hover:underline mt-1 font-sansBold text-gray-700 "
                   >
                     {data?.speciality_name}
                   </h1>

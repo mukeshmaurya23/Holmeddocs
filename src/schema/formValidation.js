@@ -94,12 +94,17 @@ export const updateProfileSchema = Yup.object().shape({
   patient_email: Yup.string()
     .required("Email is required")
     .matches(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/, "Invalid email"),
-  patient_phone: Yup.string().required("Phone number is required"),
+
   patient_gender: Yup.string().required("Phone is required"),
   patient_dob: Yup.string().required("Date of Birth is required"),
+
+  //city_id: Yup.string().required("City is required"),
+  //state_id: Yup.string().required("State is required"),
+  zip_code_id: Yup.string().required("Zip Code is required"),
+
   policy_number: Yup.string().required("Policy Number is required"),
   apartment: Yup.string().required("Apartment is required"),
   address1: Yup.string().required("Address is required"),
-  zip_code_id: Yup.string().required("Zip Code is required"),
-  insurance_company: Yup.string().required("Insurance Company is required"),
+
+  //insurance_company: Yup.string().required("Insurance Company is required"),
 });

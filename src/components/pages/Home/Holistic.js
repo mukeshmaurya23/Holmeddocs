@@ -8,22 +8,41 @@ import { LocSpec } from "../../../constant";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import DatePicker from "react-datepicker";
-
+import { useDispatch, useSelector } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
-const Holistic = () => {
-  const { data: LocSpecd, loading: locLoading } = useFetch(
-    "/patient/master/state"
-  );
+import Spinner from "../../../UI/Spinner";
+import { fetchLocationAreas } from "../../../store/LocSpecSlice";
+import DatePickerComponent from "../../../UI/DatePicker";
 
+const Holistic = () => {
+  // const { data: LocSpecd, loading: locLoading } = useFetch(
+  //   "/patient/master/state"
+  // );
+  const locationAreasDispatch = useDispatch();
+
+  const { locationAreas, status } = useSelector((state) => state.data);
+  console.log(locationAreas);
   const { data: specialistData, loading: specialityLoading } = useFetch(
     "/patient/master/speciality"
   );
 
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(true);
+  const { data: conditionData, loading: conditionLoading } = useFetch(
+    "/patient/master/condition"
+  );
+  useEffect(() => {
+    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+  }, [locationAreasDispatch]);
 
   const [startDate, setStartDate] = useState(new Date());
-
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (e) => {
+    setIsOpen(!isOpen);
+    setStartDate(e);
+  };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
+  };
   const ref = useRef();
   const calendarRef = useRef();
   const navigate = useNavigate();
@@ -53,11 +72,12 @@ const Holistic = () => {
 
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
-    speciality: "",
+    specialitycondition: "",
   });
 
   const handleSelectedItem = (name, type) => {
     // setSelectedItemList(name);
+
     setSelectedItemList((prevSelectedItemList) => {
       return { ...prevSelectedItemList, [type]: name };
     });
@@ -70,43 +90,75 @@ const Holistic = () => {
       }&date=${startDate.toDateString()}`
     );
   };
-  console.log(selectedDate?.toDateString(), "selectedDate");
+
   const locationItems = () => {
-    if (locLoading) {
-      return <p>Loading...</p>;
+    if (status === "loading") {
+      return <Spinner />;
     }
 
-    return LocSpecd?.data?.result.map((item) => (
+    return locationAreas?.map((item) => (
       <h1
         key={item.id}
-        onClick={() => handleSelectedItem(item.state_name, "location")}
-        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
+        onClick={() => handleSelectedItem(item.city, "location")}
+        className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
       >
-        {item.state_name}
+        {item.city}
       </h1>
     ));
   };
-  const specialityItems = () => {
-    if (specialityLoading) {
-      return <p>Loading...</p>;
+
+  const SpecialityAndCondition = () => {
+    if (specialityLoading || conditionLoading) {
+      return <Spinner />;
     }
-    return specialistData?.data?.result?.map((item) => (
-      <h1
-        key={item.id}
-        onClick={() =>
-          handleSelectedItem(item.medical_speciality_name, "speciality")
-        }
-        className="cursor-pointer text-[14px] hover:underline mt-1 font-sansRegular text-gray-700 tracking-[0.1rem]"
-      >
-        {item.medical_speciality_name}
-      </h1>
-    ));
+
+    return (
+      <div>
+        <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
+          Specialties
+        </h2>
+        {specialistData?.data?.result?.map((item) => (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(
+                item.medical_speciality_name,
+                "specialitycondition"
+              )
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+          >
+            {item.medical_speciality_name}
+          </h1>
+        ))}
+
+        <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
+          Conditions
+        </h2>
+        {conditionData?.data?.result?.map((item) => (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(
+                item.medical_condition_name,
+                "specialitycondition"
+              )
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+          >
+            {item.medical_condition_name}
+          </h1>
+        ))}
+      </div>
+    );
   };
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
-      <div className="bg-[#E2F6F3] ">
-        <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0 h-[50vh] 2xl:mt-[10vh] space-y-2">
-          <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
+      <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
+        <div className="mx-auto mt-[3rem] md:mt-[30vh]">
+          <h1 className="flex font-poppinsMedium justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
+            {/* <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  space-y-2">
+          <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] "> */}
             <span>HOLISTIC</span>
             <div className="flex items-center justify-center">
               <div className="relative">
@@ -122,7 +174,7 @@ const Holistic = () => {
             <p>CONNECTING</p>
           </h1>
 
-          <h1 className="flex sm:text-[1.6rem] font-poppinItalic justify-center space-x-6 tracking-widest font-[300] text-[#0C0B0B] md:text-[2.2rem] xsm:text-[0.8rem]">
+          <h1 className="flex sm:text-[1.6rem] font-poppinItalic justify-center space-x-6 mt-5 tracking-widest font-[300] text-[#0C0B0B] md:text-[2.2rem] xsm:text-[0.8rem]">
             Mind. Body. Soul
           </h1>
         </div>
@@ -151,7 +203,7 @@ const Holistic = () => {
                     key={item.id}
                   >
                     <h2
-                      className={`font-sansBold text-[.8rem] md:text-[1rem] 2xl:text-[1.4rem] text-gray-500 tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
+                      className={`font-sansBold text-[.8rem] md:text-[1rem] 2xl:text-[1.4rem] text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
                     >
                       {selectedItemList[item.id] || item.title}
                     </h2>
@@ -173,14 +225,15 @@ const Holistic = () => {
                     ></div>
                     {selectedItem === item.id && (
                       <div
-                        className="absolute top-14 bg-white w-full p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                        className="absolute top-14 bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                         style={{
                           zIndex: 1,
                         }}
                       >
                         {item.id === "location" && locationItems()}
 
-                        {item.id === "speciality" && specialityItems()}
+                        {item.id === "specialitycondition" &&
+                          SpecialityAndCondition()}
                       </div>
                     )}
                   </div>
@@ -192,46 +245,37 @@ const Holistic = () => {
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
             <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
-              <div className="flex ml-0 md:ml-5" ref={calendarRef}>
+              <div className="flex ml-0 md:ml-5">
                 <img
                   onChange={handleDateChange}
                   src={calendarSvg}
                   alt=""
+                  ref={calendarRef}
+                  onClick={handleClick}
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                {selectedDate && (
-                  <p className="text-[1rem]">
-                    {selectedDate.toDateString() === new Date().toDateString()
-                      ? "Today"
-                      : selectedDate.toDateString()}
-                  </p>
-                )}
+                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[1.2rem] text-[#636677] mr-20 font-sansBold">
+                  {startDate &&
+                  startDate.toDateString() === new Date().toDateString()
+                    ? "Today"
+                    : startDate?.toLocaleDateString()}
+                </span>
 
-                {showDatePicker && (
-                  <DatePicker
-                    selected={startDate}
-                    onChange={handleDateChange}
-                    customInput={
-                      <input
-                        style={{
-                          outline: "none",
-                          border: "none",
-                          color: "gray",
-                        }}
-                        value={startDate?.toDateString()}
-                        readOnly
-                        contentEditable={false}
-                        className="w-40 h-10 border-2 text-[.9rem] md:text-[1rem] 2xl:text-[1.4rem] border-gray-300 rounded-md"
-                      />
-                    }
-                  />
+                {isOpen && (
+                  <div className="absolute top-[4.3rem] right-10 z-[100] h-full">
+                    <DatePickerComponent
+                      handleChange={handleChange}
+                      startDate={startDate}
+                    />
+                  </div>
                 )}
               </div>
 
               <img
                 src={grayDropDown}
                 alt="dropdown"
-                className="h-3 w-3 ml-auto mr-[60px]"
+                onClick={handleClick}
+                className={`${isOpen ? "rotate-180" : ""} h-3 w-3 mr-10`}
               />
 
               <div className="hidden md:block" onClick={handleSearch}>

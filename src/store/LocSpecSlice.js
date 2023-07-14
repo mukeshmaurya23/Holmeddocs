@@ -19,11 +19,20 @@ const fetchSpecialties = createAsyncThunk(
   }
 );
 
+const fetchConditions = createAsyncThunk(
+  "data/fetchConditions",
+  async (url) => {
+    const response = await customAxios.post(url);
+    return response?.data?.data?.result;
+  }
+);
+
 const dataSlice = createSlice({
   name: "data",
   initialState: {
     locationAreas: [],
     specialties: [],
+    conditions: [],
     status: "idle",
   },
   reducers: {},
@@ -48,8 +57,18 @@ const dataSlice = createSlice({
       })
       .addCase(fetchSpecialties.rejected, (state) => {
         state.status = "failed";
+      })
+      .addCase(fetchConditions.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchConditions.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.conditions = action.payload;
+      })
+      .addCase(fetchConditions.rejected, (state) => {
+        state.status = "failed";
       });
   },
 });
-export { fetchLocationAreas, fetchSpecialties };
+export { fetchLocationAreas, fetchSpecialties, fetchConditions };
 export default dataSlice.reducer;

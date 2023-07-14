@@ -185,7 +185,7 @@ export const LocSpec = [
     title: "Location",
   },
   {
-    id: "speciality",
+    id: "specialitycondition",
     title: "Speciality / Condition",
   },
 ];
