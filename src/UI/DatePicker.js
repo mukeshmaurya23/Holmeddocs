@@ -8,6 +8,7 @@ const DatePickerComponent = ({ handleChange, startDate }) => {
       selected={startDate}
       onChange={handleChange}
       inline
+      minDate={new Date()}
       customInput={
         <input
           style={{ outline: "none", border: "none", color: "gray" }}

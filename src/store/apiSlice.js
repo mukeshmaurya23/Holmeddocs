@@ -13,6 +13,9 @@ const initialState = {
   stateStatus: "idle",
   cityStatus: "idle",
   zipCodeStatus: "idle",
+  slot_avialability: null,
+  slot_avialability_status: "idle",
+  slot_avialability_error: "",
 };
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
@@ -78,6 +81,18 @@ const fetchZipCodeData = createAsyncThunk(
   }
 );
 
+export const fetchSlotAvialability = createAsyncThunk(
+  "api/fetchSlotAvialability",
+  async ({ url, timeSlotDate, doctorId }) => {
+    const response = await customAxios.post(url, {
+      doctor_id: doctorId,
+      time_slot_date: timeSlotDate,
+    });
+    const resData = response.data.data.result;
+    return resData;
+  }
+);
+
 const apiSlice = createSlice({
   name: "api",
   initialState,
@@ -137,6 +152,17 @@ const apiSlice = createSlice({
     builder.addCase(fetchZipCodeData.rejected, (state, action) => {
       state.zipCodeStatus = "failed";
       state.error = action.error.message;
+    });
+    builder.addCase(fetchSlotAvialability.pending, (state) => {
+      state.slot_avialability_status = "loading";
+    });
+    builder.addCase(fetchSlotAvialability.fulfilled, (state, action) => {
+      state.slot_avialability_status = "succeeded";
+      state.slot_avialability = action.payload;
+    });
+    builder.addCase(fetchSlotAvialability.rejected, (state, action) => {
+      state.slot_avialability_status = "failed";
+      state.slot_avialability_error = action.error.message;
     });
   },
 });

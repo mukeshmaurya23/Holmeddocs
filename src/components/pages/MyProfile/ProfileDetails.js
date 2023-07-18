@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import customAxios from "../../../axios/custom";
 import loadingGif from "../../../images/icons/Loader.gif";
+
 const ProfileDetails = () => {
   // const getUserName = localStorage.getItem("userName");
   // const newName = JSON.parse(getUserName);
@@ -108,7 +109,8 @@ const ProfileDetails = () => {
                   Insurance Details
                 </p>
                 <p className="ml-4 text-[#292F33] font-sansRegular text-[13px] font-semibold">
-                  UHS, PN : 763529
+                  {profileData?.insurance_company}, PN:{" "}
+                  {profileData?.policy_number}
                 </p>
               </div>
             </div>

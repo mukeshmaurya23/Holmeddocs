@@ -13,13 +13,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import Spinner from "../../../UI/Spinner";
 import { fetchLocationAreas } from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
+import customAxios from "../../../axios/custom";
 
 const Holistic = () => {
   // const { data: LocSpecd, loading: locLoading } = useFetch(
   //   "/patient/master/state"
   // );
   const locationAreasDispatch = useDispatch();
-
+  const [zip_code_id, setZipCodeId] = useState("");
   const { locationAreas, status } = useSelector((state) => state.data);
   console.log(locationAreas);
   const { data: specialistData, loading: specialityLoading } = useFetch(
@@ -29,9 +30,6 @@ const Holistic = () => {
   const { data: conditionData, loading: conditionLoading } = useFetch(
     "/patient/master/condition"
   );
-  useEffect(() => {
-    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
-  }, [locationAreasDispatch]);
 
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
@@ -64,47 +62,226 @@ const Holistic = () => {
 
   const [selectedItem, setSelectedItem] = useState(null);
   const handleItemClick = (id) => {
-    console.log(id, "id");
     setSelectedItem((prevSelectedItem) =>
       prevSelectedItem === id ? null : id
     );
   };
 
+  // const [selectedItemList, setSelectedItemList] = useState({
+  //   location: "",
+  //   specialitycondition: "",
+  // });
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
-    specialitycondition: "",
+    speciality: "",
+    condition: "",
   });
 
+  console.log(zip_code_id, "selectedItemList Id Zip.......");
+  // const handleSelectedItem = (name, type) => {
+  //   // setSelectedItemList(name);
+
+  //   setSelectedItemList((prevSelectedItemList) => {
+  //     return { ...prevSelectedItemList, [type]: name };
+  //   });
+  // };
+  // const handleSelectedItem = (name, type) => {
+  //   setSelectedItemList((prevSelectedItemList) => {
+  //     let updatedItemList = { ...prevSelectedItemList };
+
+  //     if (type === "specialitycondition") {
+  //       if (updatedItemList.location && !updatedItemList.specialitycondition) {
+  //         updatedItemList = {
+  //           ...updatedItemList,
+  //           location: "",
+  //           specialitycondition: name,
+  //         };
+  //       } else {
+  //         updatedItemList = {
+  //           ...updatedItemList,
+  //           specialitycondition: name,
+  //         };
+  //       }
+  //     } else if (type === "location") {
+  //       updatedItemList = {
+  //         ...updatedItemList,
+  //         location: name,
+  //         specialitycondition: "",
+  //       };
+  //     }
+
+  //     return updatedItemList;
+  //   });
+  // };
   const handleSelectedItem = (name, type) => {
-    // setSelectedItemList(name);
-
     setSelectedItemList((prevSelectedItemList) => {
-      return { ...prevSelectedItemList, [type]: name };
+      let updatedItemList = { ...prevSelectedItemList };
+
+      if (type === "location") {
+        updatedItemList = {
+          ...updatedItemList,
+          location: name,
+          speciality: "",
+          condition: "",
+        };
+      } else if (type === "speciality") {
+        updatedItemList = {
+          ...updatedItemList,
+          speciality: name,
+          condition: "", // Clear the selected condition when selecting a specialty
+        };
+      } else if (type === "condition") {
+        updatedItemList = {
+          ...updatedItemList,
+          speciality: "", // Clear the selected specialty when selecting a condition
+          condition: name,
+        };
+      }
+
+      return updatedItemList;
     });
-  };
-  const handleSearch = () => {
-    //
-    navigate(
-      `/doctor-listing?location=${selectedItemList.location}&speciality=${
-        selectedItemList.speciality
-      }&date=${startDate.toDateString()}`
-    );
+    if (type === "location") {
+      const selectedItem = locationAreas.find((item) => item.city === name);
+      if (selectedItem) {
+        setZipCodeId(selectedItem.zip_code_id);
+      }
+    }
   };
 
+  const handleSearch = () => {
+    let url = "/doctor-listing?";
+
+    if (selectedItemList.location) {
+      url += `location=${selectedItemList.location}_${zip_code_id}&`;
+    }
+    if (selectedItemList.speciality) {
+      url += `speciality=${selectedItemList.speciality}&`;
+    }
+    if (selectedItemList.condition) {
+      url += `condition=${selectedItemList.condition}&`;
+    }
+
+    url += `date=${startDate.toDateString()}`;
+
+    navigate(url);
+  };
+
+  //create a api calls for handleSearcg
+  const [searchLocationItem, setSearchLocationItem] = useState([]);
+
+  // const searchLocationItemData = async (searchValue) => {
+  //   try {
+  //     const response = await customAxios.post("patient/master/areas", {
+  //       name: searchValue,
+  //     });
+  //     const data = response?.data?.data?.result || [];
+  //     setSearchLocationItem(data);
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleLocationSearch = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  useEffect(() => {
+    let isMounted = true; // Add a flag to track if the component is still mounted
+
+    const fetchData = async () => {
+      try {
+        const response = await customAxios.post("patient/master/areas", {
+          name: searchValue,
+        });
+
+        if (isMounted) {
+          const data = response?.data?.data?.result || [];
+          setSearchLocationItem(data);
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (searchValue) {
+      const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
+
+      return () => {
+        clearTimeout(timer);
+        isMounted = false;
+      };
+    }
+  }, [searchValue]);
+
+  // const handleSearch = () => {
+  //   //
+  //   navigate(
+  //     `/doctor-listing?location=${selectedItemList.location}&speciality=${
+  //       selectedItemList.specialitycondition
+  //     }&condition=${selectedItemList.specialitycondition}
+  //     &date=${startDate.toDateString()}`
+  //   );
+  // };
+  // const handleSearch = () => {
+  //   let url = "/doctor-listing?";
+
+  //   if (selectedItemList.location) {
+  //     url += `location=${selectedItemList.location}&`;
+  //   }
+  //   if (selectedItemList.specialitycondition) {
+  //     url += `speciality=${selectedItemList.specialitycondition}&`;
+
+  //   }
+
+  //   url += `date=${startDate.toDateString()}`;
+
+  //   navigate(url);
+  // };
+
+  // const locationItems = () => {
+  //   if (status === "loading") {
+  //     return <Spinner />;
+  //   }
+
+  //   return locationAreas?.map((item) => {
+  //     return (
+  //       <h1
+  //         key={item.id}
+  //         onClick={() =>
+  //           handleSelectedItem(item.city, "location", item.zip_code_id)
+  //         }
+  //         className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+  //       >
+  //         {item.city}
+  //       </h1>
+  //     );
+  //   });
+  // };
   const locationItems = () => {
     if (status === "loading") {
       return <Spinner />;
     }
 
-    return locationAreas?.map((item) => (
-      <h1
-        key={item.id}
-        onClick={() => handleSelectedItem(item.city, "location")}
-        className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
-      >
-        {item.city}
-      </h1>
-    ));
+    if (searchLocationItem.length === 0) {
+      return null; // No search results to display
+    }
+
+    return selectedItemList?.map((item) => {
+      return (
+        <h1
+          key={item.id}
+          onClick={() =>
+            handleSelectedItem(item.city, "location", item.zip_code_id)
+          }
+          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+        >
+          {item.city}
+        </h1>
+      );
+    });
   };
 
   const SpecialityAndCondition = () => {
@@ -121,10 +298,7 @@ const Holistic = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(
-                item.medical_speciality_name,
-                "specialitycondition"
-              )
+              handleSelectedItem(item.medical_speciality_name, "speciality")
             }
             className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
           >
@@ -139,10 +313,7 @@ const Holistic = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(
-                item.medical_condition_name,
-                "specialitycondition"
-              )
+              handleSelectedItem(item.medical_condition_name, "condition")
             }
             className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
           >
@@ -152,6 +323,51 @@ const Holistic = () => {
       </div>
     );
   };
+  // const SpecialityAndCondition = () => {
+  //   if (specialityLoading || conditionLoading) {
+  //     return <Spinner />;
+  //   }
+
+  //   return (
+  //     <div>
+  //       <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
+  //         Specialties
+  //       </h2>
+  //       {specialistData?.data?.result?.map((item) => (
+  //         <h1
+  //           key={item.id}
+  //           onClick={() =>
+  //             handleSelectedItem(
+  //               item.medical_speciality_name,
+  //               "specialitycondition"
+  //             )
+  //           }
+  //           className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+  //         >
+  //           {item.medical_speciality_name}
+  //         </h1>
+  //       ))}
+
+  //       <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
+  //         Conditions
+  //       </h2>
+  //       {conditionData?.data?.result?.map((item) => (
+  //         <h1
+  //           key={item.id}
+  //           onClick={() =>
+  //             handleSelectedItem(
+  //               item.medical_condition_name,
+  //               "specialitycondition"
+  //             )
+  //           }
+  //           className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+  //         >
+  //           {item.medical_condition_name}
+  //         </h1>
+  //       ))}
+  //     </div>
+  //   );
+  // };
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
@@ -202,13 +418,24 @@ const Holistic = () => {
                     className="flex relative justify-between items-center "
                     key={item.id}
                   >
-                    <h2
-                      className={`font-sansBold text-[.8rem] md:text-[1rem] 2xl:text-[1.4rem] text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
-                    >
-                      {selectedItemList[item.id] || item.title}
-                    </h2>
+                    {/* <input
+                      placeholder={item.title}
+                      value={
+                        selectedItemList[item.cId] || selectedItemList[item.id]
+                      }
+                      className={`font-sansBold text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
+                    ></input> */}
+                    <input
+                      placeholder={item.title}
+                      value={
+                        selectedItemList[item.cId] || selectedItemList[item.id]
+                      }
+                      onChange={handleLocationSearch}
+                      className={`font-sansBold text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
+                    />
+
                     <div
-                      className="ml-auto md:ml-5 cursor-pointer"
+                      className=" cursor-pointer"
                       onClick={() => handleItemClick(item.id)}
                     >
                       <img
@@ -232,8 +459,9 @@ const Holistic = () => {
                       >
                         {item.id === "location" && locationItems()}
 
-                        {item.id === "specialitycondition" &&
-                          SpecialityAndCondition()}
+                        {item.id === "speciality" || item.id === "condition"
+                          ? SpecialityAndCondition()
+                          : null}
                       </div>
                     )}
                   </div>

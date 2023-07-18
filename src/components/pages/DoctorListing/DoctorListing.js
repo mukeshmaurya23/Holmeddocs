@@ -271,14 +271,28 @@ const DoctorListing = () => {
       fetchDoctorsData(dayOfWeek);
     }
   }, []);
-  console.log(
-    time_slot_day,
-    "time_slot_day hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-  );
+  // console.log(
+  //   time_slot_day,
+  //   "time_slot_day hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+  // );
 
+  //here handling the search functionality using params
   const navigate = useNavigate();
   const location = useLocation();
+  // searchParams: new URLSearchParams(location.search),
+  // const params = {
+  //   locationParams: searchParams.get("location"),
+  //   zipCode: locationParams?.split("_")[1],
+  //   specialityParams: searchParams.get("speciality"),
+  // }
   const searchParams = new URLSearchParams(location.search);
+
+  const locationParams = searchParams.get("location");
+  const zipCode = locationParams?.split("_")[1];
+
+  const specialityParams = searchParams.get("speciality");
+  console.log(specialityParams, "specialityParams.............");
+  console.log(zipCode, "locationParams.............");
   const { data: filterData } = useFetch("/patient/filters");
 
   const [viewAll, setViewAll] = useState(null);
@@ -315,6 +329,7 @@ const DoctorListing = () => {
     try {
       const response = await customAxios.post("/patient/doctors", {
         time_slot_day: day,
+        serving_areas: zipCode,
       });
       const data = response?.data?.data?.result;
       setDoctorsList(data);
@@ -481,7 +496,7 @@ const DoctorListing = () => {
       // Construct the requestBody object by merging all the filter categories
       const requestBody = newReqBodyFilterData.reduce(
         (acc, cur) => ({ ...acc, ...cur }),
-        { time_slot_day: day }
+        { time_slot_day: day, serving_areas: zipCode }
       );
 
       // Update the searchParams and navigate based on the updated filter data

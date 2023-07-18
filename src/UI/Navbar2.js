@@ -19,32 +19,114 @@ import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
 import { fetchData } from "../store/apiSlice";
 import { fetchLocationAreas, fetchSpecialties } from "../store/LocSpecSlice";
+import useFetch from "../hooks/useFetch";
+
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
   const [isLocationDropdown, setIsLocationDropdown] = useState(false);
   const [isSpecialityDropdown, setIsSpecialityDropdown] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [zip_code_id, setZipCodeId] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
+    condition: "",
   });
-
+  const { data: conditionData, loading: conditionLoading } = useFetch(
+    "/patient/master/condition"
+  );
   const handleSelectedItem = (name, type) => {
-    // setSelectedItemList(name);
     setSelectedItemList((prevSelectedItemList) => {
-      return { ...prevSelectedItemList, [type]: name };
+      let updatedItemList = { ...prevSelectedItemList };
+
+      if (type === "location") {
+        updatedItemList = {
+          ...updatedItemList,
+          location: name,
+          speciality: "",
+          condition: "",
+        };
+      } else if (type === "speciality") {
+        updatedItemList = {
+          ...updatedItemList,
+          speciality: name,
+          condition: "", // Clear the selected condition when selecting a specialty
+        };
+      } else if (type === "condition") {
+        updatedItemList = {
+          ...updatedItemList,
+          speciality: "", // Clear the selected specialty when selecting a condition
+          condition: name,
+        };
+      }
+
+      return updatedItemList;
     });
+    if (type === "location") {
+      const selectedItem = locationAreas.find((item) => item.city === name);
+      if (selectedItem) {
+        setZipCodeId(selectedItem.zip_code_id);
+      }
+    }
+  };
+  const handleSearch = () => {
+    let url = "/doctor-listing?";
+
+    if (selectedItemList.location) {
+      url += `location=${selectedItemList.location}_${zip_code_id}&`;
+    }
+    if (selectedItemList.speciality) {
+      url += `speciality=${selectedItemList.speciality}&`;
+    }
+    if (selectedItemList.condition) {
+      url += `condition=${selectedItemList.condition}&`;
+    }
+
+    url += `date=${startDate.toDateString()}`;
+
+    navigate(url);
+  };
+  const SpecialityAndCondition = () => {
+    return (
+      <div>
+        <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
+          Specialties
+        </h2>
+        {specialties?.map((item) => (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(item.medical_speciality_name, "speciality")
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+          >
+            {item.medical_speciality_name}
+          </h1>
+        ))}
+
+        <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
+          Conditions
+        </h2>
+        {conditionData?.data?.result?.map((item) => (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(item.medical_condition_name, "condition")
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+          >
+            {item.medical_condition_name}
+          </h1>
+        ))}
+      </div>
+    );
   };
   // const handleSelectedItem = (name, type) => {
+  //   // setSelectedItemList(name);
   //   setSelectedItemList((prevSelectedItemList) => {
-  //     const updatedItemList = {
-  //       ...prevSelectedItemList,
-  //       [type]: name,
-  //     };
-
-  //     return updatedItemList;
+  //     return { ...prevSelectedItemList, [type]: name };
   //   });
   // };
 
@@ -84,8 +166,11 @@ const Navbar2 = () => {
 
   //search params getting data from url
   const locationSearchParams = searchParams.get("location");
+  // alert(locationSearchParams);
   console.log(locationSearchParams, "locationSearchParams");
   const specialitySearchParams = searchParams.get("speciality");
+
+  const conditionSearchParams = searchParams.get("condition");
   const dateSearchParams = searchParams.get("date");
 
   useEffect(() => {
@@ -120,25 +205,6 @@ const Navbar2 = () => {
     (state) => state.data
   );
 
-  console.log(specialties, "specialties from navbar2");
-
-  // useEffect(() => {
-  //   locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
-  // }, [locationAreasDispatch]);
-
-  // const handleLocationChange = (e) => {
-  //   const locationValue = e.target.value;
-  //   setSelectedItemList((prevState) => ({
-  //     ...prevState,
-  //     location: locationValue,
-  //   }));
-
-  //   // Update URL parameter for location
-  //   const params = new URLSearchParams(location.search);
-  //   params.set("location", locationValue);
-  //   navigate(`?${params.toString()}`);
-  //   locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
-  // };
   const handleLocationChange = (e) => {
     const locationValue = e.target.value;
     setSelectedItemList((prevState) => ({
@@ -165,8 +231,7 @@ const Navbar2 = () => {
     //i want to get the speciality from the url and set the value to that
 
     const params = new URLSearchParams(location.search);
-    console.log(params, "params");
-    params.set("speciality", specialityValue);
+
     navigate(`?${params.toString()}`);
 
     specialityDispatch(fetchSpecialties("/patient/master/speciality"));
@@ -177,7 +242,6 @@ const Navbar2 = () => {
   };
 
   const location = useLocation();
-  console.log(location.pathname);
 
   const showShadow = location.pathname !== "/";
   const LoginSignup = (
@@ -354,7 +418,7 @@ const Navbar2 = () => {
                     }}
                   /> */}
                   <input
-                    className={`relative py-1 w-[250px] h-[40px] mr-1 text-[#b5b1b1] outline-none border-r  border-[#b5b1b1] pl-2 ${
+                    className={`relative py-1 w-[250px] h-[40px] mr-1 text-[#292F33] font-sansBold outline-none border-r  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[15px]"
                         : "text-[1rem]"
@@ -378,10 +442,14 @@ const Navbar2 = () => {
                     {isLocationDropdown
                       ? locationAreas?.map((item) => (
                           <h6
-                            className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
+                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
                             key={item.id}
                             onClick={() =>
-                              handleSelectedItem(item?.city, "location")
+                              handleSelectedItem(
+                                item.city,
+                                "location",
+                                item.zip_code_id
+                              )
                             }
                           >
                             {item?.city}
@@ -403,15 +471,24 @@ const Navbar2 = () => {
                     }}
                   /> */}
                   <input
-                    className={`relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#b5b1b1] ${
-                      selectedItemList.speciality || specialitySearchParams
+                    className={`relative outline-none border-r font-sansBold border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#292F33] ${
+                      selectedItemList.speciality ||
+                      specialitySearchParams ||
+                      selectedItemList.condition ||
+                      conditionSearchParams
                         ? "text-[15px]"
                         : "text-[1rem]"
                     }`}
-                    placeholder={specialitySearchParams || "Speciality"}
+                    placeholder={
+                      specialitySearchParams ||
+                      conditionSearchParams ||
+                      "Speciality"
+                    }
                     onChange={handleSpecialityChange}
                     ref={specialityRef}
-                    value={selectedItemList.speciality || ""}
+                    value={
+                      selectedItemList.speciality || selectedItemList.condition
+                    }
                     onClick={() => {
                       setIsSpecialityDropdown(!isSpecialityDropdown);
                     }}
@@ -425,24 +502,25 @@ const Navbar2 = () => {
                     }`}
                   >
                     {isSpecialityDropdown
-                      ? specialties?.map((item) => (
-                          <h6
-                            className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
-                            key={item.id}
-                            onClick={() =>
-                              handleSelectedItem(
-                                item?.medical_speciality_name,
-                                "speciality"
-                              )
-                            }
-                          >
-                            {item?.medical_speciality_name}
-                          </h6>
-                        ))
-                      : null}
+                      ? SpecialityAndCondition()
+                      : // ? specialties?.map((item) => (
+                        //     <h6
+                        //       className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
+                        //       key={item.id}
+                        //       onClick={() =>
+                        //         handleSelectedItem(
+                        //           item?.medical_speciality_name,
+                        //           "speciality"
+                        //         )
+                        //       }
+                        //     >
+                        //       {item?.medical_speciality_name}
+                        //     </h6>
+                        //   ))
+                        null}
                   </ul>
                   <input
-                    className="outline-none  py-1 w-[200px] h-[40px] pl-2 text-[#b5b1b1]"
+                    className="outline-none font-sansBold py-1 w-[200px] h-[40px] pl-2 text-[#292F33]"
                     placeholder={dateSearchParams}
                     type="date"
                     onChange={handleDateChange}
@@ -450,6 +528,7 @@ const Navbar2 = () => {
                   />
                 </div>
                 <img
+                  onClick={() => handleSearch()}
                   src={searchIcon}
                   alt="search"
                   className="h-auto w-[50px] bg-verifiCation cursor-pointer rounded-r-md"

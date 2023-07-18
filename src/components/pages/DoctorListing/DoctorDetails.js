@@ -4,7 +4,7 @@ import calendar from "../../../images/Calendar.png";
 import Button from "../../../util/Button";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "../../../store/apiSlice";
+import { fetchData, fetchSlotAvialability } from "../../../store/apiSlice";
 import loadingGif from "../../../images/icons/Loader.gif";
 
 import Modal from "../../../UI/Modal";
@@ -12,14 +12,27 @@ import DatePickerComponent from "../../../UI/DatePicker";
 const DoctorDetails = ({}) => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const timeSlotDispatch = useDispatch();
   const { data: doctorsList, status } = useSelector((state) => state.api);
+  const { slot_avialability, slot_avialability_status } = useSelector(
+    (state) => state.api
+  );
+  console.log(slot_avialability, "slot_avialability");
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
+  // const handleDateSelection = (date, timeSlots) => {
+  //   setSelectedDate(date);
+  //   setAvailableTimeSlots(timeSlots);
+  // };
+
+  console.log(availableTimeSlots, "availableTimeSlots from doctor details");
   const handleDateSelection = (date, timeSlots) => {
     setSelectedDate(date);
+
     setAvailableTimeSlots(timeSlots);
   };
+
   const [modal, setModal] = useState(false);
   const openModal = () => {
     setModal(true);
@@ -31,6 +44,11 @@ const DoctorDetails = ({}) => {
   useEffect(() => {
     dispatch(fetchData("/patient/doctors"));
   }, [dispatch]);
+
+  // useEffect(() => {
+
+  // }, [timeSlotDispatch, formattedDate, id]);
+
   const navigate = useNavigate();
   console.log(doctorsList, "doctorsList from details");
 
@@ -47,6 +65,29 @@ const DoctorDetails = ({}) => {
         })
       : openModal();
 
+  const [startDate, setStartDate] = useState(new Date());
+  const formattedDate = startDate.toISOString().split("T")[0];
+
+  console.log(formattedDate, "startDate........from doctor details");
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (e) => {
+    setIsOpen(!isOpen);
+    setStartDate(e);
+  };
+
+  useEffect(() => {
+    if (startDate) {
+      const formattedDate = startDate.toISOString().split("T")[0];
+      timeSlotDispatch(
+        fetchSlotAvialability({
+          url: "/patient/slot_availability",
+          timeSlotDate: formattedDate,
+          doctorId: parseInt(id),
+        })
+      );
+    }
+  }, [timeSlotDispatch, startDate, id]);
+
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
     const day = date?.getDate();
@@ -54,24 +95,17 @@ const DoctorDetails = ({}) => {
     //const formattedDate = `${day} ${month}`;
     return `${day} ${month}`;
   };
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [isOpen, setIsOpen] = useState(false);
-  const handleChange = (e) => {
-    setIsOpen(!isOpen);
-    setStartDate(e);
-  };
   const handleClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
   return status === "loading" ? (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center">
       <img src={loadingGif} alt="loading" />
     </div>
   ) : (
     <>
-      <h1 className="font-sansBold px-24 py-3 text-[1.4rem] tracking-[3px] mt-[8rem]">
+      <h1 className="font-sansBold px-[3rem] py-3 text-[1.4rem] tracking-[3px] mt-[8rem]">
         Medicine cure diseases but only doctors can cure patients.
       </h1>
       {doctorsList?.data?.result
@@ -79,7 +113,7 @@ const DoctorDetails = ({}) => {
         ?.map((doctor) => {
           return (
             <section className="grid grid-cols-2 mb-10">
-              <div className="mb-8 pl-24 col-span-1">
+              <div className="mb-8 pl-[3rem] col-span-1">
                 <div className="flex py-6 ">
                   <img
                     src="https://hips.hearstapps.com/hmg-prod/images/portrait-of-a-happy-young-doctor-in-his-clinic-royalty-free-image-1661432441.jpg?crop=0.66698xw:1xh;center,top&resize=1200:*"
@@ -150,24 +184,70 @@ const DoctorDetails = ({}) => {
                   </h2>
                   <div className="flex flex-row flex-wrap ">
                     <div className=" py-2  flex flex-row flex-wrap gap-3  ">
-                      {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
-                        <div
-                          key={index}
-                          onClick={() => {
-                            handleDateSelection(timeSlot.date, timeSlot.value);
-                          }}
-                          className="bg-[#F2FCFE] flex justify-center items-center hover:bg-verifiCation hover:text-white rounded cursor-pointer"
-                        >
-                          <p className="px-5  text-xs font-semibold">
-                            <DateComp timeSlotDate={timeSlot?.date} />
-                          </p>
+                      {slot_avialability_status === "loading" ? (
+                        <div className="flex justify-between gap-3">
+                          {Array(7)
+                            .fill("")
+                            .map((_, index) => (
+                              <div
+                                className="h-10  px-7 py-2 w-full bg-gray-400 rounded-md"
+                                key={index}
+                              ></div>
+                            ))}
                         </div>
-                      ))}
+                      ) : slot_avialability ? (
+                        slot_avialability?.InPerson?.map((timeSlot, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              if (timeSlot.value.length > 0) {
+                                handleDateSelection(
+                                  timeSlot.date,
+                                  timeSlot.value
+                                );
+                              }
+                            }}
+                            className={` ${
+                              timeSlot.value.length > 0
+                                ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                : "bg-[#ecf0f1] cursor-not-allowed"
+                            } flex justify-center items-center   rounded `}
+                          >
+                            <p className="px-3 py-2 text-xs font-semibold">
+                              <DateComp timeSlotDate={timeSlot?.date} />
+                            </p>
+                          </div>
+                        ))
+                      ) : (
+                        doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              if (timeSlot.value.length > 0) {
+                                handleDateSelection(
+                                  timeSlot.date,
+                                  timeSlot.value
+                                );
+                              }
+                            }}
+                            className={` ${
+                              timeSlot.value.length > 0
+                                ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                : "bg-[#ecf0f1] cursor-not-allowed"
+                            } flex justify-center items-center   rounded `}
+                          >
+                            <p className="px-3 py-2 text-xs font-semibold">
+                              <DateComp timeSlotDate={timeSlot?.date} />
+                            </p>
+                          </div>
+                        ))
+                      )}
+
                       <div className="relative ">
                         <img
                           src={calendar}
                           alt="calendar"
-                          className="h-auto w-12 cursor-pointer"
+                          className="h-auto w-10 cursor-pointer"
                           onClick={handleClick}
                         />
                         {isOpen && (
@@ -180,21 +260,27 @@ const DoctorDetails = ({}) => {
                         )}
                       </div>
                     </div>
-                    <div className="cursor-pointer">
-                      <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
-                        {selectedDate}
-                      </h2>
-                      <ul className="flex flex-wrap gap-5 py-3">
-                        {availableTimeSlots.map((timeSlot, index) => (
+                  </div>
+                  <div className="cursor-pointer mt-10">
+                    <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
+                      {selectedDate}
+                    </h2>
+                    <ul className="flex flex-wrap gap-5 py-3">
+                      {availableTimeSlots ? (
+                        availableTimeSlots.map((timeSlot, index) => (
                           <li
                             key={index}
                             className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md"
                           >
                             {timeSlot?.to}
                           </li>
-                        ))}
-                      </ul>
-                    </div>
+                        ))
+                      ) : (
+                        <p className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
+                          No Slots Available
+                        </p>
+                      )}
+                    </ul>
                   </div>
                   <div className="flex justify-end mt-4">
                     <Button
@@ -206,7 +292,7 @@ const DoctorDetails = ({}) => {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1 mr-[4rem] py-6 pl-[12rem]">
+              <div className="col-span-1 mr-[4rem] py-6 pl-[10rem]">
                 <h1 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                   About {doctor?.doctor_name}
                 </h1>
