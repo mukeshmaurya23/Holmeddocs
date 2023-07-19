@@ -39,14 +39,14 @@ const Slider = () => {
               <img
                 src={item.image}
                 alt=""
-                className=" h-[120px] md:w-[170px] md:h-[150px] w-[100px] xsm:w-full xsm:h-auto sm:w-[200px] xs:w-[200px] rounded-md"
+                className=" h-[120px] md:w-[170px] md:h-[150px] 2xl:h-[180px] w-[100px] xsm:w-full xsm:h-auto sm:w-[200px] xs:w-[200px] rounded-md"
               />
 
               <div className="flex flex-col mt-5 px-4">
-                <h1 className="text-[#0C0B0B] font-sansBold text-[1.3rem]">
+                <h1 className="text-[#0C0B0B] font-sansBold text-[1.3rem] 2xl:text-[1.5rem]">
                   {item.title}
                 </h1>
-                <h1 className="text-[#0C0B0B] mt-2 font-sansBold text-[.8rem]">
+                <h1 className="text-[#0C0B0B] mt-2 font-sansBold text-[.8rem] 2xl:text-[.95rem]">
                   {item.subtitle}
                 </h1>
                 <p
@@ -54,7 +54,7 @@ const Slider = () => {
                     whiteSpace: "break-spaces",
                     overflow: "hidden",
                   }}
-                  className="text-[#545871] mt-4 text-[.8rem] font-sansRegular"
+                  className="text-[#545871] mt-4 text-[.8rem]  2xl:text-[.95rem] font-sansRegular"
                 >
                   {item.text}
                 </p>

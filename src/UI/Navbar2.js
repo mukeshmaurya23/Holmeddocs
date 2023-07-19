@@ -18,8 +18,10 @@ import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
 import { fetchData } from "../store/apiSlice";
+import calendarSvg from "../images/home/Calendar.svg";
 import { fetchLocationAreas, fetchSpecialties } from "../store/LocSpecSlice";
 import useFetch from "../hooks/useFetch";
+import DatePickerComponent from "./DatePicker";
 
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
@@ -28,16 +30,30 @@ const Navbar2 = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [zip_code_id, setZipCodeId] = useState("");
+  const [speciality_id, setSpecialityId] = useState("");
+  const [condition_id, setConditionId] = useState("");
   const [startDate, setStartDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (e) => {
+    setIsOpen(!isOpen);
+    setStartDate(e);
+  };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
+  };
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
-    condition: "",
+    conditions: "",
   });
   const { data: conditionData, loading: conditionLoading } = useFetch(
     "/patient/master/condition"
   );
-  const handleSelectedItem = (name, type) => {
+  const { specialties, status: specStatus } = useSelector(
+    (state) => state.data
+  );
+  const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
 
@@ -46,19 +62,21 @@ const Navbar2 = () => {
           ...updatedItemList,
           location: name,
           speciality: "",
-          condition: "",
+          conditions: "",
         };
       } else if (type === "speciality") {
         updatedItemList = {
           ...updatedItemList,
           speciality: name,
-          condition: "", // Clear the selected condition when selecting a specialty
+          speciality_id: id,
+          conditions: "", // Clear the selected condition when selecting a specialty
         };
-      } else if (type === "condition") {
+      } else if (type === "conditions") {
         updatedItemList = {
           ...updatedItemList,
           speciality: "", // Clear the selected specialty when selecting a condition
-          condition: name,
+          conditions: name,
+          condition_id: id,
         };
       }
 
@@ -71,6 +89,28 @@ const Navbar2 = () => {
       }
     }
   };
+  useEffect(() => {
+    const selectedSpeciality = specialties?.find(
+      (item) => item.medical_speciality_name === selectedItemList.speciality
+    );
+
+    if (selectedSpeciality) {
+      setSpecialityId(selectedSpeciality.id);
+    } else {
+      setSpecialityId("");
+    }
+  }, [selectedItemList.speciality, specialties]);
+
+  useEffect(() => {
+    const selectedCondition = conditionData?.data?.result?.find(
+      (item) => item.medical_condition_name === selectedItemList.conditions
+    );
+    if (selectedCondition) {
+      setConditionId(selectedCondition.id);
+    } else {
+      setConditionId("");
+    }
+  }, [selectedItemList.conditions, conditionData]);
   const handleSearch = () => {
     let url = "/doctor-listing?";
 
@@ -78,10 +118,10 @@ const Navbar2 = () => {
       url += `location=${selectedItemList.location}_${zip_code_id}&`;
     }
     if (selectedItemList.speciality) {
-      url += `speciality=${selectedItemList.speciality}&`;
+      url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
-    if (selectedItemList.condition) {
-      url += `condition=${selectedItemList.condition}&`;
+    if (selectedItemList.conditions) {
+      url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
     url += `date=${startDate.toDateString()}`;
@@ -98,9 +138,13 @@ const Navbar2 = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(item.medical_speciality_name, "speciality")
+              handleSelectedItem(
+                item.medical_speciality_name,
+                "speciality",
+                item.id
+              )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
           >
             {item.medical_speciality_name}
           </h1>
@@ -113,9 +157,13 @@ const Navbar2 = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(item.medical_condition_name, "condition")
+              handleSelectedItem(
+                item.medical_condition_name,
+                "conditions",
+                item.id
+              )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
           >
             {item.medical_condition_name}
           </h1>
@@ -170,7 +218,7 @@ const Navbar2 = () => {
   console.log(locationSearchParams, "locationSearchParams");
   const specialitySearchParams = searchParams.get("speciality");
 
-  const conditionSearchParams = searchParams.get("condition");
+  const conditionSearchParams = searchParams.get("conditions");
   const dateSearchParams = searchParams.get("date");
 
   useEffect(() => {
@@ -190,20 +238,17 @@ const Navbar2 = () => {
     };
     document.addEventListener("click", handleClickOutside);
     return () => {
+      //aslo clear the value in location and speciality
+
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
-
-  //for location and speciality data
 
   const locationAreasDispatch = useDispatch();
 
   const { locationAreas, status } = useSelector((state) => state.data);
 
   const specialityDispatch = useDispatch();
-  const { specialties, status: specStatus } = useSelector(
-    (state) => state.data
-  );
 
   const handleLocationChange = (e) => {
     const locationValue = e.target.value;
@@ -418,20 +463,20 @@ const Navbar2 = () => {
                     }}
                   /> */}
                   <input
-                    className={`relative py-1 w-[250px] h-[40px] mr-1 text-[#292F33] font-sansBold outline-none border-r  border-[#b5b1b1] pl-2 ${
+                    className={`relative py-1 w-[250px] h-[40px] mr-1  tracking-[1px] outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[15px]"
                         : "text-[1rem]"
                     }`}
-                    placeholder={locationSearchParams || "Location"}
+                    placeholder="Location"
                     onChange={handleLocationChange}
-                    value={selectedItemList.location || ""}
+                    key={locationSearchParams}
                     ref={locAreasRef}
+                    value={selectedItemList.location || ""}
                     onClick={() => {
                       setIsLocationDropdown(!isLocationDropdown);
                     }}
                   />
-
                   <ul
                     className={`${
                       isLocationDropdown
@@ -442,7 +487,7 @@ const Navbar2 = () => {
                     {isLocationDropdown
                       ? locationAreas?.map((item) => (
                           <h6
-                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
                             key={item.id}
                             onClick={() =>
                               handleSelectedItem(
@@ -457,7 +502,6 @@ const Navbar2 = () => {
                         ))
                       : null}
                   </ul>
-
                   {/* <input
                     className="relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] text-[1.2rem] h-[40px] pl-2 text-[#b5b1b1]"
                     placeholder={specialitySearchParams || "Speciality"}
@@ -471,29 +515,24 @@ const Navbar2 = () => {
                     }}
                   /> */}
                   <input
-                    className={`relative outline-none border-r font-sansBold border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#292F33] ${
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#292F33] ${
                       selectedItemList.speciality ||
                       specialitySearchParams ||
-                      selectedItemList.condition ||
+                      selectedItemList.conditions ||
                       conditionSearchParams
                         ? "text-[15px]"
                         : "text-[1rem]"
                     }`}
-                    placeholder={
-                      specialitySearchParams ||
-                      conditionSearchParams ||
-                      "Speciality"
-                    }
+                    placeholder={"Speciality"}
                     onChange={handleSpecialityChange}
                     ref={specialityRef}
                     value={
-                      selectedItemList.speciality || selectedItemList.condition
+                      selectedItemList.speciality || selectedItemList.conditions
                     }
                     onClick={() => {
                       setIsSpecialityDropdown(!isSpecialityDropdown);
                     }}
                   />
-
                   <ul
                     className={`${
                       isSpecialityDropdown
@@ -519,13 +558,34 @@ const Navbar2 = () => {
                         //   ))
                         null}
                   </ul>
-                  <input
+                  {/* <input
                     className="outline-none font-sansBold py-1 w-[200px] h-[40px] pl-2 text-[#292F33]"
                     placeholder={dateSearchParams}
-                    type="date"
+                    type="text"
                     onChange={handleDateChange}
                     value={dateSearchParams || ""}
+                  /> */}{" "}
+                  <img
+                    onChange={handleDateChange}
+                    src={calendarSvg}
+                    alt=""
+                    onClick={handleClick}
+                    className="w-6 2xl:w-9 h-auto object-contain cursor-pointer ml-5 "
                   />
+                  <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[1.2rem] text-[#636677] px-6 font-sansBold">
+                    {startDate &&
+                    startDate.toDateString() === new Date().toDateString()
+                      ? "Today"
+                      : startDate?.toLocaleDateString()}
+                  </span>
+                  {isOpen && (
+                    <div className="absolute top-[6rem] right-10 z-[100] h-full">
+                      <DatePickerComponent
+                        handleChange={handleChange}
+                        startDate={startDate}
+                      />
+                    </div>
+                  )}
                 </div>
                 <img
                   onClick={() => handleSearch()}

@@ -20,8 +20,8 @@ const DoctorsList = ({ doctorsList, status }) => {
     //const formattedDate = `${day} ${month}`;
     return (
       <>
-        <div className="flex flex-col gap-2">
-          <h3 className="font-sansRegular text-[14px]">{day}</h3>
+        <div className="flex flex-col  ">
+          <h3 className="text-[14px] font-sansSemibold">{day}</h3>
           <h3 className="text-[14px]">{month}</h3>
         </div>
       </>
@@ -90,10 +90,17 @@ const DoctorsList = ({ doctorsList, status }) => {
             <h2 className="px-3 font-Henriette text-[1.2rem] cursor-pointer">
               Availability
             </h2>
-            <div className="flex flex-row flex-wrap gap-4 px-4 py-3 cursor-pointer">
+            <div className="flex flex-row flex-wrap gap-3 mt-5 cursor-pointer ml-6">
               {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
-                <div key={index} className="bg-[#F2FCFE]">
-                  <p className="px-3 text-[14px]">
+                <div
+                  key={index}
+                  className={` ${
+                    timeSlot.value.length > 0
+                      ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                      : "bg-[#ecf0f1] cursor-not-allowed"
+                  }    rounded p-1`}
+                >
+                  <p className="px-3 text-[12px] ">
                     {timeSlot?.day?.slice(0, 3)}
                   </p>
                   <p className="px-3">

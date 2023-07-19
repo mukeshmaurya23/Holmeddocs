@@ -21,6 +21,8 @@ const Holistic = () => {
   // );
   const locationAreasDispatch = useDispatch();
   const [zip_code_id, setZipCodeId] = useState("");
+  const [speciality_id, setSpecialityId] = useState("");
+  const [condition_id, setConditionId] = useState("");
   const { locationAreas, status } = useSelector((state) => state.data);
   console.log(locationAreas);
   const { data: specialistData, loading: specialityLoading } = useFetch(
@@ -56,6 +58,11 @@ const Holistic = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
+
+  useEffect(() => {
+    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+  }, [locationAreasDispatch]);
+
   const handleDateChange = (date) => {
     setStartDate(date);
   };
@@ -74,10 +81,9 @@ const Holistic = () => {
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
-    condition: "",
+    conditions: "",
   });
 
-  console.log(zip_code_id, "selectedItemList Id Zip.......");
   // const handleSelectedItem = (name, type) => {
   //   // setSelectedItemList(name);
 
@@ -113,7 +119,7 @@ const Holistic = () => {
   //     return updatedItemList;
   //   });
   // };
-  const handleSelectedItem = (name, type) => {
+  const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
 
@@ -122,19 +128,22 @@ const Holistic = () => {
           ...updatedItemList,
           location: name,
           speciality: "",
-          condition: "",
+          conditions: "",
         };
       } else if (type === "speciality") {
         updatedItemList = {
           ...updatedItemList,
           speciality: name,
-          condition: "", // Clear the selected condition when selecting a specialty
+          speciality_id: id,
+          conditions: "", // Clear the selected conditions when selecting a specialty
         };
-      } else if (type === "condition") {
+      } else if (type === "conditions") {
         updatedItemList = {
           ...updatedItemList,
-          speciality: "", // Clear the selected specialty when selecting a condition
-          condition: name,
+
+          conditions: name,
+          condition_id: id,
+          speciality: "", // Clear the selected specialty when selecting a conditions
         };
       }
 
@@ -147,6 +156,28 @@ const Holistic = () => {
       }
     }
   };
+  useEffect(() => {
+    const selectedSpeciality = specialistData?.data?.result?.find(
+      (item) => item.medical_speciality_name === selectedItemList.speciality
+    );
+
+    if (selectedSpeciality) {
+      setSpecialityId(selectedSpeciality.id);
+    } else {
+      setSpecialityId("");
+    }
+  }, [selectedItemList.speciality, specialistData]);
+
+  useEffect(() => {
+    const selectedCondition = conditionData?.data?.result?.find(
+      (item) => item.medical_condition_name === selectedItemList.conditions
+    );
+    if (selectedCondition) {
+      setConditionId(selectedCondition.id);
+    } else {
+      setConditionId("");
+    }
+  }, [selectedItemList.conditions, conditionData]);
 
   const handleSearch = () => {
     let url = "/doctor-listing?";
@@ -155,10 +186,10 @@ const Holistic = () => {
       url += `location=${selectedItemList.location}_${zip_code_id}&`;
     }
     if (selectedItemList.speciality) {
-      url += `speciality=${selectedItemList.speciality}&`;
+      url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
-    if (selectedItemList.condition) {
-      url += `condition=${selectedItemList.condition}&`;
+    if (selectedItemList.conditions) {
+      url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
     url += `date=${startDate.toDateString()}`;
@@ -167,61 +198,61 @@ const Holistic = () => {
   };
 
   //create a api calls for handleSearcg
-  const [searchLocationItem, setSearchLocationItem] = useState([]);
+  // const [searchLocationItem, setSearchLocationItem] = useState([]);
 
-  // const searchLocationItemData = async (searchValue) => {
-  //   try {
-  //     const response = await customAxios.post("patient/master/areas", {
-  //       name: searchValue,
-  //     });
-  //     const data = response?.data?.data?.result || [];
-  //     setSearchLocationItem(data);
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+  // // const searchLocationItemData = async (searchValue) => {
+  // //   try {
+  // //     const response = await customAxios.post("patient/master/areas", {
+  // //       name: searchValue,
+  // //     });
+  // //     const data = response?.data?.data?.result || [];
+  // //     setSearchLocationItem(data);
+  // //     console.log(data);
+  // //   } catch (error) {
+  // //     console.log(error);
+  // //   }
+  // // };
+  // const [searchValue, setSearchValue] = useState("");
+
+  // const handleLocationSearch = (e) => {
+  //   setSearchValue(e.target.value);
   // };
-  const [searchValue, setSearchValue] = useState("");
 
-  const handleLocationSearch = (e) => {
-    setSearchValue(e.target.value);
-  };
+  // useEffect(() => {
+  //   let isMounted = true; // Add a flag to track if the component is still mounted
 
-  useEffect(() => {
-    let isMounted = true; // Add a flag to track if the component is still mounted
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await customAxios.post("patient/master/areas", {
+  //         name: searchValue,
+  //       });
 
-    const fetchData = async () => {
-      try {
-        const response = await customAxios.post("patient/master/areas", {
-          name: searchValue,
-        });
+  //       if (isMounted) {
+  //         const data = response?.data?.data?.result || [];
+  //         setSearchLocationItem(data);
+  //         console.log(data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-        if (isMounted) {
-          const data = response?.data?.data?.result || [];
-          setSearchLocationItem(data);
-          console.log(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //   if (searchValue) {
+  //     const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
 
-    if (searchValue) {
-      const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
-
-      return () => {
-        clearTimeout(timer);
-        isMounted = false;
-      };
-    }
-  }, [searchValue]);
+  //     return () => {
+  //       clearTimeout(timer);
+  //       isMounted = false;
+  //     };
+  //   }
+  // }, [searchValue]);
 
   // const handleSearch = () => {
   //   //
   //   navigate(
   //     `/doctor-listing?location=${selectedItemList.location}&speciality=${
   //       selectedItemList.specialitycondition
-  //     }&condition=${selectedItemList.specialitycondition}
+  //     }&conditions=${selectedItemList.specialitycondition}
   //     &date=${startDate.toDateString()}`
   //   );
   // };
@@ -265,18 +296,14 @@ const Holistic = () => {
       return <Spinner />;
     }
 
-    if (searchLocationItem.length === 0) {
-      return null; // No search results to display
-    }
-
-    return selectedItemList?.map((item) => {
+    return locationAreas?.map((item) => {
       return (
         <h1
           key={item.id}
           onClick={() =>
             handleSelectedItem(item.city, "location", item.zip_code_id)
           }
-          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
         >
           {item.city}
         </h1>
@@ -298,9 +325,13 @@ const Holistic = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(item.medical_speciality_name, "speciality")
+              handleSelectedItem(
+                item.medical_speciality_name,
+                "speciality",
+                item.id
+              )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
           >
             {item.medical_speciality_name}
           </h1>
@@ -313,9 +344,13 @@ const Holistic = () => {
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(item.medical_condition_name, "condition")
+              handleSelectedItem(
+                item.medical_condition_name,
+                "conditions",
+                item.id
+              )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-[#292F33]  tracking-[1px]"
           >
             {item.medical_condition_name}
           </h1>
@@ -372,7 +407,7 @@ const Holistic = () => {
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
         <div className="mx-auto mt-[3rem] md:mt-[30vh]">
-          <h1 className="flex font-poppinsMedium justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
+          <h1 className="flex font-sansRegular justify-center font-medium items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem]  sm:tracking-[4px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
             {/* <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  space-y-2">
           <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] "> */}
             <span>HOLISTIC</span>
@@ -430,8 +465,7 @@ const Holistic = () => {
                       value={
                         selectedItemList[item.cId] || selectedItemList[item.id]
                       }
-                      onChange={handleLocationSearch}
-                      className={`font-sansBold text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
+                      className={`font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText`}
                     />
 
                     <div
@@ -443,7 +477,7 @@ const Holistic = () => {
                         alt=""
                         className={`${
                           selectedItem === item.id ? "rotate-180" : ""
-                        } cursor-pointer h-3 w-3`}
+                        } cursor-pointer h-3 w-3 mr-8`}
                       />
                     </div>
 
@@ -459,7 +493,7 @@ const Holistic = () => {
                       >
                         {item.id === "location" && locationItems()}
 
-                        {item.id === "speciality" || item.id === "condition"
+                        {item.id === "speciality" || item.id === "conditions"
                           ? SpecialityAndCondition()
                           : null}
                       </div>
@@ -482,7 +516,7 @@ const Holistic = () => {
                   onClick={handleClick}
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[1.2rem] text-[#636677] mr-20 font-sansBold">
+                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#000000] mr-20 font-semibold">
                   {startDate &&
                   startDate.toDateString() === new Date().toDateString()
                     ? "Today"
@@ -490,7 +524,7 @@ const Holistic = () => {
                 </span>
 
                 {isOpen && (
-                  <div className="absolute top-[6rem] right-10 z-[100] h-full">
+                  <div className="absolute top-[4.4rem] right-10 z-[100] h-full">
                     <DatePickerComponent
                       handleChange={handleChange}
                       startDate={startDate}

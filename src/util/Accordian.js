@@ -276,7 +276,10 @@ const Accordion = ({
           } flex relative  w-full items-center justify-between  `}
           key={item.id}
         >
-          <div className="flex justify-between items-center flex-1">
+          <div
+            className="flex justify-between items-center flex-1 cursor-pointer"
+            onClick={() => handleItemClick(item.id)}
+          >
             {" "}
             <h2
               className={`font-sansBold 2xl:text-[1.2rem] lg:text-[1rem] text-[.9rem] tracking-[2px] ${
@@ -288,7 +291,6 @@ const Accordion = ({
             <img
               src={image}
               alt=""
-              onClick={() => handleItemClick(item.id)}
               className={`${
                 selectedItem === item.id ? "rotate-180" : ""
               } cursor-pointer h-3 w-3 `}

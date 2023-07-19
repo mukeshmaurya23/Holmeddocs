@@ -42,7 +42,11 @@ const Pagination = (props) => {
   }
   // let lastPage = paginationRange[paginationRange?.length - 1];
   return (
-    <ul className={`flex justify-center items-center m-0 p-0`}>
+    <ul
+      className={`flex justify-center items-center m-0 p-0 ${
+        totalCount === 0 ? "hidden" : "block"
+      }`}
+    >
       <li
         className={`inline-flex items-center justify-center cursor-pointer p-2 m-1 rounded-md ${
           currentPage === 1 ? "opacity-50 pointer-events-none" : ""

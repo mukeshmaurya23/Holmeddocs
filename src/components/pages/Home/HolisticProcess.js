@@ -8,7 +8,7 @@ const HolisticProcess = () => {
     <>
       <div className="flex mb-10 flex-col lg:flex-row  xl:flex-row md:justify-center md:items-center max-w-full">
         <div>
-          <h2 className="md:px-24 sm:px-20 text-[#292F33] tracking-[4px] mb-4 font-sansBold text-[1.4rem] md:text-[2.4rem] sm:text-[2.2] sm:text-center xs:text-center xsm:text-center ">
+          <h2 className="md:px-16 sm:px-16 font-sansRegular font-semibold text-[#292F33] tracking-[4px] mb-4  text-[1.4rem] md:text-[2.5rem] sm:text-[2.2] sm:text-center xs:text-center xsm:text-center ">
             Our Process
           </h2>
           <img

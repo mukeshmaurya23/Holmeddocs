@@ -51,7 +51,7 @@ const Specialistic = () => {
     <>
       <div className=" bg-[#ffffff]">
         <div className="text-center  mt-10">
-          <p className="font-sansBold tracking-[5px] md:text-[30px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.2rem] 2xl:tracking-[6px] text-[#292F33]">
+          <p className="font-sansRegular font-semibold tracking-[5px] md:text-[40px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.8rem] 2xl:tracking-[6px] text-[#292F33]">
             Holistic fields
           </p>
           <div className="flex mt-7">

@@ -11,7 +11,9 @@ import { useFormik } from "formik";
 import { registerSchema } from "../../schema/formValidation";
 import customAxios from "../../axios/custom";
 import { useNavigate } from "react-router-dom";
+import calendarSvg from "../../images/home/Calendar.svg";
 import { useSnackbar } from "notistack";
+import DatePickerComponent from "../../UI/DatePicker";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -26,7 +28,19 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const handleChange = (e) => {
+    setIsOpen(!isOpen);
+    setStartDate(e);
+  };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
+  };
+  const handleDateChange = (date) => {
+    setStartDate(date);
+  };
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -202,7 +216,7 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col w-1/2 p-[10px]">
+                      <div className="flex flex-col w-1/2 p-[10px] relative">
                         <Label
                           htmlFor="dob"
                           className="font-sansRegular text-formLabel text-sm"
@@ -216,7 +230,6 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.dob}
                           onBlur={formik.handleBlur}
-                          placeholder="MM/DD/YYYY"
                           className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
@@ -226,6 +239,31 @@ const Register = () => {
                             <>&nbsp;</>
                           )}
                         </div>
+                        <div className="absolute flex flex-row-reverse top-10 justify-evenly ">
+                          <img
+                            onChange={handleDateChange}
+                            src={calendarSvg}
+                            alt=""
+                            onClick={handleClick}
+                            className="w-5 2xl:w-9 h-auto object-contain cursor-pointer   "
+                          />
+                          <span className="outline-none px-3 text-[.7rem]  sm:text-[1rem] 2xl:text-[1.2rem] text-formLabel">
+                            {startDate &&
+                            startDate.toDateString() ===
+                              new Date().toDateString()
+                              ? "Today"
+                              : startDate?.toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        {isOpen && (
+                          <div className="absolute top-[4.4rem] right-10 z-[100] h-full">
+                            <DatePickerComponent
+                              handleChange={handleChange}
+                              startDate={startDate}
+                            />
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-col  w-1/2 p-[10px] relative">
                         <Label
