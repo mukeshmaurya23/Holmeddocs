@@ -17,11 +17,12 @@ import cross from "../images/icons/Cross.png";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
-import { fetchData } from "../store/apiSlice";
+
 import calendarSvg from "../images/home/Calendar.svg";
 import { fetchLocationAreas, fetchSpecialties } from "../store/LocSpecSlice";
 import useFetch from "../hooks/useFetch";
 import DatePickerComponent from "./DatePicker";
+import { searchLocation } from "../store/searchSlice";
 
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
@@ -53,6 +54,30 @@ const Navbar2 = () => {
   const { specialties, status: specStatus } = useSelector(
     (state) => state.data
   );
+
+  const [searchValue, setSearchValue] = useState("");
+  const locationSearchResults = useSelector(
+    (state) => state.search.locationSearchResults
+  );
+  const locationSearchDispatch = useDispatch();
+
+  const handleLocationSearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    selectedItemList.location = value;
+  };
+
+  useEffect(() => {
+    //console.log(searchValue, "searchValue");
+    const timer = setTimeout(() => {
+      if (searchValue) {
+        locationSearchDispatch(searchLocation(searchValue));
+      }
+    }, 300);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchValue]);
   const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
@@ -83,7 +108,9 @@ const Navbar2 = () => {
       return updatedItemList;
     });
     if (type === "location") {
-      const selectedItem = locationAreas.find((item) => item.city === name);
+      const selectedItem = locationSearchResults.find(
+        (item) => item.city === name
+      );
       if (selectedItem) {
         setZipCodeId(selectedItem.zip_code_id);
       }
@@ -469,10 +496,10 @@ const Navbar2 = () => {
                         : "text-[1rem]"
                     }`}
                     placeholder="Location"
-                    onChange={handleLocationChange}
+                    onChange={handleLocationSearch}
                     key={locationSearchParams}
                     ref={locAreasRef}
-                    value={selectedItemList.location || ""}
+                    value={selectedItemList.location || searchValue}
                     onClick={() => {
                       setIsLocationDropdown(!isLocationDropdown);
                     }}
@@ -485,7 +512,7 @@ const Navbar2 = () => {
                     }`}
                   >
                     {isLocationDropdown
-                      ? locationAreas?.map((item) => (
+                      ? locationSearchResults?.map((item) => (
                           <h6
                             className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
                             key={item.id}
@@ -570,16 +597,16 @@ const Navbar2 = () => {
                     src={calendarSvg}
                     alt=""
                     onClick={handleClick}
-                    className="w-6 2xl:w-9 h-auto object-contain cursor-pointer ml-5 "
+                    className="w-6 2xl:w-6 h-auto object-contain cursor-pointer ml-5 "
                   />
-                  <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[1.2rem] text-[#636677] px-6 font-sansBold">
+                  <span className="outline-none px-6 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
                     {startDate &&
                     startDate.toDateString() === new Date().toDateString()
                       ? "Today"
                       : startDate?.toLocaleDateString()}
                   </span>
                   {isOpen && (
-                    <div className="absolute top-[6rem] right-10 z-[100] h-full">
+                    <div className="absolute top-[2.8rem] right-0 z-[100] h-full">
                       <DatePickerComponent
                         handleChange={handleChange}
                         startDate={startDate}

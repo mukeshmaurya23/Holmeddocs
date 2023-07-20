@@ -343,6 +343,11 @@ const DoctorListing = () => {
       const checked = e.target.checked;
       setShouldCallAPI(false);
       const id = data.id;
+      const name =
+        data.medical_speciality_name ||
+        data.medical_condition_name ||
+        data.insurance_company_name;
+
       const appointment_type = data;
 
       if (checked) {
@@ -393,7 +398,9 @@ const DoctorListing = () => {
           filterTitle,
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
-            : [...checkedIds, id] /**data.medical_condition_name ||
+            : [
+                ` ${name}_${id}`,
+              ] /**data.medical_condition_name || [...checkedIds,
             data.medical_speciality_name ||
             data.insurance_company_name || */
         );

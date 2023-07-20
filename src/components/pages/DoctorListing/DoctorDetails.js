@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Footer from "../../../UI/Footer";
 import calendar from "../../../images/Calendar.png";
 import Button from "../../../util/Button";
@@ -6,9 +6,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData, fetchSlotAvialability } from "../../../store/apiSlice";
 import loadingGif from "../../../images/icons/Loader.gif";
-
+import TimeFormatter from "../../../util/TimeFormatter";
 import Modal from "../../../UI/Modal";
 import DatePickerComponent from "../../../UI/DatePicker";
+
 const DoctorDetails = ({}) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -17,21 +18,52 @@ const DoctorDetails = ({}) => {
   const { slot_avialability, slot_avialability_status } = useSelector(
     (state) => state.api
   );
+
   console.log(slot_avialability, "slot_avialability");
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
-  // const handleDateSelection = (date, timeSlots) => {
-  //   setSelectedDate(date);
-  //   setAvailableTimeSlots(timeSlots);
-  // };
+  const [selectDateTime, setSelectDateTime] = useState({
+    date: "",
+    time: "",
+  });
 
-  console.log(availableTimeSlots, "availableTimeSlots from doctor details");
+  const [error, setError] = useState({
+    date: "",
+    time: "",
+  });
+  console.log(selectDateTime, "selectDateTime------------------");
+  const calendarRef = useRef(null);
+
   const handleDateSelection = (date, timeSlots) => {
-    setSelectedDate(date);
+    const dateObj = new Date(date);
+    const day = dateObj?.getDate();
+    const month = dateObj?.toLocaleString("en-US", { month: "short" });
+    const year = dateObj?.getFullYear();
+    const formattedDate = `${day} ${month}, ${year}`;
+    setSelectedDate(formattedDate);
+    setSelectDateTime((prev) => ({ ...prev, date: date, time: null }));
+    setError((prev) => ({ ...prev, date: "" }));
 
     setAvailableTimeSlots(timeSlots);
   };
+  const handleTimeSelection = (time) => {
+    setSelectDateTime((prev) => ({ ...prev, time }));
+    setError((prev) => ({ ...prev, time: "" }));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!calendarRef?.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [calendarRef]);
 
   const [modal, setModal] = useState(false);
   const openModal = () => {
@@ -43,7 +75,7 @@ const DoctorDetails = ({}) => {
 
   useEffect(() => {
     dispatch(fetchData("/patient/doctors"));
-  }, [dispatch]);
+  }, []);
 
   // useEffect(() => {
 
@@ -54,16 +86,26 @@ const DoctorDetails = ({}) => {
 
   const isLoggedIn = useSelector((state) => state.login.remember_token);
 
-  const handleAppointment = () =>
-    isLoggedIn
+  const handleAppointment = () => {
+    if (!selectDateTime.date || !selectDateTime.time) {
+      setError({
+        date: selectDateTime.date ? "" : "Please select date and time",
+        time: selectDateTime.time ? "" : "Please select time",
+      });
+      return;
+    }
+    return isLoggedIn
       ? navigate("/book-appointment", {
           state: {
             doctor: doctorsList?.data?.result?.filter(
               (doctor) => doctor.id == id
             ),
+            date: selectDateTime.date,
+            time: selectDateTime.time,
           },
         })
       : openModal();
+  };
 
   const [startDate, setStartDate] = useState(new Date());
   const formattedDate = startDate.toISOString().split("T")[0];
@@ -207,13 +249,18 @@ const DoctorDetails = ({}) => {
                                 );
                               }
                             }}
-                            className={` ${
+                            className={`${
                               timeSlot.value.length > 0
                                 ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
                                 : "bg-[#ecf0f1] cursor-not-allowed"
-                            } flex justify-center items-center   rounded `}
+                            } flex justify-center items-center rounded
+                            ${
+                              selectDateTime.date === timeSlot.date &&
+                              "bg-verifiCation text-white"
+                            }
+                            `}
                           >
-                            <p className="px-3 py-2 text-xs font-semibold">
+                            <p className={`px-3 py-2 text-xs font-semibold  `}>
                               <DateComp timeSlotDate={timeSlot?.date} />
                             </p>
                           </div>
@@ -247,6 +294,7 @@ const DoctorDetails = ({}) => {
                         <img
                           src={calendar}
                           alt="calendar"
+                          ref={calendarRef}
                           className="h-auto w-10 cursor-pointer"
                           onClick={handleClick}
                         />
@@ -261,25 +309,36 @@ const DoctorDetails = ({}) => {
                       </div>
                     </div>
                   </div>
+                  <div className="flex  mt-5">
+                    {error.date ? (
+                      <p className="text-red-600 text-sm">{error.date}</p>
+                    ) : error.time ? (
+                      <p className="text-red-600 text-sm"> {error.time}</p>
+                    ) : null}
+                  </div>
                   <div className="cursor-pointer mt-10">
                     <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                       {selectedDate}
                     </h2>
                     <ul className="flex flex-wrap gap-5 py-3">
-                      {availableTimeSlots ? (
+                      {availableTimeSlots &&
                         availableTimeSlots.map((timeSlot, index) => (
                           <li
                             key={index}
-                            className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md"
+                            className={`${
+                              selectDateTime.time === timeSlot.to
+                                ? "bg-verifiCation hover:bg-green-dark cursor-pointer text-white"
+                                : "bg-[#dcf9ff] hover:bg-verifiCation hover:text-white cursor-pointer"
+                            } font-sansRegular py-2 px-5 text-[13px] rounded-md`}
+                            onClick={() => {
+                              if (timeSlot.to) {
+                                handleTimeSelection(timeSlot.to);
+                              }
+                            }}
                           >
-                            {timeSlot?.to}
+                            <TimeFormatter time={timeSlot.to} />
                           </li>
-                        ))
-                      ) : (
-                        <p className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md">
-                          No Slots Available
-                        </p>
-                      )}
+                        ))}
                     </ul>
                   </div>
                   <div className="flex justify-end mt-4">
@@ -305,13 +364,16 @@ const DoctorDetails = ({}) => {
                 <p className="max-w-[280px] py-2 text-[13px] font-semibold text-[#292F33]">
                   {doctor?.country?.[0]}
                 </p>
-                <iframe
+                {/* <iframe
                   className="mt-5 h-60 w-full"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15080.731037074034!2d72.87535869905422!3d19.099636713754155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8773cb2f051%3A0x40576ac944236b34!2sSaki%20Naka%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1686410711545!5m2!1sen!2sin"
                   allowfullscreen=""
                   loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                ></iframe> */}
+                <p className="py-5 text-[13px] text-center font-semibold text-[#292F33]">
+                  Location Does Not Exit
+                </p>
               </div>
             </section>
           );

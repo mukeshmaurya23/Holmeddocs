@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Input from "../../../util/Input";
+import { useDispatch, useSelector } from "react-redux";
 import Label from "../../../util/Label";
 import greenArrowDown from "../../../images/GreenArrowDown.png";
 import Button from "../../../util/Button";
 import greenArrowLeft from "../../../images/GreenArrowLeft.png";
 import greenArrowRight from "../../../images/GreenArrowRight.png";
-
+import TimeFormatter from "../../../util/TimeFormatter";
+import { book_appointment_DoctorData } from "../../../store/apiSlice";
 const BookAppointmentStep1 = ({ handleNextStep }) => {
   const location = useLocation();
-  console.log(location.state.doctor, "location.state");
 
+  const {
+    bookAppointmentDoctorData,
+    bookAppointmentDoctorDataStatus,
+    bookAppointmentDoctorDataError,
+  } = useSelector((state) => state.api);
+  console.log(bookAppointmentDoctorData, "bookAppointmentDoctorData");
+  const bookDoctorAppointmentDispatch = useDispatch();
+
+  useEffect(() => {
+    bookDoctorAppointmentDispatch(
+      book_appointment_DoctorData(location?.state?.doctor?.[0]?.id)
+    );
+  }, [bookDoctorAppointmentDispatch]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+  // const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
   const handleDateSelection = (date, timeSlots) => {
     setSelectedDate(date);
-    setAvailableTimeSlots(timeSlots);
+    //setAvailableTimeSlots(timeSlots);
   };
 
   const [isActive, setIsActive] = useState(false);
@@ -67,7 +81,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 />
                 <div className="flex flex-col px-5">
                   <h2 className="text-2xl   text-[1.2rem] font-Henriette font-semibold tracking-[2px]">
-                    {item?.doctor_name}
+                    {item?.doctor_name} {item?.id}
                   </h2>
                   <p className="text-[.86rem] text-[#292F33] py-1 font-sansRegular">
                     {item?.medical_speciality} , {item?.country}
@@ -85,7 +99,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   <Input
                     type="text"
                     placeholder="Select your Insurance"
-                    className="relative outline-none rounded-md px-3 text-[.7rem]  text-[#636677] font-sansRegular"
+                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677] font-sansRegular"
                   />
 
                   <img
@@ -101,7 +115,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   <Input
                     type="text"
                     placeholder="Select condition"
-                    className="relative outline-none rounded-md px-3 text-[.7rem]  text-[#636677]  font-sansRegular"
+                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677]  font-sansRegular"
                   />
 
                   <img
@@ -113,7 +127,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-8">
                   Have you visited before?
                 </Label>
-                <div className="border border-verifiCation w-full py-[4px] rounded-sm flex justify-evenly ">
+                <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
                   <Button
                     onClick={toggleButtonHandler}
                     className={`${
@@ -138,7 +152,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-4">
                   Type of Visit
                 </Label>
-                <div className="border border-verifiCation w-full py-[4px] rounded-sm flex justify-evenly ">
+                <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
                   <Button
                     onClick={toggleButtonHandlerAppointmentType}
                     className={`${
@@ -169,7 +183,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     type="text"
                     placeholder="Select condition"
                     value={item?.country?.[0]}
-                    className="relative outline-none rounded-md px-3 text-[.7rem]  text-[#757993]  font-sansRegular"
+                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#757993]  font-sansRegular"
                   />
 
                   <img
@@ -206,12 +220,13 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     <div
                       key={index}
                       className={`${
-                        selectedDate === timeSlot.date
+                        location.state.date === timeSlot.date
                           ? "bg-verifiCation border-verifiCation text-white rounded-md"
-                          : ""
+                          : "cursor-not-allowed disabled:opacity-50 "
                       }`}
                       onClick={() => {
-                        handleDateSelection(timeSlot?.date, timeSlot.value);
+                        location.state.date === timeSlot.date &&
+                          handleDateSelection(timeSlot?.date, timeSlot.value);
                       }}
                     >
                       <p className="px-3 text-[14px]">
@@ -226,15 +241,22 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     <img src={greenArrowRight} alt="" className="w-2 h-auto " />
                   </div>
                 </div>
+                <p>{selectedDate}</p>
                 <ul className="flex flex-row flex-wrap gap-4 items-center py-7 cursor-pointer">
-                  {availableTimeSlots.map((timeSlot, index) => (
-                    <li
-                      key={index}
-                      className="font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE] hover:bg-verifiCation hover:text-white rounded-md"
-                    >
-                      {timeSlot?.to}
-                    </li>
-                  ))}
+                  {item?.time_slots?.InPerson?.map((timeSlot, index) =>
+                    timeSlot?.value?.map((timeSlot, index) => (
+                      <li
+                        key={index}
+                        className={` ${
+                          location.state.time === timeSlot.to
+                            ? "bg-verifiCation text-white"
+                            : ""
+                        } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
+                      >
+                        <TimeFormatter time={timeSlot?.to} />
+                      </li>
+                    ))
+                  )}
                 </ul>
 
                 <div className="flex mt-8">

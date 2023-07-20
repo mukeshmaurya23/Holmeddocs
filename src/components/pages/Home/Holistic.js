@@ -4,21 +4,17 @@ import svgSearch from "../../../images/home/SearchBarIcon.svg";
 import calendarSvg from "../../../images/home/Calendar.svg";
 import grayDropDown from "../../../images/Login/GrayDropdown.png";
 
-import { LocSpec } from "../../../constant";
-import { useSearchParams, useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
-import DatePicker from "react-datepicker";
+
 import { useDispatch, useSelector } from "react-redux";
-import "react-datepicker/dist/react-datepicker.css";
+
 import Spinner from "../../../UI/Spinner";
 import { fetchLocationAreas } from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
-import customAxios from "../../../axios/custom";
+import { searchLocation } from "../../../store/searchSlice";
 
 const Holistic = () => {
-  // const { data: LocSpecd, loading: locLoading } = useFetch(
-  //   "/patient/master/state"
-  // );
   const locationAreasDispatch = useDispatch();
   const [zip_code_id, setZipCodeId] = useState("");
   const [speciality_id, setSpecialityId] = useState("");
@@ -32,6 +28,44 @@ const Holistic = () => {
   const { data: conditionData, loading: conditionLoading } = useFetch(
     "/patient/master/condition"
   );
+
+  const [searchValue, setSearchValue] = useState("");
+  const [condSpecSearchValue, setCondSpecSearchValue] = useState("");
+
+  const locationSearchResults = useSelector(
+    (state) => state.search.locationSearchResults
+  );
+
+  // const cacheSearch = useSelector((store) => store.search.cachedResults);
+  // console.log(cacheSearch, "cacheSearch--------------");
+  // console.log(
+  //   locationSearchResults,
+  //   "locationSearchResults*************************"
+  // );
+  const locationSearchDispatch = useDispatch();
+
+  const handleLocationSearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    selectedItemList.location = value;
+  };
+
+  const handleCondSpecialitySearch = (e) => {
+    const value = e.target.value;
+    setCondSpecSearchValue(value);
+  };
+
+  useEffect(() => {
+    //console.log(searchValue, "searchValue");
+    const timer = setTimeout(() => {
+      if (searchValue) {
+        locationSearchDispatch(searchLocation(searchValue));
+      }
+    }, 300);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchValue]);
 
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +85,9 @@ const Holistic = () => {
       if (!ref?.current?.contains(event.target)) {
         setSelectedItem(null);
       }
+      if (!calendarRef?.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -68,57 +105,13 @@ const Holistic = () => {
   };
 
   const [selectedItem, setSelectedItem] = useState(null);
-  const handleItemClick = (id) => {
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === id ? null : id
-    );
-  };
 
-  // const [selectedItemList, setSelectedItemList] = useState({
-  //   location: "",
-  //   specialitycondition: "",
-  // });
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
     conditions: "",
   });
 
-  // const handleSelectedItem = (name, type) => {
-  //   // setSelectedItemList(name);
-
-  //   setSelectedItemList((prevSelectedItemList) => {
-  //     return { ...prevSelectedItemList, [type]: name };
-  //   });
-  // };
-  // const handleSelectedItem = (name, type) => {
-  //   setSelectedItemList((prevSelectedItemList) => {
-  //     let updatedItemList = { ...prevSelectedItemList };
-
-  //     if (type === "specialitycondition") {
-  //       if (updatedItemList.location && !updatedItemList.specialitycondition) {
-  //         updatedItemList = {
-  //           ...updatedItemList,
-  //           location: "",
-  //           specialitycondition: name,
-  //         };
-  //       } else {
-  //         updatedItemList = {
-  //           ...updatedItemList,
-  //           specialitycondition: name,
-  //         };
-  //       }
-  //     } else if (type === "location") {
-  //       updatedItemList = {
-  //         ...updatedItemList,
-  //         location: name,
-  //         specialitycondition: "",
-  //       };
-  //     }
-
-  //     return updatedItemList;
-  //   });
-  // };
   const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
@@ -143,14 +136,16 @@ const Holistic = () => {
 
           conditions: name,
           condition_id: id,
-          speciality: "", // Clear the selected specialty when selecting a conditions
+          speciality: "",
         };
       }
 
       return updatedItemList;
     });
     if (type === "location") {
-      const selectedItem = locationAreas.find((item) => item.city === name);
+      const selectedItem = locationSearchResults.find(
+        (item) => item.city === name
+      );
       if (selectedItem) {
         setZipCodeId(selectedItem.zip_code_id);
       }
@@ -295,8 +290,14 @@ const Holistic = () => {
     if (status === "loading") {
       return <Spinner />;
     }
-
-    return locationAreas?.map((item) => {
+    if (locationSearchResults.length === 0) {
+      return (
+        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
+          No results found
+        </h1>
+      );
+    }
+    return locationSearchResults?.map((item) => {
       return (
         <h1
           key={item.id}
@@ -358,55 +359,18 @@ const Holistic = () => {
       </div>
     );
   };
-  // const SpecialityAndCondition = () => {
-  //   if (specialityLoading || conditionLoading) {
-  //     return <Spinner />;
-  //   }
 
-  //   return (
-  //     <div>
-  //       <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
-  //         Specialties
-  //       </h2>
-  //       {specialistData?.data?.result?.map((item) => (
-  //         <h1
-  //           key={item.id}
-  //           onClick={() =>
-  //             handleSelectedItem(
-  //               item.medical_speciality_name,
-  //               "specialitycondition"
-  //             )
-  //           }
-  //           className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
-  //         >
-  //           {item.medical_speciality_name}
-  //         </h1>
-  //       ))}
+  const handleItemClick = (id) => {
+    console.log(id);
+    setSelectedItem((prevSelectedItem) =>
+      prevSelectedItem === id ? null : id
+    );
+  };
 
-  //       <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
-  //         Conditions
-  //       </h2>
-  //       {conditionData?.data?.result?.map((item) => (
-  //         <h1
-  //           key={item.id}
-  //           onClick={() =>
-  //             handleSelectedItem(
-  //               item.medical_condition_name,
-  //               "specialitycondition"
-  //             )
-  //           }
-  //           className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
-  //         >
-  //           {item.medical_condition_name}
-  //         </h1>
-  //       ))}
-  //     </div>
-  //   );
-  // };
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
-        <div className="mx-auto mt-[3rem] md:mt-[30vh]">
+        <div className="mx-auto mt-[3rem] md:mt-[20vh]">
           <h1 className="flex font-sansRegular justify-center font-medium items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem]  sm:tracking-[4px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
             {/* <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  space-y-2">
           <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] "> */}
@@ -446,25 +410,25 @@ const Holistic = () => {
               image={grayDropDown}
               className="text-gray-600"
             /> */}
-            {LocSpec.map((item) => {
+            {/* {LocSpec.map((item) => {
               return (
                 <>
                   <div
                     className="flex relative justify-between items-center "
                     key={item.id}
                   >
-                    {/* <input
-                      placeholder={item.title}
-                      value={
-                        selectedItemList[item.cId] || selectedItemList[item.id]
-                      }
-                      className={`font-sansBold text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#636677] tracking-[2px] pr-8 pl-0 md:pl-[2rem]`}
-                    ></input> */}
+                   
                     <input
                       placeholder={item.title}
                       value={
-                        selectedItemList[item.cId] || selectedItemList[item.id]
+                        item.id === "location"
+                          ? searchValue
+                          : selectedItemList[item.id]
                       }
+                      onChange={
+                        item.id === "location" ? handleLocationSearch : null
+                      }
+                      onFocus={() => handleItemClick(item.id)}
                       className={`font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText`}
                     />
 
@@ -486,7 +450,7 @@ const Holistic = () => {
                     ></div>
                     {selectedItem === item.id && (
                       <div
-                        className="absolute top-14 bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                        className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                         style={{
                           zIndex: 1,
                         }}
@@ -501,19 +465,85 @@ const Holistic = () => {
                   </div>
                 </>
               );
-            })}
+            })} */}
+
+            <div className="flex relative justify-between items-center">
+              <input
+                placeholder="Location"
+                value={selectedItemList.location || searchValue}
+                onChange={handleLocationSearch}
+                onClick={() => handleItemClick("location")}
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText"
+              />
+              <div
+                className=" cursor-pointer"
+                onClick={() => handleItemClick("location")}
+              >
+                <img
+                  src={grayDropDown}
+                  alt=""
+                  className={`${
+                    selectedItem === "location" ? "rotate-180" : ""
+                  } cursor-pointer h-3 w-3 mr-8`}
+                />
+              </div>
+            </div>
+            {selectedItem === "location" && (
+              <div
+                className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                style={{
+                  zIndex: 1,
+                }}
+              >
+                {locationItems()}
+              </div>
+            )}
+            <div className="flex relative justify-between items-center">
+              <input
+                placeholder="Speciality / Condition"
+                onChange={handleCondSpecialitySearch}
+                value={
+                  selectedItemList.speciality ||
+                  selectedItemList.conditions ||
+                  condSpecSearchValue
+                }
+                onClick={() => handleItemClick("speciality")}
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText"
+              />
+              <div
+                className=" cursor-pointer"
+                onClick={() => handleItemClick("speciality")}
+              >
+                <img
+                  src={grayDropDown}
+                  alt=""
+                  className={`${
+                    selectedItem === "speciality" ? "rotate-180" : ""
+                  } cursor-pointer h-3 w-3 mr-8`}
+                />
+              </div>
+              {selectedItem === "speciality" && (
+                <div
+                  className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                  style={{
+                    zIndex: 1,
+                  }}
+                >
+                  {SpecialityAndCondition()}
+                </div>
+              )}
+            </div>
             {/* <div className="flex flex-row justify-between items-center flex-1 gap-[20px]">
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
             <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
-              <div className="flex ml-0 md:ml-5">
+              <div className="flex ml-0 md:ml-5" onClick={handleClick}>
                 <img
                   onChange={handleDateChange}
                   src={calendarSvg}
                   alt=""
                   ref={calendarRef}
-                  onClick={handleClick}
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
                 <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#000000] mr-20 font-semibold">
@@ -524,7 +554,7 @@ const Holistic = () => {
                 </span>
 
                 {isOpen && (
-                  <div className="absolute top-[4.4rem] right-10 z-[100] h-full">
+                  <div className="absolute top-[6.4rem] right-10 z-[100] h-full">
                     <DatePickerComponent
                       handleChange={handleChange}
                       startDate={startDate}
@@ -536,7 +566,6 @@ const Holistic = () => {
               <img
                 src={grayDropDown}
                 alt="dropdown"
-                onClick={handleClick}
                 className={`${isOpen ? "rotate-180" : ""} h-3 w-3 mr-10`}
               />
 

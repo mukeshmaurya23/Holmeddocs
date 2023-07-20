@@ -7,6 +7,7 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "@reduxjs/toolkit";
 import apiSlice from "./apiSlice";
 import dataSlice from "./LocSpecSlice";
+import searchReducer from "./searchSlice";
 //import filterApiSlice from "./filterApiSlice";
 const persistConfig = {
   key: "root",
@@ -15,9 +16,10 @@ const persistConfig = {
 const rootReducer = combineReducers({
   mobileApp: mobileAppSlice,
   login: loginSlice,
+
   api: apiSlice,
   data: dataSlice,
-  //filterapi: filterApiSlice,
+  search: searchReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

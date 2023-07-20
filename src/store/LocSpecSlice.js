@@ -4,11 +4,9 @@ import customAxios from "../axios/custom";
 // Async thunk action to fetch location areas
 const fetchLocationAreas = createAsyncThunk(
   "data/fetchLocationAreas",
-  async ({ url, searchValue }) => {
-    const response = await customAxios.post(url, {
-      name: searchValue,
-    });
-    const data = response?.data?.data?.result || [];
+  async (url) => {
+    const response = await customAxios.post(url);
+    const data = response?.data?.data?.result;
     return data;
   }
 );

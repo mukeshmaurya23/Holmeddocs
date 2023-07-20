@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import customAxios from "../axios/custom";
 
 const useFetch = (url) => {
@@ -6,7 +6,7 @@ const useFetch = (url) => {
   const [loading, setLoading] = useState(false);
   // const memoizedUrl = useMemo(() => url, [url]);
   // useEffect(() => {
-  console.log("screen mount");
+
   const fetchData = async () => {
     console.log("fetchData");
     try {
@@ -22,7 +22,6 @@ const useFetch = (url) => {
     }
   };
 
-  // }, []);
   useEffect(() => {
     fetchData();
   }, [url]);

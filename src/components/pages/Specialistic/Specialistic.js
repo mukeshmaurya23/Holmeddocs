@@ -2,50 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
-import useFetch from "../../../hooks/useFetch";
+
 import { useSelector, useDispatch } from "react-redux";
-import { fetchData } from "../../../store/apiSlice";
-//import { apiActions } from "../../../services/apiActions";
+
+import { fetchSpecialties } from "../../../store/LocSpecSlice";
+
 const Specialistic = () => {
-  //const dispatch = useDispatch();
-  //const { data: specialistData } = useSelector((state) => state.api);
-  //const { data: specialistData } = useFetch("/patient/master/speciality");
-  //useEffect(() => {
-  //   dispatch(apiActions("/patient/master/speciality"));
-  // }, []);
-
-  // const [specialistData, setSpecialistData] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await fetch(
-  //       "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Basic YWRtaW46bXlwY290",
-  //           platform: "web",
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     setSpecialistData(data?.data?.result.slice(0, 4));
-  //   };
-
-  //   fetchData();
-  // }, []);
-  // console.log(specialistData);
-
   const dispatch = useDispatch();
-  const {
-    data: specialistData,
-    error,
-    status,
-  } = useSelector((state) => state.api);
+  const { specialties, status, error } = useSelector((state) => state.data);
   useEffect(() => {
-    dispatch(fetchData("/patient/master/speciality"));
-  }, [dispatch]);
+    dispatch(fetchSpecialties("/patient/master/speciality"));
+  }, []);
 
   return (
     <>
@@ -76,9 +43,7 @@ const Specialistic = () => {
             <p className="text-red-500">{error}</p>
           </div>
         ) : (
-          <SpecialistCard
-            specialistData={specialistData?.data?.result?.slice(0, 4)}
-          />
+          <SpecialistCard specialistData={specialties?.slice(0, 4)} />
         )}
       </div>
     </>

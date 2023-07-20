@@ -1,34 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import SpecialistCard from "./SpecialistCard";
 
 import loadingGif from "../../../images/icons/Loader.gif";
 import Footer from "../../../UI/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSpecialties } from "../../../store/LocSpecSlice";
+
 const AllSpecialistic = () => {
-  const [specialistData, setSpecialistData] = useState([]);
-
+  const dispatch = useDispatch();
+  const { specialties, status } = useSelector((state) => state.data);
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(
-        "http://skyonliners.com/demo/holmeddoc/patient/master/speciality",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46bXlwY290",
-            platform: "web",
-          },
-        }
-      );
-      const data = await response.json();
-
-      setSpecialistData(data?.data?.result);
-    };
-
-    fetchData();
+    dispatch(fetchSpecialties("/patient/master/speciality"));
   }, []);
 
-  return specialistData.length === 0 ? (
+  return status === "loading" ? (
     <>
       <div className="flex justify-center items-center ">
         <img src={loadingGif} alt="" />
@@ -57,7 +43,7 @@ const AllSpecialistic = () => {
         </div>
       </div>
       <div>
-        <SpecialistCard specialistData={specialistData} />
+        <SpecialistCard specialistData={specialties} />
       </div>
       <Footer />
     </>

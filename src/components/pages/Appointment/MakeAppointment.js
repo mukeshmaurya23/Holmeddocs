@@ -78,9 +78,16 @@ const MakeAppointment = () => {
 
   useEffect(() => {
     locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+  }, [locationAreasDispatch]);
+
+  useEffect(() => {
     specialityDispatch(fetchSpecialties("/patient/master/speciality"));
+  }, [specialityDispatch]);
+
+  useEffect(() => {
     conditionsDispatch(fetchConditions("/patient/master/condition"));
-  }, [locationAreasDispatch, specialityDispatch, conditionsDispatch]);
+  }, [conditionsDispatch]);
+
   const SpecialityAndCondition = () => {
     if (conditionStatus === "loading" || specStatus === "loading") {
       return <Spinner />;

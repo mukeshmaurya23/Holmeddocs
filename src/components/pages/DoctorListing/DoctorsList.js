@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchData } from "../../../store/apiSlice";
+
 import loadingGif from "../../../images/icons/Loader.gif";
 import { Link } from "react-router-dom";
 const DoctorsList = ({ doctorsList, status }) => {

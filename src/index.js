@@ -9,6 +9,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { SnackbarProvider } from "notistack";
+import ScrollToTop from "./util/ScrollToTop";
 const persistor = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,6 +17,7 @@ root.render(
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>
         <SnackbarProvider maxSnack={3}>
+          <ScrollToTop />
           <App />
         </SnackbarProvider>
       </PersistGate>

@@ -16,6 +16,9 @@ const initialState = {
   slot_avialability: null,
   slot_avialability_status: "idle",
   slot_avialability_error: "",
+  bookAppointmentDoctorData: null,
+  bookAppointmentDoctorDataStatus: "idle",
+  bookAppointmentDoctorDataError: "",
 };
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
@@ -93,6 +96,21 @@ export const fetchSlotAvialability = createAsyncThunk(
   }
 );
 
+export const book_appointment_DoctorData = createAsyncThunk(
+  "search/searchLocation",
+  async (id) => {
+    try {
+      const response = await customAxios.post("/patient/book_appointment", {
+        doctor_id: id,
+      });
+      return response?.data?.data?.result || [];
+    } catch (error) {
+      console.error("Error while fetching search results:", error);
+      return [];
+    }
+  }
+);
+
 const apiSlice = createSlice({
   name: "api",
   initialState,
@@ -163,6 +181,17 @@ const apiSlice = createSlice({
     builder.addCase(fetchSlotAvialability.rejected, (state, action) => {
       state.slot_avialability_status = "failed";
       state.slot_avialability_error = action.error.message;
+    });
+    builder.addCase(book_appointment_DoctorData.pending, (state) => {
+      state.bookAppointmentDoctorDataStatus = "loading";
+    });
+    builder.addCase(book_appointment_DoctorData.fulfilled, (state, action) => {
+      state.bookAppointmentDoctorDataStatus = "succeeded";
+      state.bookAppointmentDoctorData = action.payload;
+    });
+    builder.addCase(book_appointment_DoctorData.rejected, (state, action) => {
+      state.bookAppointmentDoctorDataStatus = "failed";
+      state.bookAppointmentDoctorDataError = action.error.message;
     });
   },
 });
