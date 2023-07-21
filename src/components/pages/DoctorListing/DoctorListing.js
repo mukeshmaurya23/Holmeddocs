@@ -462,8 +462,8 @@ const DoctorListing = () => {
           We have found {totalCount} Doctors for your search criteria.
         </h2>
 
-        <div className="flex mt-10 mb-10">
-          <aside className="flex flex-col  px-16 py-3 border-r">
+        <div className="flex mt-5 ">
+          <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters
             </h2>
@@ -510,13 +510,13 @@ const DoctorListing = () => {
               ? ""
               : doctorsList.length === 0 && (
                   <div className="flex justify-center items-center">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col justify-center items-center">
                       <img
                         src={noDoctor}
                         alt="no doctors"
                         className="w-[25%] h-auto object-contain"
                       />
-                      <h2 className="font-sansBold text-center px-16 text-[1.3rem] text-[#292F33] tracking-[2px]">
+                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
                         No doctors found.
                       </h2>
                     </div>

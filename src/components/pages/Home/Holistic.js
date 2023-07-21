@@ -36,6 +36,7 @@ const Holistic = () => {
     (state) => state.search.locationSearchResults
   );
 
+  console.log(locationSearchResults, "locationSearchResults****************");
   // const cacheSearch = useSelector((store) => store.search.cachedResults);
   // console.log(cacheSearch, "cacheSearch--------------");
   // console.log(
@@ -290,7 +291,7 @@ const Holistic = () => {
     if (status === "loading") {
       return <Spinner />;
     }
-    if (locationSearchResults.length === 0) {
+    if (locationSearchResults?.length === 0) {
       return (
         <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
           No results found
