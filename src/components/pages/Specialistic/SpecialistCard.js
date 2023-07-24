@@ -1,7 +1,12 @@
 import React from "react";
 import imageDefault from "../../../images/specialities/Ayurveda.png";
 import { Link } from "react-router-dom";
+import { ImageArray } from "../../../constant";
 const SpecialistCard = ({ specialistData }) => {
+  const imageJuggad=(speciality_url)=>{
+    const image=ImageArray.find((item)=>item.name===speciality_url)
+    return image?.image
+  }
   return (
     <>
       <div className=" flex justify-center items-center px-5 md:px-0">
@@ -14,19 +19,19 @@ const SpecialistCard = ({ specialistData }) => {
             >
               <div className="basis-[50%]">
                 <img
-                  src={imageDefault}
+                  src={imageJuggad(item?.speciality_url) || imageDefault}
                   alt=""
                   className="xs:h-[100px] xs:w-[100px] sm:h-[120px] sm:w-[134px] xsm:h-[80px] xsm:w-[80px]"
                 />
               </div>
               <div className="md:h-[120px] sm:h-[80px] xs:h-[40px] xsm:h-[30px]">
-                <h2 className="font-sansBold text-[12px] sm:text-center xs:text-center xsm:text-center md:text-left md:text-[18px] lg:text-[18px] sm:text-[14px] text-[#292F33] md:tracking-[3px] sm:tracking-[2px] mt-5">
+                <h2 className="font-sansBold text-[12px] sm:text-center xs:text-center xsm:text-center md:text-left md:text-[20px] lg:text-[21px] sm:text-[16px] text-[#292F33]  tracking-[1px] mt-5">
                   {item?.medical_speciality_name}
                 </h2>
               </div>
 
               <div className="hidden md:block basis-[50%]">
-                <p className="text-[#545871] font-sans text-sm">
+                <p className="font-sansRegular text-[15px] font-semibold text-[#545871]">
                   {item?.description}
                 </p>
               </div>

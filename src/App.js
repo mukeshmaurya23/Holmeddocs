@@ -127,8 +127,8 @@ function App() {
     <>
       <Suspense
         fallback={
-          <div className="loader">
-            <img src={loadingGif} alt="loading" />
+          <div className="loader flex justify-center items-center mt-24">
+            <img src={loadingGif} alt="loading" className="w-full h-auto" />
           </div>
         }
       >

@@ -433,8 +433,9 @@ const DoctorListing = () => {
           }`}
           onChange={handleChange}
           checked={isChecked}
+          
         />
-        <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold tracking-[1px]">
+        <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold ">
           {data.language_title ||
             data.medical_speciality_name ||
             data.medical_condition_name ||
@@ -457,12 +458,12 @@ const DoctorListing = () => {
 
   return (
     <>
-      <section>
+      <section className="px-[.3rem]">
         <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
           We have found {totalCount} Doctors for your search criteria.
         </h2>
 
-        <div className="flex mt-5 ">
+        <div className="flex mt-5">
           <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters

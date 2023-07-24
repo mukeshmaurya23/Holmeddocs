@@ -171,7 +171,7 @@ const Navbar2 = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
           >
             {item.medical_speciality_name}
           </h1>
@@ -190,7 +190,7 @@ const Navbar2 = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
           >
             {item.medical_condition_name}
           </h1>
@@ -490,7 +490,7 @@ const Navbar2 = () => {
                     }}
                   /> */}
                   <input
-                    className={`relative py-1 w-[250px] h-[40px] mr-1  tracking-[1px] outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                    className={`relative py-1 w-[250px] h-[40px] mr-1   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[15px]"
                         : "text-[1rem]"
@@ -514,7 +514,7 @@ const Navbar2 = () => {
                     {isLocationDropdown
                       ? locationSearchResults?.map((item) => (
                           <h6
-                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
+                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
                             key={item.id}
                             onClick={() =>
                               handleSelectedItem(
@@ -757,14 +757,14 @@ const Navbar2 = () => {
                       </>
                     )}
                     <div className=" border-b " />
-                    <Link to="/">
+                    <Link to="/make-appointment" onClick={toggleMenuHandler}>
                       <h2 className="font-sansBold text-[14px]">
                         Make an appointment
                       </h2>
                     </Link>
                     <div className=" border-b " />
                     <div>
-                      <h2 className="font-sansBold text-[14px]">Browse</h2>
+                      <h2 className="font-sansBold text-[14px]" onClick={openModal }>Browse</h2>
                     </div>
                     <div className=" border-b " />
                     <Link to="/about-us" onClick={toggleMenuHandler}>

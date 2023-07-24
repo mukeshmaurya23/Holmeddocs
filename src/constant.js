@@ -434,3 +434,106 @@ export const dummyData = [
     ],
   },
 ];
+
+
+export const ImageArray=[
+  {
+    id:1,
+    name:"traditional-chinese-medicine",
+    image:require("./images/specialities/TraditionalChinese.png") 
+  },
+  {
+    id:2,
+    name:"integrative-medicine",
+    image:require("./images/specialities/Integrative.png")
+  },
+  {
+    id:3,
+    name:"acupuncturist",
+    image:require("./images/specialities/Acupuncture.png")
+  },{
+    id:4,
+    name:"allergist-and-immunologist",
+    image:require("./images/specialities/Allergy.png")
+  },
+  {
+    id:5,
+    name:"ayurvedic-medicine-practitioner",
+    image:require("./images/specialities/Ayurveda.png")
+  }
+,{
+  id:6,
+  name:"chiropractor",
+  image:require("./images/specialities/Chiropractic.png")
+},{
+  id:7,
+  name:"dietician-nutritionist" ,
+  image:require("./images/specialities/Dietican.png")
+},
+{
+  id:8,
+  name:"endocrinologist",
+  image:require("./images/specialities/Endocrinology.png")
+},
+{
+  id:9,
+  name:"internal-medicine",
+  image:require("./images/specialities/Functional.png")
+},
+{
+  id:10,
+  name:"homeopathic-practitioner",
+  image:require("./images/specialities/Homeopathy.png")
+},
+{
+  id:11,
+  name:"hypnotherapist",
+  image:require("./images/specialities/Hypnotherapy.png")
+},
+{
+  id:12,
+  name:"massage-therapist",
+  image:require("./images/specialities/MassageTherapy.png")
+}
+,
+{
+  id:13,
+  name:"naturopathic-doctor",
+  image:require("./images/specialities/Naturapathy.png")
+}
+,
+{
+  id:15,
+  name:"obgyn-obstetrician-gynecologist",
+  image:require("./images/specialities/Gynecology.png")
+}
+  ,
+  {
+    id:16,
+    name:"physical-therapist",
+    image:require("./images/specialities/Psychotherapy.png")
+  }
+  ,
+  {
+    id:17,
+    name:"psychologist-psychotherapist-counselor",
+    image:require("./images/specialities/Psychology.png")
+  }
+  ,
+  {
+    id:18,
+    name:"reflexologist",
+    image:require("./images/specialities/Reflexology.png")
+  }
+  ,
+  {
+    id:19,
+    name:"sleep-medicine-specialist",
+    image:require("./images/specialities/SleepMedicine.png")
+  },
+  {
+    id:20,
+    name:"yoga-meditation-centers",
+    image:require("./images/specialities/SportMedicine.png")
+  }
+]

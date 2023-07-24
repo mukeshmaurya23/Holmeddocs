@@ -9,12 +9,12 @@ const PortalModal = ({ closeModal }) => {
   const id = document.getElementById("portal-modal");
   return ReactDOM.createPortal(
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center mb-10 pb-10">
+      <div className=" xsm:relative xsm:-mt-[7rem] md:top-[50vh] md:fixed inset-0 z-50 flex sm:items-center justify-center md:mb-10 md:pb-10">
         <div
           className="fixed inset-0 bg-gray-900 opacity-50 cursor-pointer"
           onClick={closeModal}
         ></div>
-        <div className="relative bg-white rounded-lg shadow-lg w-3/4 h-auto">
+        <div className="relative bg-white rounded-none sm:rounded-lg shadow-lg w-full sm:w-3/4 h-auto">
           <div className="bg-[#0082821C] px-8 py-4 mr-5 ml-5 rounded-lg mt-5 font-sansBold text-[1.2rem] text-[#292F33]">
             Browse Doctors near you
             <img
@@ -24,12 +24,12 @@ const PortalModal = ({ closeModal }) => {
               className="absolute right-10 top-10 cursor-pointer h-4 w-4"
             />
           </div>
-          <div className="flex flex-wrap mb-10 ml-7">
+          <div className="flex flex-wrap mb-10 ml-0 sm:ml-7">
             {Array(20)
               .fill("")
               .map((index) => (
                 <div
-                  className="flex ml-10 mt-4 pl-3 rounded-md bg-[#00828212] px-6 py-2"
+                  className="flex ml-10 mt-4 pl-3 rounded-md bg-[#00828212] px-6 py-2  cursor-pointer"
                   key={index}
                 >
                   <img src={cityLocation} className="h-8 w-8" alt="" />

@@ -71,6 +71,7 @@ const MakeAppointment = () => {
     conditions: "",
   });
   const handleSelectedItem = (name, type, id) => {
+    setIsLocationDropdown(false);
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
 
@@ -195,7 +196,7 @@ const MakeAppointment = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
           >
             {item?.medical_speciality_name}
           </h1>
@@ -214,7 +215,7 @@ const MakeAppointment = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
           >
             {item?.medical_condition_name}
           </h1>
@@ -222,11 +223,18 @@ const MakeAppointment = () => {
       </div>
     );
   };
+
+  const togleLoctionHandler=()=>{
+    console.log("clicked me ");
+    setIsLocationDropdown(!isLocationDropdown)
+  }
   return (
     <>
-      <div class="flex justify-center relative  mb-10 ">
+      <div class="relative  mb-10 ">
         <div class="hidden md:block w-[35rem]   h-[17rem] lg:w-[45rem] lg:h-[20rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%] absolute left-1/2 transform -translate-x-1/2 mb-20">
-          <div className=" bg-white shadow-2xl  absolute md:w-[34rem] rounded-xl    top-10  left-0 mx-auto right-0 ">
+
+        </div>
+          <div className=" bg-white shadow-none sm:shadow-2xl  absolute md:w-[34rem] rounded-xl    top-10  left-0 mx-auto right-0 ">
             <div className="px-7 py-4 sm:px-8 sm:py-14 ">
               <h2 className=" text-[#292F33] text-[1.5rem]  font-sansBold tracking-[2px] pt-4">
                 Book Top Doctors Appointment
@@ -235,29 +243,30 @@ const MakeAppointment = () => {
                 Thinking to consult a doctor this week? Use Holmeddoc to find
                 the best doctors near you ..
               </p>
-              <div className="border relative border-verifiCation w-full py-4 rounded mt-7 flex justify-between items-center px-2">
+              <div ref={locAreasRef} className="border relative border-verifiCation w-full py-4 rounded mt-7 flex justify-between items-center px-2">
                 <Input
                   type="text"
                   placeholder="City,Zip Code"
+                
                   value={selectedItemList.location}
+                
+                 
                   // value={selectedItemList.location}
                   className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#636677]   font-sansBold"
                 />
                 <img
                   src={greenArrowDown}
                   alt=""
-                  ref={locAreasRef}
+                  onClick={togleLoctionHandler}
                   className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${
                     isLocationDropdown ? "transform rotate-180" : ""
                   }`}
-                  onClick={() => {
-                    setIsLocationDropdown(!isLocationDropdown);
-                  }}
+              
                 />
                 <ul
                   className={`${
                     isLocationDropdown
-                      ? "absolute mt-1 px-6 top-10 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                       : ""
                   }`}
                 >
@@ -273,7 +282,7 @@ const MakeAppointment = () => {
                               item.zip_code_id
                             )
                           }
-                          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+                          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
                         >
                           {item?.city}
                         </li>
@@ -305,7 +314,7 @@ const MakeAppointment = () => {
                 <ul
                   className={`${
                     isSpecialityDropdown
-                      ? "absolute mt-1 px-6 top-10 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                       : ""
                   }`}
                 >
@@ -372,11 +381,11 @@ const MakeAppointment = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="absolute  top-[120%]">
+          {/* <div className="absolute  top-[150%]">
         <Footer />
+      </div> */}
       </div>
+    
     </>
   );
 };
