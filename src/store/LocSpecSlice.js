@@ -33,7 +33,9 @@ const dataSlice = createSlice({
   initialState: {
     locationAreas: [],
     specialties: [],
+    filterSpecialties: [],
     conditions: [],
+    filterConditions: [],
     status: "idle",
   },
   reducers: {},
@@ -55,6 +57,7 @@ const dataSlice = createSlice({
       .addCase(fetchSpecialties.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.specialties = action.payload;
+        state.filterSpecialties = action.payload;
       })
       .addCase(fetchSpecialties.rejected, (state) => {
         state.status = "failed";
@@ -65,6 +68,7 @@ const dataSlice = createSlice({
       .addCase(fetchConditions.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.conditions = action.payload;
+        state.filterConditions = action.payload;
       })
       .addCase(fetchConditions.rejected, (state) => {
         state.status = "failed";

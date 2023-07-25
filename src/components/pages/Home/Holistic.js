@@ -10,7 +10,11 @@ import useFetch from "../../../hooks/useFetch";
 import { useDispatch, useSelector } from "react-redux";
 
 import Spinner from "../../../UI/Spinner";
-import { fetchLocationAreas } from "../../../store/LocSpecSlice";
+import {
+  fetchConditions,
+  fetchLocationAreas,
+  fetchSpecialties,
+} from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { searchLocation } from "../../../store/searchSlice";
 
@@ -21,20 +25,47 @@ const Holistic = () => {
   const [condition_id, setConditionId] = useState("");
   const { locationAreas, status } = useSelector((state) => state.data);
   console.log(locationAreas);
-  const { data: specialistData, loading: specialityLoading } = useFetch(
-    "/patient/master/speciality"
-  );
+  // const { data: specialistData, loading: specialityLoading } = useFetch(
+  //   "/patient/master/speciality"
+  // );
 
-  const { data: conditionData, loading: conditionLoading } = useFetch(
-    "/patient/master/condition"
-  );
+  // const { data: conditionData, loading: conditionLoading } = useFetch(
+  //   "/patient/master/condition"
+  // );
+
+  const conditionsDispatch = useDispatch();
+  const specialityDispatch = useDispatch();
+  const {
+    specialties: specialistData,
+    status: specStatus,
+    filterSpecialties,
+  } = useSelector((state) => state.data);
+  const {
+    conditions: conditionData,
+    status: conditionStatus,
+    filterConditions,
+  } = useSelector((state) => state.data);
+
+  const [filterSpecilityData, setFilterSpecialityData] =
+    useState(filterSpecialties);
+  const [filterConditionData, setFilterConditionData] =
+    useState(filterConditions);
+
+  useEffect(() => {
+    specialityDispatch(fetchSpecialties("/patient/master/speciality"));
+  }, [specialityDispatch]);
+
+  useEffect(() => {
+    conditionsDispatch(fetchConditions("/patient/master/condition"));
+  }, [conditionsDispatch]);
 
   const [searchValue, setSearchValue] = useState("");
-  const [condSpecSearchValue, setCondSpecSearchValue] = useState("");
+  const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
   const locationSearchResults = useSelector(
     (state) => state.search.locationSearchResults
   );
+  // const [filterSpeciality, setFilterSpeciality] = useState([]);
 
   // const cacheSearch = useSelector((store) => store.search.cachedResults);
   // console.log(cacheSearch, "cacheSearch--------------");
@@ -42,6 +73,7 @@ const Holistic = () => {
   //   locationSearchResults,
   //   "locationSearchResults*************************"
   // );
+
   const locationSearchDispatch = useDispatch();
 
   const handleLocationSearch = (e) => {
@@ -50,9 +82,32 @@ const Holistic = () => {
     selectedItemList.location = value;
   };
 
-  const handleCondSpecialitySearch = (e) => {
-    const value = e.target.value;
-    setCondSpecSearchValue(value);
+  const filterSpeciality = (searchTerm, specialityData) => {
+    const data = specialityData?.filter((item) => {
+      return item.medical_speciality_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const filterCondition = (searchTerm, conditionData) => {
+    const data = conditionData?.filter((item) => {
+      return item.medical_condition_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const handleSpecialitySearch = (e) => {
+    setCondSpecSearchValue(e.target.value);
+    setFilterSpecialityData(
+      filterSpeciality(SpecCondSearchValue, filterSpecialties)
+    );
+    setFilterConditionData(
+      filterCondition(SpecCondSearchValue, filterConditions)
+    );
   };
 
   useEffect(() => {
@@ -219,35 +274,38 @@ const Holistic = () => {
   };
 
   const SpecialityAndCondition = () => {
-    if (specialityLoading || conditionLoading) {
+    if (specStatus === "loading" || conditionStatus === "loading") {
       return <Spinner />;
     }
-
     return (
       <div>
         <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
-          Specialties
+          {filterSpecilityData?.length > 0 && "Speciality"}
         </h2>
-        {specialistData?.data?.result?.map((item) => (
-          <h1
-            key={item.id}
-            onClick={() =>
-              handleSelectedItem(
-                item.medical_speciality_name,
-                "speciality",
-                item.id
-              )
-            }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
-          >
-            {item.medical_speciality_name}
-          </h1>
-        ))}
+        {filterSpecilityData?.map((item) => {
+          return (
+            <>
+              <h1
+                key={item.id}
+                onClick={() =>
+                  handleSelectedItem(
+                    item.medical_speciality_name,
+                    "speciality",
+                    item.id
+                  )
+                }
+                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
+              >
+                {item.medical_speciality_name}
+              </h1>
+            </>
+          );
+        })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
           Conditions
         </h2>
-        {conditionData?.data?.result?.map((item) => (
+        {filterConditionData?.map((item) => (
           <h1
             key={item.id}
             onClick={() =>
@@ -266,11 +324,48 @@ const Holistic = () => {
     );
   };
 
+  const handleLocationSelection = () => {
+    setSelectedItem((prevSelectedItem) =>
+      prevSelectedItem === "location" ? null : "location"
+    );
+    setSelectedItemList((prevSelectedItemList) => {
+      let updatedItemList = { ...prevSelectedItemList };
+      updatedItemList = {
+        ...updatedItemList,
+        location: "",
+      };
+      return updatedItemList;
+    });
+    setSearchValue("");
+  };
+  const handleSpecialtySelection = () => {
+    setSelectedItem((prevSelectedItem) =>
+      prevSelectedItem === "speciality" ? null : "speciality"
+    );
+    setSelectedItemList((prevSelectedItemList) => {
+      let updatedItemList = { ...prevSelectedItemList };
+      updatedItemList = {
+        ...updatedItemList,
+        speciality: "",
+        conditions: "",
+      };
+      return updatedItemList;
+    });
+  };
+
   const handleItemClick = (id) => {
     console.log(id);
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === id ? null : id
-    );
+    // setSelectedItem((prevSelectedItem) =>
+    //   prevSelectedItem === id ? null : id
+    // );
+
+    //setSearchValue("");
+
+    if (id === "location") {
+      handleLocationSelection();
+    } else if (id === "speciality") {
+      handleSpecialtySelection();
+    }
   };
 
   return (
@@ -407,11 +502,11 @@ const Holistic = () => {
             <div className="flex relative justify-between items-center">
               <input
                 placeholder="Speciality / Condition"
-                onChange={handleCondSpecialitySearch}
+                onChange={handleSpecialitySearch}
                 value={
                   selectedItemList.speciality ||
                   selectedItemList.conditions ||
-                  condSpecSearchValue
+                  SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
                 className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px] pr-8 pl-0  placeHolderText"
