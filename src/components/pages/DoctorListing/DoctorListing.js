@@ -273,72 +273,6 @@ const DoctorListing = () => {
       commonParams.conditionParams?.includes(data?.medical_condition_name) ||
       commonParams.insuranceParams?.includes(data?.insurance_company_name);
 
-    // const handleChange = async (e) => {
-    //   const checked = e.target.checked;
-    //   const id = data.id;
-    //   const appointment_type = data;
-
-    //   if (checked) {
-    //     setCheckedIds((prevCheckedIds) => [...prevCheckedIds, id]);
-    //   } else {
-    //     setCheckedIds((prevCheckedIds) =>
-    //       prevCheckedIds.filter((checkedId) => checkedId !== id)
-    //     );
-    //   }
-    //   let filterTitle = category.title.toLowerCase().replace(" ", "_");
-    //   filterTitle = filterTitle.replace("specialty", "speciality");
-    //   filterTitle = filterTitle.replace("appointment type", "appointment_type");
-
-    //   //get the date from the url and set it to the state
-    //   const date = searchParams.get("date");
-    //   setTime_slot_day(date);
-    //   console.log(date, "date from the url");
-    //   // let filterTitle = category.title.toLowerCase().replace(" ", "_");
-    //   // filterTitle = category.title
-    //   //   .toLowerCase()
-    //   //   .replace("specialty", "speciality");
-    //   // filterTitle = category.title
-    //   //   .toLowerCase()
-    //   //   .replace("appointment type", "appointment_type");
-    //   const requestBody = {
-    //     ...searchParams,
-    //     [filterTitle]: checked
-    //       ? filterTitle.toLowerCase() === "appointment_type"
-    //         ? appointment_type
-    //         : [...checkedIds, id]
-    //       : checkedIds.filter((checkedId) => checkedId !== id),
-    //     time_slot_day: day,
-    //   };
-    //   searchParams.set(
-    //     filterTitle,
-    //     checked
-    //       ? filterTitle.toLowerCase() === "appointment_type"
-    //         ? appointment_type
-    //         : [...checkedIds, id]
-    //       : checkedIds.filter((checkedId) => checkedId !== id)
-    //   );
-    //   navigate(`?${searchParams.toString()}`);
-
-    //   //if unchecked remove from search params
-    //   if (!checked) {
-    //     const params = new URLSearchParams(location.search);
-    //     params.delete(filterTitle);
-    //     navigate(`?${params.toString()}`);
-    //   }
-    //   try {
-    //     setStatus("loading");
-    //     const filterResponse = await customAxios.post(
-    //       "/patient/doctors",
-    //       requestBody
-    //     );
-    //     const filterData = filterResponse?.data?.data?.result;
-    //     setDoctorsList(filterData);
-    //     setStatus("succeeded");
-    //   } catch (error) {
-    //     console.log(error.message);
-    //     setStatus("failed");
-    //   }
-    // };
     const handleChange = async (e) => {
       const checked = e.target.checked;
       setShouldCallAPI(false);
@@ -441,7 +375,7 @@ const DoctorListing = () => {
           onChange={handleChange}
           checked={isChecked}
         />
-        <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold ">
+        <span className="ml-2 text-gray-700 text-[.8rem] 2xl:text-[1rem] font-sansSemibold ">
           {data.language_title ||
             data.medical_speciality_name ||
             data.medical_condition_name ||
@@ -471,7 +405,7 @@ const DoctorListing = () => {
 
         <div className="flex mt-16">
           <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
-            <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
+            <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               Filters
             </h2>
             {filterData === null ? (
@@ -487,7 +421,7 @@ const DoctorListing = () => {
                       key={item.id}
                       id={item.title}
                     >
-                      <h2 className="font-sansBold text-[.8rem] text-[#292F33] tracking-[2px] mb-3">
+                      <h2 className="font-sansBold text-[.8rem] 2xl:text-[1.1rem] text-[#292F33] mb-3">
                         {item.title}
                       </h2>
                       <div className="">

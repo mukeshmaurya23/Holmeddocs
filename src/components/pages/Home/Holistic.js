@@ -66,14 +66,13 @@ const Holistic = () => {
     (state) => state.search.locationSearchResults
   );
   // const [filterSpeciality, setFilterSpeciality] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  console.log(locationSearchResults, "locationSearchResults****************");
-  // const cacheSearch = useSelector((store) => store.search.cachedResults);
-  // console.log(cacheSearch, "cacheSearch--------------");
-  // console.log(
-  //   locationSearchResults,
-  //   "locationSearchResults*************************"
-  // );
+  const [selectedItemList, setSelectedItemList] = useState({
+    location: "",
+    speciality: "",
+    conditions: "",
+  });
 
   const locationSearchDispatch = useDispatch();
 
@@ -153,20 +152,21 @@ const Holistic = () => {
   }, [ref]);
 
   useEffect(() => {
+    //in this  if search value is empty then dont show the location list and if search value is not empty then show the location list
+    if (searchValue === "") {
+      setSelectedItem(null);
+    } else {
+      setSelectedItem("location");
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
     locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
   }, [locationAreasDispatch]);
 
   const handleDateChange = (date) => {
     setStartDate(date);
   };
-
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const [selectedItemList, setSelectedItemList] = useState({
-    location: "",
-    speciality: "",
-    conditions: "",
-  });
 
   const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
@@ -179,6 +179,7 @@ const Holistic = () => {
           speciality: "",
           conditions: "",
         };
+        setSelectedItem(null);
       } else if (type === "speciality") {
         updatedItemList = {
           ...updatedItemList,
@@ -186,6 +187,7 @@ const Holistic = () => {
           speciality_id: id,
           conditions: "", // Clear the selected conditions when selecting a specialty
         };
+        setSelectedItem(null);
       } else if (type === "conditions") {
         updatedItemList = {
           ...updatedItemList,
@@ -194,6 +196,7 @@ const Holistic = () => {
           condition_id: id,
           speciality: "",
         };
+        setSelectedItem(null);
       }
 
       return updatedItemList;
@@ -331,9 +334,7 @@ const Holistic = () => {
   };
 
   const handleLocationSelection = () => {
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === "location" ? null : "location"
-    );
+    setSelectedItem("location");
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
       updatedItemList = {
@@ -342,6 +343,7 @@ const Holistic = () => {
       };
       return updatedItemList;
     });
+
     setSearchValue("");
   };
   const handleSpecialtySelection = () => {
@@ -377,7 +379,7 @@ const Holistic = () => {
   return (
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
-        <div className="mx-auto mt-[3rem] md:mt-[20vh]">
+        <div className="mx-auto mt-[3rem] md:mt-[20vh] 2xl:mt-[30vh]">
           <h1 className="flex font-sansRegular justify-center font-medium  items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem]  sm:tracking-[4px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.2rem] 2xl:text-[3.4rem] ">
             {/* <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  space-y-2">
           <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] "> */}
@@ -410,13 +412,9 @@ const Holistic = () => {
                 placeholder="Location"
                 value={selectedItemList.location || searchValue}
                 onChange={handleLocationSearch}
-                onClick={() => handleItemClick("location")}
                 className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
               />
-              <div
-                className=" cursor-pointer"
-                onClick={() => handleItemClick("location")}
-              >
+              <div className=" cursor-pointer">
                 <img
                   src={grayDropDown}
                   alt=""

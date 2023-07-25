@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import profileLogo from "../images/profile/Logo.png";
 import Modal from "../UI/Modal";
 import { enqueueSnackbar } from "notistack";
@@ -10,7 +10,8 @@ const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-
+  const location = useLocation();
+  console.log(location.pathname, "im location from sidebar");
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -82,7 +83,7 @@ const SideBar = () => {
         <div
           className={`${
             isSidebarOpen ? "block" : "hidden"
-          } md:block bg-verifiCation sm:w-[13rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
+          } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
         >
           <div className="p-10">
             <Link to="/">
@@ -93,22 +94,40 @@ const SideBar = () => {
               />
             </Link>
           </div>
-          <div className="flex flex-col absolute bottom-0 w-full mb-10">
+          <div className="flex flex-col absolute bottom-0 w-full mb-10 ">
+            {/* <Link
+              to="/sidebar"
+              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem]"
+            >
+              My Profile
+            </Link> */}
             <Link
               to="/sidebar"
-              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              className={`w-full block px-12 py-2 text-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem] 
+             
+              `}
+              style={
+                location.pathname === "/sidebar"
+                  ? { backgroundColor: "#fff", color: "#008282" }
+                  : null
+              }
             >
               My Profile
             </Link>
             <Link
               to="appointment-list"
-              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              className={`w-full block px-12 py-2 text-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem] `}
+              style={
+                location.pathname === "/sidebar/appointment-list"
+                  ? { backgroundColor: "#fff", color: "#008282" }
+                  : null
+              }
             >
               My Appointments
             </Link>
             <Link
               to="/change-password"
-              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              className={`w-full block px-12 py-2 text-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem] `}
             >
               Change Password
             </Link>
@@ -116,12 +135,12 @@ const SideBar = () => {
               onClick={() => {
                 setDeleteModal(true);
               }}
-              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              className="w-full block px-12 py-2 text-white  cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem]"
             >
               Delete Account
             </span>
             <span
-              className="w-full block px-12 py-2 text-white hover:text-verifiCation hover:bg-white cursor-pointer font-sansRegular text-xs"
+              className="w-full block px-12 py-2 text-white  cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem]"
               onClick={() => {
                 setModal(true);
               }}
@@ -149,7 +168,6 @@ const SideBar = () => {
           onConfirm={() => {
             dispatch(logout()) && navigate("/register");
           }}
-          
           closeModal={() => {
             setModal(false);
           }}

@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import customAxios from "../../../axios/custom";
 import loadingGif from "../../../images/icons/Loader.gif";
-
+import address from "../../../images/profile/Address.png";
+import genderImg from "../../../images/icons/Frame 265.png";
+import mail from "../../../images/profile/Mail.png";
+import phoneNo from "../../../images/profile/Number.png";
+import insuranceImg from "../../../images/profile/Insurance.png";
 const ProfileDetails = () => {
   // const getUserName = localStorage.getItem("userName");
   // const newName = JSON.parse(getUserName);
@@ -41,14 +45,14 @@ const ProfileDetails = () => {
     fetchUserProfileData();
   }, []);
 
-  console.log(profileData.patient_phone, "profileData");
+  console.log(profileData, "profileData**************");
   return loading ? (
     <div className="flex justify-center  ">
       <img src={loadingGif} alt="" />
     </div>
   ) : (
     <>
-      <div className="flex justify-center items-center flex-col py-10">
+      <div className="flex justify-center items-center flex-col py-10 h-screen">
         <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10">
           Profile Details
         </h2>
@@ -86,28 +90,45 @@ const ProfileDetails = () => {
               </div>
             </div>
           </div> */}
-          <div class="w-[550px]">
+          <div class="w-[462px]">
             <div class="flex flex-row">
-
-              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">
-                <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
+              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+                <img
+                  src={genderImg}
+                  alt=""
+                  className="w-[30px] h-[23px] object-contain"
+                />
                 <span className="text-[10px] font-sansBold text-gray-600 mt-1">
                   {profileData?.patient_gender}
                 </span>
               </div>
-              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">   <p class="text-center mt-1 text-[10px] font-sansBold text-gray-600">
-                {calcularteDob(profileData.patient_dob)}
-              </p>
+              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+                {" "}
+                <p class="text-center mt-1 text-[10px] font-sansBold text-gray-600">
+                  {calcularteDob(profileData.patient_dob)}
+                </p>
                 <p className="text-[10px] font-sansBold text-gray-600 mt-1">
                   Years Old
-                </p></div>
-              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">  <i class="fa fa-phone" aria-hidden="true"></i>
+                </p>
+              </div>
+              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+                <img
+                  src={phoneNo}
+                  alt=""
+                  className="w-[30px] h-[23px] object-contain"
+                />
+
                 <p className="text-[10px] font-sansBold text-gray-600 mt-1">
                   {profileData?.patient_phone}
-                </p></div>
-              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">
-                <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                <span className="text-[10px] font-sansBold text-gray-600 mt-1">
+                </p>
+              </div>
+              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+                <img
+                  src={mail}
+                  alt=""
+                  className="w-[30px] h-[23px] object-contain"
+                />
+                <span className="text-[10px] font-sansBold text-gray-600 mt-1 truncate break-words">
                   {profileData?.patient_email}
                 </span>
               </div>
@@ -116,21 +137,25 @@ const ProfileDetails = () => {
 
           <div class="border-b w-full"></div>
           <div className="flex flex-col  p-5">
-            <div className="flex ">
-              <i
-                className="fa fa-location bg-gray-300 rounded-full p-3"
-                aria-hidden="true"
-              ></i>
-              <p className="ml-4 text-[#9597A6] text-[13px] ">Address</p>
-              <p className="ml-4 text-[#292F33] font-sansRegular text-[13px] font-semibold">
-                {profileData?.address1}
-              </p>
+            <div className="flex  mt-5">
+              <img
+                src={address}
+                alt=""
+                className="w-[40px] h-[40px] object-contain"
+              />
+              <div className="flex flex-col">
+                <p className="ml-4 text-[#9597A6] text-[13px] ">Address</p>
+                <p className="ml-4 text-[#292F33] font-sansRegular text-[13px] font-semibold">
+                  {profileData?.address1}
+                </p>
+              </div>
             </div>
             <div className="flex  mt-5">
-              <i
-                className="fa fa-location-arrow bg-gray-300 rounded-full p-3"
-                aria-hidden="true"
-              ></i>
+              <img
+                src={insuranceImg}
+                alt=""
+                className="w-[40px] h-[40px] object-contain"
+              />
               <div className="flex flex-col">
                 <p className="ml-4 text-[#9597A6] text-[13px] ">
                   Insurance Details
@@ -156,7 +181,7 @@ const ProfileDetails = () => {
         <Link
           to="update-profile"
           state={{
-            phone: profileData?.patient_phone,
+            profileData,
           }}
         >
           <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold">

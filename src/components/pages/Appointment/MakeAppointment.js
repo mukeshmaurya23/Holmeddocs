@@ -41,6 +41,7 @@ const MakeAppointment = () => {
 
   const dispatch = useDispatch();
   const locAreasRef = useRef();
+  const calendarRef = useRef();
   const specialityRef = useRef();
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,6 +50,9 @@ const MakeAppointment = () => {
       }
       if (!specialityRef?.current?.contains(event.target)) {
         setIsSpecialityDropdown(false);
+      }
+      if (!calendarRef?.current?.contains(event.target)) {
+        setIsOpen(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -358,11 +362,12 @@ const MakeAppointment = () => {
               <img
                 src={calendar}
                 alt=""
+                ref={calendarRef}
                 onClick={handleClick}
                 className="w-4 h-4 mr-2 cursor-pointer"
               />
               {isOpen && (
-                <div className="absolute top-[2rem] right-0 z-[100] h-full">
+                <div className="absolute top-[3.5rem] -right-1 z-[100] h-full">
                   <DatePickerComponent
                     handleChange={handleChange}
                     startDate={startDate}

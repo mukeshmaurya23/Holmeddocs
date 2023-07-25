@@ -14,7 +14,7 @@ const HolisticProcess = () => {
           <img
             src={ourProcess}
             alt=""
-            className="w-[400px] hidden lg:block  xl:block ml-10 h-auto"
+            className="w-[400px] hidden lg:block  xl:block ml-10 h-auto 2xl:w-[500px] object-contain"
           />
         </div>
         <div className="py-7 md:py-16 sm:py-16 lg:py-16 xl:py-16 2xl:py-16  flex-1">

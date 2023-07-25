@@ -12,10 +12,12 @@ import { book_appointment_DoctorData } from "../../../store/apiSlice";
 import { useRef } from "react";
 import customAxios from "../../../axios/custom";
 import { enqueueSnackbar } from "notistack";
+import imageGif from "../../../images/icons/Loader.gif";
 const BookAppointmentStep1 = ({ handleNextStep }) => {
   const location = useLocation();
   const [isDropDownInsurance, setIsDropDownInsurance] = useState(false);
   const [isDropdownCondition, setIsDropdownCondition] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [selectedItemList, setSelectedItemList] = useState({
     insurance: "",
@@ -109,6 +111,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
     console.log(data, "data");
 
     try {
+      setLoading(true);
       const response = await customAxios.post(
         "/patient/save_appointment",
         data
@@ -120,6 +123,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
       });
       if (response.status === 200) {
         if (response?.data?.success === 1) {
+          setLoading(false);
           handleNextStep(response);
         }
       }
@@ -127,6 +131,13 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
       console.log(err);
     }
   };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center">
+        <img src={imageGif} alt="loading" />
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex flex-col justify-center mt-[6rem] items-center py-10">

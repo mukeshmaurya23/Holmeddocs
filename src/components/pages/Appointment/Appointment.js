@@ -91,7 +91,7 @@ const Appointment = () => {
         </div>
       ) : (
         <div className="flex overflow-hidden overflow-y-auto">
-          <div className=" w-full md:w-1/3 bg-appointmentColor">
+          <div className=" w-full md:w-[25%] bg-appointmentColor">
             <div className="flex items-center justify-start p-4 border-b border-gray-400">
               <h1 className="text-md text-[#9597A6] font-sansLight mr-auto ">
                 My Appointments
@@ -389,8 +389,6 @@ const Appointment = () => {
           <div className=" hidden md:block flex-1 bg-white">
             <div className="flex flex-col ">
               {appointmentData?.data?.result?.map((item) => {
-                   
-
                 if (item.id === currentIndex) {
                   return (
                     <>

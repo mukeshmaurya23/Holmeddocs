@@ -35,8 +35,8 @@ const UpdateProfile = () => {
   };
 
   const location = useLocation();
-  const { phone } = location.state;
-
+  const { profileData } = location.state;
+  console.log(profileData, "im profile data************");
   console.log(selectedItemList);
   const insuranceRef = useRef();
   const stateRef = useRef();
@@ -87,16 +87,19 @@ const UpdateProfile = () => {
     //   return;
     // }
     const data = {
-      patient_first_name: formik.values.patient_first_name,
-      patient_last_name: formik.values.patient_last_name,
-      patient_email: formik.values.patient_email,
+      patient_first_name:
+        formik.values.patient_first_name || profileData?.patient_first_name,
+      patient_last_name:
+        formik.values.patient_last_name || profileData?.patient_last_name,
+      patient_email: formik.values.patient_email || profileData?.patient_email,
       insurance_company: selectedItemList.insurance.id,
-      policy_number: formik.values.policy_number,
-      address1: formik.values.address1,
+      policy_number: formik.values.policy_number || profileData?.policy_number,
+      address1: formik.values.address1 || profileData?.address1,
       zip_code_id: selectedItemList.zip_code_id.id,
-      apartment: formik.values.apartment,
-      patient_gender: formik.values.patient_gender,
-      patient_dob: formik.values.patient_dob,
+      apartment: formik.values.apartment || profileData?.apartment,
+      patient_gender:
+        formik.values.patient_gender || profileData?.patient_gender,
+      patient_dob: formik.values.patient_dob || profileData?.patient_dob,
       city_id: selectedItemList.city_id.id,
       state_id: selectedItemList.state.id,
     };
@@ -186,9 +189,12 @@ const UpdateProfile = () => {
                   id="patient_first_name"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_first_name}
+                  value={
+                    formik.values.patient_first_name ||
+                    profileData?.patient_first_name
+                  }
                   placeholder="Enter your first name"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
 
                 {formik.errors.patient_first_name &&
@@ -210,10 +216,13 @@ const UpdateProfile = () => {
                   name="patient_last_name"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_last_name}
+                  value={
+                    formik.values.patient_last_name ||
+                    profileData?.patient_last_name
+                  }
                   id="patient_last_name"
                   placeholder="Enter your last name"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_last_name &&
                   formik.touched.patient_last_name && (
@@ -231,12 +240,14 @@ const UpdateProfile = () => {
                   Gender
                 </Label>
                 <select
-                  className="border border-verifiCation  rounded py-2 px-4 text-formLabel text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation  rounded py-2 px-4 text-black text-[12px] sm:text-[14px]"
                   id="patient_gender"
                   name="patient_gender"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_gender}
+                  value={
+                    formik.values.patient_gender || profileData?.patient_gender
+                  }
                 >
                   <option value="" className="text-formLabel">
                     Select
@@ -266,8 +277,8 @@ const UpdateProfile = () => {
                   placeholder="MM/DD/YYYY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_dob}
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-[6px] px-4 text-[12px] sm:text-[14px]"
+                  value={formik.values.patient_dob || profileData?.patient_dob}
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-[6px] px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_dob && formik.touched.patient_dob && (
                   <div className="text-red-400 text-xs mt-1">
@@ -288,13 +299,13 @@ const UpdateProfile = () => {
                 <Input
                   type="number"
                   name="patient_phone"
+                  value={profileData?.patient_phone}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={phone}
                   id="patient_phone"
                   disabled
                   placeholder="XXX XXX XXXX"
-                  className="border border-verifiCation outline-verifiCation bg-gray-200 text-formLabel rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation bg-gray-200 text-black rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
                 />
                 {formik.errors.patient_phone &&
                   formik.touched.patient_phone && (
@@ -315,10 +326,12 @@ const UpdateProfile = () => {
                   name="patient_email"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.patient_email}
+                  value={
+                    formik.values.patient_email || profileData?.patient_email
+                  }
                   id="patient_email"
                   placeholder="email@domain.com"
-                  className="border border-verifiCation text-formLabel outline-verifiCation rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation text-black outline-verifiCation rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_email &&
                   formik.touched.patient_email && (
@@ -341,10 +354,11 @@ const UpdateProfile = () => {
                   name="insurance_company"
                   onBlur={formik.handleBlur}
                   value={
-                    selectedItemList.insurance.insurance_company_name || ""
+                    selectedItemList.insurance.insurance_company_name ||
+                    profileData?.insurance_company
                   }
                   placeholder="select"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 <img
                   src={greenArrowDown}
@@ -433,8 +447,10 @@ const UpdateProfile = () => {
                   id="policy_number"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.policy_number}
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  value={
+                    formik.values.policy_number || profileData?.policy_number
+                  }
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.policy_number &&
                   formik.touched.policy_number && (
@@ -460,9 +476,9 @@ const UpdateProfile = () => {
                   id="apartment"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.apartment}
+                  value={formik.values.apartment || profileData?.apartment}
                   placeholder="Building/Apartment/Unit"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.apartment && formik.touched.apartment && (
                   <div className="text-red-400 text-xs mt-1">
@@ -485,9 +501,9 @@ const UpdateProfile = () => {
                   id="address1"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.address1}
+                  value={formik.values.address1 || profileData?.address1}
                   placeholder="Enter your address"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.address1 && formik.touched.address1 && (
                   <div className="text-red-400 text-xs mt-1">
@@ -547,7 +563,7 @@ const UpdateProfile = () => {
                   onFocus={() => setCityDropDown(true)}
                   placeholder="city"
                   autoComplete="nope"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {IscityDropDown ? (
                   <ul
@@ -696,7 +712,6 @@ const UpdateProfile = () => {
           <Button
             onClick={handleSubmit}
             type="submit"
-            disabled={!formik.isValid || !formik.dirty}
             className="bg-verifiCation cursor-pointer text-white font-sansMedium text-[14px] py-2 px-16 rounded-full"
           >
             Update
