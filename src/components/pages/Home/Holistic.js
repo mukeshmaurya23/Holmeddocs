@@ -289,6 +289,7 @@ const Holistic = () => {
   //     );
   //   });
   // };
+
   const locationItems = () => {
     if (status === "loading") {
       return <Spinner />;
@@ -493,6 +494,7 @@ const Holistic = () => {
             </div>
             {selectedItem === "location" && (
               <div
+
                 className="absolute top-[12.5rem] lg:top-[4rem] bg-white w-[85%] left-[1.5rem] md:left-2 md:w-[400px] p-0 md:p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                 style={{
                   zIndex: 1,
@@ -511,7 +513,9 @@ const Holistic = () => {
                   condSpecSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
+
                 className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px]  pl-0 md:pl-[0rem] placeHolderText"
+
               />
               <div
                 className=" cursor-pointer"
@@ -527,7 +531,9 @@ const Holistic = () => {
               </div>
               {selectedItem === "speciality" && (
                 <div
+
                   className="absolute top-[2.5rem] md:top-[5rem] lg:top-[4rem] bg-white w-[110%] -left-[1.5rem] md:w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+
                   style={{
                     zIndex: 1,
                   }}

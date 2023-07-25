@@ -9,14 +9,25 @@ import greenArrowLeft from "../../../images/GreenArrowLeft.png";
 import greenArrowRight from "../../../images/GreenArrowRight.png";
 import TimeFormatter from "../../../util/TimeFormatter";
 import { book_appointment_DoctorData } from "../../../store/apiSlice";
+import { useRef } from "react";
+import customAxios from "../../../axios/custom";
+import { enqueueSnackbar } from "notistack";
 const BookAppointmentStep1 = ({ handleNextStep }) => {
   const location = useLocation();
+  const [isDropDownInsurance, setIsDropDownInsurance] = useState(false);
+  const [isDropdownCondition, setIsDropdownCondition] = useState(false);
 
-  const {
-    bookAppointmentDoctorData,
-    bookAppointmentDoctorDataStatus,
-    bookAppointmentDoctorDataError,
-  } = useSelector((state) => state.api);
+  const [selectedItemList, setSelectedItemList] = useState({
+    insurance: "",
+    conditions: "",
+  });
+
+  const handleSelectedItem = (item, type) => {
+    setSelectedItemList({ ...selectedItemList, [type]: item });
+  };
+  console.log(selectedItemList, "selectedItemList");
+  const { bookAppointmentDoctorData, bookAppointmentDoctorDataStatus } =
+    useSelector((state) => state.api);
   console.log(bookAppointmentDoctorData, "bookAppointmentDoctorData");
   const bookDoctorAppointmentDispatch = useDispatch();
 
@@ -42,6 +53,26 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   const toggleButtonHandlerAppointmentType = () => {
     setIsActiveAppointmentType(!isActiveAppointmentType);
   };
+  const insuranceRef = useRef(null);
+  const conditionRef = useRef(null);
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (insuranceRef?.current?.contains(e.target)) {
+        setIsDropDownInsurance(true);
+      } else {
+        setIsDropDownInsurance(false);
+      }
+      if (conditionRef?.current?.contains(e.target)) {
+        setIsDropdownCondition(true);
+      } else {
+        setIsDropdownCondition(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
@@ -58,6 +89,44 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
     );
   };
 
+  if (bookAppointmentDoctorDataStatus === "loading") {
+    return <div className="text-center">loading</div>;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      doctor_id: location?.state?.doctor?.[0]?.id,
+      insurance_id: selectedItemList.insurance.id,
+      medical_condition: selectedItemList.conditions.id,
+      visit_type: !isActiveAppointmentType ? "InPerson" : "Virtual",
+
+      appointment_date: location.state.date,
+      time_slot_id: location.state.timeSlotId,
+    };
+
+    console.log(data, "data");
+
+    try {
+      const response = await customAxios.post(
+        "/patient/save_appointment",
+        data
+      );
+      console.log(response, "response");
+      enqueueSnackbar(response?.data?.message, {
+        variant: response?.data?.success ? "success" : "error",
+        autoHideDuration: 1000,
+      });
+      if (response.status === 200) {
+        if (response?.data?.success === 1) {
+          handleNextStep(response);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <div className="flex flex-col justify-center mt-[6rem] items-center py-10">
@@ -80,8 +149,8 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   className="w-[100px] h-auto rounded-xl"
                 />
                 <div className="flex flex-col px-5">
-                  <h2 className="text-2xl   text-[1.2rem] font-Henriette font-semibold tracking-[2px]">
-                    {item?.doctor_name} {item?.id}
+                  <h2 className="text-2xl   text-[1.2rem] font-sansBold font-semibold tracking-[2px]">
+                    {item?.doctor_name}
                   </h2>
                   <p className="text-[.86rem] text-[#292F33] py-1 font-sansRegular">
                     {item?.medical_speciality} , {item?.country}
@@ -95,34 +164,87 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1">
                   Select your Insurance
                 </Label>
-                <div className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center">
+                <div
+                  ref={insuranceRef}
+                  className=" relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center"
+                >
                   <Input
                     type="text"
+                    value={selectedItemList.insurance.insurance_company_name}
                     placeholder="Select your Insurance"
                     className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677] font-sansRegular"
                   />
-
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer   `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${
+                      isDropDownInsurance ? "rotate-180" : ""
+                    }  `}
                   />
+                  <ul className="absolute top-[3.7rem] 2xl:top-[5rem] p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto">
+                    {isDropDownInsurance &&
+                      bookAppointmentDoctorData?.insurance?.map((item) => (
+                        <li
+                          key={item.id}
+                          onClick={() =>
+                            handleSelectedItem(
+                              {
+                                id: item.id,
+                                insurance_company_name:
+                                  item.insurance_company_name,
+                              },
+                              "insurance"
+                            )
+                          }
+                          className="cursor-pointer px-5 font-sansRegular font-semibold text-[13px] py-1"
+                        >
+                          {item?.insurance_company_name}
+                        </li>
+                      ))}
+                  </ul>
                 </div>
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-8">
                   What’s the reason for your visit?
                 </Label>
-                <div className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center">
+                <div
+                  ref={conditionRef}
+                  className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center"
+                >
                   <Input
                     type="text"
                     placeholder="Select condition"
+                    value={selectedItemList.conditions.medical_condition_name}
                     className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677]  font-sansRegular"
                   />
 
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer   `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${
+                      isDropdownCondition ? "rotate-180" : ""
+                    }  `}
                   />
+                  <ul className="absolute top-[3.7rem] 2xl:top-[5rem] p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto">
+                    {isDropdownCondition &&
+                      bookAppointmentDoctorData?.conditions?.map((item) => (
+                        <li
+                          key={item.id}
+                          onClick={() =>
+                            handleSelectedItem(
+                              {
+                                id: item.id,
+                                medical_condition_name:
+                                  item.medical_condition_name,
+                              },
+                              "conditions"
+                            )
+                          }
+                          className="cursor-pointer px-5 font-sansRegular font-semibold text-[13px] py-1"
+                        >
+                          {item?.medical_condition_name}
+                        </li>
+                      ))}
+                  </ul>
                 </div>
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-8">
                   Have you visited before?
@@ -181,9 +303,14 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <div className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center">
                   <Input
                     type="text"
-                    placeholder="Select condition"
-                    value={item?.country?.[0]}
-                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#757993]  font-sansRegular"
+                    placeholder="address"
+                    value={bookAppointmentDoctorData?.clinic_address?.map(
+                      (item) => item.address
+                    )}
+                    style={{
+                      width: "-webkit-fill-available",
+                    }}
+                    className="relative outline-none  rounded-md px-3 py-2 text-[.9rem]  text-[#757993]  font-sansRegular"
                   />
 
                   <img
@@ -277,8 +404,9 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
                 <div className="flex items-center justify-center mt-8">
                   <Button
+                    type="submit"
                     className="bg-verifiCation text-white text-[15px] font-semibold rounded-full w-[15rem] h-[2.5rem] "
-                    onClick={handleNextStep}
+                    onClick={handleSubmit} //handleNextStep
                   >
                     Book Appointment
                   </Button>

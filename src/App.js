@@ -91,7 +91,10 @@ function App() {
         { path: "/about-us", element: <AboutUs /> },
         { path: "/make-appointment", element: <MakeAppointment /> },
         { path: "/doctor-listing", element: <DoctorListing /> },
-        { path: "/doctor-listing/:id", element: <DoctorDetails /> },
+        {
+          path: "/doctor-listing/:doctorName/:id",
+          element: <DoctorDetails />,
+        },
         { path: "/contact-us", element: <ContactUs /> },
         { path: "/book-appointment", element: <BookAppointment /> },
       ],

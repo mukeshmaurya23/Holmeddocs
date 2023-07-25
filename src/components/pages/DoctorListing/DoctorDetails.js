@@ -32,7 +32,10 @@ const DoctorDetails = ({}) => {
     date: "",
     time: "",
   });
+
+  const [timeSlotId, setTimeSlotId] = useState("");
   console.log(selectDateTime, "selectDateTime------------------");
+  console.log(timeSlotId, "timeSlotId------------------");
   const calendarRef = useRef(null);
 
   const handleDateSelection = (date, timeSlots) => {
@@ -102,6 +105,7 @@ const DoctorDetails = ({}) => {
             ),
             date: selectDateTime.date,
             time: selectDateTime.time,
+            timeSlotId: timeSlotId,
           },
         })
       : openModal();
@@ -357,6 +361,7 @@ const DoctorDetails = ({}) => {
                             } font-sansRegular py-2 px-5 text-[13px] rounded-md`}
                             onClick={() => {
                               if (timeSlot.to) {
+                                setTimeSlotId(timeSlot.id);
                                 handleTimeSelection(timeSlot.to);
                               }
                             }}

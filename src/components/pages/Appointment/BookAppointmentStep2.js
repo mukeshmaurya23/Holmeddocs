@@ -3,8 +3,10 @@ import checkMark from "../../../images/profile/Checkmark.png";
 import Button from "../../../util/Button";
 import Footer from "../../../UI/Footer";
 import { Link } from "react-router-dom";
-const BookAppointmentStep2 = () => {
+import TimeFormatter from "../../../util/TimeFormatter";
+const BookAppointmentStep2 = ({ responseData }) => {
   const [expandData, setExpandData] = useState(false);
+  console.log(responseData);
 
   const handleExpandData = () => {
     setExpandData(!expandData);
@@ -23,37 +25,41 @@ const BookAppointmentStep2 = () => {
           </p>
         </div>
         <h1 className="text-[1.1rem] tracking-[1px] font-sansRegular font-semibold text-center text-[#707070] py-4">
-          Dr. Alexander O Babazadeh
+          {responseData?.doctor_name}
         </h1>
       </div>
       <div className="sm:mx-auto m-[10px] sm:m-[10px] mt-10  bg-[#DFFEFE] px-10  py-10 border-2 border-verifiCation rounded-xl max-w-[600px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 ">
           <div>
             <p className="text-[#9FA1AF] py-1">Type of visit</p>
-            <p className="text-[#292F33] font-sansRegular">InPerson</p>
+            <p className="text-[#292F33] font-sansRegular">
+              {responseData?.visit_type}
+            </p>
           </div>
           <div className="">
             <p className="text-[#9FA1AF] py-2">Clinic Address</p>
             <p className="max-w-[190px] text-[#171b1d] font-sansRegular text-[14px]">
-              14 Street Medical P.C. 110 W 14th St New York, NY 10011
+              {responseData?.clinic_address}
             </p>
           </div>
           <div className="py-3">
             <p className="text-[#9FA1AF] py-1">Date</p>
             <p className="text-[#292F33] font-sansRegular">
-              Monday, September 1
+              {responseData?.appointment_date}
             </p>
           </div>
           <div className="py-3">
             <p className="text-[#9FA1AF] py-1">Time</p>
-            <p className="text-[#292F33] font-sansRegular">8:00 AM</p>
+            <p className="text-[#292F33] font-sansRegular">
+              <TimeFormatter time={responseData?.appointment_time} />
+            </p>
           </div>
           {expandData && (
             <>
               <div className="py-3">
                 <p className="text-[#9FA1AF] py-1">Medical Conditions</p>
                 <p className="text-[#292F33] font-sansRegular">
-                  Digestive disorders
+                  {responseData?.medical_condition}
                 </p>
               </div>
               <div className="py-3">
@@ -66,12 +72,14 @@ const BookAppointmentStep2 = () => {
               </div>
               <div className="py-3">
                 <p className="text-[#9FA1AF] py-1">Insurance</p>
-                <p className="text-[#292F33] font-sansRegular">UHC</p>
+                <p className="text-[#292F33] font-sansRegular">
+                  {responseData?.insurance}
+                </p>
               </div>
               <div className="py-3">
                 <p className="text-[#9FA1AF] py-1">Reason</p>
                 <p className="text-[#292F33] font-sansRegular text-[14px]">
-                  14 Street Medical P.C. 110 W 14th St New York, NY 10011
+                  {responseData?.clinic_address}
                 </p>
               </div>
             </>
