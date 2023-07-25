@@ -395,20 +395,21 @@ const DoctorListing = () => {
       // Update the searchParams and navigate based on the updated filter data
       if (checked) {
         const valueToAdd =
-        filterTitle.toLowerCase() === "appointment_type"
-          ? appointment_type
-          : name ? `${name}_${id}` : id;
+          filterTitle.toLowerCase() === "appointment_type"
+            ? appointment_type
+            : name
+            ? `${name}_${id}`
+            : id;
 
-          searchParams.set(filterTitle, valueToAdd);
+        searchParams.set(filterTitle, valueToAdd);
         // searchParams.set(
         //   filterTitle,
-          
-         
+
         //   filterTitle.toLowerCase() === "appointment_type"
         //     ? appointment_type
         //     : [
         //         ` ${name} ? ${name}_${id} :${id}`,
-        //       ] 
+        //       ]
         // );
       } else {
         searchParams.delete(filterTitle);
@@ -439,7 +440,6 @@ const DoctorListing = () => {
           }`}
           onChange={handleChange}
           checked={isChecked}
-          
         />
         <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold ">
           {data.language_title ||
@@ -465,11 +465,11 @@ const DoctorListing = () => {
   return (
     <>
       <section className="px-[.3rem] max-w-[1560px] mx-auto">
-        <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
+        <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[1px]">
           We have found {totalCount} Doctors for your search criteria.
         </h2>
 
-        <div className="flex mt-5">
+        <div className="flex mt-16">
           <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters
@@ -511,7 +511,7 @@ const DoctorListing = () => {
               </>
             )}
           </aside>
-          <main className="ml-10">
+          <main className="ml-5">
             {renderDoctorsList()}
             {status === "loading"
               ? ""

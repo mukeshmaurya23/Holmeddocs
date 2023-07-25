@@ -250,101 +250,6 @@ const Holistic = () => {
 
   console.log(locationSearchResults, "....................heheh");
 
-  //create a api calls for handleSearcg
-  // const [searchLocationItem, setSearchLocationItem] = useState([]);
-
-  // // const searchLocationItemData = async (searchValue) => {
-  // //   try {
-  // //     const response = await customAxios.post("patient/master/areas", {
-  // //       name: searchValue,
-  // //     });
-  // //     const data = response?.data?.data?.result || [];
-  // //     setSearchLocationItem(data);
-  // //     console.log(data);
-  // //   } catch (error) {
-  // //     console.log(error);
-  // //   }
-  // // };
-  // const [searchValue, setSearchValue] = useState("");
-
-  // const handleLocationSearch = (e) => {
-  //   setSearchValue(e.target.value);
-  // };
-
-  // useEffect(() => {
-  //   let isMounted = true; // Add a flag to track if the component is still mounted
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await customAxios.post("patient/master/areas", {
-  //         name: searchValue,
-  //       });
-
-  //       if (isMounted) {
-  //         const data = response?.data?.data?.result || [];
-  //         setSearchLocationItem(data);
-  //         console.log(data);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   if (searchValue) {
-  //     const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
-
-  //     return () => {
-  //       clearTimeout(timer);
-  //       isMounted = false;
-  //     };
-  //   }
-  // }, [searchValue]);
-
-  // const handleSearch = () => {
-  //   //
-  //   navigate(
-  //     `/doctor-listing?location=${selectedItemList.location}&speciality=${
-  //       selectedItemList.specialitycondition
-  //     }&conditions=${selectedItemList.specialitycondition}
-  //     &date=${startDate.toDateString()}`
-  //   );
-  // };
-  // const handleSearch = () => {
-  //   let url = "/doctor-listing?";
-
-  //   if (selectedItemList.location) {
-  //     url += `location=${selectedItemList.location}&`;
-  //   }
-  //   if (selectedItemList.specialitycondition) {
-  //     url += `speciality=${selectedItemList.specialitycondition}&`;
-
-  //   }
-
-  //   url += `date=${startDate.toDateString()}`;
-
-  //   navigate(url);
-  // };
-
-  // const locationItems = () => {
-  //   if (status === "loading") {
-  //     return <Spinner />;
-  //   }
-
-  //   return locationAreas?.map((item) => {
-  //     return (
-  //       <h1
-  //         key={item.id}
-  //         onClick={() =>
-  //           handleSelectedItem(item.city, "location", item.zip_code_id)
-  //         }
-  //         className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
-  //       >
-  //         {item.city}
-  //       </h1>
-  //     );
-  //   });
-  // };
-
   const locationItems = () => {
     if (status === "loading") {
       return <Spinner />;
@@ -500,82 +405,13 @@ const Holistic = () => {
             className="flex flex-col md:flex-row  justify-between px-4"
             ref={ref}
           >
-            {/* <Accordion
-              items={LocSpec}
-              items2={LocSpecd?.data?.result}
-              items3={specialistData?.data?.result}
-              locLoading={locLoading}
-              specialityLoading={specialityLoading}
-              //items2={LocSpecd?.data?.result}
-              // value={value}
-              showBorder={false}
-              image={grayDropDown}
-              className="text-gray-600"
-            /> */}
-            {/* {LocSpec.map((item) => {
-              return (
-                <>
-                  <div
-                    className="flex relative justify-between items-center "
-                    key={item.id}
-                  >
-                   
-                    <input
-                      placeholder={item.title}
-                      value={
-                        item.id === "location"
-                          ? searchValue
-                          : selectedItemList[item.id]
-                      }
-                      onChange={
-                        item.id === "location" ? handleLocationSearch : null
-                      }
-                      onFocus={() => handleItemClick(item.id)}
-                      className={`font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText`}
-                    />
-
-                    <div
-                      className=" cursor-pointer"
-                      onClick={() => handleItemClick(item.id)}
-                    >
-                      <img
-                        src={grayDropDown}
-                        alt=""
-                        className={`${
-                          selectedItem === item.id ? "rotate-180" : ""
-                        } cursor-pointer h-3 w-3 mr-8`}
-                      />
-                    </div>
-
-                    <div
-                      className={`${"border-l  border-none md:border-l lg:border-l border-gray-400 h-[50px] ml-10 mr-5"}`}
-                    ></div>
-                    {selectedItem === item.id && (
-                      <div
-                        className="absolute top-[5rem] bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
-                        style={{
-                          zIndex: 1,
-                        }}
-                      >
-                        {item.id === "location" && locationItems()}
-
-                        {item.id === "speciality" || item.id === "conditions"
-                          ? SpecialityAndCondition()
-                          : null}
-                      </div>
-                    )}
-                  </div>
-                </>
-              );
-            })} */}
-
             <div className="flex relative justify-between items-center py-4 md:py-0">
               <input
                 placeholder="Location"
                 value={selectedItemList.location || searchValue}
                 onChange={handleLocationSearch}
                 onClick={() => handleItemClick("location")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[2px] pr-8 pl-0 md:pl-[2rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
               />
               <div
                 className=" cursor-pointer"
@@ -610,7 +446,7 @@ const Holistic = () => {
                   SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px]  pl-0 md:pl-[0rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]   pl-0 md:pl-[0rem] placeHolderText"
               />
               <div
                 className=" cursor-pointer"
