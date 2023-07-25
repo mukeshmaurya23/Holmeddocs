@@ -13,6 +13,7 @@ import { forgotSchema } from "../../schema/formValidation";
 import { useFormik } from "formik";
 import customAxios from "../../axios/custom";
 import { enqueueSnackbar } from "notistack";
+import Spinner from "../../UI/Spinner";
 // const validate = (values) => {
 //   const errors = {};
 //   if (Object.values(values.otp).some((data) => data === "")) {
@@ -25,6 +26,7 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [otpValue, setOtpValue] = useState(""); // New state variable to hold otpValue
+  const [loading, setLoading] = useState(false);
 
   // Function to update otpValue
   const handleOtpChange = (otpValue) => {
@@ -111,6 +113,7 @@ const ForgotPassword = () => {
 
     if (step === 1) {
       try {
+        setLoading(true);
         const response = await customAxios.post("/patient/forgot_password", {
           phone: formik.values.phone,
         });
@@ -120,6 +123,7 @@ const ForgotPassword = () => {
         });
         console.log(response.data, "im response from forgot password");
         if (response.data.success) {
+          setLoading(false);
           //setOtpValue(response.data.token);
           handleNextStep();
         }
@@ -198,7 +202,7 @@ const ForgotPassword = () => {
                       }`}
                       onClick={handleSubmit}
                     >
-                      {step === 1 ? "Next" : step === 2 ? "Next" : false}
+                      {step === 1 ? loading ? <Spinner/> : "Next" : step === 2 ? "Next" : false}
                     </button>
                   )}
                   {step === 3 && (

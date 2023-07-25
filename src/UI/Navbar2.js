@@ -296,7 +296,7 @@ const Navbar2 = () => {
     const specialityValue = e.target.value;
     setSelectedItemList((prevState) => ({
       ...prevState,
-      speciality: specialityValue,
+      speciality: "",
     }));
 
     // Update URL parameter for speciality
@@ -499,7 +499,7 @@ const Navbar2 = () => {
                     onChange={handleLocationSearch}
                     key={locationSearchParams}
                     ref={locAreasRef}
-                    value={selectedItemList.location || searchValue}
+                    value={selectedItemList.location || searchValue || locationSearchParams}
                     onClick={() => {
                       setIsLocationDropdown(!isLocationDropdown);
                     }}
@@ -554,7 +554,7 @@ const Navbar2 = () => {
                     onChange={handleSpecialityChange}
                     ref={specialityRef}
                     value={
-                      selectedItemList.speciality || selectedItemList.conditions
+                      selectedItemList.speciality || selectedItemList.conditions || specialitySearchParams?.slice(0, -3) || conditionSearchParams?.slice(0, -3)
                     }
                     onClick={() => {
                       setIsSpecialityDropdown(!isSpecialityDropdown);

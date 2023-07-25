@@ -36,12 +36,7 @@ const Modal = ({
                 <Button
                   className="mt-4 px-12 py-1 bg-verifiCation text-white rounded-full"
                   onClick={
-                    logOutHandler
-                      ? () => {
-                          logOutHandler();
-                          closeModal();
-                        }
-                      : closeModal
+                 onConfirm ? onConfirm : logOutHandler
                   }
                 >
                   <Link to="/login">{btnText}</Link>

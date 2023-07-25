@@ -537,3 +537,20 @@ export const ImageArray=[
     image:require("./images/specialities/SportMedicine.png")
   }
 ]
+
+const doctorImages = [
+  "https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  "https://media.istockphoto.com/id/1372002650/photo/cropped-portrait-of-an-attractive-young-female-doctor-standing-with-her-arms-folded-in-the.webp?b=1&s=170667a&w=0&k=20&c=ZaIV4-qe9Bgx9QTal0mAU6MbR8eOzxA4jf0KVKYjVMQ=",
+  "https://media.istockphoto.com/id/1500306618/photo/side-view-of-a-young-male-doctor-stands-while-looking-down-at-a-document-and-reading-with.webp?b=1&s=170667a&w=0&k=20&c=Wk5HGfbyOvexk2BJpihWPp4r8yE59hJE8tqsGDo-Kco=",
+  "https://media.istockphoto.com/id/1447365709/photo/healthcare-women-and-doctors-with-patient-chart-on-clipboard-in-hospital-or-clinic-happy.webp?b=1&s=170667a&w=0&k=20&c=x9SJ1GnXViqPcvdZZuGMkFa6vnwBWfPY3AM-oJBSL7o=",
+  "https://media.istockphoto.com/id/1451854647/photo/female-nurse-using-her-digital-tablet-while-standing-in-the-consultation.webp?b=1&s=170667a&w=0&k=20&c=nDe03QVF4dHzJlnvnHCxPdq3grNgx32POxF15UuusVo=",
+  
+];
+
+export const getRandomDoctorImage = () => {
+  const randomIndex = Math.floor(Math.random() * doctorImages.length);
+  return doctorImages[randomIndex];
+};

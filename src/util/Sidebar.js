@@ -146,6 +146,10 @@ const SideBar = () => {
           text="Are you sure you want to Logout?"
           btnText="Yes"
           btnText2="No"
+          onConfirm={() => {
+            dispatch(logout()) && navigate("/register");
+          }}
+          
           closeModal={() => {
             setModal(false);
           }}

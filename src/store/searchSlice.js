@@ -28,7 +28,7 @@ const searchSlice = createSlice({
     name: "",
 
     loading: false,
-    locationSearchResults: null,
+    locationSearchResults: [],
     // cachedResults: initialCache,
   },
   reducers: {

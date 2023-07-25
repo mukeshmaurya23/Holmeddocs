@@ -15,10 +15,13 @@ import customAxios from "../../axios/custom";
 import { enqueueSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/loginSlice";
+import Spinner from "../../UI/Spinner";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
   const [isnewPasswordVisible, setIsnewPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
   const toggleOldPasswordVisibility = () => {
@@ -56,6 +59,7 @@ const ChangePassword = () => {
       };
       console.log(data);
       try {
+        setLoading(true);
         const response = await customAxios.post(
           "/patient/change_password",
           data
@@ -66,6 +70,7 @@ const ChangePassword = () => {
           autoHideDuration: 1500,
         });
         if (response.data.success === 1) {
+          setLoading(false);
           formik.resetForm();
           openModal();
           setTimeout(() => {
@@ -74,6 +79,8 @@ const ChangePassword = () => {
         }
       } catch (err) {
         console.log(err);
+      }finally{
+        setLoading(false);
       }
     },
     validationSchema: resetSchema,
@@ -229,7 +236,9 @@ const ChangePassword = () => {
                         onClick={handleContinue}
                         disabled={!(formik.isValid && formik.dirty)}
                       >
-                        Continue
+                        {
+                          loading ? <Spinner /> : "Continue"
+                        }
                       </Button>
                     </div>
                   </div>

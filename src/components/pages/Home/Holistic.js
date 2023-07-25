@@ -193,6 +193,8 @@ const Holistic = () => {
     navigate(url);
   };
 
+  console.log(locationSearchResults ,"....................heheh")
+
   //create a api calls for handleSearcg
   // const [searchLocationItem, setSearchLocationItem] = useState([]);
 
@@ -298,7 +300,7 @@ const Holistic = () => {
         </h1>
       );
     }
-    return locationSearchResults?.map((item) => {
+    return locationSearchResults && locationSearchResults?.map((item) => {
       return (
         <h1
           key={item.id}

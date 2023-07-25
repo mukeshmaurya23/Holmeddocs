@@ -394,16 +394,22 @@ const DoctorListing = () => {
 
       // Update the searchParams and navigate based on the updated filter data
       if (checked) {
-        searchParams.set(
-          filterTitle,
-          filterTitle.toLowerCase() === "appointment_type"
-            ? appointment_type
-            : [
-                ` ${name}_${id}`,
-              ] /**data.medical_condition_name || [...checkedIds,
-            data.medical_speciality_name ||
-            data.insurance_company_name || */
-        );
+        const valueToAdd =
+        filterTitle.toLowerCase() === "appointment_type"
+          ? appointment_type
+          : name ? `${name}_${id}` : id;
+
+          searchParams.set(filterTitle, valueToAdd);
+        // searchParams.set(
+        //   filterTitle,
+          
+         
+        //   filterTitle.toLowerCase() === "appointment_type"
+        //     ? appointment_type
+        //     : [
+        //         ` ${name} ? ${name}_${id} :${id}`,
+        //       ] 
+        // );
       } else {
         searchParams.delete(filterTitle);
       }
@@ -458,7 +464,7 @@ const DoctorListing = () => {
 
   return (
     <>
-      <section className="px-[.3rem]">
+      <section className="px-[.3rem] max-w-[1560px] mx-auto">
         <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
           We have found {totalCount} Doctors for your search criteria.
         </h2>
@@ -477,7 +483,7 @@ const DoctorListing = () => {
                 {filterData?.data?.result.map((item, index) => {
                   return (
                     <div
-                      className="mt-5 cursor-pointer max-w-[300px]"
+                      className="mt-5 cursor-pointer w-[250px]"
                       key={item.id}
                       id={item.title}
                     >

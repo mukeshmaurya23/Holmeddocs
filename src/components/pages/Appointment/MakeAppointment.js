@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useSearchParams } from "react-router-dom";
 import Input from "../../../util/Input";
 import greenArrowDown from "../../../images/GreenArrowDown.png";
 import greenArrowUp from "../../../images/home/WhiteDropdown.png";
@@ -8,6 +8,7 @@ import Button from "../../../util/Button";
 import DatePickerComponent from "../../../UI/DatePicker";
 import Footer from "../../../UI/Footer";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   fetchConditions,
   fetchLocationAreas,
@@ -15,6 +16,8 @@ import {
 } from "../../../store/LocSpecSlice";
 import Spinner from "../../../UI/Spinner";
 const MakeAppointment = () => {
+
+  const[searchParams]=useSearchParams();
   console.log("pathname", window.location.pathname);
   const [isActive, setIsActive] = useState(false);
   const toggleButtonHandler = () => {
@@ -25,7 +28,7 @@ const MakeAppointment = () => {
   const [condition_id, setConditionId] = useState("");
   const [isLocationDropdown, setIsLocationDropdown] = useState(false);
   const [isSpecialityDropdown, setIsSpecialityDropdown] = useState(false);
-
+ 
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const handleChange = (e) => {
@@ -37,6 +40,8 @@ const MakeAppointment = () => {
     setIsOpen(!isOpen);
   };
 
+
+  const dispatch = useDispatch();
   const locAreasRef = useRef();
   const specialityRef = useRef();
   useEffect(() => {
@@ -137,9 +142,11 @@ const MakeAppointment = () => {
   //     return { ...prevSelectedItemList, [type]: name };
   //   });
   // };
+  const zipCodeId =searchParams.get("city")
+  console.log(zipCodeId,"im zip code id");
 
   useEffect(() => {
-    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
+    dispatch(fetchLocationAreas({ url: "/patient/master/areas", zip_code_id: zipCodeId }));
   }, [locationAreasDispatch]);
 
   useEffect(() => {
@@ -154,10 +161,21 @@ const MakeAppointment = () => {
 
   const handleSearch = () => {
     let url = "/doctor-listing?";
+    const locatonUpdatedUrl = selectedItemList.location
+    ? selectedItemList.location
+    : locationAreas?.[0]?.city;
 
-    if (selectedItemList.location) {
-      url += `location=${selectedItemList.location}_${zip_code_id}&`;
-    }
+ 
+  const updatedZipcode = zip_code_id
+    ? zip_code_id
+    : locationAreas?.[0]?.zip_code_id;
+
+  url += `location=${locatonUpdatedUrl}_${updatedZipcode}&`;
+    // if (selectedItemList.location) {
+    //   const locatonUpdatedUrl=selectedItemList?.location || locationAreas?.[0]?.city;
+    //   const updatedZipcode=zip_code_id || locationAreas?.[0]?.zip_code_id;
+    //   url += `location=${locatonUpdatedUrl}_${updatedZipcode }&`;
+    // }
     if (selectedItemList.speciality) {
       url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
@@ -231,7 +249,7 @@ const MakeAppointment = () => {
   return (
     <>
       <div class="relative  mb-10 ">
-        <div class="hidden md:block w-[35rem]   h-[17rem] lg:w-[45rem] lg:h-[20rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%] absolute left-1/2 transform -translate-x-1/2 mb-20">
+        <div class="hidden md:block w-[35rem]   h-[17rem] lg:w-[50rem] lg:h-[25rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%] absolute left-1/2 transform -translate-x-1/2 mb-20">
 
         </div>
           <div className=" bg-white shadow-none sm:shadow-2xl  absolute md:w-[34rem] rounded-xl    top-10  left-0 mx-auto right-0 ">
@@ -248,11 +266,11 @@ const MakeAppointment = () => {
                   type="text"
                   placeholder="City,Zip Code"
                 
-                  value={selectedItemList.location}
-                
+                  value={selectedItemList.location || locationAreas?.length===1 ? locationAreas?.[0]?.city :""}
+             
                  
                   // value={selectedItemList.location}
-                  className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#636677]   font-sansBold"
+                  className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] w-full  font-sansBold"
                 />
                 <img
                   src={greenArrowDown}
@@ -298,7 +316,7 @@ const MakeAppointment = () => {
                     selectedItemList.speciality || selectedItemList.conditions
                   }
                   onClick={() => handleItemClick("speciality")}
-                  className="relative outline-none px-3 text-[.7rem] sm:text-[.9rem] font-sansBold text-[#5a5c66]"
+                  className="relative outline-none px-3 text-[.7rem] sm:text-[.9rem] font-sansBold text-[#5a5c66] w-full"
                 />
                 <img
                   src={greenArrowDown}
