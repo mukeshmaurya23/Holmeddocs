@@ -10,11 +10,11 @@ export const searchLocation = createAsyncThunk(
       const response = await customAxios.post("/patient/master/areas", {
         name: searchValue,
       });
-      const result = response?.data?.data?.result || [];
+      //const result = response?.data?.data?.result || [];
       //   dispatch(addCacheResults({ [searchValue]: result }));
       //   console.log(addCacheResults({ [searchValue]: result }), "im result" );
-      return result;
-      // return response?.data?.data?.result || [];
+      // return result;
+      return response?.data?.data?.result || [];
     } catch (error) {
       console.error("Error while fetching search results:", error);
       return [];
@@ -26,7 +26,7 @@ const searchSlice = createSlice({
   name: "search",
   initialState: {
     name: "",
-    results: [],
+
     loading: false,
     locationSearchResults: [],
     // cachedResults: initialCache,

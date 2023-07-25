@@ -189,7 +189,7 @@ const Footer = () => {
             </ul>
           </section>
         </div>
-        <p className=" px-20 py-10 text-[#000000] leading-6 font-sansRegular text-[13px] hidden sm:block md:block lg:block xl:block 2xl:block">
+        <p className=" px-20 py-10 text-gray-600 leading-6 font-sansRegular font-semibold text-[14px] hidden sm:block md:block lg:block xl:block 2xl:block">
           The content provided here or elsewhere on the Holmeddoc website,
           mobile application, newsletters or similar communication is provided
           for general informational purpose only. Holmeddoc Inc does not provide

@@ -434,3 +434,123 @@ export const dummyData = [
     ],
   },
 ];
+
+
+export const ImageArray=[
+  {
+    id:1,
+    name:"traditional-chinese-medicine",
+    image:require("./images/specialities/TraditionalChinese.png") 
+  },
+  {
+    id:2,
+    name:"integrative-medicine",
+    image:require("./images/specialities/Integrative.png")
+  },
+  {
+    id:3,
+    name:"acupuncturist",
+    image:require("./images/specialities/Acupuncture.png")
+  },{
+    id:4,
+    name:"allergist-and-immunologist",
+    image:require("./images/specialities/Allergy.png")
+  },
+  {
+    id:5,
+    name:"ayurvedic-medicine-practitioner",
+    image:require("./images/specialities/Ayurveda.png")
+  }
+,{
+  id:6,
+  name:"chiropractor",
+  image:require("./images/specialities/Chiropractic.png")
+},{
+  id:7,
+  name:"dietician-nutritionist" ,
+  image:require("./images/specialities/Dietican.png")
+},
+{
+  id:8,
+  name:"endocrinologist",
+  image:require("./images/specialities/Endocrinology.png")
+},
+{
+  id:9,
+  name:"internal-medicine",
+  image:require("./images/specialities/Functional.png")
+},
+{
+  id:10,
+  name:"homeopathic-practitioner",
+  image:require("./images/specialities/Homeopathy.png")
+},
+{
+  id:11,
+  name:"hypnotherapist",
+  image:require("./images/specialities/Hypnotherapy.png")
+},
+{
+  id:12,
+  name:"massage-therapist",
+  image:require("./images/specialities/MassageTherapy.png")
+}
+,
+{
+  id:13,
+  name:"naturopathic-doctor",
+  image:require("./images/specialities/Naturapathy.png")
+}
+,
+{
+  id:15,
+  name:"obgyn-obstetrician-gynecologist",
+  image:require("./images/specialities/Gynecology.png")
+}
+  ,
+  {
+    id:16,
+    name:"physical-therapist",
+    image:require("./images/specialities/Psychotherapy.png")
+  }
+  ,
+  {
+    id:17,
+    name:"psychologist-psychotherapist-counselor",
+    image:require("./images/specialities/Psychology.png")
+  }
+  ,
+  {
+    id:18,
+    name:"reflexologist",
+    image:require("./images/specialities/Reflexology.png")
+  }
+  ,
+  {
+    id:19,
+    name:"sleep-medicine-specialist",
+    image:require("./images/specialities/SleepMedicine.png")
+  },
+  {
+    id:20,
+    name:"yoga-meditation-centers",
+    image:require("./images/specialities/SportMedicine.png")
+  }
+]
+
+const doctorImages = [
+  "https://plus.unsplash.com/premium_photo-1658506671316-0b293df7c72b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  "https://media.istockphoto.com/id/1372002650/photo/cropped-portrait-of-an-attractive-young-female-doctor-standing-with-her-arms-folded-in-the.webp?b=1&s=170667a&w=0&k=20&c=ZaIV4-qe9Bgx9QTal0mAU6MbR8eOzxA4jf0KVKYjVMQ=",
+  "https://media.istockphoto.com/id/1500306618/photo/side-view-of-a-young-male-doctor-stands-while-looking-down-at-a-document-and-reading-with.webp?b=1&s=170667a&w=0&k=20&c=Wk5HGfbyOvexk2BJpihWPp4r8yE59hJE8tqsGDo-Kco=",
+  "https://media.istockphoto.com/id/1447365709/photo/healthcare-women-and-doctors-with-patient-chart-on-clipboard-in-hospital-or-clinic-happy.webp?b=1&s=170667a&w=0&k=20&c=x9SJ1GnXViqPcvdZZuGMkFa6vnwBWfPY3AM-oJBSL7o=",
+  "https://media.istockphoto.com/id/1451854647/photo/female-nurse-using-her-digital-tablet-while-standing-in-the-consultation.webp?b=1&s=170667a&w=0&k=20&c=nDe03QVF4dHzJlnvnHCxPdq3grNgx32POxF15UuusVo=",
+  
+];
+
+export const getRandomDoctorImage = () => {
+  const randomIndex = Math.floor(Math.random() * doctorImages.length);
+  return doctorImages[randomIndex];
+};

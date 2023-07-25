@@ -2,10 +2,14 @@ import React, { useEffect } from "react";
 
 import loadingGif from "../../../images/icons/Loader.gif";
 import { Link, useParams } from "react-router-dom";
+import { getRandomDoctorImage } from "../../../constant";
+
 const DoctorsList = ({ doctorsList, status }) => {
   const { id, doctorName } = useParams();
   console.log(id, doctorName, "doctorName a and id .........");
 
+
+  const randomDoctorImage =getRandomDoctorImage();
   console.log(doctorsList, "doctorsList from listing");
   const DateComp = ({ timeSlotDate }) => {
     const date = new Date(timeSlotDate);
@@ -33,11 +37,11 @@ const DoctorsList = ({ doctorsList, status }) => {
           className="flex flex-wrap sm:gap-5 2xl:gap-[3rem] 2xl:px-[2rem] px-4 mb-6"
           key={doctor?.id}
         >
-          <div className="h-auto w-[160px] mb-3">
+          <div className="rounded-md mb-3">
             <img
-              src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZG9jdG9yfGVufDB8fDB8fHww&w=1000&q=80"
+              src={getRandomDoctorImage()}
               alt="doctor"
-              className="rounded-md"
+              className="rounded-md object-contain h-[160px] w-[160px]"
             />
           </div>
           <div className="flex flex-col">
@@ -86,7 +90,7 @@ const DoctorsList = ({ doctorsList, status }) => {
             </h2>
             <div className="flex flex-row flex-wrap gap-3 mt-5 cursor-pointer ml-6">
               {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
-                <div
+                <Link to={`/doctor-listing/${doctor?.id}`}
                   key={index}
                   className={` ${
                     timeSlot.value.length > 0
@@ -100,7 +104,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                   <p className="px-3">
                     <DateComp timeSlotDate={timeSlot?.date} />
                   </p>
-                </div>
+                </Link>
               ))}
             </div>
             <div className="flex gap-10 py-5 px-5 justify-between items-center">

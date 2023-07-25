@@ -151,23 +151,23 @@ const DoctorDetails = ({}) => {
     </div>
   ) : (
     <>
-      <h1 className="font-sansBold px-[3rem] py-3 text-[1.4rem] tracking-[3px] mt-[8rem]">
+      <h1 className="font-sansBold sm:px-24 sm:py-3 xsm:p-3 text-[1rem] sm:text-[1.4rem] sm:tracking-[3px] mt-2 sm:mt-[10rem]">
         Medicine cure diseases but only doctors can cure patients.
       </h1>
       {doctorsList?.data?.result
         ?.filter((doctor) => doctor.id == id)
         ?.map((doctor) => {
           return (
-            <section className="grid grid-cols-2 mb-10">
-              <div className="mb-8 pl-[3rem] col-span-1">
-                <div className="flex py-6 ">
+            <section className="grid col-span-2  mb-10">
+              <div className="mb-8 sm:pl-[3rem] p-5 col-span-1 md:px-24">
+                <div className="flex py-6 flex-col sm:flex-row ">
                   <img
                     src="https://hips.hearstapps.com/hmg-prod/images/portrait-of-a-happy-young-doctor-in-his-clinic-royalty-free-image-1661432441.jpg?crop=0.66698xw:1xh;center,top&resize=1200:*"
                     alt="doctor"
-                    className="h-[22rem] w-[19rem] rounded-lg object-cover"
+                    className="sm:h-[22rem] sm:w-[19rem] h-[25rem] w-full rounded-lg object-cover"
                   />
 
-                  <ul className="pl-5">
+                  <ul className="sm:pl-[2rem] xsm:mt-2">
                     <li className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                       {doctor?.doctor_name}
                     </li>
@@ -222,8 +222,33 @@ const DoctorDetails = ({}) => {
                       ))}
                     </li>
                   </ul>
-                </div>
 
+                  <div className="flex-1 sm:mr-[4rem] py- sm:pl-[10rem]">
+                <h1 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
+                  About {doctor?.doctor_name}
+                </h1>
+                <p className="py-3 text-sm text-[#545871]">
+                  {doctor?.doctor_bio}
+                </p>
+                <h1 className="font-Henriette py-3 text-[1.1rem] tracking-[1px] text-[#292F33]">
+                  Practise Location
+                </h1>
+                <p className="max-w-[280px] py-2 text-[13px] font-semibold text-[#292F33]">
+                  {doctor?.country?.[0]}
+                </p>
+                {/* <iframe
+                  className="mt-5 h-60 w-full"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15080.731037074034!2d72.87535869905422!3d19.099636713754155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8773cb2f051%3A0x40576ac944236b34!2sSaki%20Naka%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1686410711545!5m2!1sen!2sin"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe> */}
+                <p className="py-5 text-[13px] text-center font-semibold text-[#292F33]">
+                  Location Does Not Exit
+                </p>
+              </div>
+                </div>
+               
                 <div className="mt-[4rem]">
                   <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                     Availability
@@ -346,7 +371,7 @@ const DoctorDetails = ({}) => {
                         ))}
                     </ul>
                   </div>
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-center mt-4">
                     <Button
                       className="bg-verifiCation rounded-full text-white  text-[13px] py-2 px-5 font-sansLight"
                       onClick={handleAppointment}
@@ -356,30 +381,7 @@ const DoctorDetails = ({}) => {
                   </div>
                 </div>
               </div>
-              <div className="col-span-1 mr-[4rem] py-6 pl-[10rem]">
-                <h1 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
-                  About {doctor?.doctor_name}
-                </h1>
-                <p className="py-3 text-sm text-[#545871]">
-                  {doctor?.doctor_bio}
-                </p>
-                <h1 className="font-Henriette py-3 text-[1.1rem] tracking-[1px] text-[#292F33]">
-                  Practise Location
-                </h1>
-                <p className="max-w-[280px] py-2 text-[13px] font-semibold text-[#292F33]">
-                  {doctor?.country?.[0]}
-                </p>
-                {/* <iframe
-                  className="mt-5 h-60 w-full"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15080.731037074034!2d72.87535869905422!3d19.099636713754155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8773cb2f051%3A0x40576ac944236b34!2sSaki%20Naka%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1686410711545!5m2!1sen!2sin"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe> */}
-                <p className="py-5 text-[13px] text-center font-semibold text-[#292F33]">
-                  Location Does Not Exit
-                </p>
-              </div>
+           
             </section>
           );
         })}

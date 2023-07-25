@@ -394,16 +394,22 @@ const DoctorListing = () => {
 
       // Update the searchParams and navigate based on the updated filter data
       if (checked) {
-        searchParams.set(
-          filterTitle,
-          filterTitle.toLowerCase() === "appointment_type"
-            ? appointment_type
-            : [
-                ` ${name}_${id}`,
-              ] /**data.medical_condition_name || [...checkedIds,
-            data.medical_speciality_name ||
-            data.insurance_company_name || */
-        );
+        const valueToAdd =
+        filterTitle.toLowerCase() === "appointment_type"
+          ? appointment_type
+          : name ? `${name}_${id}` : id;
+
+          searchParams.set(filterTitle, valueToAdd);
+        // searchParams.set(
+        //   filterTitle,
+          
+         
+        //   filterTitle.toLowerCase() === "appointment_type"
+        //     ? appointment_type
+        //     : [
+        //         ` ${name} ? ${name}_${id} :${id}`,
+        //       ] 
+        // );
       } else {
         searchParams.delete(filterTitle);
       }
@@ -433,8 +439,9 @@ const DoctorListing = () => {
           }`}
           onChange={handleChange}
           checked={isChecked}
+          
         />
-        <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold tracking-[1px]">
+        <span className="ml-2 text-gray-700 text-[.8rem]  font-sansSemibold ">
           {data.language_title ||
             data.medical_speciality_name ||
             data.medical_condition_name ||
@@ -457,13 +464,13 @@ const DoctorListing = () => {
 
   return (
     <>
-      <section>
+      <section className="px-[.3rem] max-w-[1560px] mx-auto">
         <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[2px]">
           We have found {totalCount} Doctors for your search criteria.
         </h2>
 
-        <div className="flex mt-10 mb-10">
-          <aside className="flex flex-col  px-16 py-3 border-r">
+        <div className="flex mt-5">
+          <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] tracking-[2px]">
               Filters
             </h2>
@@ -476,7 +483,7 @@ const DoctorListing = () => {
                 {filterData?.data?.result.map((item, index) => {
                   return (
                     <div
-                      className="mt-5 cursor-pointer max-w-[300px]"
+                      className="mt-5 cursor-pointer w-[250px]"
                       key={item.id}
                       id={item.title}
                     >
@@ -510,13 +517,13 @@ const DoctorListing = () => {
               ? ""
               : doctorsList.length === 0 && (
                   <div className="flex justify-center items-center">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col justify-center items-center">
                       <img
                         src={noDoctor}
                         alt="no doctors"
                         className="w-[25%] h-auto object-contain"
                       />
-                      <h2 className="font-sansBold text-center px-16 text-[1.3rem] text-[#292F33] tracking-[2px]">
+                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
                         No doctors found.
                       </h2>
                     </div>

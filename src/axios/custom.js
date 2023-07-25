@@ -1,5 +1,5 @@
 import axios from "axios";
-import { login } from "../store/loginSlice";
+import { logout } from "../store/loginSlice";
 import store from "../store/store";
 const customAxios = axios.create({
   //baseURL: "http://192.168.1.35/holmeddoc",
@@ -30,6 +30,10 @@ customAxios.interceptors.response.use(
     return response;
   },
   (error) => {
+    // if (error.response.status === 404) {
+    //   store.dispatch(logout());
+    // }
+
     return Promise.reject(error);
   }
 );
