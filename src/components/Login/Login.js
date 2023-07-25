@@ -14,9 +14,10 @@ import customAxios from "../../axios/custom";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/loginSlice";
 import { useSnackbar } from "notistack";
+import Spinner from "../../UI/Spinner";
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+const[loading,setLoading]=useState(false)
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -43,7 +44,10 @@ const Login = () => {
       };
       console.log(data, "data");
       try {
+        setLoading(true)
         const response = await customAxios.post("/patient/login", data);
+       
+
         console.log(response, "response");
         // setMessage(response?.data?.message);
 
@@ -53,6 +57,7 @@ const Login = () => {
         });
 
         if (response.status === 200) {
+          setLoading(false)
           console.log(response?.data?.data?.result, "response.data.data");
           // localStorage.setItem(
           //   "token",
@@ -67,6 +72,8 @@ const Login = () => {
         }
       } catch (error) {
         console.log(error, "Im error");
+      }finally{
+        setLoading(false)
       }
     },
   });
@@ -246,8 +253,11 @@ const Login = () => {
                       : "bg-white"
                   } */
                     >
-                      Login
+                      {
+                        loading ? <Spinner/> : "Login"
+                      }
                     </Button>
+                  
                   </div>
                 </form>
               </div>

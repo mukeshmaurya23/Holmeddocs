@@ -53,7 +53,7 @@ const ApproacData = [
 ];
 const AboutUs = () => {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden max-w-[1560px] mx-auto">
       <section className="relative mb-10">
         {/*First Div */}
 

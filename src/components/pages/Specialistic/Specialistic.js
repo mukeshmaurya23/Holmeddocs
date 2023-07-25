@@ -9,7 +9,7 @@ import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const Specialistic = () => {
   const dispatch = useDispatch();
-  const { specialties, status, error } = useSelector((state) => state.data);
+  const { specialties, specialtiesStatus, error } = useSelector((state) => state.data);
   useEffect(() => {
     dispatch(fetchSpecialties("/patient/master/speciality"));
   }, []);
@@ -18,27 +18,27 @@ const Specialistic = () => {
     <>
       <div className=" bg-[#ffffff]">
         <div className="text-center  mt-10">
-          <p className="font-sansRegular font-semibold tracking-[5px] md:text-[40px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.8rem] 2xl:tracking-[6px] text-[#292F33]">
+          <p className="font-sansBold  tracking-[2px] md:text-[40px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.6rem] 2xl:tracking-[6px] text-[#292F33]">
             Holistic fields
           </p>
           <div className="flex mt-7">
-            <p className="font-sansBold items-center flex-1 tracking-[3px] text-xl md:ml-[6rem] 2xl:text-[1.6rem] text-[#292F33]">
+            <p className="font-sansBold items-center text-center flex-1 tracking-[3px] text-xl md:ml-[10rem] py-2 2xl:text-[1.6rem] text-[#292F33]">
               15 + Specialities
             </p>
             <Link to="/specialist" className="hidden md:block">
-              <button className=" pr-10 text-[#CF8B15] tracking-[3px] text-md font-semibold font-sansRegular">
+              <button className=" pr-10 text-[#CF8B15] tracking-[3px] text-md 2xl:text-[1.3rem] py-2 font-semibold font-sansRegular">
                 See More
               </button>
             </Link>
           </div>
         </div>
-        {status === "loading" ? (
+        {specialtiesStatus === "loading" ? (
           <>
             <div className="flex justify-center  ">
               <img src={loadingGif} alt="" />
             </div>
           </>
-        ) : status == "failed" ? (
+        ) : specialtiesStatus == "failed" ? (
           <div className="flex justify-center  ">
             <p className="text-red-500">{error}</p>
           </div>

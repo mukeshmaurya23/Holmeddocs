@@ -696,7 +696,8 @@ const UpdateProfile = () => {
           <Button
             onClick={handleSubmit}
             type="submit"
-            className="bg-verifiCation cursor-pointer text-white font-sansMedium text-[14px] py-2 px-10 rounded-full"
+            disabled={!formik.isValid || !formik.dirty}
+            className="bg-verifiCation cursor-pointer text-white font-sansMedium text-[14px] py-2 px-16 rounded-full"
           >
             Update
           </Button>

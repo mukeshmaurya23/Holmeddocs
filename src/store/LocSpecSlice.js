@@ -4,8 +4,11 @@ import customAxios from "../axios/custom";
 // Async thunk action to fetch location areas
 const fetchLocationAreas = createAsyncThunk(
   "data/fetchLocationAreas",
-  async (url) => {
-    const response = await customAxios.post(url);
+  async ({ url, zip_code_id = "" }) => {
+    const response = await customAxios.post(
+      url,
+      zip_code_id ? { zip_code_id } : null
+    );
     const data = response?.data?.data?.result;
     return data;
   }
@@ -37,6 +40,7 @@ const dataSlice = createSlice({
     conditions: [],
     filterConditions: [],
     status: "idle",
+    specialtiesStatus: "idle",
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -55,12 +59,12 @@ const dataSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchSpecialties.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.specialtiesStatus = "succeeded";
         state.specialties = action.payload;
         state.filterSpecialties = action.payload;
       })
       .addCase(fetchSpecialties.rejected, (state) => {
-        state.status = "failed";
+        state.specialtiesStatus = "failed";
       })
       .addCase(fetchConditions.pending, (state) => {
         state.status = "loading";

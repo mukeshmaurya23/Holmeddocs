@@ -48,15 +48,15 @@ const ProfileDetails = () => {
     </div>
   ) : (
     <>
-      <div className="flex justify-center items-center flex-col px-24 py-16">
+      <div className="flex justify-center items-center flex-col py-10">
         <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10">
           Profile Details
         </h2>
         <div className="border border-verifiCation rounded-xl  p-[30px]">
-          <h2 className="text-center font-Henriette text-[20px]">
+          <h2 className="text-center font-Henriette text-[20px] mb-5">
             {profileData?.patient_first_name}
           </h2>
-          <div class="flex justify-between mx-3  mb-4 ">
+          {/* <div class="flex justify-between mx-3  mb-4 ">
             <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
               <div class="border-r border-verifiCation p-6 ">
                 <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
@@ -83,6 +83,33 @@ const ProfileDetails = () => {
                 <p className="text-[10px] font-sansBold text-gray-600 ml-2">
                   {profileData?.patient_email}
                 </p>
+              </div>
+            </div>
+          </div> */}
+          <div class="w-[550px]">
+            <div class="flex flex-row">
+
+              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">
+                <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
+                <span className="text-[10px] font-sansBold text-gray-600 mt-1">
+                  {profileData?.patient_gender}
+                </span>
+              </div>
+              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">   <p class="text-center mt-1 text-[10px] font-sansBold text-gray-600">
+                {calcularteDob(profileData.patient_dob)}
+              </p>
+                <p className="text-[10px] font-sansBold text-gray-600 mt-1">
+                  Years Old
+                </p></div>
+              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">  <i class="fa fa-phone" aria-hidden="true"></i>
+                <p className="text-[10px] font-sansBold text-gray-600 mt-1">
+                  {profileData?.patient_phone}
+                </p></div>
+              <div class="w-1/4 p-4 border border-[#008282] flex flex-col items-center">
+                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                <span className="text-[10px] font-sansBold text-gray-600 mt-1">
+                  {profileData?.patient_email}
+                </span>
               </div>
             </div>
           </div>

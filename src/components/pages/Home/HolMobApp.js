@@ -5,7 +5,7 @@ const HolMobApp = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="px-8 2xl:ml-[5rem] md:px-16 py-14">
+        <div className="px-8  md:px-16 py-14">
           <h2 className="font-sansRegular font-semibold text-[#292F33] text-[1.1rem] text-center md:text-start md:text-[2.5rem] tracking-[1px] md:tracking-[4px] 2xl:text-[2.3rem]">
             Download Holmeddoc
           </h2>

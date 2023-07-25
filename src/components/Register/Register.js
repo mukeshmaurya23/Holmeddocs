@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import calendarSvg from "../../images/home/Calendar.svg";
 import { useSnackbar } from "notistack";
 import DatePickerComponent from "../../UI/DatePicker";
+import Spinner from "../../UI/Spinner";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -21,6 +22,8 @@ const Register = () => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  const [loading,setLoading]=useState(false)
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const toggleConfirmPasswordVisibility = () => {
@@ -77,6 +80,7 @@ const Register = () => {
         gender,
       };
       try {
+        setLoading(true)
         const response = await customAxios.post("/patient/register", data);
         console.log(response);
         enqueueSnackbar(response?.data?.message, {
@@ -85,6 +89,7 @@ const Register = () => {
         });
         if (response.status === 200) {
           if (response.data.success === 1) {
+            setLoading(false)
             //console.log(response.data.message, "im 200 response success");
             // if (response.success === 1) {
             //   navigate("/otp");
@@ -99,6 +104,8 @@ const Register = () => {
         }
       } catch (err) {
         console.log(err);
+      }finally{
+        setLoading(false)
       }
     },
   });
@@ -406,7 +413,9 @@ const Register = () => {
                           //    disabled={!(formik.isValid && formik.dirty)}
                           type="submit"
                         >
-                          Next
+                          {
+                            loading ? <Spinner/> : "Next"
+                          }
                         </Button>
                       </div>
                     </div>

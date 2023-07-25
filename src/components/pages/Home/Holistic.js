@@ -67,6 +67,7 @@ const Holistic = () => {
   );
   // const [filterSpeciality, setFilterSpeciality] = useState([]);
 
+  console.log(locationSearchResults, "locationSearchResults****************");
   // const cacheSearch = useSelector((store) => store.search.cachedResults);
   // console.log(cacheSearch, "cacheSearch--------------");
   // console.log(
@@ -247,30 +248,130 @@ const Holistic = () => {
     navigate(url);
   };
 
+  console.log(locationSearchResults, "....................heheh");
+
+  //create a api calls for handleSearcg
+  // const [searchLocationItem, setSearchLocationItem] = useState([]);
+
+  // // const searchLocationItemData = async (searchValue) => {
+  // //   try {
+  // //     const response = await customAxios.post("patient/master/areas", {
+  // //       name: searchValue,
+  // //     });
+  // //     const data = response?.data?.data?.result || [];
+  // //     setSearchLocationItem(data);
+  // //     console.log(data);
+  // //   } catch (error) {
+  // //     console.log(error);
+  // //   }
+  // // };
+  // const [searchValue, setSearchValue] = useState("");
+
+  // const handleLocationSearch = (e) => {
+  //   setSearchValue(e.target.value);
+  // };
+
+  // useEffect(() => {
+  //   let isMounted = true; // Add a flag to track if the component is still mounted
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await customAxios.post("patient/master/areas", {
+  //         name: searchValue,
+  //       });
+
+  //       if (isMounted) {
+  //         const data = response?.data?.data?.result || [];
+  //         setSearchLocationItem(data);
+  //         console.log(data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   if (searchValue) {
+  //     const timer = setTimeout(fetchData, 300); // Delay the API call by 300 milliseconds to avoid frequent requests while typing
+
+  //     return () => {
+  //       clearTimeout(timer);
+  //       isMounted = false;
+  //     };
+  //   }
+  // }, [searchValue]);
+
+  // const handleSearch = () => {
+  //   //
+  //   navigate(
+  //     `/doctor-listing?location=${selectedItemList.location}&speciality=${
+  //       selectedItemList.specialitycondition
+  //     }&conditions=${selectedItemList.specialitycondition}
+  //     &date=${startDate.toDateString()}`
+  //   );
+  // };
+  // const handleSearch = () => {
+  //   let url = "/doctor-listing?";
+
+  //   if (selectedItemList.location) {
+  //     url += `location=${selectedItemList.location}&`;
+  //   }
+  //   if (selectedItemList.specialitycondition) {
+  //     url += `speciality=${selectedItemList.specialitycondition}&`;
+
+  //   }
+
+  //   url += `date=${startDate.toDateString()}`;
+
+  //   navigate(url);
+  // };
+
+  // const locationItems = () => {
+  //   if (status === "loading") {
+  //     return <Spinner />;
+  //   }
+
+  //   return locationAreas?.map((item) => {
+  //     return (
+  //       <h1
+  //         key={item.id}
+  //         onClick={() =>
+  //           handleSelectedItem(item.city, "location", item.zip_code_id)
+  //         }
+  //         className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 tracking-[0.1rem]"
+  //       >
+  //         {item.city}
+  //       </h1>
+  //     );
+  //   });
+  // };
+
   const locationItems = () => {
     if (status === "loading") {
       return <Spinner />;
     }
-    if (locationSearchResults.length === 0) {
+    if (locationSearchResults?.length === 0) {
       return (
         <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
           No results found
         </h1>
       );
     }
-    return locationSearchResults?.map((item) => {
-      return (
-        <h1
-          key={item.id}
-          onClick={() =>
-            handleSelectedItem(item.city, "location", item.zip_code_id)
-          }
-          className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]"
-        >
-          {item.city}
-        </h1>
-      );
-    });
+    return (
+      locationSearchResults &&
+      locationSearchResults?.map((item) => {
+        return (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(item.city, "location", item.zip_code_id)
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular px-4 md:px-1 text-[#292F33] font-semibold "
+          >
+            {item.city}
+          </h1>
+        );
+      })
+    );
   };
 
   const SpecialityAndCondition = () => {
@@ -315,7 +416,7 @@ const Holistic = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-[#292F33]  tracking-[1px]"
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-[#292F33]  "
           >
             {item.medical_condition_name}
           </h1>
@@ -372,7 +473,7 @@ const Holistic = () => {
     <div className="p-5 bg-[#E2F6F3] sm:h-[calc(100vh_-_7rem)] relative">
       <div className="bg-[#E2F6F3] flex items-center flex-col md:flex-row  ">
         <div className="mx-auto mt-[3rem] md:mt-[20vh]">
-          <h1 className="flex font-sansRegular justify-center font-medium items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem]  sm:tracking-[4px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] ">
+          <h1 className="flex font-sansRegular justify-center font-medium  items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem]  sm:tracking-[4px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.2rem] 2xl:text-[3.4rem] ">
             {/* <div className=" sm:pt-28 xs:pt-28 xsm:pt-16 mt-0  space-y-2">
           <h1 className="flex font-poppinsMedium 2xl:tracking-[8px] justify-center items-center sm:space-x-6 xs:space-x-4 xsm:space-x-3 md:text-[2.5rem] lg:text-[2.7rem] xl:text-[3rem] font-medium sm:tracking-[5px] text-[#0C0B0B] sm:text-[2rem] xs:text-[1.8rem] xsm:text-[1.1rem] 2xl:text-[3.4rem] "> */}
             <span>HOLISTIC</span>
@@ -380,7 +481,7 @@ const Holistic = () => {
               <div className="relative">
                 <p>M</p>
                 <img
-                  className="absolute md:top-2 md:h-[3rem] md:left-[1.2px] 2xl:h-[3.4rem] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[18px] xsm:top-[.12rem] xsm:font-sansBold"
+                  className="absolute md:top-2 md:h-[3rem] md:left-[1.2px] 2xl:h-[3.4rem] sm:top-[.30rem] sm:h-[35px] xs:top-[.20rem] xs:h-[25px] xsm:h-[20px] xsm:top-[.12rem] xsm:font-sansBold"
                   alt=""
                   src={leaf}
                 />
@@ -390,7 +491,7 @@ const Holistic = () => {
             <p>CONNECTING</p>
           </h1>
 
-          <h1 className="flex sm:text-[1.6rem] font-poppinItalic justify-center space-x-6 mt-5 tracking-widest font-[300] text-[#0C0B0B] md:text-[2.2rem] xsm:text-[0.8rem]">
+          <h1 className="flex sm:text-[1.6rem] font-poppinItalic justify-center space-x-6 mt-5 tracking-widest font-[300] text-[#0C0B0B] md:text-[2.2rem] xsm:text-[1.2rem]">
             Mind. Body. Soul
           </h1>
         </div>
@@ -468,7 +569,7 @@ const Holistic = () => {
               );
             })} */}
 
-            <div className="flex relative justify-between items-center">
+            <div className="flex relative justify-between items-center py-4 md:py-0">
               <input
                 placeholder="Location"
                 value={selectedItemList.location || searchValue}
@@ -485,13 +586,13 @@ const Holistic = () => {
                   alt=""
                   className={`${
                     selectedItem === "location" ? "rotate-180" : ""
-                  } cursor-pointer h-3 w-3 mr-8`}
+                  } cursor-pointer h-3 w-3 `}
                 />
               </div>
             </div>
             {selectedItem === "location" && (
               <div
-                className="absolute top-[4rem] 2xl:top-[5rem]  bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                className="absolute top-[12.5rem] lg:top-[4rem] bg-white w-[85%] left-[1.5rem] md:left-2 md:w-[400px] p-0 md:p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                 style={{
                   zIndex: 1,
                 }}
@@ -499,7 +600,7 @@ const Holistic = () => {
                 {locationItems()}
               </div>
             )}
-            <div className="flex relative justify-between items-center">
+            <div className="flex relative justify-between items-center py-4 md:py-0">
               <input
                 placeholder="Speciality / Condition"
                 onChange={handleSpecialitySearch}
@@ -509,7 +610,7 @@ const Holistic = () => {
                   SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px] pr-8 pl-0  placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000] tracking-[1px]  pl-0 md:pl-[0rem] placeHolderText"
               />
               <div
                 className=" cursor-pointer"
@@ -520,12 +621,12 @@ const Holistic = () => {
                   alt=""
                   className={`${
                     selectedItem === "speciality" ? "rotate-180" : ""
-                  } cursor-pointer h-3 w-3 mr-8`}
+                  } cursor-pointer h-3 w-3 mr-0 md:mr-8`}
                 />
               </div>
               {selectedItem === "speciality" && (
                 <div
-                  className="absolute top-[4rem] 2xl:top-[5rem]  bg-white w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                  className="absolute top-[2.5rem] md:top-[5rem] lg:top-[4rem] bg-white w-[110%] -left-[1.5rem] md:w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                   style={{
                     zIndex: 1,
                   }}
@@ -555,7 +656,7 @@ const Holistic = () => {
                 </span>
 
                 {isOpen && (
-                  <div className="absolute top-[6.4rem] right-10 z-[100] h-full">
+                  <div className="absolute top-[5rem] 2xl:top-[6.4rem] lg:top-[5rem] right-10 z-[100] h-full">
                     <DatePickerComponent
                       handleChange={handleChange}
                       startDate={startDate}
@@ -567,21 +668,21 @@ const Holistic = () => {
               <img
                 src={grayDropDown}
                 alt="dropdown"
-                className={`${isOpen ? "rotate-180" : ""} h-3 w-3 mr-10`}
+                className={`${isOpen ? "rotate-180" : ""} h-3 w-3 mr-0 md:mr-8`}
               />
 
               <div className="hidden md:block" onClick={handleSearch}>
                 <img
                   src={svgSearch}
                   alt=""
-                  className=" w-16 2xl:w-24 h-auto cursor-pointer"
+                  className=" w-16 lg:w-20 2xl:w-24 h-auto cursor-pointer"
                 />
               </div>
             </div>
           </div>
           <div className="md:hidden pb-6 pt-3 pr-6">
             <button
-              className="bg-gray-600 text-white w-full py-2 rounded"
+              className="bg-verifiCation text-white w-full py-2 rounded-full font-sansRegular text-[1rem] font-semibold tracking-[1px]"
               onClick={handleSearch}
             >
               Search

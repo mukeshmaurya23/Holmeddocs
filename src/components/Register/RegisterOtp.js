@@ -9,6 +9,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import customAxios from "../../axios/custom";
 import OtpCountDown from "../../util/OtpCountDown";
 import { useSnackbar } from "notistack";
+import Spinner from "../../UI/Spinner";
 const RegisterOtp = () => {
   const [otpValue, setOtpValue] = useState("");
   const [otpMessage, setOtpMessage] = useState("");
@@ -20,13 +21,14 @@ const RegisterOtp = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-
+const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(otpValue, "From RegisterOtp");
     if (!otpValue) return alert("Please enter the OTP");
     if (otpValue !== 123456) return alert("Please enter the correct OTP");
     try {
+      setLoading(true);
       const response = await customAxios.post("/patient/verify_otp", {
         token: otpValue,
         request_type: "register",
@@ -39,10 +41,13 @@ const RegisterOtp = () => {
         autoHideDuration: 1000,
       });
       if (response.data.success) {
+        setLoading(false);
         navigate("/login");
       }
     } catch (err) {
       console.log(err);
+    }finally{
+      setLoading(false);
     }
   };
   return (
@@ -96,7 +101,7 @@ const RegisterOtp = () => {
                   onClick={handleSubmit}
                   className="mx-4 sm:mx-10 px-7 sm:px-20 rounded-full bg-white py-2 text-black"
                 >
-                  Verify
+                  {loading ? <Spinner /> : "Verify"}
                 </Button>
               </div>
             </div>

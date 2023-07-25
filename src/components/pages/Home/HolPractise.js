@@ -55,17 +55,17 @@ const HolPractise = () => {
           <h2 className="text-[#030303] font-sansRegular tracking-[3px] font-semibold text-[1.3rem] sm:text-[1.8rem] 2xl:text-[2.5rem] lg:text-[1.8rem] xl:text-[2rem]">
             Let's connect your practice
           </h2>
-          <ul className="py-3 xl:py-10 lg:py-9 md:py-8">
-            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.4rem]">
+          <ul className="py-3 xl:py-10 lg:py-9 md:py-8 font-sansRegular font-semibold space-y-3 ">
+            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.2rem]">
               Get onboarded and allow us to connect the patient with you.
             </li>
-            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.4rem]">
+            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.2rem]">
               Answer medical queries & showcase your expertise
             </li>
-            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.4rem]">
+            <li className="text-[#545871] py-2 text-[.9rem] 2xl:text-[1.2rem]">
               Grow your reach and experience.
             </li>
-            <button className="text-[.7rem] md:text-[.8rem] px-8 py-2 mt-5 text-sm font-sansBold text-white  bg-verifiCation  rounded-full">
+            <button className="text-[.7rem] cursor-pointer md:text-[.9rem] px-8 py-2 2xl:py-3 mt-5 text-sm font-sansBold text-white  bg-verifiCation  rounded-full">
               List your practice on Holmeddoc
             </button>
           </ul>

@@ -389,7 +389,8 @@ const Appointment = () => {
           <div className=" hidden md:block flex-1 bg-white">
             <div className="flex flex-col ">
               {appointmentData?.data?.result?.map((item) => {
-                console.log("item id ", item.id, " cimdex ", currentIndex);
+                   
+
                 if (item.id === currentIndex) {
                   return (
                     <>
