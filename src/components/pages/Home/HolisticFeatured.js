@@ -34,14 +34,14 @@ import Slider from "../../../UI/Slider";
 const HolisticFeatured = () => {
   return (
     <div className="flex flex-col lg:flex-row sm:flex-col mb-3 py-12 p-2">
-      <div className="w-full sm:max-w-[55%]  2xl:max-w-[45%] px-4 md:px-16">
+      <div className="w-full sm:max-w-[45%]  2xl:max-w-[45%] px-4 md:px-16">
         <h2 className="text-[#030303] font-sansRegular font-semibold tracking-[3px]  text-[1.1rem] md:text-[2.5rem]">
           Featured Holistic
         </h2>
         <h2 className=" text-[#030303] font-sansRegular font-semibold tracking-[3px] mt-1 mb-12  text-[1.1rem] md:text-[2.5rem]">
           Practitioners
         </h2>
-        <span className="px-[2rem] ">
+        <span className="px-[2rem] cursor-pointer ">
           <Slider />
         </span>
       </div>

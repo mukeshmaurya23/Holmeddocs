@@ -399,7 +399,7 @@ const Holistic = () => {
                   setSearchValue("") ||
                   setSelectedItem(null)
                 }
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] tracking-[3px] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
               />
               <div className=" cursor-pointer">
                 <img
@@ -434,7 +434,7 @@ const Holistic = () => {
                   SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]   pl-0 md:pl-[0rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] tracking-[2px]  outline-none 2xl:text-[1.2rem] w-full text-[#000000]   pl-0 md:pl-[0rem] placeHolderText"
               />
               <div
                 className=" cursor-pointer"
@@ -445,7 +445,7 @@ const Holistic = () => {
                   alt=""
                   className={`${
                     selectedItem === "speciality" ? "rotate-180" : ""
-                  } cursor-pointer h-3 w-3 mr-0 md:mr-8`}
+                  } cursor-pointer h-3 w-3 mr-0 ml-16 2xl:ml-[9rem]`}
                 />
               </div>
               {selectedItem === "speciality" && (
@@ -472,7 +472,7 @@ const Holistic = () => {
                   ref={calendarRef}
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#000000] mr-20 font-semibold">
+                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-semibold">
                   {startDate &&
                   startDate.toDateString() === new Date().toDateString()
                     ? "Today"

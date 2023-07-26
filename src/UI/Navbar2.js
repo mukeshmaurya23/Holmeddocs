@@ -358,6 +358,9 @@ const Navbar2 = () => {
   let specialitySearchParams = searchParams.get("speciality");
 
   let conditionSearchParams = searchParams.get("conditions");
+
+  const dateSearchParams = searchParams.get("date");
+  console.log(dateSearchParams, "dateSearchParams");
   //clear the value of search params
   const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
   const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
@@ -655,7 +658,7 @@ const Navbar2 = () => {
                   <span className="outline-none px-6 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
                     {startDate &&
                     startDate.toDateString() === new Date().toDateString()
-                      ? "Today"
+                      ? dateSearchParams
                       : startDate?.toLocaleDateString()}
                   </span>
                   {isOpen && (

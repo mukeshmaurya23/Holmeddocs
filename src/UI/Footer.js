@@ -199,7 +199,10 @@ const Footer = () => {
           medication.
         </p>
         <div>
-          <div className="bg-transparent flex justify-center items-center pt-8 md:py-0">
+          <div
+            className="bg-transparent flex justify-center items-center pt-8 md:py-0"
+            onClick={() => window.scrollTo(0, 0)}
+          >
             <img
               className="bg-transparent h-[7rem] md:h-[8rem] xl:h-[8.5rem] mb-2 cursor-pointer"
               src={require("../images/home/Footer.png")}

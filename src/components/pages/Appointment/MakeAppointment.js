@@ -463,7 +463,7 @@ const MakeAppointment = () => {
                   placeholder="Today"
                   className="outline-none px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] tracking-[2px] font-sansRegular"
                 /> */}
-              <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansBold">
+              <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem]  text-[#292f33] mr-20 font-sansBold">
                 {startDate &&
                 startDate.toDateString() === new Date().toDateString()
                   ? "Today"

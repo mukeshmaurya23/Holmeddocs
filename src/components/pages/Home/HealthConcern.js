@@ -27,7 +27,7 @@ const HealthConcern = () => {
   console.log(medicalConditionData, "im medicalConditionData");
 
   return (
-    <div className="max-w-full bg-healthConcern py-12 px-4 sm:px-16 md:px-16 lg:px-16 p-3 ">
+    <div className="max-w-full bg-healthConcern py-12 px-4 sm:px-16 md:px-16 lg:px-16 p-3 mb-16 ">
       <h2 className="text-[1rem]  font-sansRegular font-semibold tracking-[1px] sm:text-[1.4rem] md:text-[2.5rem] xsm:text-[1rem] xs:text-[1.1rem] md:tracking-[4px] ">
         Most common health concerns
       </h2>

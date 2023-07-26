@@ -9,14 +9,16 @@ import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const Specialistic = () => {
   const dispatch = useDispatch();
-  const { specialties, specialtiesStatus, error } = useSelector((state) => state.data);
+  const { specialties, specialtiesStatus, error } = useSelector(
+    (state) => state.data
+  );
   useEffect(() => {
     dispatch(fetchSpecialties("/patient/master/speciality"));
   }, []);
 
   return (
     <>
-      <div className=" bg-[#ffffff]">
+      <div className=" bg-[#ffffff] mb-16">
         <div className="text-center  mt-10">
           <p className="font-sansBold  tracking-[2px] md:text-[40px] sm:text-[28px] xs:text-[28px] xsm:text-[24px] 2xl:text-[2.6rem] 2xl:tracking-[6px] text-[#292F33]">
             Holistic fields
