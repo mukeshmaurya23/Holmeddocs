@@ -5,33 +5,19 @@ import calendarSvg from "../../../images/home/Calendar.svg";
 import grayDropDown from "../../../images/Login/GrayDropdown.png";
 
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../../hooks/useFetch";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import Spinner from "../../../UI/Spinner";
-import {
-  fetchConditions,
-  fetchLocationAreas,
-  fetchSpecialties,
-} from "../../../store/LocSpecSlice";
+import { fetchConditions, fetchSpecialties } from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { searchLocation } from "../../../store/searchSlice";
 
 const Holistic = () => {
-  const locationAreasDispatch = useDispatch();
   const [zip_code_id, setZipCodeId] = useState("");
   const [speciality_id, setSpecialityId] = useState("");
-  const [condition_id, setConditionId] = useState("");
-  const { locationAreas, status } = useSelector((state) => state.data);
-  console.log(locationAreas);
-  // const { data: specialistData, loading: specialityLoading } = useFetch(
-  //   "/patient/master/speciality"
-  // );
 
-  // const { data: conditionData, loading: conditionLoading } = useFetch(
-  //   "/patient/master/condition"
-  // );
+  const [condition_id, setConditionId] = useState("");
 
   const conditionsDispatch = useDispatch();
   const specialityDispatch = useDispatch();
@@ -114,7 +100,7 @@ const Holistic = () => {
     //console.log(searchValue, "searchValue");
     const timer = setTimeout(() => {
       if (searchValue) {
-        locationSearchDispatch(searchLocation(searchValue));
+        locationSearchDispatch(searchLocation({ searchValue }));
       }
     }, 300);
     return () => {
@@ -159,10 +145,6 @@ const Holistic = () => {
       setSelectedItem("location");
     }
   }, [searchValue]);
-
-  useEffect(() => {
-    locationAreasDispatch(fetchLocationAreas("/patient/master/areas"));
-  }, [locationAreasDispatch]);
 
   const handleDateChange = (date) => {
     setStartDate(date);
@@ -211,7 +193,7 @@ const Holistic = () => {
     }
   };
   useEffect(() => {
-    const selectedSpeciality = specialistData?.data?.result?.find(
+    const selectedSpeciality = specialistData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
     );
 
@@ -223,7 +205,7 @@ const Holistic = () => {
   }, [selectedItemList.speciality, specialistData]);
 
   useEffect(() => {
-    const selectedCondition = conditionData?.data?.result?.find(
+    const selectedCondition = conditionData?.find(
       (item) => item.medical_condition_name === selectedItemList.conditions
     );
     if (selectedCondition) {
@@ -254,9 +236,6 @@ const Holistic = () => {
   console.log(locationSearchResults, "....................heheh");
 
   const locationItems = () => {
-    if (status === "loading") {
-      return <Spinner />;
-    }
     if (locationSearchResults?.length === 0) {
       return (
         <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
@@ -412,6 +391,14 @@ const Holistic = () => {
                 placeholder="Location"
                 value={selectedItemList.location || searchValue}
                 onChange={handleLocationSearch}
+                onClick={() =>
+                  setSelectedItemList({
+                    ...selectedItemList,
+                    location: "",
+                  }) ||
+                  setSearchValue("") ||
+                  setSelectedItem(null)
+                }
                 className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
               />
               <div className=" cursor-pointer">
@@ -434,7 +421,10 @@ const Holistic = () => {
                 {locationItems()}
               </div>
             )}
-            <div className="flex relative justify-between items-center py-4 md:py-0">
+            <div
+              ref={ref}
+              className="flex relative justify-between items-center py-4 md:py-0"
+            >
               <input
                 placeholder="Speciality / Condition"
                 onChange={handleSpecialitySearch}

@@ -8,16 +8,12 @@ import Button from "../../../util/Button";
 import DatePickerComponent from "../../../UI/DatePicker";
 import Footer from "../../../UI/Footer";
 import { useDispatch, useSelector } from "react-redux";
-
-import {
-  fetchConditions,
-  fetchLocationAreas,
-  fetchSpecialties,
-} from "../../../store/LocSpecSlice";
+import { fetchLocationAreas } from "../../../store/LocSpecSlice";
 import Spinner from "../../../UI/Spinner";
+import { searchLocation } from "../../../store/searchSlice";
 const MakeAppointment = () => {
   const [searchParams] = useSearchParams();
-  console.log("pathname", window.location.pathname);
+
   const [isActive, setIsActive] = useState(false);
   const toggleButtonHandler = () => {
     setIsActive(!isActive);
@@ -25,11 +21,103 @@ const MakeAppointment = () => {
   const [zip_code_id, setZipCodeId] = useState("");
   const [speciality_id, setSpecialityId] = useState("");
   const [condition_id, setConditionId] = useState("");
-  const [isLocationDropdown, setIsLocationDropdown] = useState(false);
-  const [isSpecialityDropdown, setIsSpecialityDropdown] = useState(false);
 
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
+  const { locationAreas, status } = useSelector((state) => state.data);
+
+  const {
+    specialties: specialistData,
+    status: specStatus,
+    filterSpecialties,
+  } = useSelector((state) => state.data);
+  const {
+    conditions: conditionData,
+    status: conditionStatus,
+    filterConditions,
+  } = useSelector((state) => state.data);
+
+  const [filterSpecilityData, setFilterSpecialityData] =
+    useState(filterSpecialties);
+  const [filterConditionData, setFilterConditionData] =
+    useState(filterConditions);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
+
+  const locationSearchResults = useSelector(
+    (state) => state.search.locationSearchResults
+  );
+
+  console.log(locationSearchResults, "im location search results");
+  // const [filterSpeciality, setFilterSpeciality] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const [selectedItemList, setSelectedItemList] = useState({
+    location: "",
+    speciality: "",
+    conditions: "",
+  });
+
+  const [brosweData, setBrowseData] = useState();
+  const locationSearchDispatch = useDispatch();
+
+  const zipCodeId = searchParams.get("city");
+  console.log(zipCodeId, "im zip code id");
+  const handleLocationSearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    selectedItemList.location = value;
+  };
+
+  const filterSpeciality = (searchTerm, specialityData) => {
+    const data = specialityData?.filter((item) => {
+      return item.medical_speciality_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const filterCondition = (searchTerm, conditionData) => {
+    const data = conditionData?.filter((item) => {
+      return item.medical_condition_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const handleSpecialitySearch = (e) => {
+    setCondSpecSearchValue(e.target.value);
+    setFilterSpecialityData(
+      filterSpeciality(SpecCondSearchValue, filterSpecialties)
+    );
+    setFilterConditionData(
+      filterCondition(SpecCondSearchValue, filterConditions)
+    );
+  };
+
+  useEffect(() => {
+    //console.log(searchValue, "searchValue");
+    const timer = setTimeout(() => {
+      if (searchValue) {
+        locationSearchDispatch(searchLocation({ searchValue }));
+      }
+    }, 300);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (zipCodeId) {
+      locationSearchDispatch(searchLocation({ zip_code_id: zipCodeId }));
+      setBrowseData(locationAreas?.[0]?.city);
+    }
+  }, [zipCodeId]);
+
+  console.log(brosweData, "im browse data*********************");
   const handleChange = (e) => {
     setIsOpen(!isOpen);
     setStartDate(e);
@@ -39,17 +127,13 @@ const MakeAppointment = () => {
     setIsOpen(!isOpen);
   };
 
-  const dispatch = useDispatch();
-  const locAreasRef = useRef();
+  const ref = useRef();
   const calendarRef = useRef();
-  const specialityRef = useRef();
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!locAreasRef?.current?.contains(event.target)) {
-        setIsLocationDropdown(false);
-      }
-      if (!specialityRef?.current?.contains(event.target)) {
-        setIsSpecialityDropdown(false);
+      if (!ref?.current?.contains(event.target)) {
+        setSelectedItem(null);
       }
       if (!calendarRef?.current?.contains(event.target)) {
         setIsOpen(false);
@@ -59,26 +143,47 @@ const MakeAppointment = () => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [locAreasRef, specialityRef]);
+  }, [ref]);
 
-  const locationAreasDispatch = useDispatch();
-  const conditionsDispatch = useDispatch();
-  const { locationAreas, status } = useSelector((state) => state.data);
+  useEffect(() => {
+    if (searchValue === "") {
+      setSelectedItem(null);
+    } else {
+      setSelectedItem("location");
+    }
+  }, [searchValue]);
 
-  const specialityDispatch = useDispatch();
-  const { specialties, status: specStatus } = useSelector(
-    (state) => state.data
-  );
-  const { conditions, status: conditionStatus } = useSelector(
-    (state) => state.data
-  );
-  const [selectedItemList, setSelectedItemList] = useState({
-    location: "",
-    speciality: "",
-    conditions: "",
-  });
+  const navigate = useNavigate();
+
+  // const handleSearch = () => {
+  //   let url = "/doctor-listing?";
+  //   const locatonUpdatedUrl = selectedItemList.location
+  //     ? selectedItemList.location
+  //     : locationAreas?.[0]?.city;
+
+  //   const updatedZipcode = zip_code_id
+  //     ? zip_code_id
+  //     : locationAreas?.[0]?.zip_code_id;
+
+  //   url += `location=${locatonUpdatedUrl}_${updatedZipcode}&`;
+  //   // if (selectedItemList.location) {
+  //   //   const locatonUpdatedUrl=selectedItemList?.location || locationAreas?.[0]?.city;
+  //   //   const updatedZipcode=zip_code_id || locationAreas?.[0]?.zip_code_id;
+  //   //   url += `location=${locatonUpdatedUrl}_${updatedZipcode }&`;
+  //   // }
+  //   if (selectedItemList.speciality) {
+  //     url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
+  //   }
+  //   if (selectedItemList.conditions) {
+  //     url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+  //   }
+
+  //   url += `date=${startDate.toDateString()}`;
+
+  //   navigate(url);
+  // };
+
   const handleSelectedItem = (name, type, id) => {
-    setIsLocationDropdown(false);
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
 
@@ -89,6 +194,7 @@ const MakeAppointment = () => {
           speciality: "",
           conditions: "",
         };
+        setSelectedItem(null);
       } else if (type === "speciality") {
         updatedItemList = {
           ...updatedItemList,
@@ -96,6 +202,7 @@ const MakeAppointment = () => {
           speciality_id: id,
           conditions: "", // Clear the selected conditions when selecting a specialty
         };
+        setSelectedItem(null);
       } else if (type === "conditions") {
         updatedItemList = {
           ...updatedItemList,
@@ -104,19 +211,22 @@ const MakeAppointment = () => {
           condition_id: id,
           speciality: "",
         };
+        setSelectedItem(null);
       }
 
       return updatedItemList;
     });
     if (type === "location") {
-      const selectedItem = locationAreas.find((item) => item.city === name);
+      const selectedItem = locationSearchResults.find(
+        (item) => item.city === name
+      );
       if (selectedItem) {
         setZipCodeId(selectedItem.zip_code_id);
       }
     }
   };
   useEffect(() => {
-    const selectedSpeciality = specialties?.find(
+    const selectedSpeciality = filterSpecilityData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
     );
 
@@ -125,10 +235,10 @@ const MakeAppointment = () => {
     } else {
       setSpecialityId("");
     }
-  }, [selectedItemList.speciality, specialties]);
+  }, [selectedItemList.speciality, specialistData]);
 
   useEffect(() => {
-    const selectedCondition = conditions?.find(
+    const selectedCondition = filterConditionData?.find(
       (item) => item.medical_condition_name === selectedItemList.conditions
     );
     if (selectedCondition) {
@@ -136,52 +246,16 @@ const MakeAppointment = () => {
     } else {
       setConditionId("");
     }
-  }, [selectedItemList.conditions, conditions]);
-  // const handleSelectedItem = (name, type) => {
-  //   // setSelectedItemList(name);
-
-  //   setSelectedItemList((prevSelectedItemList) => {
-  //     return { ...prevSelectedItemList, [type]: name };
-  //   });
-  // };
-  const zipCodeId = searchParams.get("city");
-  console.log(zipCodeId, "im zip code id");
-
-  useEffect(() => {
-    dispatch(
-      fetchLocationAreas({
-        url: "/patient/master/areas",
-        zip_code_id: zipCodeId,
-      })
-    );
-  }, [locationAreasDispatch]);
-
-  useEffect(() => {
-    specialityDispatch(fetchSpecialties("/patient/master/speciality"));
-  }, [specialityDispatch]);
-
-  useEffect(() => {
-    conditionsDispatch(fetchConditions("/patient/master/condition"));
-  }, [conditionsDispatch]);
-
-  const navigate = useNavigate();
+  }, [selectedItemList.conditions, conditionData]);
 
   const handleSearch = () => {
     let url = "/doctor-listing?";
-    const locatonUpdatedUrl = selectedItemList.location
-      ? selectedItemList.location
-      : locationAreas?.[0]?.city;
-
-    const updatedZipcode = zip_code_id
-      ? zip_code_id
-      : locationAreas?.[0]?.zip_code_id;
-
-    url += `location=${locatonUpdatedUrl}_${updatedZipcode}&`;
-    // if (selectedItemList.location) {
-    //   const locatonUpdatedUrl=selectedItemList?.location || locationAreas?.[0]?.city;
-    //   const updatedZipcode=zip_code_id || locationAreas?.[0]?.zip_code_id;
-    //   url += `location=${locatonUpdatedUrl}_${updatedZipcode }&`;
-    // }
+    if (zipCodeId) {
+      url += `location=${brosweData}_${zipCodeId}&`;
+    }
+    if (selectedItemList.location) {
+      url += `location=${selectedItemList.location}_${zip_code_id}&`;
+    }
     if (selectedItemList.speciality) {
       url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
@@ -193,43 +267,39 @@ const MakeAppointment = () => {
 
     navigate(url);
   };
-  const [selectedItem, setSelectedItem] = useState(null);
-  const handleItemClick = (id) => {
-    console.log(id);
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === id ? null : id
-    );
-  };
   const SpecialityAndCondition = () => {
-    if (conditionStatus === "loading" || specStatus === "loading") {
+    if (specStatus === "loading" || conditionStatus === "loading") {
       return <Spinner />;
     }
-
     return (
       <div>
         <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
-          Specialties
+          {filterSpecilityData?.length > 0 && "Speciality"}
         </h2>
-        {specialties?.map((item) => (
-          <h1
-            key={item.id}
-            onClick={() =>
-              handleSelectedItem(
-                item?.medical_speciality_name,
-                "speciality",
-                item.id
-              )
-            }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
-          >
-            {item?.medical_speciality_name}
-          </h1>
-        ))}
+        {filterSpecilityData?.map((item) => {
+          return (
+            <>
+              <h1
+                key={item.id}
+                onClick={() =>
+                  handleSelectedItem(
+                    item.medical_speciality_name,
+                    "speciality",
+                    item.id
+                  )
+                }
+                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
+              >
+                {item.medical_speciality_name}
+              </h1>
+            </>
+          );
+        })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
           Conditions
         </h2>
-        {conditions?.map((item) => (
+        {filterConditionData?.map((item) => (
           <h1
             key={item.id}
             onClick={() =>
@@ -239,19 +309,66 @@ const MakeAppointment = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-[#292F33]  "
           >
-            {item?.medical_condition_name}
+            {item.medical_condition_name}
           </h1>
         ))}
       </div>
     );
   };
-
-  const togleLoctionHandler = () => {
-    console.log("clicked me ");
-    setIsLocationDropdown(!isLocationDropdown);
+  const locationItems = () => {
+    if (locationSearchResults?.length === 0) {
+      return (
+        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
+          No results found
+        </h1>
+      );
+    }
+    return (
+      locationSearchResults &&
+      locationSearchResults?.map((item) => {
+        return (
+          <h1
+            key={item.id}
+            onClick={() =>
+              handleSelectedItem(item.city, "location", item.zip_code_id)
+            }
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular px-4 md:px-1 text-[#292F33] font-semibold "
+          >
+            {item.city}
+          </h1>
+        );
+      })
+    );
   };
+
+  const handleLocationSelection = () => {
+    setSelectedItem("location");
+  };
+  const handleSpecialtySelection = () => {
+    setSelectedItem((prevSelectedItem) =>
+      prevSelectedItem === "speciality" ? null : "speciality"
+    );
+    setSelectedItemList((prevSelectedItemList) => {
+      let updatedItemList = { ...prevSelectedItemList };
+      updatedItemList = {
+        ...updatedItemList,
+        speciality: "",
+        conditions: "",
+      };
+      return updatedItemList;
+    });
+  };
+
+  const handleItemClick = (id) => {
+    if (id === "location") {
+      handleLocationSelection();
+    } else if (id === "speciality") {
+      handleSpecialtySelection();
+    }
+  };
+
   return (
     <>
       <div class="relative  mb-10 ">
@@ -266,16 +383,25 @@ const MakeAppointment = () => {
               best doctors near you ..
             </p>
             <div
-              ref={locAreasRef}
+              ref={ref}
               className="border relative border-verifiCation w-full py-4 rounded mt-7 flex justify-between items-center px-2"
             >
-              <Input
+              <input
                 type="text"
-                placeholder="City,Zip Code"
-                value={
-                  selectedItemList.location || locationAreas?.length === 1
-                    ? locationAreas?.[0]?.city
-                    : ""
+                placeholder={"City,Zip Code"}
+                // value={
+                //   selectedItemList.location || locationAreas?.length === 1
+                //     ? locationAreas?.[0]?.city
+                //     : ""
+                // }
+                onFocus={() => setBrowseData("")}
+                value={selectedItemList.location || searchValue || brosweData}
+                onChange={handleLocationSearch}
+                onClick={() =>
+                  setSelectedItemList({
+                    ...selectedItemList,
+                    location: "",
+                  }) || setSearchValue("")
                 }
                 // value={selectedItemList.location}
                 className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] w-full  font-sansBold placeHolderText"
@@ -283,67 +409,51 @@ const MakeAppointment = () => {
               <img
                 src={greenArrowDown}
                 alt=""
-                onClick={togleLoctionHandler}
                 className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${
-                  isLocationDropdown ? "transform rotate-180" : ""
+                  selectedItem === "location" ? "rotate-180" : ""
                 }`}
               />
               <ul
                 className={`${
-                  isLocationDropdown
+                  selectedItem === "location"
                     ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     : ""
                 }`}
               >
                 {/* {isLocationDropdown && */}
-                {isLocationDropdown &&
-                  locationAreas?.map((item) => (
-                    <div class="mb-2">
-                      <li
-                        onClick={() =>
-                          handleSelectedItem(
-                            item.city,
-                            "location",
-                            item.zip_code_id
-                          )
-                        }
-                        className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-gray-700 "
-                      >
-                        {item?.city}
-                      </li>
-                    </div>
-                  ))}
+                {selectedItem === "location" && locationItems()}
               </ul>
             </div>
-            <div className="relative border border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2">
-              <Input
-                type="text"
+            <div
+              ref={ref}
+              className="relative border border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2"
+            >
+              <input
                 placeholder="Specialty/Condition"
+                onChange={handleSpecialitySearch}
                 value={
-                  selectedItemList.speciality || selectedItemList.conditions
+                  selectedItemList.speciality ||
+                  selectedItemList.conditions ||
+                  SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
                 className="relative outline-none px-3 text-[.7rem] sm:text-[.9rem] font-sansBold text-[#5a5c66] w-full placeHolderText"
               />
               <img
                 src={greenArrowDown}
-                ref={specialityRef}
-                onClick={() => {
-                  setIsSpecialityDropdown(!isSpecialityDropdown);
-                }}
                 alt=""
                 className={`w-3 h-3 mr-2 cursor-pointer absolute right-0 top-[1.4rem] ${
-                  isSpecialityDropdown ? "transform rotate-180" : ""
+                  selectedItem === "speciality" ? "rotate-180" : ""
                 }`}
               />
               <ul
                 className={`${
-                  isSpecialityDropdown
+                  selectedItem === "speciality"
                     ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     : ""
                 }`}
               >
-                {isSpecialityDropdown ? SpecialityAndCondition() : ""}
+                {selectedItem === "speciality" && SpecialityAndCondition()}
               </ul>
             </div>
 

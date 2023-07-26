@@ -176,7 +176,7 @@ const DoctorDetails = ({}) => {
                     </li>
 
                     <li className="text-xs font-semibold text-[#292F33]">
-                      Doctor of Medicine ({doctor?.education?.[0]})
+                      {doctor?.education?.[0]}
                     </li>
                     <p className="gap-2 flex py-2 font-sansSemibold text-[13px]">
                       <div className="bg-[#b9eeeb] px-2 rounded-full">

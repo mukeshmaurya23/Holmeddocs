@@ -4,12 +4,23 @@ import customAxios from "../axios/custom";
 
 export const searchLocation = createAsyncThunk(
   "search/searchLocation",
-  async (searchValue) => {
+  async ({ searchValue, zip_code_id }) => {
     //{ dispatch }
     try {
-      const response = await customAxios.post("/patient/master/areas", {
-        name: searchValue,
-      });
+      const requestData = {};
+      if (searchValue && searchValue.trim() !== "") {
+        requestData.name = searchValue;
+      }
+      if (zip_code_id && zip_code_id.trim() !== "") {
+        requestData.zip_code_id = zip_code_id;
+      }
+      const response = await customAxios.post(
+        "/patient/master/areas",
+        requestData
+      );
+      //const response = await customAxios.post("/patient/master/areas", {
+      // name: searchValue,
+      //});
       //const result = response?.data?.data?.result || [];
       //   dispatch(addCacheResults({ [searchValue]: result }));
       //   console.log(addCacheResults({ [searchValue]: result }), "im result" );

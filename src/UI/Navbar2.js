@@ -19,15 +19,14 @@ import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
 
 import calendarSvg from "../images/home/Calendar.svg";
-import { fetchLocationAreas, fetchSpecialties } from "../store/LocSpecSlice";
-import useFetch from "../hooks/useFetch";
+
 import DatePickerComponent from "./DatePicker";
 import { searchLocation } from "../store/searchSlice";
+import Spinner from "./Spinner";
 
 const Navbar2 = () => {
   const [isLoggedInDropdown, setIsLoggedInDropdown] = useState(false);
-  const [isLocationDropdown, setIsLocationDropdown] = useState(false);
-  const [isSpecialityDropdown, setIsSpecialityDropdown] = useState(false);
+
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [zip_code_id, setZipCodeId] = useState("");
@@ -36,6 +35,28 @@ const Navbar2 = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  const {
+    specialties: specialistData,
+    status: specStatus,
+    filterSpecialties,
+  } = useSelector((state) => state.data);
+  const {
+    conditions: conditionData,
+    status: conditionStatus,
+    filterConditions,
+  } = useSelector((state) => state.data);
+
+  const [filterSpecilityData, setFilterSpecialityData] =
+    useState(filterSpecialties);
+  const [filterConditionData, setFilterConditionData] =
+    useState(filterConditions);
+
+  const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
+
+  const locationSearchResults = useSelector(
+    (state) => state.search.locationSearchResults
+  );
   const handleChange = (e) => {
     setIsOpen(!isOpen);
     setStartDate(e);
@@ -49,17 +70,15 @@ const Navbar2 = () => {
     speciality: "",
     conditions: "",
   });
-  const { data: conditionData, loading: conditionLoading } = useFetch(
-    "/patient/master/condition"
-  );
-  const { specialties, status: specStatus } = useSelector(
-    (state) => state.data
-  );
+  // const { data: conditionData, loading: conditionLoading } = useFetch(
+  //   "/patient/master/condition"
+  // );
+  // const { specialties, status: specStatus } = useSelector(
+  //   (state) => state.data
+  // );
 
   const [searchValue, setSearchValue] = useState("");
-  const locationSearchResults = useSelector(
-    (state) => state.search.locationSearchResults
-  );
+
   const locationSearchDispatch = useDispatch();
 
   const handleLocationSearch = (e) => {
@@ -68,11 +87,38 @@ const Navbar2 = () => {
     selectedItemList.location = value;
   };
 
+  const filterSpeciality = (searchTerm, specialityData) => {
+    const data = specialityData?.filter((item) => {
+      return item.medical_speciality_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const filterCondition = (searchTerm, conditionData) => {
+    const data = conditionData?.filter((item) => {
+      return item.medical_condition_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    });
+    return data;
+  };
+
+  const handleSpecialitySearch = (e) => {
+    setCondSpecSearchValue(e.target.value);
+    setFilterSpecialityData(
+      filterSpeciality(SpecCondSearchValue, filterSpecialties)
+    );
+    setFilterConditionData(
+      filterCondition(SpecCondSearchValue, filterConditions)
+    );
+  };
   useEffect(() => {
     //console.log(searchValue, "searchValue");
     const timer = setTimeout(() => {
       if (searchValue) {
-        locationSearchDispatch(searchLocation(searchValue));
+        locationSearchDispatch(searchLocation({ searchValue }));
       }
     }, 300);
     return () => {
@@ -121,7 +167,7 @@ const Navbar2 = () => {
     }
   };
   useEffect(() => {
-    const selectedSpeciality = specialties?.find(
+    const selectedSpeciality = specialistData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
     );
 
@@ -130,10 +176,10 @@ const Navbar2 = () => {
     } else {
       setSpecialityId("");
     }
-  }, [selectedItemList.speciality, specialties]);
+  }, [selectedItemList.speciality, specialistData]);
 
   useEffect(() => {
-    const selectedCondition = conditionData?.data?.result?.find(
+    const selectedCondition = conditionData?.find(
       (item) => item.medical_condition_name === selectedItemList.conditions
     );
     if (selectedCondition) {
@@ -159,32 +205,66 @@ const Navbar2 = () => {
 
     navigate(url);
   };
-  const SpecialityAndCondition = () => {
+
+  const locationItems = () => {
+    if (locationSearchResults?.length === 0) {
+      return (
+        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
+          No results found
+        </h1>
+      );
+    }
     return (
-      <div>
-        <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
-          Specialties
-        </h2>
-        {specialties?.map((item) => (
+      locationSearchResults &&
+      locationSearchResults?.map((item) => {
+        return (
           <h1
             key={item.id}
             onClick={() =>
-              handleSelectedItem(
-                item.medical_speciality_name,
-                "speciality",
-                item.id
-              )
+              handleSelectedItem(item.city, "location", item.zip_code_id)
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular px-4 md:px-1 text-[#292F33] font-semibold "
           >
-            {item.medical_speciality_name}
+            {item.city}
           </h1>
-        ))}
+        );
+      })
+    );
+  };
+
+  const SpecialityAndCondition = () => {
+    if (specStatus === "loading" || conditionStatus === "loading") {
+      return <Spinner />;
+    }
+    return (
+      <div>
+        <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
+          {filterSpecilityData?.length > 0 && "Speciality"}
+        </h2>
+        {filterSpecilityData?.map((item) => {
+          return (
+            <>
+              <h1
+                key={item.id}
+                onClick={() =>
+                  handleSelectedItem(
+                    item.medical_speciality_name,
+                    "speciality",
+                    item.id
+                  )
+                }
+                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
+              >
+                {item.medical_speciality_name}
+              </h1>
+            </>
+          );
+        })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
           Conditions
         </h2>
-        {conditionData?.data?.result?.map((item) => (
+        {filterConditionData?.map((item) => (
           <h1
             key={item.id}
             onClick={() =>
@@ -194,7 +274,7 @@ const Navbar2 = () => {
                 item.id
               )
             }
-            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
+            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular font-semibold text-[#292F33]  "
           >
             {item.medical_condition_name}
           </h1>
@@ -202,86 +282,8 @@ const Navbar2 = () => {
       </div>
     );
   };
-  // const handleSelectedItem = (name, type) => {
-  //   // setSelectedItemList(name);
-  //   setSelectedItemList((prevSelectedItemList) => {
-  //     return { ...prevSelectedItemList, [type]: name };
-  //   });
-  // };
-
-  const navigate = useNavigate();
-
-  const [showModal, setShowModal] = useState(false);
-  const [logOutmodal, setlogOutModal] = useState(false);
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const dispatch = useDispatch();
-
-  const toggleMenuHandler = () => {
-    dispatch(toggleMenu());
-  };
-  const loggedInToggleDropdown = () => {
-    setIsLoggedInDropdown(!isLoggedInDropdown);
-  };
-
-  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
-  //const isLoggedIn = localStorage.getItem("token");
-  const isLoggedIn = useSelector((state) => state.login.remember_token);
-  const logOutHandler = () => {
-    dispatch(logout());
-  };
-
-  const ref = useRef();
-  const loginRef = useRef();
-  const locAreasRef = useRef();
-  const specialityRef = useRef();
-  const locSpecConditionRef = useRef();
-  //search params getting data from url
-  const locationSearchParams = searchParams.get("location");
-  // alert(locationSearchParams);
-  console.log(locationSearchParams, "locationSearchParams");
-  const specialitySearchParams = searchParams.get("speciality");
-
-  const conditionSearchParams = searchParams.get("conditions");
-  const dateSearchParams = searchParams.get("date");
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!ref?.current?.contains(event.target)) {
-        setDropdownVisible(false);
-      }
-      if (!locSpecConditionRef?.current?.contains(event.target)) {
-        setSelectedItem(null);
-      }
-      if (!loginRef?.current?.contains(event.target)) {
-        setIsLoggedInDropdown(false);
-      }
-      if (!locAreasRef?.current?.contains(event.target)) {
-        setIsLocationDropdown(false);
-      }
-      if (!specialityRef?.current?.contains(event.target)) {
-        setIsSpecialityDropdown(false);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      //aslo clear the value in location and speciality
-
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [ref]);
-
   const handleLocationSelection = () => {
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === "location" ? null : "location"
-    );
+    setSelectedItem("location");
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };
       updatedItemList = {
@@ -317,6 +319,92 @@ const Navbar2 = () => {
       handleSpecialtySelection();
     }
   };
+
+  const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
+  const [logOutmodal, setlogOutModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const dispatch = useDispatch();
+
+  const toggleMenuHandler = () => {
+    dispatch(toggleMenu());
+  };
+  const loggedInToggleDropdown = () => {
+    setIsLoggedInDropdown(!isLoggedInDropdown);
+  };
+
+  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
+  //const isLoggedIn = localStorage.getItem("token");
+  const isLoggedIn = useSelector((state) => state.login.remember_token);
+  const logOutHandler = () => {
+    dispatch(logout());
+  };
+
+  const ref = useRef();
+  const loginRef = useRef();
+
+  const locSpecConditionRef = useRef();
+  //search params getting data from url
+  let locationSearchParams = searchParams.get("location");
+  let specialitySearchParams = searchParams.get("speciality");
+
+  let conditionSearchParams = searchParams.get("conditions");
+  //clear the value of search params
+  const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
+  const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
+    useState(null);
+  const [clearConditionPlaceholder, setClearConditionPlaceholder] =
+    useState(null);
+
+  useEffect(() => {
+    if (locationSearchParams) {
+      setClearingPlaceholder(locationSearchParams.split("_")[0]);
+    }
+    if (specialitySearchParams) {
+      setClearSpecialityPlaceholder(specialitySearchParams.split("_")[0]);
+    }
+    if (conditionSearchParams) {
+      setClearConditionPlaceholder(conditionSearchParams.split("_")[0]);
+    }
+  }, [locationSearchParams, specialitySearchParams, conditionSearchParams]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref?.current?.contains(event.target)) {
+        setDropdownVisible(false);
+      }
+      if (!locSpecConditionRef?.current?.contains(event.target)) {
+        setSelectedItem(null);
+      }
+      if (!loginRef?.current?.contains(event.target)) {
+        setIsLoggedInDropdown(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      //aslo clear the value in location and speciality
+
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
+
+  useEffect(() => {
+    //in this  if search value is empty then dont show the location list and if search value is not empty then show the location list
+    if (searchValue === "") {
+      setSelectedItem(null);
+    } else {
+      setSelectedItem("location");
+    }
+  }, [searchValue]);
 
   const handleDateChange = (e) => {
     setSearchParams({ ...searchParams, date: e.target.value });
@@ -488,37 +576,27 @@ const Navbar2 = () => {
 
               <div
                 ref={locSpecConditionRef}
-                className="border-[1px] flex items-center rounded-lg border-[#b5b1b1] "
+                className="border-[1px] flex items-center rounded-lg border-[#b5b1b1]  "
               >
                 <div className="flex items-center relative">
-                  {/* <input
-                    className="relative py-1 w-[250px] h-[40px] mr-1 outline-none border-r text-[1.2rem] border-[#b5b1b1] pl-2 text-[#b5b1b1]"
-                    placeholder={locationSearchParams || "Location"}
-                    onChange={handleLocationChange}
-                    value={locationSearchParams || selectedItemList.location}
-                    ref={locAreasRef}
-                    onClick={() => {
-                      setIsLocationDropdown(!isLocationDropdown);
-                    }}
-                  /> */}
                   <input
-                    className={`relative py-1 w-[250px] h-[40px] mr-1   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                    ref={locSpecConditionRef}
+                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
-                        ? "text-[15px]"
+                        ? "text-[1rem] font-semibold"
                         : "text-[1rem]"
                     }`}
-                    placeholder="Location"
+                    placeholder={clearingPlaceholder || "Location"}
+                    value={selectedItemList.location || searchValue}
                     onChange={handleLocationSearch}
-                    key={locationSearchParams}
-                    value={
-                      selectedItemList.location ||
-                      searchValue ||
-                      locationSearchParams
+                    onClick={() =>
+                      setSelectedItemList({
+                        ...selectedItemList,
+                        location: "",
+                      }) ||
+                      setSearchValue("") ||
+                      setClearingPlaceholder("")
                     }
-                    onClick={() => handleItemClick("location")}
-                    // onClick={() => {
-                    //   setIsLocationDropdown(!isLocationDropdown);
-                    // }}
                   />
                   <ul
                     className={`${
@@ -527,89 +605,46 @@ const Navbar2 = () => {
                         : ""
                     }`}
                   >
-                    {selectedItem === "location"
-                      ? locationSearchResults?.map((item) => (
-                          <h6
-                            className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold "
-                            key={item.id}
-                            onClick={() =>
-                              handleSelectedItem(
-                                item.city,
-                                "location",
-                                item.zip_code_id
-                              )
-                            }
-                          >
-                            {item?.city}
-                          </h6>
-                        ))
-                      : null}
+                    {selectedItem === "location" && locationItems()}
                   </ul>
-                  {/* <input
-                    className="relative outline-none border-r border-[#b5b1b1] py-1 w-[250px] text-[1.2rem] h-[40px] pl-2 text-[#b5b1b1]"
-                    placeholder={specialitySearchParams || "Speciality"}
-                    onChange={handleSpecialityChange}
-                    ref={specialityRef}
-                    value={
-                      specialitySearchParams || selectedItemList.speciality
-                    }
-                    onClick={() => {
-                      setIsSpecialityDropdown(!isSpecialityDropdown);
-                    }}
-                  /> */}
                   <input
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] pl-2 text-[#292F33] ${
+                    ref={locSpecConditionRef}
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${
                       selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
                       conditionSearchParams
-                        ? "text-[15px]"
+                        ? "text-[1rem] font-semibold"
                         : "text-[1rem]"
                     }`}
-                    placeholder={"Speciality"}
-                    ref={specialityRef}
+                    placeholder={
+                      clearSpecialityPlaceholder ||
+                      clearConditionPlaceholder ||
+                      "Speciality/Condition"
+                    }
+                    onChange={handleSpecialitySearch}
                     value={
                       selectedItemList.speciality ||
                       selectedItemList.conditions ||
-                      specialitySearchParams?.slice(0, -3) ||
-                      conditionSearchParams?.slice(0, -3)
+                      SpecCondSearchValue
                     }
-                    onClick={() => {
-                      setIsSpecialityDropdown(!isSpecialityDropdown);
-                    }}
+                    onClick={() =>
+                      handleItemClick("speciality") ||
+                      setCondSpecSearchValue("") ||
+                      setClearSpecialityPlaceholder("") ||
+                      setClearConditionPlaceholder("")
+                    }
                   />
                   <ul
                     className={`${
-                      isSpecialityDropdown
+                      selectedItem === "speciality"
                         ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                         : ""
                     }`}
                   >
-                    {isSpecialityDropdown
-                      ? SpecialityAndCondition()
-                      : // ? specialties?.map((item) => (
-                        //     <h6
-                        //       className="cursor-pointer relative  mt-1  text-primary hover:bg-pink-100  "
-                        //       key={item.id}
-                        //       onClick={() =>
-                        //         handleSelectedItem(
-                        //           item?.medical_speciality_name,
-                        //           "speciality"
-                        //         )
-                        //       }
-                        //     >
-                        //       {item?.medical_speciality_name}
-                        //     </h6>
-                        //   ))
-                        null}
+                    {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
-                  {/* <input
-                    className="outline-none font-sansBold py-1 w-[200px] h-[40px] pl-2 text-[#292F33]"
-                    placeholder={dateSearchParams}
-                    type="text"
-                    onChange={handleDateChange}
-                    value={dateSearchParams || ""}
-                  /> */}{" "}
+
                   <img
                     onChange={handleDateChange}
                     src={calendarSvg}

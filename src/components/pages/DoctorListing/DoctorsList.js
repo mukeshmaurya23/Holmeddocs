@@ -57,7 +57,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                 <h3 className="text-sm">{doctor?.country?.[0]}</h3>
               </div>
               <h3 class="max-w-[200px] break-words text-sm font-sansRegular font-bold text-[#000000]">
-                Doctor of Medicine ({doctor?.education?.[0]})
+                {doctor?.education?.[0]}
               </h3>
 
               <p className="gap-2 flex py-1 font-sansRegular font-bold text-[#000000] text-[13px] py-2">
@@ -114,15 +114,15 @@ const DoctorsList = ({ doctorsList, status }) => {
                 </div>
               ))}
             </div>
-            <div className="flex gap-10 py-5 px-5 justify-between items-center">
+            <div className="flex gap-10 py-5  justify-between items-center">
               <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
-                <button className="bg-verifiCation rounded-full font-sansBold text-xs text-white px-5 py-2">
-                  SCHEDULE AN APPOINTMENT
+                <button className="bg-verifiCation rounded-full font-sansSemibold text-[.9rem] mt-3 2xl:text-[1rem]  text-white px-5 py-2 2xl:py-3 2xl:px-8 2xl:mt-5">
+                  Schedule an Appointment
                 </button>
               </Link>
 
               <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
-                <p className="text-[#CF8B15] cursor-pointer underline">
+                <p className="text-[#CF8B15] cursor-pointer mt-3 underline 2xl:py-3 font-sansSemibold 2xl:mt-5">
                   View More
                 </p>
               </Link>

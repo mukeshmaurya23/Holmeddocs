@@ -51,23 +51,18 @@ const PortalModal = ({ closeModal }) => {
               className="absolute right-10 top-5 cursor-pointer h-4 w-4"
             />
           </div>
+          <div className="mt-5"> {loading && <Spinner />}</div>
           <div className="flex flex-wrap mb-10 ml-0 sm:ml-7">
-            {loading ? (
-              <div className="flex mt-5  justify-center items-center">
-                <Spinner />
+            {operatingCity.map((item) => (
+              <div
+                className="flex ml-10 mt-4 pl-3 rounded-md bg-[#00828212] px-6 py-2  cursor-pointer"
+                key={item.id}
+                onClick={() => handleCity(item?.zip_code_id)}
+              >
+                <img src={cityLocation} className="h-8 w-8" alt="" />
+                <p className="ml-4 text-verifiCation">{item?.city_name}</p>
               </div>
-            ) : (
-              operatingCity.map((item) => (
-                <div
-                  className="flex ml-10 mt-4 pl-3 rounded-md bg-[#00828212] px-6 py-2  cursor-pointer"
-                  key={item.id}
-                  onClick={() => handleCity(item?.zip_code_id)}
-                >
-                  <img src={cityLocation} className="h-8 w-8" alt="" />
-                  <p className="ml-4 text-verifiCation">{item?.city_name}</p>
-                </div>
-              ))
-            )}
+            ))}
           </div>
         </div>
       </div>
