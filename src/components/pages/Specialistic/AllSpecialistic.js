@@ -9,12 +9,12 @@ import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const AllSpecialistic = () => {
   const dispatch = useDispatch();
-  const { specialties, status } = useSelector((state) => state.data);
+  const { specialties, specialtiesStatus } = useSelector((state) => state.data);
   useEffect(() => {
     dispatch(fetchSpecialties("/patient/master/speciality"));
   }, []);
 
-  return status === "loading" ? (
+  return specialtiesStatus === "loading" ? (
     <>
       <div className="flex justify-center items-center ">
         <img src={loadingGif} alt="" />
@@ -33,10 +33,10 @@ const AllSpecialistic = () => {
         </div>
         <div class="mt-4 px-2 sm:px-5 lg:px-0 max-w-[1080px]">
           <p class="font-sansRegular text-[.8rem] font-semibold text-[#545871] md:text-base text-size-6 text-center  mb-4 tracking-[1.5px]">
-            Every medical specialist shares one common goal to help patients
-            get healthy or stay healthy. But each one has very specific skills
-            and <br class="hidden specialityMd:block" /> competencies that make
-            them an integral member of the medical field.{" "}
+            Every medical specialist shares one common goal to help patients get
+            healthy or stay healthy. But each one has very specific skills and{" "}
+            <br class="hidden specialityMd:block" /> competencies that make them
+            an integral member of the medical field.{" "}
             <br class="hidden specialityMd:block" /> Browse through each
             specialist and select as per your need.
           </p>

@@ -404,7 +404,7 @@ const MakeAppointment = () => {
                   }) || setSearchValue("")
                 }
                 // value={selectedItemList.location}
-                className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] w-full  font-sansBold placeHolderText"
+                className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText"
               />
               <img
                 src={greenArrowDown}
@@ -437,7 +437,7 @@ const MakeAppointment = () => {
                   SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="relative outline-none px-3 text-[.7rem] sm:text-[.9rem] font-sansBold text-[#5a5c66] w-full placeHolderText"
+                className="relative outline-none px-3 text-[.7rem] sm:text-[.9rem] font-sansBold text-[#292f33] w-full placeHolderText"
               />
               <img
                 src={greenArrowDown}
@@ -457,7 +457,11 @@ const MakeAppointment = () => {
               </ul>
             </div>
 
-            <div className="border relative border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2">
+            <div
+              ref={calendarRef}
+              onClick={handleClick}
+              className="border relative border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2 cursor-pointer"
+            >
               {/* <Input
                   type="Today"
                   placeholder="Today"
@@ -472,7 +476,6 @@ const MakeAppointment = () => {
               <img
                 src={calendar}
                 alt=""
-                ref={calendarRef}
                 onClick={handleClick}
                 className="w-4 h-4 mr-2 cursor-pointer"
               />

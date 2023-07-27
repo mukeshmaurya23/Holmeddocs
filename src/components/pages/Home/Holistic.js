@@ -236,13 +236,6 @@ const Holistic = () => {
   console.log(locationSearchResults, "....................heheh");
 
   const locationItems = () => {
-    if (locationSearchResults?.length === 0) {
-      return (
-        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
-          No results found
-        </h1>
-      );
-    }
     return (
       locationSearchResults &&
       locationSearchResults?.map((item) => {
@@ -282,7 +275,7 @@ const Holistic = () => {
                     item.id
                   )
                 }
-                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292F33] font-semibold tracking-[1px]"
+                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292f33] font-semibold tracking-[1px]"
               >
                 {item.medical_speciality_name}
               </h1>
@@ -381,9 +374,9 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3 md:px-5 rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3  rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
           <div
-            className="flex flex-col md:flex-row  justify-between px-4"
+            className="flex flex-col md:flex-row  justify-between "
             ref={ref}
           >
             <div className="flex relative justify-between items-center py-4 md:py-0">
@@ -399,7 +392,7 @@ const Holistic = () => {
                   setSearchValue("") ||
                   setSelectedItem(null)
                 }
-                className="font-sansRegular text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem] tracking-[3px] w-full text-[#000000]  pr-8 pl-0 md:pl-[2rem] placeHolderText"
+                className="font-sansRegular font-semibold text-[.8rem] md:text-[1rem] outline-none 2xl:text-[1.2rem]  w-full text-[#292f33]  pr-8 pl-0 md:pl-[2rem] placeHolderText2"
               />
               <div className=" cursor-pointer">
                 <img
@@ -434,7 +427,7 @@ const Holistic = () => {
                   SpecCondSearchValue
                 }
                 onClick={() => handleItemClick("speciality")}
-                className="font-sansRegular text-[.8rem] md:text-[1rem] tracking-[2px]  outline-none 2xl:text-[1.2rem] w-full text-[#000000]   pl-0 md:pl-[0rem] placeHolderText"
+                className="font-sansRegular text-[.8rem] md:text-[1rem] w-[250px]  font-semibold outline-none 2xl:text-[1.2rem]  text-[#292f33]   pl-0 md:pl-[0rem] placeHolderText2"
               />
               <div
                 className=" cursor-pointer"
@@ -464,15 +457,18 @@ const Holistic = () => {
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
             <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
-              <div className="flex ml-0 md:ml-5" onClick={handleClick}>
+              <div
+                className="flex ml-0 md:ml-5 cursor-pointer items-center"
+                onClick={handleClick}
+                ref={calendarRef}
+              >
                 <img
                   onChange={handleDateChange}
                   src={calendarSvg}
                   alt=""
-                  ref={calendarRef}
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-semibold">
+                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansRegular font-semibold">
                   {startDate &&
                   startDate.toDateString() === new Date().toDateString()
                     ? "Today"
@@ -487,13 +483,14 @@ const Holistic = () => {
                     />
                   </div>
                 )}
+                <img
+                  src={grayDropDown}
+                  alt="dropdown"
+                  className={`${
+                    isOpen ? "rotate-180" : ""
+                  } h-3 w-3 mr-0 md:mr-8`}
+                />
               </div>
-
-              <img
-                src={grayDropDown}
-                alt="dropdown"
-                className={`${isOpen ? "rotate-180" : ""} h-3 w-3 mr-0 md:mr-8`}
-              />
 
               <div className="hidden md:block" onClick={handleSearch}>
                 <img

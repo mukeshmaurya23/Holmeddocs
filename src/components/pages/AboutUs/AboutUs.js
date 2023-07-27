@@ -55,7 +55,7 @@ const AboutUs = () => {
   return (
     <>
       <div className="overflow-hidden  max-w-[1560px] mx-auto">
-        <section className="relative mb-10">
+        <section className="relative mb-16">
           {/*First Div */}
 
           <h1 className="absolute font-poppinsMedium text-[#000000] text-[1rem] sm:text-[2.3rem] md:text-[2.5rem]  lg:text-[2.8rem] xl:text-[2.9rem] 2xl:text-[3rem] tracking-[4px] top-1/2 left-[1rem] sm:left-[4rem] md:left-[5rem] lg:left-[6rem] xl:left-[6.3rem] 2xl:left-[6.4rem]">
@@ -63,7 +63,7 @@ const AboutUs = () => {
           </h1>
           <img src={AboutUsBg} alt="" className="w-[100%] h-auto" />
         </section>
-        <section className="grid grid-cols-1 md:grid-cols-2 px-2 md:px-10 py-2 space-y-4 mb-10">
+        <section className="grid grid-cols-1 md:grid-cols-2 px-2 md:px-10 py-2 space-y-4 mb-[6rem]">
           {/*second Div */}
           <div className="px-4 md:px-16">
             <div className="w-[100px] h-1 mb-4 bg-aboutUsBorder"></div>
@@ -91,7 +91,7 @@ const AboutUs = () => {
             className="w-[590px] ml-0 md:ml-[2rem] h-[340px] object-contain"
           />
         </section>
-        <section className="px-2 md:px-10 py-2 space-y-4 mb-1 md:mb-10">
+        <section className="px-2 md:px-10 py-2 space-y-4 mb-1 md:mb-16">
           {" "}
           {/*Third Div */}
           <div className="px-4 md:px-16">
@@ -118,7 +118,7 @@ const AboutUs = () => {
             ))}
           </div>
         </section>
-        <section className="bg-[#47C7C612] px-2 md:px-10 py-2 space-y-4  pb-10 mb-10">
+        <section className="bg-[#47C7C612] px-2 md:px-10 py-2 space-y-4  pb-10 mb-16">
           {/*Fourth Div */}
           <div className="px-4 md:px-16 py-10">
             <div className="w-[100px] h-1 mb-4 bg-aboutUsBorder"></div>
@@ -149,7 +149,7 @@ const AboutUs = () => {
             className="w-[75px] h-auto ml-auto mr-10 "
           />
         </section>
-        <section className="grid grid-cols-1 sm:grid-cols-2 px-2 md:px-10 py-2 space-y-4 mb-10">
+        <section className="grid grid-cols-1 sm:grid-cols-2 px-2 md:px-10 py-2 space-y-4 mb-16">
           {/*Fifth Div */}
           <div className="px-4 md:px-16">
             <div className="w-[100px] h-1 mb-4 bg-aboutUsBorder"></div>

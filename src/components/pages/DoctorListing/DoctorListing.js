@@ -33,6 +33,7 @@ const DoctorListing = () => {
     {
       appointment_type: "",
     },
+
     //appointment_type ://pending
   ]);
   const { data: filterData } = useFetch("/patient/filters");
@@ -40,20 +41,9 @@ const DoctorListing = () => {
   const [time_slot_day, setTime_slot_day] = useState("");
   const [day, setDay] = useState("");
 
-  // console.log(
-  //   time_slot_day,
-  //   "time_slot_day hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-  // );
-
-  //here handling the search functionality using params
   const navigate = useNavigate();
   const location = useLocation();
-  // searchParams: new URLSearchParams(location.search),
-  // const params = {
-  //   locationParams: searchParams.get("location"),
-  //   zipCode: locationParams?.split("_")[1],
-  //   specialityParams: searchParams.get("speciality"),
-  // }
+
   const searchParams = new URLSearchParams(location.search);
 
   const commonParams = {
@@ -64,7 +54,6 @@ const DoctorListing = () => {
     insuranceParams: searchParams.get("insurance"),
   };
 
-  //const locationParams = searchParams.get("location");
   const zipCode = commonParams?.locationParams?.split("_")[1];
   const specialityId = commonParams?.specialityParams?.split("_")[1];
   const conditionId = commonParams?.conditionParams?.split("_")[1];
@@ -73,134 +62,32 @@ const DoctorListing = () => {
 
   const openViewAll = (name) => {
     if (viewAll === name) {
-      setViewAll(null); // Collapse the currently expanded category
+      setViewAll(null);
     } else {
-      setViewAll(name); // Expand the clicked category
+      setViewAll(name);
     }
   };
 
-  // useEffect(() => {
-  //   fetchDoctorsData();
-  // }, []);
-
-  // const fetchDoctorsData = async () => {
-  //   setStatus("loading");
-  //   try {
-  //     const response = await customAxios.post("/patient/doctors", {
-  //       time_slot_day: time_slot_day,
-  //     });
-  //     const data = response?.data?.data?.result;
-  //     setDoctorsList(data);
-  //     setStatus("succeeded");
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     setStatus("failed");
-  //   }
-  // };
-  // const fetchDoctorsData = async (day) => {
-  //   setDay(day);
-  //   setStatus("loading");
-  //   const specilaityParams=commonParams?.specialityParams
-  //   const conditionParams=commonParams?.conditionParams
-  //   let specialityId = null;
-  // let conditionId = null;
-  //   try {
-  //     const response = await customAxios.post("/patient/doctors", {
-  //       time_slot_day: day,
-  //       serving_areas: zipCode,
-  //     });
-  //     const data = response?.data?.data?.result;
-  //     setDoctorsList(data);
-  //     setStatus("succeeded");
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     setStatus("failed");
-  //   }
-  // };
-
-  // //api calls
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const dateParam = urlParams.get("date");
-
-  //   if (dateParam) {
-  //     const dateObject = new Date(dateParam);
-  //     const dayOfWeek = dateObject.toLocaleDateString("en-US", {
-  //       weekday: "long",
-  //     });
-
-  //     setTime_slot_day(dayOfWeek);
-  //     fetchDoctorsData(dayOfWeek);
-  //   }
-  // }, [commonParams?.locationParams]);
   const fetchDoctorsData = async (day) => {
     setDay(day);
     setStatus("loading");
-    console.log("CALLLED FETCH DOCTOR DATA");
+
     try {
-      // Get the speciality ID
-      // const specilaityParams = commonParams?.specialityParams;
-      // const conditionParams = commonParams?.conditionParams;
-
-      // if (specilaityParams && filterData) {
-      //   const specialityData = filterData?.data?.result?.map(
-      //     (item) => item.value
-      //   );
-      //   if (specialityData.length > 0) {
-      //     specialityData.forEach((item) => {
-      //       item.forEach((item) => {
-      //         if (item.medical_speciality_name === specilaityParams) {
-      //           // specialityId = item.id;
-      //           console.log("============ITEM ID==========================");
-      //           console.log(item.id);
-      //           setSpecialityId(item.id);
-      //         }
-      //       });
-      //     });
-      //   }
-      // }
-
-      // Get the condition ID
-
       const response = await customAxios.post("/patient/doctors", {
         time_slot_day: day,
         serving_areas: zipCode,
         speciality: specialityId,
         conditions: conditionId,
-        // Pass the speciality ID to the API call
       });
 
       const data = response?.data?.data?.result;
       setDoctorsList(data);
       setStatus("succeeded");
     } catch (error) {
-      console.log(error.message);
       setStatus("failed");
     }
   };
 
-  //api calls
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const dateParam = urlParams.get("date");
-
-  //   console.log(dateParam, "->>>>>>>>>>>>>>>>>>>> DATE PARAM");
-
-  //   if (dateParam) {
-  //     const dateObject = new Date(dateParam);
-  //     const dayOfWeek = dateObject.toLocaleDateString("en-US", {
-  //       weekday: "long",
-  //     });
-
-  //     setTime_slot_day(dayOfWeek);
-  //     fetchDoctorsData(dayOfWeek);
-  //   }
-  // }, [
-  //   commonParams?.locationParams,
-  //   commonParams?.specialityParams,
-  //   commonParams?.conditionParams,
-  //   commonParams?.date,
-  // ]);
   useEffect(() => {
     if (shouldCallAPI) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -265,7 +152,6 @@ const DoctorListing = () => {
 
     return displayedValues.map((data) => generateLabel(data, category));
   };
-  console.log(commonParams.specialityParams, "commonParams.specialityParams");
 
   const generateLabel = (data, category) => {
     const isChecked =
@@ -306,19 +192,23 @@ const DoctorListing = () => {
       if (filterCategoryIndex !== -1) {
         const filterCategory = newReqBodyFilterData[filterCategoryIndex];
         const filterCategoryKey = Object.keys(filterCategory)[0];
+        console.log(filterCategoryKey, "filterCategoryKey")
 
-        // Update the filter category with the new checkedIds value
+        if (filterCategoryKey === "appointment_type") {
+          
+          filterCategory[filterCategoryKey] = checked ? appointment_type : null;
+         
+        }else{
         filterCategory[filterCategoryKey] = checked
           ? [...filterCategory[filterCategoryKey], id]
           : filterCategory[filterCategoryKey].filter(
               (checkedId) => checkedId !== id
             );
+          }
       }
 
-      // Update the reqBodyFilterData state with the updated newReqBodyFilterData
       setReqBodyFilterData(newReqBodyFilterData);
 
-      // Construct the requestBody object by merging all the filter categories
       const requestBody = newReqBodyFilterData.reduce(
         (acc, cur) => ({ ...acc, ...cur }),
         {
@@ -326,7 +216,6 @@ const DoctorListing = () => {
         }
       );
 
-      // Update the searchParams and navigate based on the updated filter data
       if (checked) {
         const valueToAdd =
           filterTitle.toLowerCase() === "appointment_type"
@@ -360,7 +249,6 @@ const DoctorListing = () => {
         setDoctorsList(filterData);
         setStatus("succeeded");
       } catch (error) {
-        console.log(error.message);
         setStatus("failed");
       }
     };

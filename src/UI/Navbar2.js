@@ -17,7 +17,7 @@ import cross from "../images/icons/Cross.png";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
-
+import moment from "moment";
 import calendarSvg from "../images/home/Calendar.svg";
 
 import DatePickerComponent from "./DatePicker";
@@ -35,7 +35,7 @@ const Navbar2 = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const location = useLocation();
   const {
     specialties: specialistData,
     status: specStatus,
@@ -105,6 +105,16 @@ const Navbar2 = () => {
     return data;
   };
 
+
+  // useEffect(() => {
+  //   return () => {
+  //     setSelectedItemList({
+  //       location: "",
+  //       speciality: "",
+  //       conditions: "",
+  //     });
+  //   }; 
+  // }, [selectedItemList.location, selectedItemList.speciality, selectedItemList.conditions]);
   const handleSpecialitySearch = (e) => {
     setCondSpecSearchValue(e.target.value);
     setFilterSpecialityData(
@@ -166,6 +176,10 @@ const Navbar2 = () => {
       }
     }
   };
+
+  useEffect(() => {
+
+  },[]);
   useEffect(() => {
     const selectedSpeciality = specialistData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
@@ -207,13 +221,7 @@ const Navbar2 = () => {
   };
 
   const locationItems = () => {
-    if (locationSearchResults?.length === 0) {
-      return (
-        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
-          No results found
-        </h1>
-      );
-    }
+   
     return (
       locationSearchResults &&
       locationSearchResults?.map((item) => {
@@ -320,6 +328,8 @@ const Navbar2 = () => {
     }
   };
 
+
+
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
@@ -353,7 +363,7 @@ const Navbar2 = () => {
   const loginRef = useRef();
 
   const locSpecConditionRef = useRef();
-  //search params getting data from url
+
   let locationSearchParams = searchParams.get("location");
   let specialitySearchParams = searchParams.get("speciality");
 
@@ -361,7 +371,13 @@ const Navbar2 = () => {
 
   const dateSearchParams = searchParams.get("date");
   console.log(dateSearchParams, "dateSearchParams");
-  //clear the value of search params
+
+
+  const dateObject=moment(dateSearchParams)
+  const today=moment()
+  const formattedDate = dateObject.isSame(today, 'day')
+  ? 'Today'
+  : dateObject.format('MMMM D, YYYY');
   const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
   const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
     useState(null);
@@ -377,6 +393,11 @@ const Navbar2 = () => {
     }
     if (conditionSearchParams) {
       setClearConditionPlaceholder(conditionSearchParams.split("_")[0]);
+    }
+    return () => {
+      setClearingPlaceholder(null);
+      setClearSpecialityPlaceholder(null);
+      setClearConditionPlaceholder(null);
     }
   }, [locationSearchParams, specialitySearchParams, conditionSearchParams]);
 
@@ -401,7 +422,7 @@ const Navbar2 = () => {
   }, [ref]);
 
   useEffect(() => {
-    //in this  if search value is empty then dont show the location list and if search value is not empty then show the location list
+   
     if (searchValue === "") {
       setSelectedItem(null);
     } else {
@@ -409,11 +430,26 @@ const Navbar2 = () => {
     }
   }, [searchValue]);
 
+    //check if routes chnage clear the selected item list
+    useEffect(() => {
+      return () => {
+        setSelectedItemList({
+          location: "",
+          speciality: "",
+          conditions: "",
+        });
+        setSearchValue("");
+     
+        setClearSpecialityPlaceholder("") 
+        setClearConditionPlaceholder("")
+      };
+    }, [location.pathname]);
+
   const handleDateChange = (e) => {
     setSearchParams({ ...searchParams, date: e.target.value });
   };
 
-  const location = useLocation();
+
 
   const showShadow = location.pathname !== "/";
   const LoginSignup = (
@@ -568,18 +604,11 @@ const Navbar2 = () => {
                 />
               </Link>
 
-              {/* <div className="flex">
-                <input className="border border-gray-300 rounded-md py-2 px-4 w-[500px] h-[40px] mr-4" />
-                <img
-                  src={searchIcon}
-                  alt="search"
-                  className="h-auto w-[50px]"
-                />
-              </div> */}
+          
 
               <div
                 ref={locSpecConditionRef}
-                className="border-[1px] flex items-center rounded-lg border-[#b5b1b1]  "
+                className="border-[2px] flex items-center rounded-lg border-gray-300  "
               >
                 <div className="flex items-center relative">
                   <input
@@ -629,7 +658,7 @@ const Navbar2 = () => {
                     value={
                       selectedItemList.speciality ||
                       selectedItemList.conditions ||
-                      SpecCondSearchValue
+                      SpecCondSearchValue 
                     }
                     onClick={() =>
                       handleItemClick("speciality") ||
@@ -658,7 +687,7 @@ const Navbar2 = () => {
                   <span className="outline-none px-6 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
                     {startDate &&
                     startDate.toDateString() === new Date().toDateString()
-                      ? dateSearchParams
+                      ? formattedDate
                       : startDate?.toLocaleDateString()}
                   </span>
                   {isOpen && (

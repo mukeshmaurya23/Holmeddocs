@@ -11,6 +11,9 @@ import Modal from "../../../UI/Modal";
 import DatePickerComponent from "../../../UI/DatePicker";
 
 const DoctorDetails = ({}) => {
+
+
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const timeSlotDispatch = useDispatch();
@@ -19,7 +22,6 @@ const DoctorDetails = ({}) => {
     (state) => state.api
   );
 
-  console.log(slot_avialability, "slot_avialability");
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
@@ -32,10 +34,26 @@ const DoctorDetails = ({}) => {
     date: "",
     time: "",
   });
+  const [availabilityType, setAvailabilityType] = useState([
+    {
+      type: "Virtual",
+      Virtual:slot_avialability?.Virtual
+
+    },
+    {
+      type: "InPerson",
+      InPerson:slot_avialability?.InPerson
+    }
+  ]);
+
+  console.log(availabilityType, "availabilityType from doctor details");
+  const combinedSlots = (slot_avialability?.Virtual || []).concat(
+    slot_avialability?.InPerson || []
+  );
+  // console.log(combinedSlots, "combinedSlots from doctor details");
 
   const [timeSlotId, setTimeSlotId] = useState("");
-  console.log(selectDateTime, "selectDateTime------------------");
-  console.log(timeSlotId, "timeSlotId------------------");
+
   const calendarRef = useRef(null);
 
   const handleDateSelection = (date, timeSlots) => {
@@ -44,11 +62,15 @@ const DoctorDetails = ({}) => {
     const month = dateObj?.toLocaleString("en-US", { month: "short" });
     const year = dateObj?.getFullYear();
     const formattedDate = `${day} ${month}, ${year}`;
-    setSelectedDate(formattedDate);
-    setSelectDateTime((prev) => ({ ...prev, date: date, time: null }));
-    setError((prev) => ({ ...prev, date: "" }));
+    
+ 
 
+
+    setSelectDateTime((prev) => ({ ...prev, date, time: null }));
+    setError((prev) => ({ ...prev, date: "" }));
     setAvailableTimeSlots(timeSlots);
+//availabilityType ? `${formattedDate} (${availabilityType})` : 
+    setSelectedDate(formattedDate);
   };
   const handleTimeSelection = (time) => {
     setSelectDateTime((prev) => ({ ...prev, time }));
@@ -114,7 +136,7 @@ const DoctorDetails = ({}) => {
   const [startDate, setStartDate] = useState(new Date());
   const formattedDate = startDate.toISOString().split("T")[0];
 
-  console.log(formattedDate, "startDate........from doctor details");
+  //console.log(formattedDate, "startDate........from doctor details");
   const [isOpen, setIsOpen] = useState(false);
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -266,57 +288,45 @@ const DoctorDetails = ({}) => {
                               ></div>
                             ))}
                         </div>
-                      ) : slot_avialability ? (
-                        slot_avialability?.InPerson?.map((timeSlot, index) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              if (timeSlot.value.length > 0) {
-                                handleDateSelection(
-                                  timeSlot.date,
-                                  timeSlot.value
-                                );
-                              }
-                            }}
-                            className={`${
-                              timeSlot.value.length > 0
-                                ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
-                                : "bg-[#ecf0f1] cursor-not-allowed"
-                            } flex justify-center items-center rounded
-                            ${
-                              selectDateTime.date === timeSlot.date &&
-                              "bg-verifiCation text-white"
-                            }
-                            `}
-                          >
-                            <p className={`px-3 py-2 text-xs font-semibold  `}>
-                              <DateComp timeSlotDate={timeSlot?.date} />
-                            </p>
-                          </div>
-                        ))
                       ) : (
-                        doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              if (timeSlot.value.length > 0) {
-                                handleDateSelection(
-                                  timeSlot.date,
-                                  timeSlot.value
-                                );
-                              }
-                            }}
-                            className={` ${
-                              timeSlot.value.length > 0
-                                ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
-                                : "bg-[#ecf0f1] cursor-not-allowed"
-                            } flex justify-center items-center   rounded `}
-                          >
-                            <p className="px-3 py-2 text-xs font-semibold">
-                              <DateComp timeSlotDate={timeSlot?.date} />
-                            </p>
-                          </div>
-                        ))
+                        <>
+                          {Array.from(
+                            new Set(combinedSlots.map((slot) => slot.date))
+                          ).map((date, index) => {
+                            const slotsWithValues = combinedSlots.filter(
+                              (slot) =>
+                                slot.date === date && slot.value.length > 0
+                            );
+                           
+                              console.log(slotsWithValues, "slotsWithValues")
+                            return (
+                              <div
+                                key={index}
+                                onClick={() => {
+                                  if (slotsWithValues.length > 0) {
+                                    handleDateSelection(
+                                      date,
+                                      slotsWithValues[0].value
+                                    );
+                                  }
+                                }}
+                                className={`${
+                                  slotsWithValues.length > 0
+                                    ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                    : "bg-[#ecf0f1] cursor-not-allowed"
+                                } flex justify-center items-center rounded
+            ${selectDateTime.date === date && "bg-verifiCation text-white"}
+            `}
+                              >
+                                <p
+                                  className={`px-3 py-2 text-xs font-semibold  `}
+                                >
+                                  <DateComp timeSlotDate={date} />
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </>
                       )}
 
                       <div className="relative ">
@@ -349,6 +359,7 @@ const DoctorDetails = ({}) => {
                     <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                       {selectedDate}
                     </h2>
+
                     <ul className="flex flex-wrap gap-5 py-3">
                       {availableTimeSlots &&
                         availableTimeSlots.map((timeSlot, index) => (
