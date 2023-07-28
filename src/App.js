@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Suspense, lazy } from "react";
 import loadingGif from "./images/icons/Loader.gif";
 import useOnline from "./hooks/useOnline";
+import UnderMaintenance from "./components/UnderMaintenance";
 const Login = lazy(() => import("./components/Login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 
@@ -97,6 +98,10 @@ function App() {
         },
         { path: "/contact-us", element: <ContactUs /> },
         { path: "/book-appointment", element: <BookAppointment /> },
+        {
+          path: "/under-maintenance",
+          element: <UnderMaintenance />,
+        },
       ],
     },
 

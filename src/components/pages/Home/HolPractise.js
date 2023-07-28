@@ -1,5 +1,6 @@
 import React from "react";
 import practiseLogo from "../../../images/home/OBJECTS.png";
+import { Link } from "react-router-dom";
 
 const HolPractise = () => {
   return (
@@ -27,7 +28,10 @@ const HolPractise = () => {
               Grow your reach and experience.
             </li>
             <button className="text-[.7rem] cursor-pointer md:text-[.9rem] px-8 py-2 2xl:py-3 mt-5 text-sm font-sansBold text-white  bg-verifiCation  rounded-full">
-              List your practice on Holmeddoc
+              <Link to="/under-maintenance " className="cursor-pointer">
+                {" "}
+                List your practice on Holmeddoc
+              </Link>
             </button>
           </ul>
         </div>
