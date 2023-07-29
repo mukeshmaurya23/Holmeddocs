@@ -31,19 +31,23 @@ const Slider = () => {
   }, [index]);
 
   useEffect(() => {
-    try {
-      const getDoctorData = async () => {
-        const response = await customAxios.post("/patient/doctors", {
-          featured: "1",
-        });
-        const data = await response?.data?.data?.result;
-        setDoctorData(data);
-      };
-      getDoctorData();
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+    const getDoctorData = async () => {
+      try {
+        // Check if the doctorData is already available in state
+        if (doctorData.length === 0) {
+          const response = await customAxios.post("/patient/doctors", {
+            featured: "1",
+          });
+          const data = response?.data?.data?.result || [];
+          setDoctorData(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getDoctorData();
+  }, [doctorData]); 
 
   return (
     <div className="overflow-hidden ml-4 md:ml-8">

@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
-
+import moment from "moment";
 import loadingGif from "../../../images/icons/Loader.gif";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { getRandomDoctorImage } from "../../../constant";
 
 const DoctorsList = ({ doctorsList, status }) => {
   const { id, doctorName } = useParams();
-  console.log(id, doctorName, "doctorName a and id .........");
+  
 
-  const randomDoctorImage = getRandomDoctorImage();
-  console.log(doctorsList, "doctorsList from listing");
+  
+  console.log(doctorsList, "doctorsList from listing------");
   const DateComp = ({ timeSlotDate }) => {
-    const date = new Date(timeSlotDate);
-    const day = date?.getDate();
-    const month = date?.toLocaleString("en-US", { month: "short" });
-    //const formattedDate = `${day} ${month}`;
+   
+    const day = moment(timeSlotDate).format("DD");
+    const month = moment(timeSlotDate).format("MMM");
+    
     return (
       <>
         <div className="flex flex-col  ">
@@ -109,7 +109,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                     {timeSlot?.day?.slice(0, 3)}
                   </p>
                   <p className="px-3">
-                    <DateComp timeSlotDate={timeSlot?.date} />
+                  <DateComp timeSlotDate={timeSlot?.date} />
                   </p>
                 </div>
               ))}

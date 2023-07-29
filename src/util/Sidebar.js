@@ -44,9 +44,8 @@ const SideBar = () => {
     <div className="flex flex-col h-screen">
       <div className="flex flex-col md:flex-row h-screen">
         <div
-          className={`md:hidden ${
-            isSidebarOpen ? "bg-verifiCation" : "bg-verifiCation "
-          }`}
+          className={`md:hidden ${isSidebarOpen ? "bg-verifiCation" : "bg-verifiCation "
+            }`}
         >
           <div className="flex justify-between p-2">
             <button
@@ -81,9 +80,8 @@ const SideBar = () => {
         </div>
 
         <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
+          className={`${isSidebarOpen ? "block" : "hidden"
+            } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
         >
           <div className="p-10">
             <Link to="/">
@@ -107,7 +105,7 @@ const SideBar = () => {
              
               `}
               style={
-                location.pathname === "/sidebar"
+                location.pathname === "/sidebar" || location.pathname === "/sidebar/update-profile"
                   ? { backgroundColor: "#fff", color: "#008282" }
                   : null
               }

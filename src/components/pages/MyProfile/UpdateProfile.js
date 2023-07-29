@@ -15,6 +15,8 @@ import {
   fetchStateData,
   fetchZipCodeData,
 } from "../../../store/apiSlice";
+
+import { filterFunctionality } from "../../../constant";
 const UpdateProfile = () => {
   const [isInsuranceDropdown, setIsInsuranceDropDown] = useState(false);
   const [isStateDropdown, setIsStateDropDown] = useState(false);
@@ -32,8 +34,20 @@ const UpdateProfile = () => {
     setSelectedItemList((prevSelectedItemList) => {
       return { ...prevSelectedItemList, [type]: name };
     });
+    if (type === "insurance") {
+      setIsInsuranceDropDown(false);
+    }
+    if (type === "state") {
+      setIsStateDropDown(false);
+    }
+    if (type === "city_id") {
+      setCityDropDown(false);
+    }
+    if (type === "zip_code_id") {
+      setZipCodeDropDown(false);
+    }
   };
-
+  const [isStateSelected, setIsStateSelected] = useState(false);
   const location = useLocation();
   const { profileData } = location.state;
   console.log(profileData, "im profile data************");
@@ -146,9 +160,13 @@ const UpdateProfile = () => {
   const stateDispatch = useDispatch();
   const cityDispatch = useDispatch();
   const zipCodeDispatch = useDispatch();
-  const { insuranceData, insuranceStatus } = useSelector((state) => state.api);
+  const { insuranceData, insuranceStatus, filterInsuranceData } = useSelector(
+    (state) => state.api
+  );
 
-  const { stateData, stateStatus } = useSelector((state) => state.api);
+  const { stateData, stateStatus, filterStateData } = useSelector(
+    (state) => state.api
+  );
   useEffect(() => {
     insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
   }, [insuranceDispatch]);
@@ -157,15 +175,102 @@ const UpdateProfile = () => {
     stateDispatch(fetchStateData("/patient/master/state"));
   }, [stateDispatch]);
 
-  const { cityData, cityStatus } = useSelector((state) => state.api);
-  useEffect(() => {
-    cityDispatch(fetchCityData("/patient/master/city"));
-  }, [cityDispatch]);
+  const { cityData, cityStatus, filterCityData } = useSelector(
+    (state) => state.api
+  );
 
-  const { zipCodeData, zipCodeStatus } = useSelector((state) => state.api);
+  const { zipCodeData, zipCodeStatus, filterZipCodeData } = useSelector(
+    (state) => state.api
+  );
+
   useEffect(() => {
-    zipCodeDispatch(fetchZipCodeData("/patient/master/zip"));
-  }, [zipCodeDispatch]);
+    if (selectedItemList.state.id) {
+      cityDispatch(
+        fetchCityData({
+          url: "/patient/master/city",
+          state_id: selectedItemList.state.id,
+        })
+      );
+      // setCityDropDown(true); // Open city dropdown when state is selected
+    }
+    if (selectedItemList.state.id) {
+      setCityDropDown(true);
+      setIsStateSelected(true);
+      cityRef.current.focus();
+    } else {
+      setIsStateSelected(false);
+    }
+  }, [cityDispatch, selectedItemList.state.id]);
+
+  useEffect(() => {
+    if (selectedItemList.state.id && selectedItemList.city_id.id) {
+      zipCodeDispatch(
+        fetchZipCodeData({
+          url: "/patient/master/zip",
+          state_id: selectedItemList.state.id,
+          city_id: selectedItemList.city_id.id,
+        })
+      );
+      // setZipCodeDropDown(true); // Open zip code dropdown when both state and city are selected
+    }
+    if (selectedItemList.state.id && selectedItemList.city_id.id) {
+      setZipCodeDropDown(true);
+      zipCodeRef.current.focus();
+    }
+  }, [zipCodeDispatch, selectedItemList.state.id, selectedItemList.city_id.id]);
+
+  //   stateData?.find((item) => item.id === profileData?.state_id)?.state_name ||
+
+  const [insurnceValue, setInsuranceValue] = useState(
+    profileData?.insurance_company
+  );
+  const [stateValue, setStateValue] = useState("");
+
+  const [cityValue, setCityValue] = useState("");
+
+  const [zipCodeValue, setZipCodeValue] = useState("");
+  //filter functionality
+const[filterState,setFilterState]=useState(filterStateData)
+const[stateSearchValue,setStateSearchValue]=useState("")
+
+//for city
+const[filterCity,setFilterCity]=useState(filterCityData)
+const[citySearchValue,setCitySearchValue]=useState("")
+  console.log(filterCityData, "im filterCityData>>>>>>>>>>>>>>>");
+const handleStateSearch = (e) => {
+ setStateSearchValue(e.target.value);
+  setFilterState(
+    filterFunctionality(stateSearchValue, filterStateData, "state_name")
+  );
+}
+//for city
+const handleCitySearch = (e) => {
+  setCitySearchValue(e.target.value);
+  setFilterCity(
+    filterFunctionality(citySearchValue, filterCityData, "city_name")
+  );
+}
+
+//for zip 
+// const[filterZip,setFilterZip]=useState(filterZipCodeData)
+// const[zipSearchValue,setZipSearchValue]=useState("")
+// const handleZipSearch = (e) => {
+//   setZipSearchValue(e.target.value);
+//   setFilterZip(
+//     filterFunctionality(zipSearchValue, filterZipCodeData, "zip")
+//   );
+// }
+
+//for insurance
+const[filterInsurance,setFilterInsurance]=useState(filterInsuranceData)
+const[insuranceSearchValue,setInsuranceSearchValue]=useState("")
+const handleInsuranceSearch = (e) => {
+  setInsuranceSearchValue(e.target.value);
+  setFilterInsurance(
+    filterFunctionality(insuranceSearchValue, filterInsuranceData, "insurance_company_name")
+  );
+}
+
 
   return (
     <>
@@ -194,7 +299,7 @@ const UpdateProfile = () => {
                     profileData?.patient_first_name
                   }
                   placeholder="Enter your first name"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] rounded py-2 px-4 text-[12px] sm:text-[14px] font-semibold"
                 />
 
                 {formik.errors.patient_first_name &&
@@ -222,7 +327,7 @@ const UpdateProfile = () => {
                   }
                   id="patient_last_name"
                   placeholder="Enter your last name"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_last_name &&
                   formik.touched.patient_last_name && (
@@ -240,7 +345,7 @@ const UpdateProfile = () => {
                   Gender
                 </Label>
                 <select
-                  className="border border-verifiCation  rounded py-2 px-4 text-black text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation  rounded py-2 px-4 text-[#292f33] font-semibold text-[12px] sm:text-[14px]"
                   id="patient_gender"
                   name="patient_gender"
                   onChange={formik.handleChange}
@@ -278,7 +383,7 @@ const UpdateProfile = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.patient_dob || profileData?.patient_dob}
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-[6px] px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] font-semibold rounded py-[6px] px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_dob && formik.touched.patient_dob && (
                   <div className="text-red-400 text-xs mt-1">
@@ -305,7 +410,7 @@ const UpdateProfile = () => {
                   id="patient_phone"
                   disabled
                   placeholder="XXX XXX XXXX"
-                  className="border border-verifiCation outline-verifiCation bg-gray-200 text-black rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation bg-gray-200 text-[#292f33] font-semibold rounded py-2 px-7 sm:px-8 text-[10px] sm:text-[14px]"
                 />
                 {formik.errors.patient_phone &&
                   formik.touched.patient_phone && (
@@ -331,7 +436,7 @@ const UpdateProfile = () => {
                   }
                   id="patient_email"
                   placeholder="email@domain.com"
-                  className="border border-verifiCation text-black outline-verifiCation rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation text-[#292f33] font-semibold outline-verifiCation rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.patient_email &&
                   formik.touched.patient_email && (
@@ -340,7 +445,10 @@ const UpdateProfile = () => {
                     </div>
                   )}
               </div>
-              <div className="flex flex-col  w-1/2 relative p-[10px]">
+              <div
+                className="flex flex-col  w-1/2 relative p-[10px]"
+                ref={insuranceRef}
+              >
                 <Label
                   htmlFor="insurance_company"
                   className="font-sansRegular text-formLabel text-sm py-1"
@@ -348,22 +456,34 @@ const UpdateProfile = () => {
                   Select Your Insurance
                 </Label>
 
-                <Input
+                <input
                   type="text"
+                  placeholder={"Select"}
                   id="insurance_company"
                   name="insurance_company"
                   onBlur={formik.handleBlur}
+                  autoComplete="nope"
                   value={
                     selectedItemList.insurance.insurance_company_name ||
-                    profileData?.insurance_company
+                    insurnceValue || insuranceSearchValue
                   }
-                  placeholder="select"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  onFocus={() => {
+                    setInsuranceValue("") || setInsuranceSearchValue("") ||
+                      setSelectedItemList({
+                        ...selectedItemList,
+                        insurance: {
+                          ...selectedItemList.insurance,
+                          insurance_company_name: "",
+                        },
+                      }) ||
+                      setIsInsuranceDropDown(true);
+                  }}
+                  onChange={handleInsuranceSearch}
+                  className="border border-verifiCation placeHolderText outline-verifiCation text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 <img
                   src={greenArrowDown}
                   alt=""
-                  ref={insuranceRef}
                   onClick={() => {
                     setIsInsuranceDropDown(!isInsuranceDropdown);
                   }}
@@ -380,7 +500,7 @@ const UpdateProfile = () => {
                 <ul
                   className={`${
                     isInsuranceDropdown
-                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      ? "absolute mt-1 pl-5 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                       : ""
                   }`}
                 >
@@ -388,7 +508,7 @@ const UpdateProfile = () => {
                     ? insuranceStatus === "loading"
                       ? "Loading..."
                       : insuranceData &&
-                        insuranceData.map((item) => (
+                        filterInsurance.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
@@ -408,32 +528,6 @@ const UpdateProfile = () => {
                         ))
                     : null}
                 </ul>
-
-                {/* <ul
-                  className={`${
-                    isInsuranceDropdown
-                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                  }`}
-                >
-                  {isInsuranceDropdown &&
-                    (insuranceStatus === "loading" ? (
-                      "Loading..."
-                    ) : (
-                      <li
-                        className="text-formLabel text-[12px] cursor-pointer relative"
-                        key={item.id}
-                        onClick={() =>
-                          handleSelectedItem(
-                            item.insurance_company_name,
-                            "insurance"
-                          )
-                        }
-                      >
-                        {item.insurance_company_name}
-                      </li>
-                    ))}
-                </ul> */}
               </div>
               <div className="flex flex-col  w-1/2 relative p-[10px]">
                 <Label
@@ -450,7 +544,7 @@ const UpdateProfile = () => {
                   value={
                     formik.values.policy_number || profileData?.policy_number
                   }
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.policy_number &&
                   formik.touched.policy_number && (
@@ -478,7 +572,7 @@ const UpdateProfile = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.apartment || profileData?.apartment}
                   placeholder="Building/Apartment/Unit"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.apartment && formik.touched.apartment && (
                   <div className="text-red-400 text-xs mt-1">
@@ -503,7 +597,7 @@ const UpdateProfile = () => {
                   onBlur={formik.handleBlur}
                   value={formik.values.address1 || profileData?.address1}
                   placeholder="Enter your address"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
                 {formik.errors.address1 && formik.touched.address1 && (
                   <div className="text-red-400 text-xs mt-1">
@@ -513,40 +607,75 @@ const UpdateProfile = () => {
               </div>
             </div>
             <div className="flex flex-wrap px-4 sm:px-24">
-              {/* <div className="relative flex flex-col w-1/3 p-[10px]">
+              <div
+                className="flex relative flex-col w-1/3 p-[10px]"
+                ref={stateRef}
+              >
                 <Label
-                  htmlFor="city_id"
+                  htmlFor="state"
                   className="font-sansRegular text-formLabel text-sm py-1"
                 >
-                  City
+                  State
                 </Label>
                 <Input
+                  ref={stateRef}
                   type="text"
-                  name="city_id"
-                  id="city_id"
-                  onFocus={() => setCityDropDown(true)}
-                  placeholder="city"
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  name="state"
+                  autoComplete="nope"
+                  id="state"
+                  placeholder="select"
+                  value={selectedItemList.state.state_name || stateValue || stateSearchValue}
+                  onFocus={() =>
+                    setIsStateDropDown(true) ||
+                    setStateValue("") || setStateSearchValue("") || setCitySearchValue("") ||
+                    setSelectedItemList({
+                      ...selectedItemList,
+                      state: {
+                        id: "",
+                        state_name: "",
+                      },
+                      city_id: "",
+                      city_name: "",
+                      zip_code_id: "",
+                    })
+                  }
+                  onChange={handleStateSearch}
+                  className="border border-verifiCation outline-verifiCation text-[#292f33] placeHolderText font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]"
                 />
-                {cityDropDown
-                  ? cityStatus === "loading"
-                    ? "Loading..."
-                    : cityData &&
-                      cityData.map((item) => (
-                        <li
-                          className="text-formLabel text-[12px] cursor-pointer relative"
-                          key={item.id}
-                          onClick={() =>
-                            handleSelectedItem(item?.id, "city_id")
-                          }
-                        >
-                          {item.city_name}
-                        </li>
-                      ))
-                  : null}
-              </div> */}
+
+                <ul
+                  className={`${
+                    isStateDropdown
+                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                  }`}
+                >
+                  {isStateDropdown
+                    ? stateStatus === "loading"
+                      ? "Loading..."
+                      : 
+                      filterState.map((item) => (
+                          <li
+                            className="text-formLabel text-[12px] cursor-pointer relative"
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  state_name: item.state_name,
+                                },
+                                "state"
+                              )
+                            }
+                          >
+                            {item.state_name}
+                          </li>
+                        ))
+                    : null}
+                </ul>
+              </div>
               <div
-                className="relative flex flex-col w-1/3 p-[10px]"
+                className="relative flex flex-col w-1/3 p-[10px] "
                 ref={cityRef}
               >
                 <Label
@@ -556,16 +685,34 @@ const UpdateProfile = () => {
                   City
                 </Label>
                 <Input
+                  ref={cityRef}
                   type="text"
                   name="city_id"
                   id="city_id"
-                  value={selectedItemList.city_id.city_name}
-                  onFocus={() => setCityDropDown(true)}
+                  value={selectedItemList.city_id.city_name || cityValue || citySearchValue}
+                  onFocus={() =>
+                    setCityDropDown(true) ||
+                    setCityValue("") || setCitySearchValue("") ||
+                    setSelectedItemList({
+                      ...selectedItemList,
+                      city_id: {
+                        id: "",
+                        city_name: "",
+                      },
+                      zip_code_id: "",
+                    })
+                  }
                   placeholder="city"
                   autoComplete="nope"
-                  className="border border-verifiCation outline-verifiCation text-black rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  disabled={!selectedItemList.state.id}
+                  onChange={handleCitySearch}
+                  className={`border border-verifiCation outline-verifiCation placeHolderText text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px]  ${
+                    !selectedItemList.state.id
+                      ? "bg-gray-100 cursor-not-allowed"
+                      : ""
+                  }`}
                 />
-                {IscityDropDown ? (
+                {IscityDropDown && selectedItemList.state.state_name ? (
                   <ul
                     className={`${
                       IscityDropDown
@@ -575,8 +722,8 @@ const UpdateProfile = () => {
                   >
                     {cityStatus === "loading"
                       ? "Loading..."
-                      : cityData &&
-                        cityData.map((item) => (
+                      : 
+                        filterCity.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
@@ -610,28 +757,51 @@ const UpdateProfile = () => {
                   type="text"
                   name="zip_code_id"
                   id="zip_code_id"
-                  value={selectedItemList.zip_code_id.zip}
+                  value={selectedItemList.zip_code_id.zip || zipCodeValue }
                   placeholder="zip code"
                   autoComplete="nope"
-                  onFocus={() => setZipCodeDropDown(true)}
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
+                  
+                  onFocus={() =>
+                    setZipCodeDropDown(true) ||
+                    setZipCodeValue("") ||
+                    setSelectedItemList({
+                      ...selectedItemList,
+                      zip_code_id: {
+                        id: "",
+                        zip: "",
+                      },
+                    })
+                  }
+                  disabled={
+                    !selectedItemList.state.id && !selectedItemList.city_id.id
+                  }
+                  className={`border border-verifiCation outline-verifiCation placeHolderText text-[#292f33] font-semibold rounded py-2 px-4 text-[12px] sm:text-[14px] ${
+                    !selectedItemList.state.id || !selectedItemList.city_id.id
+                      ? "bg-gray-100 cursor-not-allowed"
+                      : ""
+                  }`}
                 />
                 {formik.errors.zip_code_id && formik.touched.zip_code_id && (
                   <div className="text-red-400 text-xs mt-1">
                     {formik.errors.zip_code_id}
                   </div>
                 )}
-                <ul
-                  className={`${
-                    IsZipCodeDropDown
-                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                  }`}
-                >
-                  {IsZipCodeDropDown
-                    ? zipCodeStatus === "loading"
+
+                {IsZipCodeDropDown &&
+                selectedItemList.state.state_name &&
+                selectedItemList.city_id.city_name ? (
+                  <ul
+                    className={`${
+                      IsZipCodeDropDown
+                        ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
+                  >
+                    {zipCodeStatus === "loading"
                       ? "Loading..."
-                      : zipCodeData &&
+                      : stateData &&
+                        cityData &&
+                       
                         zipCodeData.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
@@ -648,62 +818,9 @@ const UpdateProfile = () => {
                           >
                             {item.zip}
                           </li>
-                        ))
-                    : null}
-                </ul>
-              </div>
-              <div className="flex relative flex-col w-1/3 p-[10px]">
-                <Label
-                  htmlFor="state"
-                  className="font-sansRegular text-formLabel text-sm py-1"
-                >
-                  State
-                </Label>
-                <Input
-                  type="text"
-                  name="state"
-                  id="state"
-                  placeholder="select"
-                  value={selectedItemList.state.state_name || ""}
-                  className="border border-verifiCation outline-verifiCation text-formLabel rounded py-2 px-4 text-[12px] sm:text-[14px]"
-                />
-                <img
-                  src={greenArrowDown}
-                  alt=""
-                  ref={stateRef}
-                  onClick={() => setIsStateDropDown(!isStateDropdown)}
-                  className={`w-3 h-3 mr-2 cursor-pointer absolute right-4 top-[3.3rem] `}
-                />
-                <ul
-                  className={`${
-                    isStateDropdown
-                      ? "absolute mt-1 px-6 top-20 max-h-60 z-10 w-full  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                  }`}
-                >
-                  {isStateDropdown
-                    ? stateStatus === "loading"
-                      ? "Loading..."
-                      : stateData &&
-                        stateData.map((item) => (
-                          <li
-                            className="text-formLabel text-[12px] cursor-pointer relative"
-                            key={item.id}
-                            onClick={() =>
-                              handleSelectedItem(
-                                {
-                                  id: item.id,
-                                  state_name: item.state_name,
-                                },
-                                "state"
-                              )
-                            }
-                          >
-                            {item.state_name}
-                          </li>
-                        ))
-                    : null}
-                </ul>
+                        ))}
+                  </ul>
+                ) : null}
               </div>
             </div>
           </div>

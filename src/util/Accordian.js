@@ -61,7 +61,6 @@ const Accordion = ({
     };
   }, [ref]);
 
-  console.log(medicalConditionListData, "im medicalConditionListData");
 
   const getSpeciality = (id, name) => () => {
     console.log(id, "im id");

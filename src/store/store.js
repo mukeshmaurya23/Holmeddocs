@@ -7,7 +7,7 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "@reduxjs/toolkit";
 import apiSlice from "./apiSlice";
 import dataSlice from "./LocSpecSlice";
-import searchReducer from "./searchSlice";
+import searchSlice from "./searchSlice";
 //import filterApiSlice from "./filterApiSlice";
 const persistConfig = {
   key: "root",
@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
 
   api: apiSlice,
   data: dataSlice,
-  search: searchReducer,
+  search: searchSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

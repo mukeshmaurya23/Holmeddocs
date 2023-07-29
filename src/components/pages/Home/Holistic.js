@@ -31,7 +31,11 @@ const Holistic = () => {
     status: conditionStatus,
     filterConditions,
   } = useSelector((state) => state.data);
+  const {locationSearchResults,status:loactioSearchStatus} = useSelector(
+    (state) => state.search
+  );
 
+  console.log(locationSearchResults, "locationSearchResults----------");
   const [filterSpecilityData, setFilterSpecialityData] =
     useState(filterSpecialties);
   const [filterConditionData, setFilterConditionData] =
@@ -39,18 +43,16 @@ const Holistic = () => {
 
   useEffect(() => {
     specialityDispatch(fetchSpecialties("/patient/master/speciality"));
-  }, [specialityDispatch]);
+  }, []);
 
   useEffect(() => {
     conditionsDispatch(fetchConditions("/patient/master/condition"));
-  }, [conditionsDispatch]);
+  }, []);
 
   const [searchValue, setSearchValue] = useState("");
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
-  const locationSearchResults = useSelector(
-    (state) => state.search.locationSearchResults
-  );
+
   // const [filterSpeciality, setFilterSpeciality] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -233,7 +235,7 @@ const Holistic = () => {
     navigate(url);
   };
 
-  console.log(locationSearchResults, "....................heheh");
+
 
   const locationItems = () => {
     return (

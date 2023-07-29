@@ -11,8 +11,11 @@ const AllSpecialistic = () => {
   const dispatch = useDispatch();
   const { specialties, specialtiesStatus } = useSelector((state) => state.data);
   useEffect(() => {
-    dispatch(fetchSpecialties("/patient/master/speciality"));
-  }, []);
+   
+    if (!specialties) {
+      dispatch(fetchSpecialties("/patient/master/speciality"));
+    }
+  }, [dispatch, specialties]);
 
   return specialtiesStatus === "loading" ? (
     <>

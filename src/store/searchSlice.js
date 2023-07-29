@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import customAxios from "../axios/custom";
 
-export const searchLocation = createAsyncThunk(
+ const searchLocation = createAsyncThunk(
   "search/searchLocation",
   async ({ searchValue, zip_code_id }) => {
     //{ dispatch }
@@ -36,9 +36,8 @@ export const searchLocation = createAsyncThunk(
 const searchSlice = createSlice({
   name: "search",
   initialState: {
-    name: "",
 
-    loading: false,
+   status: "idle",
     locationSearchResults: [],
     // cachedResults: initialCache,
   },
@@ -49,16 +48,18 @@ const searchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(searchLocation.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
     });
     builder.addCase(searchLocation.fulfilled, (state, action) => {
       state.locationSearchResults = action.payload;
-      state.loading = false;
+      state.status = "succeeded";
     });
     builder.addCase(searchLocation.rejected, (state) => {
-      state.loading = false;
+      state.status = "failed";
     });
   },
 });
+
+export { searchLocation}
 //export const { addCacheResults } = searchSlice.actions;
 export default searchSlice.reducer;

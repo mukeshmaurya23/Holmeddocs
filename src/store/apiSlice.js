@@ -4,9 +4,13 @@ const initialState = {
   loading: false,
   data: null,
   insuranceData: null,
+  filterInsuranceData: null,
   stateData: null,
+  filterStateData: null,
   cityData: null,
+  filterCityData: null,
   zipCodeData: null,
+  filterZipCodeData: null,
   error: "",
   status: "idle",
   insuranceStatus: "idle",
@@ -59,11 +63,16 @@ const fetchStateData = createAsyncThunk("api/fetchStateData", async (url) => {
   }
 });
 
-const fetchCityData = createAsyncThunk("api/fetchCityData", async (url) => {
+const fetchCityData = createAsyncThunk("api/fetchCityData", async (
+  {url,state_id}
+) => {
   try {
-    const response = await customAxios.post(url);
-    const resData = await response.data.data.result;
-    return resData;
+    if(state_id){
+      const response = await customAxios.post(url,{state_id});
+      const resData = await response.data.data.result;
+      return resData;
+    }
+    
   } catch (error) {
     console.error("Error fetching data:", error);
     return error.message;
@@ -72,11 +81,22 @@ const fetchCityData = createAsyncThunk("api/fetchCityData", async (url) => {
 
 const fetchZipCodeData = createAsyncThunk(
   "api/fetchZipCodeData",
-  async (url) => {
+  async ({
+    url,
+    state_id,
+    city_id,
+  }) => {
     try {
-      const response = await customAxios.post(url);
-      const resData = await response.data.data.result;
-      return resData;
+      
+      if( state_id && city_id){
+        const response = await customAxios.post(url, {
+          state_id,
+          city_id,
+        });
+        const resData = await response.data.data.result;
+        return resData;
+      }
+
     } catch (error) {
       console.error("Error fetching data:", error);
       return error.message;
@@ -97,7 +117,7 @@ export const fetchSlotAvialability = createAsyncThunk(
 );
 
 export const book_appointment_DoctorData = createAsyncThunk(
-  "search/searchLocation",
+  "api/book_appointment_DoctorData",
   async (id) => {
     try {
       const response = await customAxios.post("/patient/book_appointment", {
@@ -133,6 +153,7 @@ const apiSlice = createSlice({
     builder.addCase(fetchInsuranceData.fulfilled, (state, action) => {
       state.insuranceStatus = "succeeded";
       state.insuranceData = action.payload;
+      state.filterInsuranceData = action.payload;
     });
     builder.addCase(fetchInsuranceData.rejected, (state, action) => {
       state.insuranceStatus = "failed";
@@ -144,6 +165,7 @@ const apiSlice = createSlice({
     builder.addCase(fetchStateData.fulfilled, (state, action) => {
       state.stateStatus = "succeeded";
       state.stateData = action.payload;
+      state.filterStateData = action.payload;
     });
     builder.addCase(fetchStateData.rejected, (state, action) => {
       state.stateStatus = "failed";
@@ -155,6 +177,7 @@ const apiSlice = createSlice({
     builder.addCase(fetchCityData.fulfilled, (state, action) => {
       state.cityStatus = "succeeded";
       state.cityData = action.payload;
+      state.filterCityData = action.payload;
     });
     builder.addCase(fetchCityData.rejected, (state, action) => {
       state.cityStatus = "failed";
@@ -166,6 +189,7 @@ const apiSlice = createSlice({
     builder.addCase(fetchZipCodeData.fulfilled, (state, action) => {
       state.zipCodeStatus = "succeeded";
       state.zipCodeData = action.payload;
+      state.filterZipCodeData = action.payload;
     });
     builder.addCase(fetchZipCodeData.rejected, (state, action) => {
       state.zipCodeStatus = "failed";

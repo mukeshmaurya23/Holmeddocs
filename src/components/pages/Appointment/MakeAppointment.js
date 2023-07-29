@@ -45,8 +45,8 @@ const MakeAppointment = () => {
   const [searchValue, setSearchValue] = useState("");
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
-  const locationSearchResults = useSelector(
-    (state) => state.search.locationSearchResults
+  const { locationSearchResults } = useSelector(
+    (state) => state.search
   );
 
   console.log(locationSearchResults, "im location search results");
@@ -113,7 +113,7 @@ const MakeAppointment = () => {
   useEffect(() => {
     if (zipCodeId) {
       locationSearchDispatch(searchLocation({ zip_code_id: zipCodeId }));
-      setBrowseData(locationAreas?.[0]?.city);
+      setBrowseData(locationSearchResults?.[0]?.city);
     }
   }, [zipCodeId]);
 
@@ -318,13 +318,7 @@ const MakeAppointment = () => {
     );
   };
   const locationItems = () => {
-    if (locationSearchResults?.length === 0) {
-      return (
-        <h1 className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular text-[#292F33] font-semibold tracking-[1px]">
-          No results found
-        </h1>
-      );
-    }
+
     return (
       locationSearchResults &&
       locationSearchResults?.map((item) => {
@@ -409,16 +403,14 @@ const MakeAppointment = () => {
               <img
                 src={greenArrowDown}
                 alt=""
-                className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${
-                  selectedItem === "location" ? "rotate-180" : ""
-                }`}
+                className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${selectedItem === "location" ? "rotate-180" : ""
+                  }`}
               />
               <ul
-                className={`${
-                  selectedItem === "location"
-                    ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                    : ""
-                }`}
+                className={`${selectedItem === "location"
+                  ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                  : ""
+                  }`}
               >
                 {/* {isLocationDropdown && */}
                 {selectedItem === "location" && locationItems()}
@@ -442,16 +434,14 @@ const MakeAppointment = () => {
               <img
                 src={greenArrowDown}
                 alt=""
-                className={`w-3 h-3 mr-2 cursor-pointer absolute right-0 top-[1.4rem] ${
-                  selectedItem === "speciality" ? "rotate-180" : ""
-                }`}
+                className={`w-3 h-3 mr-2 cursor-pointer absolute right-0 top-[1.4rem] ${selectedItem === "speciality" ? "rotate-180" : ""
+                  }`}
               />
               <ul
-                className={`${
-                  selectedItem === "speciality"
-                    ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                    : ""
-                }`}
+                className={`${selectedItem === "speciality"
+                  ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                  : ""
+                  }`}
               >
                 {selectedItem === "speciality" && SpecialityAndCondition()}
               </ul>
@@ -469,7 +459,7 @@ const MakeAppointment = () => {
                 /> */}
               <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem]  text-[#292f33] mr-20 font-sansBold">
                 {startDate &&
-                startDate.toDateString() === new Date().toDateString()
+                  startDate.toDateString() === new Date().toDateString()
                   ? "Today"
                   : startDate?.toLocaleDateString()}
               </span>
@@ -491,21 +481,17 @@ const MakeAppointment = () => {
             <div className="border border-verifiCation w-full py-3 rounded mt-8 flex justify-between items-center px-2">
               <Button
                 onClick={toggleButtonHandler}
-                className={`${
-                  !isActive ? "bg-[#008282] " : ""
-                } py-2 px-3  sm:px-16 ${
-                  isActive ? "text-black" : "text-white"
-                } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+                className={`${!isActive ? "bg-[#008282] " : ""
+                  } py-2 px-3  sm:px-16 ${isActive ? "text-black" : "text-white"
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
               >
                 InPerson
               </Button>
               <Button
                 onClick={toggleButtonHandler}
-                className={`${
-                  isActive ? "bg-[#008282] " : ""
-                } py-2 px-3 sm:px-16 ${
-                  isActive ? "text-white" : "text-black"
-                } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+                className={`${isActive ? "bg-[#008282] " : ""
+                  } py-2 px-3 sm:px-16 ${isActive ? "text-white" : "text-black"
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
               >
                 Virtual
               </Button>

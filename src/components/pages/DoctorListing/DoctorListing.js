@@ -305,7 +305,7 @@ const DoctorListing = () => {
                 {filterData?.data?.result.map((item, index) => {
                   return (
                     <div
-                      className="mt-5 cursor-pointer w-[250px]"
+                      className="mt-5 cursor-pointer w-[240px]"
                       key={item.id}
                       id={item.title}
                     >

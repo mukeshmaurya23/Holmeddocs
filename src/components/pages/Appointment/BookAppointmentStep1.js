@@ -12,12 +12,17 @@ import { book_appointment_DoctorData } from "../../../store/apiSlice";
 import { useRef } from "react";
 import customAxios from "../../../axios/custom";
 import { enqueueSnackbar } from "notistack";
+import moment from "moment";
 import imageGif from "../../../images/icons/Loader.gif";
 const BookAppointmentStep1 = ({ handleNextStep }) => {
   const location = useLocation();
   const [isDropDownInsurance, setIsDropDownInsurance] = useState(false);
   const [isDropdownCondition, setIsDropdownCondition] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState(false)
+  const [errorCheckedMessage, setCheckedErrorMessage] = useState("")
+  const [searchQueryInsurance, setSearchQueryInsurance] = useState("");
+  const [searchQueryCondition, setSearchQueryCondition] = useState("");
 
   const [selectedItemList, setSelectedItemList] = useState({
     insurance: "",
@@ -26,6 +31,15 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
   const handleSelectedItem = (item, type) => {
     setSelectedItemList({ ...selectedItemList, [type]: item });
+    if (type === "insurance") {
+      setIsDropDownInsurance(false)
+    }
+    if (type === "conditions") {
+      setIsDropdownCondition(false)
+
+
+    }
+
   };
   console.log(selectedItemList, "selectedItemList");
   const { bookAppointmentDoctorData, bookAppointmentDoctorDataStatus } =
@@ -37,7 +51,8 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
     bookDoctorAppointmentDispatch(
       book_appointment_DoctorData(location?.state?.doctor?.[0]?.id)
     );
-  }, [bookDoctorAppointmentDispatch]);
+  }, []);
+
   const [selectedDate, setSelectedDate] = useState(null);
   // const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
 
@@ -46,15 +61,18 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
     //setAvailableTimeSlots(timeSlots);
   };
 
+  const { type } = location?.state;
+  console.log(type, ".........typeeeeeee");
+
   const [isActive, setIsActive] = useState(false);
   const toggleButtonHandler = () => {
     setIsActive(!isActive);
   };
 
-  const [isActiveAppointmentType, setIsActiveAppointmentType] = useState(false);
-  const toggleButtonHandlerAppointmentType = () => {
-    setIsActiveAppointmentType(!isActiveAppointmentType);
-  };
+  // const [isActiveAppointmentType, setIsActiveAppointmentType] = useState(false);
+  // const toggleButtonHandlerAppointmentType = () => {
+  //   setIsActiveAppointmentType(!isActiveAppointmentType);
+  // };
   const insuranceRef = useRef(null);
   const conditionRef = useRef(null);
   useEffect(() => {
@@ -77,9 +95,8 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   }, []);
 
   const DateComp = ({ timeSlotDate }) => {
-    const date = new Date(timeSlotDate);
-    const day = date?.getDate();
-    const month = date?.toLocaleString("en-US", { month: "short" });
+    const day = moment(timeSlotDate).format("DD");
+    const month = moment(timeSlotDate).format("MMM");
 
     return (
       <>
@@ -97,12 +114,15 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!checked) {
+      //setCheckedErrorMessage("Please Confirm the Checkbox")
+      return
+    }
     const data = {
       doctor_id: location?.state?.doctor?.[0]?.id,
       insurance_id: selectedItemList.insurance.id,
       medical_condition: selectedItemList.conditions.id,
-      visit_type: !isActiveAppointmentType ? "InPerson" : "Virtual",
+      visit_type: type == "InPerson" ? "InPerson" : "Virtual",
 
       appointment_date: location.state.date,
       time_slot_id: location.state.timeSlotId,
@@ -131,6 +151,25 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
       console.log(err);
     }
   };
+
+  const handleConditionSearch = () => {
+
+
+    const filteredInsurance = bookAppointmentDoctorData?.insurance?.filter((item) =>
+      item.insurance_company_name.toLowerCase().includes(searchQueryInsurance.toLowerCase())
+    );
+
+    const filteredConditions = bookAppointmentDoctorData?.conditions?.filter((item) =>
+      item.medical_condition_name.toLowerCase().includes(searchQueryCondition.toLowerCase())
+    );
+
+    return {
+      filteredInsurance,
+      filteredConditions,
+    };
+  };
+
+
   if (loading) {
     return (
       <div className="flex justify-center items-center">
@@ -181,20 +220,30 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 >
                   <Input
                     type="text"
-                    value={selectedItemList.insurance.insurance_company_name}
+                    value={selectedItemList.insurance.insurance_company_name || searchQueryInsurance}
+                    onChange={(e) => setSearchQueryInsurance(e.target.value)}
+                    onFocus={
+                      () => setSelectedItemList({
+                        ...selectedItemList, insurance: {
+                          id: "",
+                          insurance_company_name: "",
+
+                        }
+                      }) || setSearchQueryInsurance("")
+
+                    }
                     placeholder="Select your Insurance"
                     className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677] font-sansRegular"
                   />
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer ${
-                      isDropDownInsurance ? "rotate-180" : ""
-                    }  `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${isDropDownInsurance ? "rotate-180" : ""
+                      }  `}
                   />
-                  <ul className="absolute top-[3.7rem] 2xl:top-[5rem] p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto">
+                  <ul className="absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[35vh] overflow-y-auto">
                     {isDropDownInsurance &&
-                      bookAppointmentDoctorData?.insurance?.map((item) => (
+                      handleConditionSearch().filteredInsurance?.map((item) => (
                         <li
                           key={item.id}
                           onClick={() =>
@@ -224,20 +273,29 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   <Input
                     type="text"
                     placeholder="Select condition"
-                    value={selectedItemList.conditions.medical_condition_name}
+                    value={selectedItemList.conditions.medical_condition_name || searchQueryCondition}
+                    onChange={(e) => setSearchQueryCondition(e.target.value)}
+                    onFocus={
+                      () => setSelectedItemList({
+                        ...selectedItemList, conditions: {
+                          id: "",
+                          medical_condition_name: "",
+
+                        }
+                      }) || setSearchQueryCondition("")
+                    }
                     className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677]  font-sansRegular"
                   />
 
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer ${
-                      isDropdownCondition ? "rotate-180" : ""
-                    }  `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${isDropdownCondition ? "rotate-180" : ""
+                      }  `}
                   />
-                  <ul className="absolute top-[3.7rem] 2xl:top-[5rem] p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto">
+                  <ul className={` ${!isDropDownInsurance ? 'absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto' : ''} `}>
                     {isDropdownCondition &&
-                      bookAppointmentDoctorData?.conditions?.map((item) => (
+                      handleConditionSearch().filteredConditions?.map((item) => (
                         <li
                           key={item.id}
                           onClick={() =>
@@ -263,21 +321,17 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
                   <Button
                     onClick={toggleButtonHandler}
-                    className={`${
-                      !isActive ? "bg-[#008282] " : ""
-                    } py-1 px-[8.2rem]  ${
-                      isActive ? "text-black" : "text-white"
-                    } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${!isActive ? "bg-[#008282] " : ""
+                      } py-1 px-[8.2rem]  ${isActive ? "text-black" : "text-white"
+                      } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     Yes
                   </Button>
                   <Button
                     onClick={toggleButtonHandler}
-                    className={`${
-                      isActive ? "bg-[#008282] " : ""
-                    } py-1 px-[8.2rem] ${
-                      isActive ? "text-white" : "text-black"
-                    } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${isActive ? "bg-[#008282] " : ""
+                      } py-1 px-[8.2rem] ${isActive ? "text-white" : "text-black"
+                      } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     No
                   </Button>
@@ -287,22 +341,18 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 </Label>
                 <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
                   <Button
-                    onClick={toggleButtonHandlerAppointmentType}
-                    className={`${
-                      !isActiveAppointmentType ? "bg-[#008282] " : ""
-                    } py-1 px-[7rem]   ${
-                      isActiveAppointmentType ? "text-black" : "text-white"
-                    } text-[.9rem] tracking-[2px] font-sansRegular`}
+
+                    className={`${type == "InPerson" ? "bg-[#008282] " : ""
+                      } py-1 px-[7rem]   ${type == "InPerson" ? "text-white" : "text-black"
+                      } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     InPerson
                   </Button>
                   <Button
-                    onClick={toggleButtonHandlerAppointmentType}
-                    className={`${
-                      isActiveAppointmentType ? "bg-[#008282] " : ""
-                    } py-1 px-[7rem] ${
-                      isActiveAppointmentType ? "text-white" : "text-black"
-                    } text-[.9rem] tracking-[2px] font-sansRegular`}
+
+                    className={`${type == "Virtual" ? "bg-[#008282] " : ""
+                      } py-1 px-[7rem] ${type == "Virtual" ? "text-white" : "text-black"
+                      } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     Virtual
                   </Button>
@@ -354,53 +404,101 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                       </p>
                     </div>
                   ))} */}
-                  {item?.time_slots?.InPerson?.map((timeSlot, index) => (
-                    <div
-                      key={index}
-                      className={`${
-                        location.state.date === timeSlot.date
+                  {type && type === "InPerson"
+                    ? // Render for InPerson type
+                    item?.time_slots?.InPerson?.map((timeSlot, index) => (
+                      <div
+                        key={index}
+                        className={`${location.state.date === timeSlot.date
                           ? "bg-verifiCation border-verifiCation text-white rounded-md"
                           : "cursor-not-allowed disabled:opacity-50 "
-                      }`}
-                      onClick={() => {
-                        location.state.date === timeSlot.date &&
-                          handleDateSelection(timeSlot?.date, timeSlot.value);
-                      }}
-                    >
-                      <p className="px-3 text-[14px]">
-                        {timeSlot?.day?.slice(0, 3)}
-                      </p>
-                      <p className="px-3">
-                        <DateComp timeSlotDate={timeSlot?.date} />
-                      </p>
-                    </div>
-                  ))}
+                          }`}
+                        onClick={() => {
+                          location.state.date === timeSlot.date &&
+                            handleDateSelection(
+                              timeSlot?.date,
+                              timeSlot.value
+                            );
+                        }}
+                      >
+                        <p className="px-3 text-[14px]">
+                          {timeSlot?.day?.slice(0, 3)}
+                        </p>
+                        <p className="px-3">
+                          <DateComp timeSlotDate={timeSlot?.date} />
+                        </p>
+                      </div>
+                    ))
+                    : // Render for Virtual type
+                    item?.time_slots?.Virtual?.map((timeSlot, index) => (
+                      <div
+                        key={index}
+                        className={`${location.state.date === timeSlot.date
+                          ? "bg-verifiCation border-verifiCation text-white rounded-md"
+                          : "cursor-not-allowed disabled:opacity-50 "
+                          }`}
+                        onClick={() => {
+                          location.state.date === timeSlot.date &&
+                            handleDateSelection(
+                              timeSlot?.date,
+                              timeSlot.value
+                            );
+                        }}
+                      >
+                        <p className="px-3 text-[14px]">
+                          {timeSlot?.day?.slice(0, 3)}
+                        </p>
+                        <p className="px-3">
+                          <DateComp timeSlotDate={timeSlot?.date} />
+                        </p>
+                      </div>
+                    ))}
+
                   <div className="w-[3rem] h-[2.3rem] outline-verifiCation border border-verifiCation rounded-sm flex justify-center items-center">
                     <img src={greenArrowRight} alt="" className="w-2 h-auto " />
                   </div>
                 </div>
                 <p>{selectedDate}</p>
                 <ul className="flex flex-row flex-wrap gap-4 items-center py-7 cursor-pointer">
-                  {item?.time_slots?.InPerson?.map((timeSlot, index) =>
-                    timeSlot?.value?.map((timeSlot, index) => (
-                      <li
-                        key={index}
-                        className={` ${
-                          location.state.time === timeSlot.to
+                  {
+
+                    type == "InPerson" ? item?.time_slots?.InPerson?.map((timeSlot, index) =>
+                      timeSlot?.value?.map((timeSlot, index) => (
+                        <li
+                          key={index}
+                          className={` ${location.state.time === timeSlot.to
                             ? "bg-verifiCation text-white"
                             : ""
-                        } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
-                      >
-                        <TimeFormatter time={timeSlot?.to} />
-                      </li>
-                    ))
-                  )}
+                            } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
+                        >
+                          <TimeFormatter time={timeSlot?.to} />
+                        </li>
+                      ))
+                    ) : (
+                      item?.time_slots?.Virtual?.map((timeSlot, index) =>
+                        timeSlot?.value?.map((timeSlot, index) => (
+                          <li
+                            key={index}
+                            className={` ${location.state.time === timeSlot.to
+                              ? "bg-verifiCation text-white"
+                              : ""
+                              } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
+                          >
+                            <TimeFormatter time={timeSlot?.to} />
+                          </li>
+                        ))
+                      )
+                    )
+                  }
                 </ul>
 
                 <div className="flex mt-8">
                   <Input
                     type="checkbox"
                     name="checkbox"
+                    onClick={
+                      () => setChecked(!checked)
+                    }
                     className="rounded border-none outline-verifiCation  accent-verifiCation transition-all delay-200"
                   />
 
@@ -411,13 +509,18 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     I Certify that the information provided by me is accurate
                     for insurance and payment.
                   </Label>
-                </div>
 
+                </div>
+                {/* {!checked && (
+                  <span className="text-red-500 text-xs font-sansRegular mt-3">
+                    {errorCheckedMessage}
+                  </span>
+                )} */}
                 <div className="flex items-center justify-center mt-8">
                   <Button
                     type="submit"
                     className="bg-verifiCation text-white text-[15px] font-semibold rounded-full w-[15rem] h-[2.5rem] "
-                    onClick={handleSubmit} //handleNextStep
+                    onClick={handleSubmit}
                   >
                     Book Appointment
                   </Button>

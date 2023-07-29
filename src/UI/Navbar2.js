@@ -54,8 +54,8 @@ const Navbar2 = () => {
 
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
-  const locationSearchResults = useSelector(
-    (state) => state.search.locationSearchResults
+  const {locationSearchResults} = useSelector(
+    (state) => state.search
   );
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -372,12 +372,20 @@ const Navbar2 = () => {
   const dateSearchParams = searchParams.get("date");
   console.log(dateSearchParams, "dateSearchParams");
 
+  const [formattedDate,setFormattedDate]=useState(dateSearchParams)
+  useEffect(() => {
+    const dateObject = moment(dateSearchParams);
+    const today = moment();
 
-  const dateObject=moment(dateSearchParams)
-  const today=moment()
-  const formattedDate = dateObject.isSame(today, 'day')
-  ? 'Today'
-  : dateObject.format('MMMM D, YYYY');
+    
+    const newFormattedDate = dateObject.isSame(today, 'day')
+      ? 'Today'
+      : dateObject.format('MMMM D, YYYY');
+
+    setFormattedDate(newFormattedDate);
+  }, [dateSearchParams]);
+
+
   const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
   const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
     useState(null);
@@ -400,7 +408,7 @@ const Navbar2 = () => {
       setClearConditionPlaceholder(null);
     }
   }, [locationSearchParams, specialitySearchParams, conditionSearchParams]);
-
+const calendarRef = useRef();
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!ref?.current?.contains(event.target)) {
@@ -408,6 +416,9 @@ const Navbar2 = () => {
       }
       if (!locSpecConditionRef?.current?.contains(event.target)) {
         setSelectedItem(null);
+      }
+      if (!calendarRef?.current?.contains(event.target)) {
+        setIsOpen(false);
       }
       if (!loginRef?.current?.contains(event.target)) {
         setIsLoggedInDropdown(false);
@@ -677,27 +688,33 @@ const Navbar2 = () => {
                     {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
 
-                  <img
-                    onChange={handleDateChange}
-                    src={calendarSvg}
-                    alt=""
-                    onClick={handleClick}
-                    className="w-6 2xl:w-6 h-auto object-contain cursor-pointer ml-5 "
-                  />
-                  <span className="outline-none px-6 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
+                  <div
+                className="flex ml-0 md:ml-5 cursor-pointer items-center"
+                onClick={handleClick}
+                ref={calendarRef}
+              >
+                <img
+                  onChange={handleDateChange}
+                  src={calendarSvg}
+                  alt=""
+                  className="w-6 2xl:w-9 h-auto object-contain cursor-pointer "
+                />
+               <span className="outline-none px-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
                     {startDate &&
                     startDate.toDateString() === new Date().toDateString()
                       ? formattedDate
                       : startDate?.toLocaleDateString()}
                   </span>
-                  {isOpen && (
-                    <div className="absolute top-[2.8rem] right-0 z-[100] h-full">
-                      <DatePickerComponent
-                        handleChange={handleChange}
-                        startDate={startDate}
-                      />
-                    </div>
-                  )}
+
+                {isOpen && (
+                  <div className="absolute top-[3rem]  right-0 z-[100] h-full">
+                    <DatePickerComponent
+                      handleChange={handleChange}
+                      startDate={startDate}
+                    />
+                  </div>
+                )}
+                </div>
                 </div>
                 <img
                   onClick={() => handleSearch()}

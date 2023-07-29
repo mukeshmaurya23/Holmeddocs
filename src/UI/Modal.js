@@ -33,14 +33,16 @@ const Modal = ({
             <p className="text-center mt-4 text-sm text-gray-500">{text}</p>
             <div className="flex justify-between mt-5">
               {btnText && (
+                 <Link to="/login">
                 <Button
                   className="mt-4 px-12 py-1 bg-verifiCation text-white rounded-full"
                   onClick={
                  onConfirm ? onConfirm : logOutHandler
                   }
                 >
-                  <Link to="/login">{btnText}</Link>
+                 {btnText}
                 </Button>
+                </Link>
               )}
               {btnTextDelete && (
                 <Button
@@ -51,12 +53,14 @@ const Modal = ({
                 </Button>
               )}
               {btnText2 && (
+                <Link to={link}>
                 <Button
                   className="mt-4 px-12 py-1 ml-3 bg-verifiCation text-white rounded-full"
                   onClick={closeModal}
                 >
-                  <Link to={link}>{btnText2}</Link>
+                  {btnText2}
                 </Button>
+                </Link>
               )}
             </div>
             <img

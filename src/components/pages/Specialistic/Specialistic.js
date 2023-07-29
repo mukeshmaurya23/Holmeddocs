@@ -9,12 +9,19 @@ import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const Specialistic = () => {
   const dispatch = useDispatch();
+  
   const { specialties, specialtiesStatus, error } = useSelector(
     (state) => state.data
   );
+  
   useEffect(() => {
-    dispatch(fetchSpecialties("/patient/master/speciality"));
-  }, []);
+    //dont make api call if i navigate to other page and come back to this page
+    if (!specialties) {
+      dispatch(fetchSpecialties("/patient/master/speciality"));
+    }
+    
+    
+  }, [dispatch, specialties]);
 
   return (
     <>

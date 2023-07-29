@@ -297,26 +297,7 @@ export const Footeritems = [
   },
 ];
 
-export const slides = [
-  {
-    image: require("./images/home/Doctor.jpg"),
-    title: "Lindsay M.",
-    subtitle: "Vancouver, BC",
-    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-  },
-  {
-    image: require("./images/home/Doctor.jpg"),
-    title: "Lindsay M.",
-    subtitle: "Vancouver, BC",
-    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-  },
-  {
-    image: require("./images/home/Doctor.jpg"),
-    title: "Lindsay M.",
-    subtitle: "Vancouver, BC",
-    text: "Lindsay was raised in Atlanta Georgia. She graduated from the University of Texas where she earned her degree in human biology...",
-  },
-];
+
 
 export const dummyData = [
   {
@@ -554,3 +535,22 @@ export const getRandomDoctorImage = () => {
   const randomIndex = Math.floor(Math.random() * doctorImages.length);
   return doctorImages[randomIndex];
 };
+
+
+export const filterFunctionality=(searchTerm,data,name)=>{
+  const filteredData = data.filter((item) => {
+    if(name==="state_name"){
+    return item.state_name.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    else if(name==="city_name"){
+      return item.city_name.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    else if(name==="zip"){
+      
+      return item.zip.toString().includes(searchTerm);
+    } else if(name==="insurance_company_name"){
+      return item.insurance_company_name.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+  });
+  return filteredData;
+}

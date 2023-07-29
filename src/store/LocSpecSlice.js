@@ -56,7 +56,7 @@ const dataSlice = createSlice({
         state.status = "failed";
       })
       .addCase(fetchSpecialties.pending, (state) => {
-        state.status = "loading";
+        state.specialtiesStatus = "loading";
       })
       .addCase(fetchSpecialties.fulfilled, (state, action) => {
         state.specialtiesStatus = "succeeded";
