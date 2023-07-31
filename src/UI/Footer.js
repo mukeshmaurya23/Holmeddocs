@@ -1,17 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Footeritems } from "../constant";
 import addIcon from "../images/icons/Add.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import moment from "moment";
 //import minusIcon from "../images/icons/Minus.png";
 
 const Footer = () => {
   const [isVisible, setIsVisible] = useState(1);
-
+  const [startDate] = useState(new Date());
+  const [selectedSpeciality, setSelectedSpeciality] = useState(null);
+  const [selectedInsurance, setSelectedInsurance] = useState(null);
+  const navigate = useNavigate();
+  const navigateInsurance = useNavigate();
+  const [showAllInsurance, setShowAllInsurance] = useState(false);
   const handleItemClick = (id) => {
     setIsVisible((prevIsVisible) => (prevIsVisible === id ? null : id));
     console.log(id);
   };
+  const { insuranceData } = useSelector((state) => state.api);
+  const { specialties } = useSelector((state) => state.data);
+  const handleCardClick = (speciality) => {
+    setSelectedSpeciality(speciality);
+  };
 
+  const handleInsuranceCardClick = (insurance) => {
+    setSelectedInsurance(insurance);
+  };
+
+  useEffect(() => {
+    if (selectedSpeciality) {
+      navigate(
+        `/doctor-listing?selectedSpeciality=${selectedSpeciality.name}_${selectedSpeciality.id}&date=${selectedSpeciality.date}`
+      );
+    }
+  }, [selectedSpeciality, navigate]);
+
+  useEffect(() => {
+    if (selectedInsurance) {
+      navigateInsurance(
+        `/doctor-listing?insurance=${selectedInsurance.name}_${selectedInsurance.id}&date=${selectedInsurance.date}`
+      );
+    }
+  }, [selectedInsurance, navigateInsurance]);
   return (
     <>
       <div className="bg-greenMain  text-black lg:pt-16 pt-8 tracking-[0.1rem] ">
@@ -24,12 +55,18 @@ const Footer = () => {
                     <h6 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                       Holmeddoc
                     </h6>
-                    <li className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li
+                      onClick={() => window.scrollTo(0, 0)}
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                    >
                       Home
                     </li>
-                    <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <Link
+                      to="/about-us"
+                      className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black"
+                    >
                       About us
-                    </li>
+                    </Link>
                   </ul>
                 </section>
               </li>
@@ -42,12 +79,21 @@ const Footer = () => {
                     >
                       Contact Us
                     </Link>
-                    <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <li
+                      className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={(e) => {
+                        window.location.href = "mailto:info@holmeddoc.com";
+                        e.preventDefault();
+                      }}
+                    >
                       info@holmeddoc.com
                     </li>
-                    <li className=" hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
+                    <a
+                      href="tel:+10000000000"
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                    >
                       +1 000 000 0000
-                    </li>
+                    </a>
                   </ul>
                 </section>
               </li>
@@ -58,14 +104,44 @@ const Footer = () => {
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Insurance Providers
               </h2>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                UHC
-              </li>
-              <li className=" hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                Humana
-              </li>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                Aetna
+
+              {showAllInsurance
+                ? insuranceData?.map((item, index) => (
+                    <li
+                      key={index}
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={() =>
+                        handleInsuranceCardClick({
+                          name: item?.insurance_company_name,
+                          id: item?.id,
+                          date: moment(startDate).format("YYYY-MM-DD"),
+                        })
+                      }
+                    >
+                      {item?.insurance_company_name}
+                    </li>
+                  ))
+                : insuranceData?.slice(0, 3)?.map((item, index) => (
+                    <li
+                      key={index}
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={() =>
+                        handleInsuranceCardClick({
+                          name: item?.insurance_company_name,
+                          id: item?.id,
+                          date: moment(startDate).format("YYYY-MM-DD"),
+                        })
+                      }
+                    >
+                      {item?.insurance_company_name}
+                    </li>
+                  ))}
+
+              <li
+                className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black underline"
+                onClick={() => setShowAllInsurance(!showAllInsurance)}
+              >
+                {showAllInsurance ? "View Less" : "View All"}
               </li>
             </ul>
           </section>
@@ -74,26 +150,25 @@ const Footer = () => {
               <h2 className="white font-sansRegular font-semibold mb-8 text-footerHeader">
                 Major Specialities
               </h2>
-              <li className="hidden sm:block  cursor-pointer font-semibold font-sansRegular text-sm text-[11px] text-black">
-                Acupuncture
-              </li>
-              <li className="hidden sm:block  font-semibold   font-sansRegular text-sm text-[11px] text-black">
-                Aromatherapy{" "}
-              </li>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                Alternative Medicine
-              </li>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                Yoga
-              </li>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black">
-                {" "}
-                Reiki
-              </li>
-              <li className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px]  text-black">
-                {" "}
-                Holistic Medicine
-              </li>
+              {specialties &&
+                specialties?.slice(0, 6)?.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={() =>
+                        handleCardClick({
+                          name: item?.medical_speciality_name,
+                          id: item?.id,
+                          date: moment(startDate).format("YYYY-MM-DD"),
+                        })
+                      }
+                    >
+                      {item?.medical_speciality_name}
+                    </li>
+                  );
+                })}
+
               <Link to="/specialist">
                 <li className=" font-semibold font-sansRegular text-sm text-[11px] pt-3 text-black underline">
                   View All
@@ -148,10 +223,11 @@ const Footer = () => {
                             </h6>
 
                             <i
-                              className={`${isVisible === item.id
+                              className={`${
+                                isVisible === item.id
                                   ? "fa fa-minus"
                                   : "fa fa-plus"
-                                } text-[16px] cursor-pointer`}
+                              } text-[16px] cursor-pointer`}
                               aria-hidden="true"
                               onClick={() => handleItemClick(item.id)}
                             ></i>

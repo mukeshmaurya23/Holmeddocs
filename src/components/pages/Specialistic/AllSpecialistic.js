@@ -5,17 +5,17 @@ import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
 import Footer from "../../../UI/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSpecialties } from "../../../store/LocSpecSlice";
+//import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const AllSpecialistic = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { specialties, specialtiesStatus } = useSelector((state) => state.data);
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (specialties === null) {
-      dispatch(fetchSpecialties("/patient/master/speciality"));
-    }
-  }, [dispatch, specialties]);
+  //   if (specialties === null) {
+  //     dispatch(fetchSpecialties("/patient/master/speciality"));
+  //   }
+  // }, [dispatch, specialties]);
 
   return specialtiesStatus === "loading" ? (
     <>

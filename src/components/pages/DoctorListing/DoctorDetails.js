@@ -11,7 +11,7 @@ import Modal from "../../../UI/Modal";
 import DatePickerComponent from "../../../UI/DatePicker";
 import moment from "moment";
 import TimeSlotsComponent from "./TimeSlotsComponent";
-const DoctorDetails = ({ }) => {
+const DoctorDetails = ({}) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const timeSlotDispatch = useDispatch();
@@ -22,11 +22,8 @@ const DoctorDetails = ({ }) => {
     (state) => state.api
   );
 
-
-
   console.log(slot_avialability, "slot_avialability----");
   const [selectedDate, setSelectedDate] = useState(null);
-
 
   const [selectDateTime, setSelectDateTime] = useState({
     date: "",
@@ -37,7 +34,7 @@ const DoctorDetails = ({ }) => {
     date: "",
     time: "",
   });
-  const [selectedType, setSelectedType] = useState("")
+  const [selectedType, setSelectedType] = useState("");
   const [timeSlotId, setTimeSlotId] = useState("");
 
   const calendarRef = useRef(null);
@@ -45,7 +42,7 @@ const DoctorDetails = ({ }) => {
     setSelectedType(type);
   };
 
-  console.log(selectedType, 'selectedType fro he details--------->');
+  console.log(selectedType, "selectedType fro he details--------->");
 
   const handleDateSelection = (date, timeSlots, formatedDate) => {
     // const dateObj = new Date(date);
@@ -97,8 +94,6 @@ const DoctorDetails = ({ }) => {
 
   const isLoggedIn = useSelector((state) => state.login.remember_token);
 
-
-
   const handleAppointment = () => {
     if (!selectDateTime.date || !selectDateTime.time) {
       setError({
@@ -109,16 +104,16 @@ const DoctorDetails = ({ }) => {
     }
     return isLoggedIn
       ? navigate("/book-appointment", {
-        state: {
-          doctor: doctorsList?.data?.result?.filter(
-            (doctor) => doctor.id == id
-          ),
-          date: selectDateTime.date,
-          time: selectDateTime.time,
-          timeSlotId: timeSlotId,
-          type: selectedType
-        },
-      })
+          state: {
+            doctor: doctorsList?.data?.result?.filter(
+              (doctor) => doctor.id == id
+            ),
+            date: selectDateTime.date,
+            time: selectDateTime.time,
+            timeSlotId: timeSlotId,
+            type: selectedType,
+          },
+        })
       : openModal();
   };
 
@@ -126,6 +121,11 @@ const DoctorDetails = ({ }) => {
   const handleChange = (e) => {
     setIsOpen(!isOpen);
     setStartDate(e);
+  };
+  const [showFullBio, setShowFullBio] = useState(false);
+
+  const handleViewMore = () => {
+    setShowFullBio(!showFullBio);
   };
 
   useEffect(() => {
@@ -154,17 +154,13 @@ const DoctorDetails = ({ }) => {
     setIsOpen(!isOpen);
   };
 
-
-
-
-
   return status === "loading" ? (
     <div className="flex justify-center items-center">
       <img src={loadingGif} alt="loading" />
     </div>
   ) : (
     <>
-      <h1 className="font-sansBold sm:px-24 sm:py-3 xsm:p-3 text-[1rem] sm:text-[1.4rem] sm:tracking-[3px] mt-2 sm:mt-[10rem]">
+      <h1 className="font-sansBold sm:px-24 sm:py-3 xsm:p-3 text-[1rem] sm:text-[1.4rem] sm:tracking-[3px] mt-2 sm:mt-[10rem] md:text-[1.8rem]">
         Medicine cure diseases but only doctors can cure patients.
       </h1>
       {doctorsList?.data?.result
@@ -181,7 +177,7 @@ const DoctorDetails = ({ }) => {
                   />
 
                   <ul className="sm:pl-[2rem] xsm:mt-2">
-                    <li className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
+                    <li className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33] md:text-[1.4rem]">
                       {doctor?.doctor_name}
                     </li>
                     <li className="font-sansRegular py-2 text-[13px] text-[#292F33]">
@@ -236,29 +232,50 @@ const DoctorDetails = ({ }) => {
                     </li>
                   </ul>
 
-                  <div className="flex-1 sm:mr-[4rem] py- sm:pl-[10rem]">
-                    <h1 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
+                  <div className="flex-1 sm:mr-[4rem] py- sm:pl-[10rem] relative">
+                    <h1 className="font-Henriette md:text-[1.4rem] tracking-[1px] text-[#292F33]">
                       About {doctor?.doctor_name}
                     </h1>
-                    <p className="py-3 text-sm text-[#545871]">
+                    <p
+                      className={`mt-[1rem] text-sm text-[#545871] md:text-[1rem] overflow-auto max-h-[250px] ${
+                        showFullBio
+                          ? "scroll-smooth"
+                          : `line-clamp-3 text-ellipsis overflow-hidden  whitespace-break-spaces`
+                      }`}
+                    >
                       {doctor?.doctor_bio}
+                      <div className="flex py-5">
+                        {showFullBio && (
+                          <button
+                            className="pr-10 text-[#CF8B15] underline text-md 2xl:text-[1.3rem] py-4 font-semibold font-sansRegular"
+                            onClick={handleViewMore}
+                          >
+                            View Less
+                          </button>
+                        )}
+                      </div>
                     </p>
-                    <h1 className="font-Henriette py-3 text-[1.1rem] tracking-[1px] text-[#292F33]">
-                      Practise Location
-                    </h1>
-                    <p className="max-w-[280px] py-2 text-[13px] font-semibold text-[#292F33]">
-                      {doctor?.country?.[0]}
-                    </p>
-                    {/* <iframe
-                  className="mt-5 h-60 w-full"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15080.731037074034!2d72.87535869905422!3d19.099636713754155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8773cb2f051%3A0x40576ac944236b34!2sSaki%20Naka%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1686410711545!5m2!1sen!2sin"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe> */}
-                    <p className="py-5 text-[13px] text-center font-semibold text-[#292F33]">
-                      Location Does Not Exit
-                    </p>
+                    {!showFullBio && (
+                      <button
+                        className="pr-10 text-[#CF8B15] underline text-md 2xl:text-[1.3rem] py-4 font-semibold font-sansRegular"
+                        onClick={handleViewMore}
+                      >
+                        View More
+                      </button>
+                    )}
+
+                    <div className="absolute bottom-0 top-[27rem]">
+                      <h1 className="font-Henriette py-3 text-[1.1rem] md:text-[1.4rem] tracking-[1px] text-[#292F33]">
+                        Practise Location
+                      </h1>
+                      <p className="max-w-[280px] py-2 text-[13px] font-semibold text-[#292F33]">
+                        {doctor?.country?.[0]}
+                      </p>
+
+                      <p className="py-5 text-[13px] text-center font-semibold text-[#292F33]">
+                        Location Does Not Exit
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -291,16 +308,16 @@ const DoctorDetails = ({ }) => {
                             <>
                               <div
                                 key={index}
-
-
-                                className={`${timeSlot.value.length > 0 ||
+                                className={`${
+                                  timeSlot.value.length > 0 ||
                                   virtualData?.value.length > 0
-                                  ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
-                                  : "bg-[#ecf0f1] cursor-not-allowed"
-                                  } flex justify-center items-center rounded
-                            ${selectDateTime.date === timeSlot.date &&
-                                  "bg-verifiCation text-white"
-                                  }
+                                    ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                    : "bg-[#ecf0f1] cursor-not-allowed"
+                                } flex justify-center items-center rounded
+                            ${
+                              selectDateTime.date === timeSlot.date &&
+                              "bg-verifiCation text-white"
+                            }
                             `}
                                 onClick={() => {
                                   if (timeSlot.value.length > 0) {
@@ -317,8 +334,6 @@ const DoctorDetails = ({ }) => {
                                       formattedDate
                                     );
                                   }
-
-
                                 }}
                               >
                                 <p
@@ -327,7 +342,6 @@ const DoctorDetails = ({ }) => {
                                   <DateComp timeSlotDate={timeSlot?.date} />
                                 </p>
                               </div>
-
                             </>
                           );
                         })
@@ -337,7 +351,6 @@ const DoctorDetails = ({ }) => {
                         <img
                           src={calendar}
                           alt="calendar"
-
                           className="h-auto w-10 cursor-pointer"
                           onClick={handleClick}
                         />
@@ -363,66 +376,60 @@ const DoctorDetails = ({ }) => {
                     <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                       {selectedDate}
                     </h2>
-                    {
-                      slot_avialability.InPerson?.map((timeSlot, index) => {
-                        const virtualData = doctor?.time_slots?.Virtual?.find(
-                          (item) => item.date === timeSlot.date
-                        );
-                        return (
-                          <>
+                    {slot_avialability.InPerson?.map((timeSlot, index) => {
+                      const virtualData = doctor?.time_slots?.Virtual?.find(
+                        (item) => item.date === timeSlot.date
+                      );
+                      return (
+                        <>
+                          {selectedDate === timeSlot.date && (
+                            <div className="flex flex-wrap">
+                              {timeSlot.value.length > 0 && (
+                                <div className="flex flex-wrap flex-col">
+                                  <p className="font-semibold py-2 font-sansRegular text-[13px]">
+                                    InPerson
+                                  </p>
+                                  <ul className="flex gap-3">
+                                    <TimeSlotsComponent
+                                      type={"InPerson"}
+                                      timeSlots={timeSlot.value}
+                                      selectDateTime={selectDateTime}
+                                      setTimeSlotId={setTimeSlotId}
+                                      handleTimeSelection={handleTimeSelection}
+                                      onSelectedTypeChange={
+                                        handleSelectedTypeChange
+                                      }
+                                    />
+                                  </ul>
+                                </div>
+                              )}
+                              {virtualData?.value.length > 0 && (
+                                <div className="flex flex-col flex-wrap">
+                                  <p className="font-semibold py-2 font-sansRegular text-[13px]">
+                                    Virtual
+                                  </p>
 
-                            {selectedDate === timeSlot.date && (
-                              <div className="flex flex-wrap">
-                                {timeSlot.value.length > 0 && (
-                                  <div className="flex flex-wrap flex-col">
-                                    <p className="font-semibold py-2 font-sansRegular text-[13px]">InPerson</p>
-                                    <ul className="flex gap-3">
-                                      <TimeSlotsComponent
-                                        type={"InPerson"}
-                                        timeSlots={timeSlot.value}
-                                        selectDateTime={selectDateTime}
-                                        setTimeSlotId={setTimeSlotId}
-                                        handleTimeSelection={
-                                          handleTimeSelection
-                                        }
-
-                                        onSelectedTypeChange={handleSelectedTypeChange}
-                                      />
-                                    </ul>
-                                  </div>
-                                )}
-                                {virtualData?.value.length > 0 && (
-
-                                  <div className="flex flex-col flex-wrap">
-                                    <p className="font-semibold py-2 font-sansRegular text-[13px]">Virtual
-
-                                    </p>
-
-                                    <ul className="flex gap-3">
-                                      <TimeSlotsComponent
-                                        type={"Virtual"}
-                                        timeSlots={virtualData.value}
-                                        selectDateTime={selectDateTime}
-                                        setTimeSlotId={setTimeSlotId}
-                                        handleTimeSelection={
-                                          handleTimeSelection
-                                        }
-
-                                        onSelectedTypeChange={handleSelectedTypeChange}
-                                      />
-                                    </ul>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-
-
-                          </>
-                        )
-                      })
-                    }
+                                  <ul className="flex gap-3">
+                                    <TimeSlotsComponent
+                                      type={"Virtual"}
+                                      timeSlots={virtualData.value}
+                                      selectDateTime={selectDateTime}
+                                      setTimeSlotId={setTimeSlotId}
+                                      handleTimeSelection={handleTimeSelection}
+                                      onSelectedTypeChange={
+                                        handleSelectedTypeChange
+                                      }
+                                    />
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      );
+                    })}
                   </div>
-                  <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mr-[18rem] mt-10">
                     <Button
                       className="bg-verifiCation rounded-full text-white  text-[13px] py-2 px-5 font-sansLight"
                       onClick={handleAppointment}

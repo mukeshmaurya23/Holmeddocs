@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import mobileAppSlice from "./mobileAppSlice";
 import loginSlice from "./loginSlice";
-import thunk from "redux-thunk";
+
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "@reduxjs/toolkit";
 import apiSlice from "./apiSlice";
-import dataSlice from "./LocSpecSlice";
+import LocSpecSlice from "./LocSpecSlice";
 import searchSlice from "./searchSlice";
 //import filterApiSlice from "./filterApiSlice";
 const persistConfig = {
@@ -18,8 +18,9 @@ const rootReducer = combineReducers({
   login: loginSlice,
 
   api: apiSlice,
-  data: dataSlice,
+  
   search: searchSlice,
+  data: LocSpecSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

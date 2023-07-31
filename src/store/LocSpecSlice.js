@@ -31,7 +31,7 @@ const fetchConditions = createAsyncThunk(
   }
 );
 
-const dataSlice = createSlice({
+const LocSpecSlice = createSlice({
   name: "data",
   initialState: {
     locationAreas: [],
@@ -60,7 +60,7 @@ const dataSlice = createSlice({
       })
       .addCase(fetchSpecialties.fulfilled, (state, action) => {
         state.specialtiesStatus = "succeeded";
-        state.specialties = action.payload;
+        state.specialties = action.payload; //here getting data from payload
         state.filterSpecialties = action.payload;
       })
       .addCase(fetchSpecialties.rejected, (state) => {
@@ -80,4 +80,4 @@ const dataSlice = createSlice({
   },
 });
 export { fetchLocationAreas, fetchSpecialties, fetchConditions };
-export default dataSlice.reducer;
+export default LocSpecSlice.reducer;

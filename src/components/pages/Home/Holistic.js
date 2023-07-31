@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Spinner from "../../../UI/Spinner";
-import { fetchConditions, fetchSpecialties } from "../../../store/LocSpecSlice";
+//import { fetchConditions, fetchSpecialties } from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { searchLocation } from "../../../store/searchSlice";
 import moment from "moment";
@@ -20,8 +20,6 @@ const Holistic = () => {
 
   const [condition_id, setConditionId] = useState("");
 
-  const conditionsDispatch = useDispatch();
-  const specialityDispatch = useDispatch();
   const {
     specialties: specialistData,
     status: specStatus,
@@ -42,17 +40,8 @@ const Holistic = () => {
   const [filterConditionData, setFilterConditionData] =
     useState(filterConditions);
 
-  useEffect(() => {
-    specialityDispatch(fetchSpecialties("/patient/master/speciality"));
-  }, []);
-
-  useEffect(() => {
-    conditionsDispatch(fetchConditions("/patient/master/condition"));
-  }, []);
-
   const [searchValue, setSearchValue] = useState("");
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
-
 
   // const [filterSpeciality, setFilterSpeciality] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -225,18 +214,16 @@ const Holistic = () => {
       url += `location=${selectedItemList.location}_${zip_code_id}&`;
     }
     if (selectedItemList.speciality) {
-      url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
+      url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
     if (selectedItemList.conditions) {
       url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
-    url += `date=${startDate.toDateString()}`;
+    url += `date=${moment(startDate).format("YYYY-MM-DD")}`;
 
     navigate(url);
   };
-
-
 
   const locationItems = () => {
     return (
@@ -287,9 +274,7 @@ const Holistic = () => {
         })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
-          {
-            filterConditionData?.length > 0 && "Conditions"
-          }
+          {filterConditionData?.length > 0 && "Conditions"}
         </h2>
         {filterConditionData?.map((item) => (
           <h1
@@ -351,7 +336,6 @@ const Holistic = () => {
     } else if (id === "speciality") {
       handleSpecialtySelection();
     }
-
   };
 
   return (
@@ -404,8 +388,9 @@ const Holistic = () => {
                 <img
                   src={grayDropDown}
                   alt=""
-                  className={`${selectedItem === "location" ? "rotate-180" : ""
-                    } cursor-pointer h-3 w-3 `}
+                  className={`${
+                    selectedItem === "location" ? "rotate-180" : ""
+                  } cursor-pointer h-3 w-3 `}
                 />
               </div>
             </div>
@@ -441,8 +426,9 @@ const Holistic = () => {
                 <img
                   src={grayDropDown}
                   alt=""
-                  className={`${selectedItem === "speciality" ? "rotate-180" : ""
-                    } cursor-pointer h-3 w-3 mr-0 ml-16 2xl:ml-[9rem]`}
+                  className={`${
+                    selectedItem === "speciality" ? "rotate-180" : ""
+                  } cursor-pointer h-3 w-3 mr-0 ml-16 2xl:ml-[9rem]`}
                 />
               </div>
               {selectedItem === "speciality" && (
@@ -460,11 +446,10 @@ const Holistic = () => {
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
-            <div className="flex items-center mt-1 justify-between py-4 md:py-0 " >
+            <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
               <div
                 className="flex ml-0 md:ml-5 cursor-pointer items-center"
                 ref={calendarRef}
-
               >
                 <img
                   onClick={handleClick}
@@ -473,9 +458,12 @@ const Holistic = () => {
                   alt=""
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                <span onClick={handleClick} className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansRegular font-semibold">
+                <span
+                  onClick={handleClick}
+                  className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansRegular font-semibold"
+                >
                   {startDate &&
-                    startDate.toDateString() === new Date().toDateString()
+                  startDate.toDateString() === new Date().toDateString()
                     ? "Today"
                     : moment(startDate).format("DD MMM,YYYY")}
                 </span>
@@ -492,8 +480,9 @@ const Holistic = () => {
                   src={grayDropDown}
                   alt="dropdown"
                   onClick={handleClick}
-                  className={`${isOpen ? "rotate-180" : ""
-                    } h-3 w-3 mr-0 md:mr-8`}
+                  className={`${
+                    isOpen ? "rotate-180" : ""
+                  } h-3 w-3 mr-0 md:mr-8`}
                 />
               </div>
 

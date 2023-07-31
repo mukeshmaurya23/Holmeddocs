@@ -1,9 +1,14 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Suspense, lazy } from "react";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+
+import { Suspense, lazy, useEffect } from "react";
 import loadingGif from "./images/icons/Loader.gif";
 import useOnline from "./hooks/useOnline";
+import { useSelector, useDispatch } from "react-redux";
 import UnderMaintenance from "./components/UnderMaintenance";
+
+import { fetchConditions, fetchSpecialties } from "./store/LocSpecSlice";
+import { fetchInsuranceData } from "./store/apiSlice";
+
 const Login = lazy(() => import("./components/Login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 
@@ -81,7 +86,38 @@ const BookAppointment = lazy(() =>
 function App() {
   const isOnline = useOnline();
   const isLoggedIn = useSelector((state) => state.login.remember_token);
+  const dispatch = useDispatch();
+ const location=useLocation();
 
+
+
+ const conditionsDispatch = useDispatch();
+ const specialityDispatch = useDispatch();
+ const insuranceDispatch = useDispatch();
+
+ useEffect(() => {
+
+   dispatch(fetchSpecialties("/patient/master/speciality"));
+   }, []);
+   useEffect(() => {
+     specialityDispatch(fetchSpecialties("/patient/master/speciality"));
+   }, []);
+ 
+   useEffect(() => {
+     conditionsDispatch(fetchConditions("/patient/master/condition"));
+   }, []);
+   useEffect(() => {
+    insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
+  }, [insuranceDispatch]);
+
+ 
+
+    useEffect(()=>{
+        //scroll to top on every route change
+        window.scrollTo(0, 0);
+    },[location.pathname])
+
+    
   const commonRoutes = [
     {
       path: "/",

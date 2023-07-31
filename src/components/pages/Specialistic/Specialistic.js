@@ -1,28 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SpecialistCard from "./SpecialistCard";
 import loadingGif from "../../../images/icons/Loader.gif";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchSpecialties } from "../../../store/LocSpecSlice";
+//import { fetchSpecialties } from "../../../store/LocSpecSlice";
 
 const Specialistic = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+ 
 
 
   const { specialties, specialtiesStatus, error } = useSelector(
     (state) => state.data
   );
 
-  useEffect(() => {
-    //dont make api call if i navigate to other page and come back to this page
-    if (specialties === null) {
-      dispatch(fetchSpecialties("/patient/master/speciality"));
-    }
+  // const fetchSpecialtiesHandler = useCallback(() => {
+  //   dispatch(fetchSpecialties("/patient/master/speciality"));
+  // },[])
+   
+  // console.log("specialitiesxvfxft4rg4tg ", !!specialties.length)
 
-
-  }, [specialties]);
+  // useEffect(() => {
+  // // if(!!specialties.length ){
+  // //  console.log("null")
+  // // }else {
+  // //   fetchSpecialtiesHandler()
+  // // }
+ 
+  // dispatch(fetchSpecialties("/patient/master/speciality"));
+  // }, []);
 
   return (
     <>

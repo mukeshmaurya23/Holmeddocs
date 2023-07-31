@@ -30,9 +30,9 @@ customAxios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // if (error.response.status === 404) {
-    //   store.dispatch(logout());
-    // }
+    if (error.response.status === 404) {
+      store.dispatch(logout());
+    }
 
     return Promise.reject(error);
   }

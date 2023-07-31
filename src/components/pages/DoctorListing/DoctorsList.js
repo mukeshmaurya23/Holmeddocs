@@ -6,15 +6,12 @@ import { getRandomDoctorImage } from "../../../constant";
 
 const DoctorsList = ({ doctorsList, status }) => {
   const { id, doctorName } = useParams();
-  
 
-  
   console.log(doctorsList, "doctorsList from listing------");
   const DateComp = ({ timeSlotDate }) => {
-   
     const day = moment(timeSlotDate).format("DD");
     const month = moment(timeSlotDate).format("MMM");
-    
+
     return (
       <>
         <div className="flex flex-col  ">
@@ -37,7 +34,9 @@ const DoctorsList = ({ doctorsList, status }) => {
           key={doctor?.id}
         >
           <Link
-            to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}
+            to={`/doctor-listing/${doctor?.doctor_name
+              .replace(/ /g, "_")
+              .toLowerCase()}/${doctor?.id}`}
             className="flex space-x-4"
           >
             {" "}
@@ -95,7 +94,9 @@ const DoctorsList = ({ doctorsList, status }) => {
                   onClick={() =>
                     timeSlot.value.length > 0 &&
                     naviagte(
-                      `/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`
+                      `/doctor-listing/${doctor?.doctor_name
+                        .replace(/ /g, "_")
+                        .toLowerCase()}/${doctor?.id}`
                     )
                   }
                   key={index}
@@ -109,19 +110,27 @@ const DoctorsList = ({ doctorsList, status }) => {
                     {timeSlot?.day?.slice(0, 3)}
                   </p>
                   <p className="px-3">
-                  <DateComp timeSlotDate={timeSlot?.date} />
+                    <DateComp timeSlotDate={timeSlot?.date} />
                   </p>
                 </div>
               ))}
             </div>
             <div className="flex gap-10 py-5  justify-between items-center">
-              <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
+              <Link
+                to={`/doctor-listing/${doctor?.doctor_name
+                  .replace(/ /g, "_")
+                  .toLowerCase()}/${doctor?.id}`}
+              >
                 <button className="bg-verifiCation rounded-full font-sansSemibold text-[.9rem] mt-3 2xl:text-[1rem]  text-white px-5 py-2 2xl:py-3 2xl:px-8 2xl:mt-5">
                   Schedule an Appointment
                 </button>
               </Link>
 
-              <Link to={`/doctor-listing/${doctor?.doctor_name}/${doctor?.id}`}>
+              <Link
+                to={`/doctor-listing/${doctor?.doctor_name
+                  .replace(/ /g, "_")
+                  .toLowerCase()}/${doctor?.id}`}
+              >
                 <p className="text-[#CF8B15] cursor-pointer mt-3 underline 2xl:py-3 font-sansSemibold 2xl:mt-5">
                   View More
                 </p>

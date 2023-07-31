@@ -47,7 +47,7 @@ const Slider = () => {
     };
 
     getDoctorData();
-  }, [doctorData]); 
+  }, [doctorData]);
 
   return (
     <div className="overflow-hidden ml-4 md:ml-8">
@@ -58,7 +58,9 @@ const Slider = () => {
         {doctorData &&
           doctorData.map((item) => (
             <Link
-              to={`/doctor-listing/${item?.doctor_name}/${item?.id}`}
+              to={`/doctor-listing/${item?.doctor_name
+                .replace(/ /g, "_")
+                .toLowerCase()}/${item?.id}`}
               key={item?.id}
             >
               <div className="inline-block  w-[100%] rounded-md">

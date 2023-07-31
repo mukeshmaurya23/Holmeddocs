@@ -13,7 +13,7 @@ import hamBurger from "../images/icons/Hamburger.png";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../store/mobileAppSlice";
 import cross from "../images/icons/Cross.png";
-
+import CryptoJS from "crypto-js";
 import searchIcon from "../images/home/SearchBarIcon.svg";
 import { logout } from "../store/loginSlice";
 import Modal from "./Modal";
@@ -54,21 +54,16 @@ const Navbar2 = () => {
 
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
-  const { locationSearchResults } = useSelector(
-    (state) => state.search
-  );
+  const { locationSearchResults } = useSelector((state) => state.search);
   const handleChange = (e) => {
     setIsOpen(!isOpen);
 
     setStartDate(e);
-
-
   };
   const handleClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
     setSelectedItem(null);
-
   };
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
@@ -81,7 +76,16 @@ const Navbar2 = () => {
   // const { specialties, status: specStatus } = useSelector(
   //   (state) => state.data
   // );
+  const decryptData = (data, secretKey) => {
+    if (data === null) {
+      return "";
+    }
 
+    const hexData = CryptoJS.enc.Hex.stringify(data);
+    const bytes = CryptoJS.AES.decrypt(hexData, secretKey);
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+    return decryptedData;
+  };
   const [searchValue, setSearchValue] = useState("");
 
   const locationSearchDispatch = useDispatch();
@@ -110,7 +114,6 @@ const Navbar2 = () => {
     return data;
   };
 
-
   // useEffect(() => {
   //   return () => {
   //     setSelectedItemList({
@@ -118,7 +121,7 @@ const Navbar2 = () => {
   //       speciality: "",
   //       conditions: "",
   //     });
-  //   }; 
+  //   };
   // }, [selectedItemList.location, selectedItemList.speciality, selectedItemList.conditions]);
   const handleSpecialitySearch = (e) => {
     setCondSpecSearchValue(e.target.value);
@@ -182,7 +185,6 @@ const Navbar2 = () => {
     }
   };
 
-
   useEffect(() => {
     const selectedSpeciality = specialistData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
@@ -217,14 +219,13 @@ const Navbar2 = () => {
     if (selectedItemList.conditions) {
       url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
     }
-
-    url += `date=${startDate.toDateString()}`;
+    //date=${startDate.toString()} see me make appointment
+    url += `date=${moment(startDate).format("YYYY-MM-DD")}`;
 
     navigate(url);
   };
 
   const locationItems = () => {
-
     return (
       locationSearchResults &&
       locationSearchResults?.map((item) => {
@@ -331,8 +332,6 @@ const Navbar2 = () => {
     }
   };
 
-
-
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
@@ -368,26 +367,24 @@ const Navbar2 = () => {
   const locSpecConditionRef = useRef();
 
   let locationSearchParams = searchParams.get("location");
-  let specialitySearchParams = searchParams.get("speciality");
+  let specialitySearchParams = searchParams.get("selectedSpeciality");
 
   let conditionSearchParams = searchParams.get("conditions");
 
   const dateSearchParams = searchParams.get("date");
   console.log(dateSearchParams, "dateSearchParams");
 
-  const [formattedDate, setFormattedDate] = useState(dateSearchParams)
+  const [formattedDate, setFormattedDate] = useState(dateSearchParams);
   useEffect(() => {
     const dateObject = moment(dateSearchParams);
     const today = moment();
 
-
-    const newFormattedDate = dateObject.isSame(today, 'day')
-      ? 'Today'
-      : dateObject.format('MMMM D, YYYY');
+    const newFormattedDate = dateObject.isSame(today, "day")
+      ? "Today"
+      : dateObject.format("MMMM D, YYYY");
 
     setFormattedDate(newFormattedDate);
   }, [dateSearchParams, startDate]);
-
 
   const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
   const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
@@ -400,7 +397,9 @@ const Navbar2 = () => {
       setClearingPlaceholder(locationSearchParams.split("_")[0]);
     }
     if (specialitySearchParams) {
-      setClearSpecialityPlaceholder(specialitySearchParams.split("_")[0]);
+      setClearSpecialityPlaceholder(
+        specialitySearchParams.split("_")[0].replace(/-/g, " ")
+      );
     }
     if (conditionSearchParams) {
       setClearConditionPlaceholder(conditionSearchParams.split("_")[0]);
@@ -409,7 +408,7 @@ const Navbar2 = () => {
       setClearingPlaceholder(null);
       setClearSpecialityPlaceholder(null);
       setClearConditionPlaceholder(null);
-    }
+    };
   }, [locationSearchParams, specialitySearchParams, conditionSearchParams]);
   const calendarRef = useRef();
   useEffect(() => {
@@ -436,7 +435,6 @@ const Navbar2 = () => {
   }, [ref]);
 
   useEffect(() => {
-
     if (searchValue === "") {
       setSelectedItem(null);
     } else {
@@ -459,14 +457,12 @@ const Navbar2 = () => {
         conditions: "",
       });
       setSearchValue("");
-      setStartDate(new Date())
+      setStartDate(new Date());
 
-      setClearSpecialityPlaceholder("")
-      setClearConditionPlaceholder("")
+      setClearSpecialityPlaceholder("");
+      setClearConditionPlaceholder("");
     };
   }, [location.pathname]);
-
-
 
   const showShadow = location.pathname !== "/";
   const LoginSignup = (
@@ -554,20 +550,22 @@ const Navbar2 = () => {
     </div>
   );
 
-
   return (
     <>
       <div
-        class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${location.pathname === "/make-appointment" ||
+        class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
+          location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
-          ? "drop-shadow-lg"
-          : "lg:py-5"
-          } grid grid-col-12 py-1  ${location.pathname === "/make-appointment" ||
-            location.pathname === "/doctor-listing"
+            ? "drop-shadow-lg"
+            : "lg:py-5"
+        } grid grid-col-12 py-1  ${
+          location.pathname === "/make-appointment" ||
+          location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-          } ${showShadow ? "drop-shadow-md" : ""
-          } bg-white z-10  h-[7rem] relative cursor-pointer`}
+        } ${
+          showShadow ? "drop-shadow-md" : ""
+        } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
         <div class="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -620,8 +618,6 @@ const Navbar2 = () => {
                 />
               </Link>
 
-
-
               <div
                 ref={locSpecConditionRef}
                 className="border-[2px] flex items-center rounded-lg border-gray-300  "
@@ -629,10 +625,11 @@ const Navbar2 = () => {
                 <div className="flex items-center relative">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${selectedItemList.location || locationSearchParams
-                      ? "text-[1rem] font-semibold"
-                      : "text-[1rem]"
-                      }`}
+                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                      selectedItemList.location || locationSearchParams
+                        ? "text-[1rem] font-semibold"
+                        : "text-[1rem]"
+                    }`}
                     placeholder={clearingPlaceholder || "Location"}
                     value={selectedItemList.location || searchValue}
                     onChange={handleLocationSearch}
@@ -646,22 +643,24 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${selectedItem === "location"
-                      ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                      }`}
+                    className={`${
+                      selectedItem === "location"
+                        ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
                   >
                     {selectedItem === "location" && locationItems()}
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${selectedItemList.speciality ||
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${
+                      selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
                       conditionSearchParams
-                      ? "text-[1rem] font-semibold"
-                      : "text-[1rem]"
-                      }`}
+                        ? "text-[1rem] font-semibold"
+                        : "text-[1rem]"
+                    }`}
                     placeholder={
                       clearSpecialityPlaceholder ||
                       clearConditionPlaceholder ||
@@ -681,17 +680,17 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${selectedItem === "speciality"
-                      ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                      }`}
+                    className={`${
+                      selectedItem === "speciality"
+                        ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
                   >
                     {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
 
                   <div
-                    className="flex ml-0 md:ml-5 cursor-pointer items-center"
-
+                    className="flex ml-0 md:ml-5 cursor-pointer items-center w-[180px] h-[40px] 2xl:w-[300px]"
                     ref={calendarRef}
                   >
                     <img
@@ -699,11 +698,14 @@ const Navbar2 = () => {
                       onChange={handleDateChange}
                       src={calendarSvg}
                       alt=""
-                      className="w-6 2xl:w-9 h-auto object-contain cursor-pointer "
+                      className="w-6 2xl:w-7 h-auto object-contain cursor-pointer "
                     />
-                    <span onClick={handleClick} className="outline-none px-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
+                    <span
+                      onClick={handleClick}
+                      className="outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold"
+                    >
                       {startDate &&
-                        startDate.toDateString() === new Date().toDateString()
+                      startDate.toDateString() === new Date().toDateString()
                         ? formattedDate
                         : moment(startDate).format("DD MMM,YYYY")}
                     </span>
@@ -794,8 +796,9 @@ const Navbar2 = () => {
 
           {isMenuOpen && (
             <div
-              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-                }`}
+              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <div className="relative">
                 <button

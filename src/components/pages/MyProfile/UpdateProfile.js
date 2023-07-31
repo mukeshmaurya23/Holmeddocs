@@ -156,7 +156,6 @@ const UpdateProfile = () => {
     };
   }, [insuranceRef, stateRef, cityRef, zipCodeRef]);
 
-  const insuranceDispatch = useDispatch();
   const stateDispatch = useDispatch();
   const cityDispatch = useDispatch();
   const zipCodeDispatch = useDispatch();
@@ -167,9 +166,6 @@ const UpdateProfile = () => {
   const { stateData, stateStatus, filterStateData } = useSelector(
     (state) => state.api
   );
-  useEffect(() => {
-    insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
-  }, [insuranceDispatch]);
 
   useEffect(() => {
     stateDispatch(fetchStateData("/patient/master/state"));
@@ -230,47 +226,50 @@ const UpdateProfile = () => {
 
   const [zipCodeValue, setZipCodeValue] = useState("");
   //filter functionality
-const[filterState,setFilterState]=useState(filterStateData)
-const[stateSearchValue,setStateSearchValue]=useState("")
+  const [filterState, setFilterState] = useState(filterStateData);
+  const [stateSearchValue, setStateSearchValue] = useState("");
 
-//for city
-const[filterCity,setFilterCity]=useState(filterCityData)
-const[citySearchValue,setCitySearchValue]=useState("")
+  //for city
+  const [filterCity, setFilterCity] = useState(filterCityData);
+  const [citySearchValue, setCitySearchValue] = useState("");
   console.log(filterCityData, "im filterCityData>>>>>>>>>>>>>>>");
-const handleStateSearch = (e) => {
- setStateSearchValue(e.target.value);
-  setFilterState(
-    filterFunctionality(stateSearchValue, filterStateData, "state_name")
-  );
-}
-//for city
-const handleCitySearch = (e) => {
-  setCitySearchValue(e.target.value);
-  setFilterCity(
-    filterFunctionality(citySearchValue, filterCityData, "city_name")
-  );
-}
+  const handleStateSearch = (e) => {
+    setStateSearchValue(e.target.value);
+    setFilterState(
+      filterFunctionality(stateSearchValue, filterStateData, "state_name")
+    );
+  };
+  //for city
+  const handleCitySearch = (e) => {
+    setCitySearchValue(e.target.value);
+    setFilterCity(
+      filterFunctionality(citySearchValue, filterCityData, "city_name")
+    );
+  };
 
-//for zip 
-// const[filterZip,setFilterZip]=useState(filterZipCodeData)
-// const[zipSearchValue,setZipSearchValue]=useState("")
-// const handleZipSearch = (e) => {
-//   setZipSearchValue(e.target.value);
-//   setFilterZip(
-//     filterFunctionality(zipSearchValue, filterZipCodeData, "zip")
-//   );
-// }
+  //for zip
+  // const[filterZip,setFilterZip]=useState(filterZipCodeData)
+  // const[zipSearchValue,setZipSearchValue]=useState("")
+  // const handleZipSearch = (e) => {
+  //   setZipSearchValue(e.target.value);
+  //   setFilterZip(
+  //     filterFunctionality(zipSearchValue, filterZipCodeData, "zip")
+  //   );
+  // }
 
-//for insurance
-const[filterInsurance,setFilterInsurance]=useState(filterInsuranceData)
-const[insuranceSearchValue,setInsuranceSearchValue]=useState("")
-const handleInsuranceSearch = (e) => {
-  setInsuranceSearchValue(e.target.value);
-  setFilterInsurance(
-    filterFunctionality(insuranceSearchValue, filterInsuranceData, "insurance_company_name")
-  );
-}
-
+  //for insurance
+  const [filterInsurance, setFilterInsurance] = useState(filterInsuranceData);
+  const [insuranceSearchValue, setInsuranceSearchValue] = useState("");
+  const handleInsuranceSearch = (e) => {
+    setInsuranceSearchValue(e.target.value);
+    setFilterInsurance(
+      filterFunctionality(
+        insuranceSearchValue,
+        filterInsuranceData,
+        "insurance_company_name"
+      )
+    );
+  };
 
   return (
     <>
@@ -465,10 +464,12 @@ const handleInsuranceSearch = (e) => {
                   autoComplete="nope"
                   value={
                     selectedItemList.insurance.insurance_company_name ||
-                    insurnceValue || insuranceSearchValue
+                    insurnceValue ||
+                    insuranceSearchValue
                   }
                   onFocus={() => {
-                    setInsuranceValue("") || setInsuranceSearchValue("") ||
+                    setInsuranceValue("") ||
+                      setInsuranceSearchValue("") ||
                       setSelectedItemList({
                         ...selectedItemList,
                         insurance: {
@@ -624,10 +625,16 @@ const handleInsuranceSearch = (e) => {
                   autoComplete="nope"
                   id="state"
                   placeholder="select"
-                  value={selectedItemList.state.state_name || stateValue || stateSearchValue}
+                  value={
+                    selectedItemList.state.state_name ||
+                    stateValue ||
+                    stateSearchValue
+                  }
                   onFocus={() =>
                     setIsStateDropDown(true) ||
-                    setStateValue("") || setStateSearchValue("") || setCitySearchValue("") ||
+                    setStateValue("") ||
+                    setStateSearchValue("") ||
+                    setCitySearchValue("") ||
                     setSelectedItemList({
                       ...selectedItemList,
                       state: {
@@ -653,8 +660,8 @@ const handleInsuranceSearch = (e) => {
                   {isStateDropdown
                     ? stateStatus === "loading"
                       ? "Loading..."
-                      : 
-                      filterState.map((item) => (
+                      : stateData &&
+                        filterState?.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
@@ -689,10 +696,15 @@ const handleInsuranceSearch = (e) => {
                   type="text"
                   name="city_id"
                   id="city_id"
-                  value={selectedItemList.city_id.city_name || cityValue || citySearchValue}
+                  value={
+                    selectedItemList.city_id.city_name ||
+                    cityValue ||
+                    citySearchValue
+                  }
                   onFocus={() =>
                     setCityDropDown(true) ||
-                    setCityValue("") || setCitySearchValue("") ||
+                    setCityValue("") ||
+                    setCitySearchValue("") ||
                     setSelectedItemList({
                       ...selectedItemList,
                       city_id: {
@@ -722,8 +734,8 @@ const handleInsuranceSearch = (e) => {
                   >
                     {cityStatus === "loading"
                       ? "Loading..."
-                      : 
-                        filterCity.map((item) => (
+                      : cityData &&
+                        filterCity?.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
@@ -757,10 +769,9 @@ const handleInsuranceSearch = (e) => {
                   type="text"
                   name="zip_code_id"
                   id="zip_code_id"
-                  value={selectedItemList.zip_code_id.zip || zipCodeValue }
+                  value={selectedItemList.zip_code_id.zip || zipCodeValue}
                   placeholder="zip code"
                   autoComplete="nope"
-                  
                   onFocus={() =>
                     setZipCodeDropDown(true) ||
                     setZipCodeValue("") ||
@@ -801,8 +812,8 @@ const handleInsuranceSearch = (e) => {
                       ? "Loading..."
                       : stateData &&
                         cityData &&
-                       
-                        zipCodeData.map((item) => (
+                        zipCodeData &&
+                        zipCodeData?.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
                             key={item.id}
