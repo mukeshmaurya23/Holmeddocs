@@ -11,8 +11,8 @@ const AllSpecialistic = () => {
   const dispatch = useDispatch();
   const { specialties, specialtiesStatus } = useSelector((state) => state.data);
   useEffect(() => {
-   
-    if (!specialties) {
+
+    if (specialties === null) {
       dispatch(fetchSpecialties("/patient/master/speciality"));
     }
   }, [dispatch, specialties]);

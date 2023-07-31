@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-
+import "./DatePicker.css"
 import "react-datepicker/dist/react-datepicker.css";
 const DatePickerComponent = ({ handleChange, startDate }) => {
   return (
@@ -8,6 +8,7 @@ const DatePickerComponent = ({ handleChange, startDate }) => {
       selected={startDate}
       onChange={handleChange}
       inline
+
       minDate={new Date()}
       customInput={
         <input

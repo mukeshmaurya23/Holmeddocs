@@ -11,7 +11,7 @@ import Modal from "../../../UI/Modal";
 import DatePickerComponent from "../../../UI/DatePicker";
 import moment from "moment";
 import TimeSlotsComponent from "./TimeSlotsComponent";
-const DoctorDetails = ({}) => {
+const DoctorDetails = ({ }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const timeSlotDispatch = useDispatch();
@@ -45,7 +45,7 @@ const DoctorDetails = ({}) => {
     setSelectedType(type);
   };
 
-  console.log(selectedType,'selectedType fro he details--------->');
+  console.log(selectedType, 'selectedType fro he details--------->');
 
   const handleDateSelection = (date, timeSlots, formatedDate) => {
     // const dateObj = new Date(date);
@@ -97,7 +97,7 @@ const DoctorDetails = ({}) => {
 
   const isLoggedIn = useSelector((state) => state.login.remember_token);
 
-  
+
 
   const handleAppointment = () => {
     if (!selectDateTime.date || !selectDateTime.time) {
@@ -109,16 +109,16 @@ const DoctorDetails = ({}) => {
     }
     return isLoggedIn
       ? navigate("/book-appointment", {
-          state: {
-            doctor: doctorsList?.data?.result?.filter(
-              (doctor) => doctor.id == id
-            ),
-            date: selectDateTime.date,
-            time: selectDateTime.time,
-            timeSlotId: timeSlotId,
-            type:selectedType
-          },
-        })
+        state: {
+          doctor: doctorsList?.data?.result?.filter(
+            (doctor) => doctor.id == id
+          ),
+          date: selectDateTime.date,
+          time: selectDateTime.time,
+          timeSlotId: timeSlotId,
+          type: selectedType
+        },
+      })
       : openModal();
   };
 
@@ -153,7 +153,7 @@ const DoctorDetails = ({}) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
-  
+
 
 
 
@@ -280,7 +280,7 @@ const DoctorDetails = ({}) => {
                             ))}
                         </div>
                       ) : (
-                       slot_avialability?.InPerson?.map((timeSlot, index) => {
+                        slot_avialability?.InPerson?.map((timeSlot, index) => {
                           const formattedDate = timeSlot.date;
 
                           const virtualData = doctor?.time_slots?.Virtual?.find(
@@ -291,6 +291,17 @@ const DoctorDetails = ({}) => {
                             <>
                               <div
                                 key={index}
+
+
+                                className={`${timeSlot.value.length > 0 ||
+                                  virtualData?.value.length > 0
+                                  ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                  : "bg-[#ecf0f1] cursor-not-allowed"
+                                  } flex justify-center items-center rounded
+                            ${selectDateTime.date === timeSlot.date &&
+                                  "bg-verifiCation text-white"
+                                  }
+                            `}
                                 onClick={() => {
                                   if (timeSlot.value.length > 0) {
                                     handleDateSelection(
@@ -299,27 +310,16 @@ const DoctorDetails = ({}) => {
                                       formattedDate
                                     );
                                   }
-
-                                  if (virtualData) {
+                                  if (virtualData?.value.length > 0) {
                                     handleDateSelection(
                                       virtualData.date,
                                       virtualData.value,
                                       formattedDate
                                     );
                                   }
+
+
                                 }}
-                                
-                                className={`${
-                                  timeSlot.value.length > 0 ||
-                                  virtualData?.value.length > 0
-                                    ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
-                                    : "bg-[#ecf0f1] cursor-not-allowed"
-                                } flex justify-center items-center rounded
-                            ${
-                              selectDateTime.date === timeSlot.date &&
-                              "bg-verifiCation text-white"
-                            }
-                            `}
                               >
                                 <p
                                   className={`px-3 py-2 text-xs font-semibold  `}
@@ -327,17 +327,17 @@ const DoctorDetails = ({}) => {
                                   <DateComp timeSlotDate={timeSlot?.date} />
                                 </p>
                               </div>
-                            
+
                             </>
                           );
                         })
                       )}
 
-                      <div className="relative "    ref={calendarRef}>
+                      <div className="relative " ref={calendarRef}>
                         <img
                           src={calendar}
                           alt="calendar"
-                       
+
                           className="h-auto w-10 cursor-pointer"
                           onClick={handleClick}
                         />
@@ -363,64 +363,64 @@ const DoctorDetails = ({}) => {
                     <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
                       {selectedDate}
                     </h2>
-                 {
-                   slot_avialability.InPerson?.map((timeSlot, index) => {
-                    const virtualData = doctor?.time_slots?.Virtual?.find(
-                      (item) => item.date === timeSlot.date
-                    );
+                    {
+                      slot_avialability.InPerson?.map((timeSlot, index) => {
+                        const virtualData = doctor?.time_slots?.Virtual?.find(
+                          (item) => item.date === timeSlot.date
+                        );
                         return (
                           <>
-                           
-                                {selectedDate === timeSlot.date && (
-                                  <div className="flex flex-wrap">
-                                    {timeSlot.value.length > 0 && (
-                                      <div className="w-[100px] flex flex-wrap">
-                                        <p className="font-semibold py-2 font-sansRegular text-[13px]">InPerson</p>
-                                        <ul>
-                                          <TimeSlotsComponent
-                                          type={"InPerson"}
-                                            timeSlots={timeSlot.value}
-                                            selectDateTime={selectDateTime}
-                                            setTimeSlotId={setTimeSlotId}
-                                            handleTimeSelection={
-                                              handleTimeSelection
-                                            }
-                                        
-                                            onSelectedTypeChange={handleSelectedTypeChange} 
-                                          />
-                                        </ul>
-                                      </div>
-                                    )}
-                                    {virtualData?.value.length > 0 && (
-                                      
-                                       <div className="w-[100px] flex flex-wrap">
-                                        <p className="font-semibold py-2 font-sansRegular text-[13px]">Virtual
-                                          
-                                        </p>
 
-                                        <ul>
-                                          <TimeSlotsComponent
-                                          type={"Virtual"}
-                                            timeSlots={virtualData.value}
-                                            selectDateTime={selectDateTime}
-                                            setTimeSlotId={setTimeSlotId}
-                                            handleTimeSelection={
-                                              handleTimeSelection
-                                            }
-                                          
-                                            onSelectedTypeChange={handleSelectedTypeChange} 
-                                          />
-                                        </ul>
-                                      </div>
-                                    )}
+                            {selectedDate === timeSlot.date && (
+                              <div className="flex flex-wrap">
+                                {timeSlot.value.length > 0 && (
+                                  <div className="flex flex-wrap flex-col">
+                                    <p className="font-semibold py-2 font-sansRegular text-[13px]">InPerson</p>
+                                    <ul className="flex gap-3">
+                                      <TimeSlotsComponent
+                                        type={"InPerson"}
+                                        timeSlots={timeSlot.value}
+                                        selectDateTime={selectDateTime}
+                                        setTimeSlotId={setTimeSlotId}
+                                        handleTimeSelection={
+                                          handleTimeSelection
+                                        }
+
+                                        onSelectedTypeChange={handleSelectedTypeChange}
+                                      />
+                                    </ul>
                                   </div>
                                 )}
-                             
-                          
+                                {virtualData?.value.length > 0 && (
+
+                                  <div className="flex flex-col flex-wrap">
+                                    <p className="font-semibold py-2 font-sansRegular text-[13px]">Virtual
+
+                                    </p>
+
+                                    <ul className="flex gap-3">
+                                      <TimeSlotsComponent
+                                        type={"Virtual"}
+                                        timeSlots={virtualData.value}
+                                        selectDateTime={selectDateTime}
+                                        setTimeSlotId={setTimeSlotId}
+                                        handleTimeSelection={
+                                          handleTimeSelection
+                                        }
+
+                                        onSelectedTypeChange={handleSelectedTypeChange}
+                                      />
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+
                           </>
                         )
-                   })
-                 }
+                      })
+                    }
                   </div>
                   <div className="flex justify-center mt-4">
                     <Button

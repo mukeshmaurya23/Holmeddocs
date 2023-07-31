@@ -35,7 +35,7 @@ const dataSlice = createSlice({
   name: "data",
   initialState: {
     locationAreas: [],
-    specialties: [],
+    specialties: null,
     filterSpecialties: [],
     conditions: [],
     filterConditions: [],

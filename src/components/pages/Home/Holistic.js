@@ -12,6 +12,7 @@ import Spinner from "../../../UI/Spinner";
 import { fetchConditions, fetchSpecialties } from "../../../store/LocSpecSlice";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { searchLocation } from "../../../store/searchSlice";
+import moment from "moment";
 
 const Holistic = () => {
   const [zip_code_id, setZipCodeId] = useState("");
@@ -31,11 +32,11 @@ const Holistic = () => {
     status: conditionStatus,
     filterConditions,
   } = useSelector((state) => state.data);
-  const {locationSearchResults,status:loactioSearchStatus} = useSelector(
+  const { locationSearchResults, status: loactioSearchStatus } = useSelector(
     (state) => state.search
   );
 
-  console.log(locationSearchResults, "locationSearchResults----------");
+  console.log(locationSearchResults, "locationSearchResults");
   const [filterSpecilityData, setFilterSpecialityData] =
     useState(filterSpecialties);
   const [filterConditionData, setFilterConditionData] =
@@ -137,7 +138,7 @@ const Holistic = () => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [ref]);
+  }, [ref, calendarRef]);
 
   useEffect(() => {
     //in this  if search value is empty then dont show the location list and if search value is not empty then show the location list
@@ -286,7 +287,9 @@ const Holistic = () => {
         })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
-          Conditions
+          {
+            filterConditionData?.length > 0 && "Conditions"
+          }
         </h2>
         {filterConditionData?.map((item) => (
           <h1
@@ -348,6 +351,7 @@ const Holistic = () => {
     } else if (id === "speciality") {
       handleSpecialtySelection();
     }
+
   };
 
   return (
@@ -400,9 +404,8 @@ const Holistic = () => {
                 <img
                   src={grayDropDown}
                   alt=""
-                  className={`${
-                    selectedItem === "location" ? "rotate-180" : ""
-                  } cursor-pointer h-3 w-3 `}
+                  className={`${selectedItem === "location" ? "rotate-180" : ""
+                    } cursor-pointer h-3 w-3 `}
                 />
               </div>
             </div>
@@ -438,9 +441,8 @@ const Holistic = () => {
                 <img
                   src={grayDropDown}
                   alt=""
-                  className={`${
-                    selectedItem === "speciality" ? "rotate-180" : ""
-                  } cursor-pointer h-3 w-3 mr-0 ml-16 2xl:ml-[9rem]`}
+                  className={`${selectedItem === "speciality" ? "rotate-180" : ""
+                    } cursor-pointer h-3 w-3 mr-0 ml-16 2xl:ml-[9rem]`}
                 />
               </div>
               {selectedItem === "speciality" && (
@@ -458,23 +460,24 @@ const Holistic = () => {
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
-            <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
+            <div className="flex items-center mt-1 justify-between py-4 md:py-0 " >
               <div
                 className="flex ml-0 md:ml-5 cursor-pointer items-center"
-                onClick={handleClick}
                 ref={calendarRef}
+
               >
                 <img
+                  onClick={handleClick}
                   onChange={handleDateChange}
                   src={calendarSvg}
                   alt=""
                   className="w-6 2xl:w-9 h-auto object-contain cursor-pointer mr-5 "
                 />
-                <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansRegular font-semibold">
+                <span onClick={handleClick} className="outline-none px-3 text-[.7rem] mt-1 sm:text-[1rem] 2xl:text-[1.2rem] text-[#292f33] mr-20 font-sansRegular font-semibold">
                   {startDate &&
-                  startDate.toDateString() === new Date().toDateString()
+                    startDate.toDateString() === new Date().toDateString()
                     ? "Today"
-                    : startDate?.toLocaleDateString()}
+                    : moment(startDate).format("DD MMM,YYYY")}
                 </span>
 
                 {isOpen && (
@@ -488,9 +491,9 @@ const Holistic = () => {
                 <img
                   src={grayDropDown}
                   alt="dropdown"
-                  className={`${
-                    isOpen ? "rotate-180" : ""
-                  } h-3 w-3 mr-0 md:mr-8`}
+                  onClick={handleClick}
+                  className={`${isOpen ? "rotate-180" : ""
+                    } h-3 w-3 mr-0 md:mr-8`}
                 />
               </div>
 

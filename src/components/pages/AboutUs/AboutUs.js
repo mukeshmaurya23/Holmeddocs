@@ -101,7 +101,7 @@ const AboutUs = () => {
             </h2>
           </div>
           <div className="flex flex-col sm:flex-row justify-evenly items-center mr-5 py-10 p-5">
-            {ApproacData.map((data) => (
+            {ApproacData?.map((data) => (
               <div className="flex flex-col items-center justify-center mb-10 cursor-pointer">
                 <img
                   src={data.image}

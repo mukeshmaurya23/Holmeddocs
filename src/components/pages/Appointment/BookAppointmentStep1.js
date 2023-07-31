@@ -114,10 +114,10 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!checked) {
-      //setCheckedErrorMessage("Please Confirm the Checkbox")
-      return
-    }
+    // if (!checked) {
+    //   //setCheckedErrorMessage("Please Confirm the Checkbox")
+    //   return
+    // }
     const data = {
       doctor_id: location?.state?.doctor?.[0]?.id,
       insurance_id: selectedItemList.insurance.id,
@@ -137,6 +137,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
         data
       );
       console.log(response, "response");
+      setLoading(false);
       enqueueSnackbar(response?.data?.message, {
         variant: response?.data?.success ? "success" : "error",
         autoHideDuration: 1000,

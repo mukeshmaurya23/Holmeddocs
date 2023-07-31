@@ -53,7 +53,7 @@ const PortalModal = ({ closeModal }) => {
           </div>
           <div className="mt-5"> {loading && <Spinner />}</div>
           <div className="flex flex-wrap mb-10 ml-0 sm:ml-7">
-            {operatingCity.map((item) => (
+            {operatingCity?.map((item) => (
               <div
                 className="flex ml-10 mt-4 pl-3 rounded-md bg-[#00828212] px-6 py-2  cursor-pointer"
                 key={item.id}

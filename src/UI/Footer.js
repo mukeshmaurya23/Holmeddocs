@@ -138,7 +138,7 @@ const Footer = () => {
             <ul>
               <li className="mb-10 p-3">
                 <section>
-                  {Footeritems.map((item, index) => {
+                  {Footeritems?.map((item, index) => {
                     return (
                       <>
                         <ul className="font-sansRegular py-5 " key={item.id}>
@@ -148,11 +148,10 @@ const Footer = () => {
                             </h6>
 
                             <i
-                              className={`${
-                                isVisible === item.id
+                              className={`${isVisible === item.id
                                   ? "fa fa-minus"
                                   : "fa fa-plus"
-                              } text-[16px] cursor-pointer`}
+                                } text-[16px] cursor-pointer`}
                               aria-hidden="true"
                               onClick={() => handleItemClick(item.id)}
                             ></i>

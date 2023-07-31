@@ -8,15 +8,20 @@ import Button from "../../../util/Button";
 import DatePickerComponent from "../../../UI/DatePicker";
 import Footer from "../../../UI/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLocationAreas } from "../../../store/LocSpecSlice";
+import moment from "moment";
 import Spinner from "../../../UI/Spinner";
 import { searchLocation } from "../../../store/searchSlice";
 const MakeAppointment = () => {
   const [searchParams] = useSearchParams();
 
-  const [isActive, setIsActive] = useState(false);
+  // const [isActive, setIsActive] = useState(false);
+  // const toggleButtonHandler = () => {
+  //   setIsActive(!isActive);
+  // };
+  const [active, setActive] = useState("InPerson");
+
   const toggleButtonHandler = () => {
-    setIsActive(!isActive);
+    setActive((prevActive) => (prevActive === "InPerson" ? "Virtual" : "InPerson"));
   };
   const [zip_code_id, setZipCodeId] = useState("");
   const [speciality_id, setSpecialityId] = useState("");
@@ -263,6 +268,14 @@ const MakeAppointment = () => {
       url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
+    if (active === "InPerson") {
+      url += `appointment_type=InPerson&`;
+    } else if (active === "Virtual") {
+      url += `appointment_type=Virtual&`;
+    }
+
+
+
     url += `date=${startDate.toDateString()}`;
 
     navigate(url);
@@ -297,7 +310,9 @@ const MakeAppointment = () => {
         })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
-          Conditions
+          {
+            filterConditionData?.length > 0 && "Conditions"
+          }
         </h2>
         {filterConditionData?.map((item) => (
           <h1
@@ -449,7 +464,7 @@ const MakeAppointment = () => {
 
             <div
               ref={calendarRef}
-              onClick={handleClick}
+
               className="border relative border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2 cursor-pointer"
             >
               {/* <Input
@@ -457,17 +472,18 @@ const MakeAppointment = () => {
                   placeholder="Today"
                   className="outline-none px-3 text-[.7rem] sm:text-[.9rem] text-[#636677] tracking-[2px] font-sansRegular"
                 /> */}
-              <span className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem]  text-[#292f33] mr-20 font-sansBold">
+              <span onClick={handleClick} className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem]  text-[#292f33] mr-20 font-sansBold">
                 {startDate &&
                   startDate.toDateString() === new Date().toDateString()
                   ? "Today"
-                  : startDate?.toLocaleDateString()}
+                  : moment(startDate).format("DD MMM,YYYY")}
               </span>
               <img
                 src={calendar}
-                alt=""
                 onClick={handleClick}
-                className="w-4 h-4 mr-2 cursor-pointer"
+                alt=""
+
+                className="w-5 h-5 mr-2 cursor-pointer"
               />
               {isOpen && (
                 <div className="absolute top-[3.5rem] -right-1 z-[100] h-full">
@@ -479,7 +495,7 @@ const MakeAppointment = () => {
               )}
             </div>
             <div className="border border-verifiCation w-full py-3 rounded mt-8 flex justify-between items-center px-2">
-              <Button
+              {/* <Button
                 onClick={toggleButtonHandler}
                 className={`${!isActive ? "bg-[#008282] " : ""
                   } py-2 px-3  sm:px-16 ${isActive ? "text-black" : "text-white"
@@ -494,7 +510,22 @@ const MakeAppointment = () => {
                   } text-[1rem] tracking-[2px] font-sansRegular rounded`}
               >
                 Virtual
+              </Button> */}
+              <Button
+                onClick={toggleButtonHandler}
+                className={`py-2 px-3 sm:px-16 ${active === "InPerson" ? "bg-[#008282] text-white" : "text-black"
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+              >
+                InPerson
               </Button>
+              <Button
+                onClick={toggleButtonHandler}
+                className={`py-2 px-3 sm:px-16 ${active === "Virtual" ? "bg-[#008282] text-white" : "text-black"
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+              >
+                Virtual
+              </Button>
+
             </div>
             <div className="flex justify-center items-center ">
               <Button
@@ -505,10 +536,12 @@ const MakeAppointment = () => {
               </Button>
             </div>
           </div>
+
         </div>
-        {/* <div className="absolute  top-[150%]">
+
+      </div>
+      <div className="absolute  top-[140%] 2xl:top-[110%]">
         <Footer />
-      </div> */}
       </div>
     </>
   );

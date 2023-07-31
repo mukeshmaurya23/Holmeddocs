@@ -48,7 +48,7 @@ const ContactUs = () => {
       </section>
       <section className="mb-10">
         <div className="flex flex-col md:flex-row max-w-[1080px] justify-evenly mx-auto items-center mt-5">
-          {dummyData.map((data) => (
+          {dummyData?.map((data) => (
             <div
               key={data.id}
               className="flex shadow-sm py-10  flex-col items-center mt-5 md:mt-0 md:mx-5 w-[100%] h-auto "

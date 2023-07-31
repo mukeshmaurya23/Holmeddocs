@@ -52,11 +52,13 @@ const DoctorListing = () => {
     specialityParams: searchParams.get("speciality"),
     conditionParams: searchParams.get("conditions"),
     insuranceParams: searchParams.get("insurance"),
+    appointment_type: searchParams.get("appointment_type"),
   };
 
   const zipCode = commonParams?.locationParams?.split("_")[1];
   const specialityId = commonParams?.specialityParams?.split("_")[1];
   const conditionId = commonParams?.conditionParams?.split("_")[1];
+  console.log(checkedIds, "+++++++++++++++++++++CheckedIDS");
 
   const [viewAll, setViewAll] = useState(null);
 
@@ -78,6 +80,7 @@ const DoctorListing = () => {
         serving_areas: zipCode,
         speciality: specialityId,
         conditions: conditionId,
+        appointment_type: commonParams?.appointment_type,
       });
 
       const data = response?.data?.data?.result;
@@ -107,6 +110,7 @@ const DoctorListing = () => {
     commonParams?.specialityParams,
     commonParams?.conditionParams,
     commonParams?.date,
+    commonParams?.appointment_type,
     shouldCallAPI,
   ]);
   const handlePageChange = (pageNumber) => {
@@ -123,7 +127,7 @@ const DoctorListing = () => {
 
     if (status === "loading") {
       return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center w-full h-screen">
           <img src={loadingGif} alt="" />
         </div>
       );
@@ -150,17 +154,48 @@ const DoctorListing = () => {
       displayedValues = values.slice(0, 3);
     }
 
-    return displayedValues.map((data) => generateLabel(data, category));
+    return displayedValues?.map((data) => generateLabel(data, category));
   };
 
   const generateLabel = (data, category) => {
-    const isChecked =
-      commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
-      commonParams.conditionParams?.includes(data?.medical_condition_name) ||
-      commonParams.insuranceParams?.includes(data?.insurance_company_name);
+
+    const id = data.id
+    // const isChecked = checkedIds.includes(id);
+    // const isChecked =
+    //   commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
+    //   commonParams.conditionParams?.includes(data?.medical_condition_name) ||
+    //   commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
+    //   commonParams.appointment_type === data
+
+    // const filterCategoryKey = category.title.toLowerCase().replace(" ", "_");
+    // const isChecked = reqBodyfilterData.find(
+    //   (categoryData) => categoryData[filterCategoryKey]?.includes(data.id)
+    // );
+    const filterCategoryKey = category.title
+      .toLowerCase()
+      .replace(" ", "_")
+      .replace("specialty", "speciality"); // Replace "specialty" with "speciality" in the filterCategoryKey
+    const isChecked = reqBodyfilterData.find(
+      (categoryData) => categoryData[filterCategoryKey]?.includes(data.id)
+    );
+    // const isCheckedFromReqBody = reqBodyfilterData.find(
+    //   (categoryData) => categoryData[filterCategoryKey]?.includes(data.id)
+    // );
+
+    // Check if the data.id exists in the URL params
+    // const isCheckedFromURLParams = commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
+    //   commonParams.conditionParams?.includes(data?.medical_condition_name) ||
+    //   commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
+    //   commonParams.appointment_type === data
+
+
+    // Set isChecked based on both reqBodyfilterData and URL params
+    // const isChecked = isCheckedFromReqBody || isCheckedFromURLParams
 
     const handleChange = async (e) => {
       const checked = e.target.checked;
+      const originalId = e.target.id.split("-")[1];
+      const filterCategoryKey = category.title.toLowerCase().replace(" ", "_");
       setShouldCallAPI(false);
       const id = data.id;
       const name =
@@ -170,12 +205,81 @@ const DoctorListing = () => {
 
       const appointment_type = data;
 
+      // if (checked) {
+      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, id]);
+      // } else {
+      //   setCheckedIds((prevCheckedIds) =>
+      //     prevCheckedIds.filter((checkedId) => checkedId !== id)
+      //   );
+      // }
+      // if (checked) {
+      //   // Use the originalId instead of data.id
+      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
+
+      //   // Update reqBodyfilterData
+      //   setReqBodyFilterData((prevData) => {
+      //     const updatedData = prevData.map((categoryData) => {
+      //       const key = Object.keys(categoryData)[0];
+      //       if (key === filterCategoryKey) {
+      //         return { [key]: [...categoryData[key], originalId] };
+      //       }
+      //       return categoryData;
+      //     });
+      //     return updatedData;
+      //   });
+      // } else {
+      //   // Use the originalId instead of data.id
+      //   setCheckedIds((prevCheckedIds) => prevCheckedIds.filter((checkedId) => checkedId !== originalId));
+
+      //   // Update reqBodyfilterData
+      //   setReqBodyFilterData((prevData) => {
+      //     const updatedData = prevData.map((categoryData) => {
+      //       const key = Object.keys(categoryData)[0];
+      //       if (key === filterCategoryKey) {
+      //         return { [key]: categoryData[key].filter((checkedId) => checkedId !== originalId) };
+      //       }
+      //       return categoryData;
+      //     });
+      //     return updatedData;
+      //   });
+      // }
+
       if (checked) {
-        setCheckedIds((prevCheckedIds) => [...prevCheckedIds, id]);
+        // Use the originalId instead of data.id
+        setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
+
+        // Update reqBodyfilterData
+        setReqBodyFilterData((prevData) => {
+          const updatedData = prevData.map((categoryData) => {
+            const key = Object.keys(categoryData)[0];
+            // Replace "specialty" with "speciality" in the filterCategoryKey
+            const updatedFilterCategoryKey = key === "specialty" ? "speciality" : key;
+
+            if (updatedFilterCategoryKey === filterCategoryKey) {
+              return { [updatedFilterCategoryKey]: [...categoryData[key], originalId] };
+            }
+            return categoryData;
+          });
+          return updatedData;
+        });
       } else {
-        setCheckedIds((prevCheckedIds) =>
-          prevCheckedIds.filter((checkedId) => checkedId !== id)
-        );
+        // Use the originalId instead of data.id
+        setCheckedIds((prevCheckedIds) => prevCheckedIds.filter((checkedId) => checkedId !== originalId));
+
+        // Update reqBodyfilterData
+        setReqBodyFilterData((prevData) => {
+          const updatedData = prevData.map((categoryData) => {
+            const key = Object.keys(categoryData)[0];
+            // Replace "specialty" with "speciality" in the filterCategoryKey
+            const updatedFilterCategoryKey = key === "specialty" ? "speciality" : key;
+
+            if (updatedFilterCategoryKey === filterCategoryKey) {
+              return { [updatedFilterCategoryKey]: categoryData[key].filter((checkedId) => checkedId !== originalId) };
+            }
+            return categoryData;
+          });
+          return updatedData;
+        });
       }
 
       let filterTitle = category.title.toLowerCase().replace(" ", "_");
@@ -195,16 +299,16 @@ const DoctorListing = () => {
         console.log(filterCategoryKey, "filterCategoryKey")
 
         if (filterCategoryKey === "appointment_type") {
-          
+
           filterCategory[filterCategoryKey] = checked ? appointment_type : null;
-         
-        }else{
-        filterCategory[filterCategoryKey] = checked
-          ? [...filterCategory[filterCategoryKey], id]
-          : filterCategory[filterCategoryKey].filter(
+
+        } else {
+          filterCategory[filterCategoryKey] = checked
+            ? [...filterCategory[filterCategoryKey], id]
+            : filterCategory[filterCategoryKey].filter(
               (checkedId) => checkedId !== id
             );
-          }
+        }
       }
 
       setReqBodyFilterData(newReqBodyFilterData);
@@ -221,8 +325,8 @@ const DoctorListing = () => {
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
             : name
-            ? `${name}_${id}`
-            : id;
+              ? `${name}_${id}`
+              : id;
 
         searchParams.set(filterTitle, valueToAdd);
         // searchParams.set(
@@ -254,14 +358,17 @@ const DoctorListing = () => {
     };
 
     return (
-      <label className="inline-flex items-center mt-3" key={data.id || data}>
+      <label className="inline-flex items-center mt-3" key={data.id}>
         <input
           type="checkbox"
-          className={`form-checkbox h-3 w-3 text-gray-600 ${
-            isChecked ? "checked" : ""
-          }`}
+          className={`form-checkbox h-3 w-3 text-gray-600 ${isChecked ? "checked" : ""
+            }`}
           onChange={handleChange}
-          checked={isChecked}
+          checked={isChecked || commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
+            commonParams.conditionParams?.includes(data?.medical_condition_name) ||
+            commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
+            commonParams.appointment_type === data
+          }
         />
         <span className="ml-2 text-gray-700 text-[.8rem] 2xl:text-[1rem] font-sansSemibold ">
           {data.language_title ||
@@ -286,50 +393,55 @@ const DoctorListing = () => {
 
   return (
     <>
-      <section className="px-[.3rem] max-w-[1560px] mx-auto">
+      <section className="px-[.3rem] max-w-[1580px] mx-auto">
         <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[1px]">
           We have found {totalCount} Doctors for your search criteria.
         </h2>
 
         <div className="flex mt-16">
-          <aside className="flex flex-col  px-10 py-3 border-r border-gray-300">
+          <aside className="flex flex-col  px-6 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
-              Filters
+              {
+                filterData && "Filters"
+              }
             </h2>
             {filterData === null ? (
               <>
-                <h2>Loading ...</h2>
+                <div className="flex items-center justify-center w-[100vw] overflow-hidden">
+                  <img src={loadingGif} alt="loading" />
+                </div>
               </>
             ) : (
               <>
-                {filterData?.data?.result.map((item, index) => {
-                  return (
-                    <div
-                      className="mt-5 cursor-pointer w-[240px]"
-                      key={item.id}
-                      id={item.title}
-                    >
-                      <h2 className="font-sansBold text-[.8rem] 2xl:text-[1.1rem] text-[#292F33] mb-3">
-                        {item.title}
-                      </h2>
-                      <div className="">
-                        <div className="flex flex-col">
-                          {generateLabels(item)}
+                {
+                  filterData && filterData?.data?.result?.map((item, index) => {
+                    return (
+                      <div
+                        className="mt-5 cursor-pointer w-[240px]"
+                        key={item.id}
+                        id={item.title}
+                      >
+                        <h2 className="font-sansBold text-[.8rem] 2xl:text-[1.1rem] text-[#292F33] mb-3">
+                          {item.title}
+                        </h2>
+                        <div className="">
+                          <div className="flex flex-col">
+                            {generateLabels(item)}
+                          </div>
+                          {item.title !== "Appointment Type" &&
+                            item.value.length > 3 && (
+                              <label
+                                onClick={() => openViewAll(item.title)}
+                                id={item.title}
+                                className="inline-flex items-center mt-3 text-[#CF8B15] underline cursor-pointer"
+                              >
+                                View all
+                              </label>
+                            )}
                         </div>
-                        {item.title !== "Appointment Type" &&
-                          item.value.length > 3 && (
-                            <label
-                              onClick={() => openViewAll(item.title)}
-                              id={item.title}
-                              className="inline-flex items-center mt-3 text-[#CF8B15] underline cursor-pointer"
-                            >
-                              View all
-                            </label>
-                          )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </>
             )}
           </aside>
@@ -338,19 +450,19 @@ const DoctorListing = () => {
             {status === "loading"
               ? ""
               : doctorsList.length === 0 && (
-                  <div className="flex justify-center items-center">
-                    <div className="flex flex-col justify-center items-center">
-                      <img
-                        src={noDoctor}
-                        alt="no doctors"
-                        className="w-[25%] h-auto object-contain"
-                      />
-                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
-                        No doctors found.
-                      </h2>
-                    </div>
+                <div className="flex justify-center items-center">
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={noDoctor}
+                      alt="no doctors"
+                      className="w-[25%] h-auto object-contain"
+                    />
+                    <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
+                      No doctors found.
+                    </h2>
                   </div>
-                )}
+                </div>
+              )}
 
             <div className="mt-10">
               <Pagination
@@ -370,3 +482,6 @@ const DoctorListing = () => {
 };
 
 export default DoctorListing;
+
+
+

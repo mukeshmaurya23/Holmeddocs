@@ -54,16 +54,21 @@ const Navbar2 = () => {
 
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
 
-  const {locationSearchResults} = useSelector(
+  const { locationSearchResults } = useSelector(
     (state) => state.search
   );
   const handleChange = (e) => {
     setIsOpen(!isOpen);
+
     setStartDate(e);
+
+
   };
   const handleClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
+    setSelectedItem(null);
+
   };
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
@@ -177,9 +182,7 @@ const Navbar2 = () => {
     }
   };
 
-  useEffect(() => {
 
-  },[]);
   useEffect(() => {
     const selectedSpeciality = specialistData?.find(
       (item) => item.medical_speciality_name === selectedItemList.speciality
@@ -221,7 +224,7 @@ const Navbar2 = () => {
   };
 
   const locationItems = () => {
-   
+
     return (
       locationSearchResults &&
       locationSearchResults?.map((item) => {
@@ -372,18 +375,18 @@ const Navbar2 = () => {
   const dateSearchParams = searchParams.get("date");
   console.log(dateSearchParams, "dateSearchParams");
 
-  const [formattedDate,setFormattedDate]=useState(dateSearchParams)
+  const [formattedDate, setFormattedDate] = useState(dateSearchParams)
   useEffect(() => {
     const dateObject = moment(dateSearchParams);
     const today = moment();
 
-    
+
     const newFormattedDate = dateObject.isSame(today, 'day')
       ? 'Today'
       : dateObject.format('MMMM D, YYYY');
 
     setFormattedDate(newFormattedDate);
-  }, [dateSearchParams]);
+  }, [dateSearchParams, startDate]);
 
 
   const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
@@ -408,7 +411,7 @@ const Navbar2 = () => {
       setClearConditionPlaceholder(null);
     }
   }, [locationSearchParams, specialitySearchParams, conditionSearchParams]);
-const calendarRef = useRef();
+  const calendarRef = useRef();
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!ref?.current?.contains(event.target)) {
@@ -433,7 +436,7 @@ const calendarRef = useRef();
   }, [ref]);
 
   useEffect(() => {
-   
+
     if (searchValue === "") {
       setSelectedItem(null);
     } else {
@@ -441,24 +444,27 @@ const calendarRef = useRef();
     }
   }, [searchValue]);
 
-    //check if routes chnage clear the selected item list
-    useEffect(() => {
-      return () => {
-        setSelectedItemList({
-          location: "",
-          speciality: "",
-          conditions: "",
-        });
-        setSearchValue("");
-     
-        setClearSpecialityPlaceholder("") 
-        setClearConditionPlaceholder("")
-      };
-    }, [location.pathname]);
+  //check if routes chnage clear the selected item list
 
   const handleDateChange = (e) => {
     setSearchParams({ ...searchParams, date: e.target.value });
   };
+
+  //cleanup function
+  useEffect(() => {
+    return () => {
+      setSelectedItemList({
+        location: "",
+        speciality: "",
+        conditions: "",
+      });
+      setSearchValue("");
+      setStartDate(new Date())
+
+      setClearSpecialityPlaceholder("")
+      setClearConditionPlaceholder("")
+    };
+  }, [location.pathname]);
 
 
 
@@ -547,22 +553,21 @@ const calendarRef = useRef();
       </div>
     </div>
   );
+
+
   return (
     <>
       <div
-        class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
-          location.pathname === "/make-appointment" ||
+        class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
-            ? "drop-shadow-lg"
-            : "lg:py-5"
-        } grid grid-col-12 py-1  ${
-          location.pathname === "/make-appointment" ||
-          location.pathname === "/doctor-listing"
+          ? "drop-shadow-lg"
+          : "lg:py-5"
+          } grid grid-col-12 py-1  ${location.pathname === "/make-appointment" ||
+            location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-        } ${
-          showShadow ? "drop-shadow-md" : ""
-        } bg-white z-10  h-[7rem] relative cursor-pointer`}
+          } ${showShadow ? "drop-shadow-md" : ""
+          } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
         <div class="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -615,7 +620,7 @@ const calendarRef = useRef();
                 />
               </Link>
 
-          
+
 
               <div
                 ref={locSpecConditionRef}
@@ -624,11 +629,10 @@ const calendarRef = useRef();
                 <div className="flex items-center relative">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
-                      selectedItemList.location || locationSearchParams
-                        ? "text-[1rem] font-semibold"
-                        : "text-[1rem]"
-                    }`}
+                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${selectedItemList.location || locationSearchParams
+                      ? "text-[1rem] font-semibold"
+                      : "text-[1rem]"
+                      }`}
                     placeholder={clearingPlaceholder || "Location"}
                     value={selectedItemList.location || searchValue}
                     onChange={handleLocationSearch}
@@ -642,24 +646,22 @@ const calendarRef = useRef();
                     }
                   />
                   <ul
-                    className={`${
-                      selectedItem === "location"
-                        ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                        : ""
-                    }`}
+                    className={`${selectedItem === "location"
+                      ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                      }`}
                   >
                     {selectedItem === "location" && locationItems()}
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${
-                      selectedItemList.speciality ||
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
                       conditionSearchParams
-                        ? "text-[1rem] font-semibold"
-                        : "text-[1rem]"
-                    }`}
+                      ? "text-[1rem] font-semibold"
+                      : "text-[1rem]"
+                      }`}
                     placeholder={
                       clearSpecialityPlaceholder ||
                       clearConditionPlaceholder ||
@@ -669,7 +671,7 @@ const calendarRef = useRef();
                     value={
                       selectedItemList.speciality ||
                       selectedItemList.conditions ||
-                      SpecCondSearchValue 
+                      SpecCondSearchValue
                     }
                     onClick={() =>
                       handleItemClick("speciality") ||
@@ -679,42 +681,42 @@ const calendarRef = useRef();
                     }
                   />
                   <ul
-                    className={`${
-                      selectedItem === "speciality"
-                        ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                        : ""
-                    }`}
+                    className={`${selectedItem === "speciality"
+                      ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                      }`}
                   >
                     {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
 
                   <div
-                className="flex ml-0 md:ml-5 cursor-pointer items-center"
-                onClick={handleClick}
-                ref={calendarRef}
-              >
-                <img
-                  onChange={handleDateChange}
-                  src={calendarSvg}
-                  alt=""
-                  className="w-6 2xl:w-9 h-auto object-contain cursor-pointer "
-                />
-               <span className="outline-none px-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
-                    {startDate &&
-                    startDate.toDateString() === new Date().toDateString()
-                      ? formattedDate
-                      : startDate?.toLocaleDateString()}
-                  </span>
+                    className="flex ml-0 md:ml-5 cursor-pointer items-center"
 
-                {isOpen && (
-                  <div className="absolute top-[3rem]  right-0 z-[100] h-full">
-                    <DatePickerComponent
-                      handleChange={handleChange}
-                      startDate={startDate}
+                    ref={calendarRef}
+                  >
+                    <img
+                      onClick={handleClick}
+                      onChange={handleDateChange}
+                      src={calendarSvg}
+                      alt=""
+                      className="w-6 2xl:w-9 h-auto object-contain cursor-pointer "
                     />
+                    <span onClick={handleClick} className="outline-none px-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold">
+                      {startDate &&
+                        startDate.toDateString() === new Date().toDateString()
+                        ? formattedDate
+                        : moment(startDate).format("DD MMM,YYYY")}
+                    </span>
+
+                    {isOpen && (
+                      <div className="absolute top-[3rem]  right-0 z-[100] h-full">
+                        <DatePickerComponent
+                          handleChange={handleChange}
+                          startDate={startDate}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-                </div>
                 </div>
                 <img
                   onClick={() => handleSearch()}
@@ -792,9 +794,8 @@ const calendarRef = useRef();
 
           {isMenuOpen && (
             <div
-              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
-                isMenuOpen ? "translate-x-0" : "translate-x-full"
-              }`}
+              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+                }`}
             >
               <div className="relative">
                 <button

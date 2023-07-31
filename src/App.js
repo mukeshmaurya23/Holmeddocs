@@ -124,12 +124,12 @@ function App() {
   const routes = isLoggedIn
     ? [...commonRoutes, ...authenticatedRoutes]
     : [
-        ...commonRoutes,
-        { path: "/register", element: <Register /> },
-        { path: "/otp", element: <RegisterOtp /> },
-        { path: "/login", element: <Login /> },
-        { path: "/forgot-password", element: <ForgotPassword /> },
-      ];
+      ...commonRoutes,
+      { path: "/register", element: <Register /> },
+      { path: "/otp", element: <RegisterOtp /> },
+      { path: "/login", element: <Login /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+    ];
 
   return (
     <>
@@ -147,10 +147,10 @@ function App() {
           </>
         ) : (
           <Routes>
-            {routes.map((route, index) => (
+            {routes?.map((route, index) => (
               <Route key={index} path={route.path} element={route.element}>
                 {route.children &&
-                  route.children.map((child, index) => (
+                  route.children?.map((child, index) => (
                     <Route
                       key={index}
                       path={child.path}
