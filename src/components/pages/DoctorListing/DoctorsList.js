@@ -84,7 +84,7 @@ const DoctorsList = ({ doctorsList, status }) => {
               </div>
             </div>
           </Link>
-          <div className="px-6 flex-1 space-x-16">
+          <div className="px-6 flex-1 space-x-16 ">
             <h2 className="px-16 font-sansBold text-[1.2rem] cursor-pointer space-x-16">
               Availability
             </h2>

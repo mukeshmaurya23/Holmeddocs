@@ -253,25 +253,26 @@ const Holistic = () => {
         <h2 className="font-sansBold text-gray-400 text-[13px] mb-2">
           {filterSpecilityData?.length > 0 && "Speciality"}
         </h2>
-        {filterSpecilityData?.map((item) => {
-          return (
-            <>
-              <h1
-                key={item.id}
-                onClick={() =>
-                  handleSelectedItem(
-                    item.medical_speciality_name,
-                    "speciality",
-                    item.id
-                  )
-                }
-                className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292f33] font-semibold tracking-[1px]"
-              >
-                {item.medical_speciality_name}
-              </h1>
-            </>
-          );
-        })}
+        {filterSpecilityData?.length > 0 &&
+          filterSpecilityData?.map((item) => {
+            return (
+              <>
+                <h1
+                  key={item.id}
+                  onClick={() =>
+                    handleSelectedItem(
+                      item.medical_speciality_name,
+                      "speciality",
+                      item.id
+                    )
+                  }
+                  className="cursor-pointer text-[12px] hover:underline mt-1 font-sansRegular  text-[#292f33] font-semibold tracking-[1px]"
+                >
+                  {item.medical_speciality_name}
+                </h1>
+              </>
+            );
+          })}
 
         <h2 className="font-sansBold text-gray-400 text-[13px] py-2">
           {filterConditionData?.length > 0 && "Conditions"}

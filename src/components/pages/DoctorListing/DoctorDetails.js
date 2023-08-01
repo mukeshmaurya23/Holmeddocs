@@ -236,6 +236,9 @@ const DoctorDetails = ({}) => {
                     <h1 className="font-Henriette md:text-[1.4rem] tracking-[1px] text-[#292F33]">
                       About {doctor?.doctor_name}
                     </h1>
+                    {/* <h1 className="font-Henriette md:text-[1.4rem] tracking-[1px] text-[#292F33]">
+                      About {doctor?.doctor_name}
+                    </h1>
                     <p
                       className={`mt-[1rem] text-sm text-[#545871] md:text-[1rem] overflow-auto max-h-[250px] ${
                         showFullBio
@@ -262,9 +265,36 @@ const DoctorDetails = ({}) => {
                       >
                         View More
                       </button>
-                    )}
+                    )} */}
 
-                    <div className="absolute bottom-0 top-[27rem]">
+                    <div className=" max-h-[250px] overflow-auto">
+                      <span
+                        className={`mt-[1rem] text-sm text-[#545871] md:text-[1rem] overflow-hidden ${
+                          showFullBio ? "" : "line-clamp-3"
+                        }`}
+                      >
+                        {doctor?.doctor_bio}
+                      </span>
+                      {showFullBio && (
+                        <div className="flex py-5 mt-[1rem]">
+                          <button
+                            className="pr-10 text-[#CF8B15] underline text-md 2xl:text-[1.3rem] py-4 font-semibold font-sansRegular"
+                            onClick={handleViewMore}
+                          >
+                            View Less
+                          </button>
+                        </div>
+                      )}
+                      {!showFullBio && (
+                        <button
+                          className="pr-10 text-[#CF8B15] underline text-md 2xl:text-[1.3rem] py-4 font-semibold font-sansRegular"
+                          onClick={handleViewMore}
+                        >
+                          View More
+                        </button>
+                      )}
+                    </div>
+                    <div className="absolute top-[26rem] bottom-0 mx-auto">
                       <h1 className="font-Henriette py-3 text-[1.1rem] md:text-[1.4rem] tracking-[1px] text-[#292F33]">
                         Practise Location
                       </h1>

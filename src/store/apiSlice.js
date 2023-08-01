@@ -23,6 +23,9 @@ const initialState = {
   bookAppointmentDoctorData: null,
   bookAppointmentDoctorDataStatus: "idle",
   bookAppointmentDoctorDataError: "",
+  getDoctorsData: null,
+  getDoctorsDataStatus: "idle",
+  getDoctorsDataError: "",
 };
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
@@ -63,32 +66,27 @@ const fetchStateData = createAsyncThunk("api/fetchStateData", async (url) => {
   }
 });
 
-const fetchCityData = createAsyncThunk("api/fetchCityData", async (
-  {url,state_id}
-) => {
-  try {
-    if(state_id){
-      const response = await customAxios.post(url,{state_id});
-      const resData = await response.data.data.result;
-      return resData;
+const fetchCityData = createAsyncThunk(
+  "api/fetchCityData",
+  async ({ url, state_id }) => {
+    try {
+      if (state_id) {
+        const response = await customAxios.post(url, { state_id });
+        const resData = await response.data.data.result;
+        return resData;
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return error.message;
     }
-    
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return error.message;
   }
-});
+);
 
 const fetchZipCodeData = createAsyncThunk(
   "api/fetchZipCodeData",
-  async ({
-    url,
-    state_id,
-    city_id,
-  }) => {
+  async ({ url, state_id, city_id }) => {
     try {
-      
-      if( state_id && city_id){
+      if (state_id && city_id) {
         const response = await customAxios.post(url, {
           state_id,
           city_id,
@@ -96,7 +94,6 @@ const fetchZipCodeData = createAsyncThunk(
         const resData = await response.data.data.result;
         return resData;
       }
-
     } catch (error) {
       console.error("Error fetching data:", error);
       return error.message;
@@ -110,6 +107,17 @@ export const fetchSlotAvialability = createAsyncThunk(
     const response = await customAxios.post(url, {
       doctor_id: doctorId,
       time_slot_date: timeSlotDate,
+    });
+    const resData = response.data.data.result;
+    return resData;
+  }
+);
+
+export const fetchDoctorsData = createAsyncThunk(
+  "api/fetchDoctorsData",
+  async ({ url, featured }) => {
+    const response = await customAxios.post(url, {
+      featured,
     });
     const resData = response.data.data.result;
     return resData;
@@ -216,6 +224,17 @@ const apiSlice = createSlice({
     builder.addCase(book_appointment_DoctorData.rejected, (state, action) => {
       state.bookAppointmentDoctorDataStatus = "failed";
       state.bookAppointmentDoctorDataError = action.error.message;
+    });
+    builder.addCase(fetchDoctorsData.pending, (state) => {
+      state.getDoctorsDataStatus = "loading";
+    });
+    builder.addCase(fetchDoctorsData.fulfilled, (state, action) => {
+      state.getDoctorsDataStatus = "succeeded";
+      state.getDoctorsData = action.payload;
+    });
+    builder.addCase(fetchDoctorsData.rejected, (state, action) => {
+      state.getDoctorsDataStatus = "failed";
+      state.getDoctorsDataError = action.error.message;
     });
   },
 });

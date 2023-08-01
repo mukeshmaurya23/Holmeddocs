@@ -156,7 +156,6 @@ const UpdateProfile = () => {
     };
   }, [insuranceRef, stateRef, cityRef, zipCodeRef]);
 
-  const stateDispatch = useDispatch();
   const cityDispatch = useDispatch();
   const zipCodeDispatch = useDispatch();
   const { insuranceData, insuranceStatus, filterInsuranceData } = useSelector(
@@ -166,10 +165,6 @@ const UpdateProfile = () => {
   const { stateData, stateStatus, filterStateData } = useSelector(
     (state) => state.api
   );
-
-  useEffect(() => {
-    stateDispatch(fetchStateData("/patient/master/state"));
-  }, [stateDispatch]);
 
   const { cityData, cityStatus, filterCityData } = useSelector(
     (state) => state.api

@@ -2,18 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Slider.css";
 import { Link } from "react-router-dom";
 import customAxios from "../axios/custom";
-
+import { useSelector } from "react-redux";
+import Spinner from "../UI/Spinner";
 const Slider = () => {
   const delay = 3000;
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef(null);
 
-  const [doctorData, setDoctorData] = useState([]);
   function resetTimeout() {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
   }
+
+  const {
+    getDoctorsData: doctorData,
+    getDoctorsDataStatus,
+    getDoctorsDataError,
+  } = useSelector((state) => state.api);
 
   useEffect(() => {
     resetTimeout();
@@ -30,26 +36,13 @@ const Slider = () => {
     };
   }, [index]);
 
-  useEffect(() => {
-    const getDoctorData = async () => {
-      try {
-        // Check if the doctorData is already available in state
-        if (doctorData.length === 0) {
-          const response = await customAxios.post("/patient/doctors", {
-            featured: "1",
-          });
-          const data = response?.data?.data?.result || [];
-          setDoctorData(data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  if (getDoctorsDataStatus === "failed") {
+    return <div>{getDoctorsDataError}</div>;
+  }
 
-    getDoctorData();
-  }, [doctorData]);
-
-  return (
+  return getDoctorsDataStatus === "loading" ? (
+    <Spinner />
+  ) : (
     <div className="overflow-hidden ml-4 md:ml-8">
       <div
         className="slideshowSlider"

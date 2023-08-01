@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Label from "../../util/Label";
 import Input from "../../util/Input";
 import Button from "../../util/Button";
@@ -23,12 +23,26 @@ const Register = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
   };
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref?.current?.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
 
   const navigate = useNavigate();
   const [startDate, setStartDate] = useState(new Date());
@@ -80,7 +94,7 @@ const Register = () => {
         gender,
       };
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await customAxios.post("/patient/register", data);
         console.log(response);
         enqueueSnackbar(response?.data?.message, {
@@ -89,7 +103,7 @@ const Register = () => {
         });
         if (response.status === 200) {
           if (response.data.success === 1) {
-            setLoading(false)
+            setLoading(false);
             //console.log(response.data.message, "im 200 response success");
             // if (response.success === 1) {
             //   navigate("/otp");
@@ -104,8 +118,8 @@ const Register = () => {
         }
       } catch (err) {
         console.log(err);
-      }finally{
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -223,7 +237,10 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col w-1/2 p-[10px] relative">
+                      <div
+                        className="flex flex-col w-1/2 p-[10px] relative"
+                        ref={ref}
+                      >
                         <Label
                           htmlFor="dob"
                           className="font-sansRegular text-formLabel text-sm"
@@ -233,7 +250,9 @@ const Register = () => {
                         <Input
                           type="text"
                           name="dob"
+                          autoComplete="nope"
                           id="dob"
+                          onFocus={handleClick}
                           onChange={formik.handleChange}
                           value={formik.values.dob}
                           onBlur={formik.handleBlur}
@@ -247,13 +266,6 @@ const Register = () => {
                           )}
                         </div>
                         <div className="absolute flex flex-row-reverse top-10 justify-evenly ">
-                          <img
-                            onChange={handleDateChange}
-                            src={calendarSvg}
-                            alt=""
-                            onClick={handleClick}
-                            className="w-5 2xl:w-9 h-auto object-contain cursor-pointer   "
-                          />
                           <span className="outline-none px-3 text-[.7rem]  sm:text-[1rem] 2xl:text-[1.2rem] text-formLabel">
                             {startDate &&
                             startDate.toDateString() ===
@@ -264,7 +276,7 @@ const Register = () => {
                         </div>
 
                         {isOpen && (
-                          <div className="absolute top-[4.4rem] right-10 z-[100] h-full">
+                          <div className="absolute top-[4.6rem] right-10 z-[100] h-full">
                             <DatePickerComponent
                               handleChange={handleChange}
                               startDate={startDate}
@@ -413,9 +425,7 @@ const Register = () => {
                           //    disabled={!(formik.isValid && formik.dirty)}
                           type="submit"
                         >
-                          {
-                            loading ? <Spinner/> : "Next"
-                          }
+                          {loading ? <Spinner /> : "Next"}
                         </Button>
                       </div>
                     </div>

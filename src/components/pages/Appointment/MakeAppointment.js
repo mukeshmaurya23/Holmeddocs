@@ -160,34 +160,6 @@ const MakeAppointment = () => {
 
   const navigate = useNavigate();
 
-  // const handleSearch = () => {
-  //   let url = "/doctor-listing?";
-  //   const locatonUpdatedUrl = selectedItemList.location
-  //     ? selectedItemList.location
-  //     : locationAreas?.[0]?.city;
-
-  //   const updatedZipcode = zip_code_id
-  //     ? zip_code_id
-  //     : locationAreas?.[0]?.zip_code_id;
-
-  //   url += `location=${locatonUpdatedUrl}_${updatedZipcode}&`;
-  //   // if (selectedItemList.location) {
-  //   //   const locatonUpdatedUrl=selectedItemList?.location || locationAreas?.[0]?.city;
-  //   //   const updatedZipcode=zip_code_id || locationAreas?.[0]?.zip_code_id;
-  //   //   url += `location=${locatonUpdatedUrl}_${updatedZipcode }&`;
-  //   // }
-  //   if (selectedItemList.speciality) {
-  //     url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
-  //   }
-  //   if (selectedItemList.conditions) {
-  //     url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
-  //   }
-
-  //   url += `date=${startDate.toDateString()}`;
-
-  //   navigate(url);
-  // };
-
   const handleSelectedItem = (name, type, id) => {
     setSelectedItemList((prevSelectedItemList) => {
       let updatedItemList = { ...prevSelectedItemList };

@@ -702,9 +702,12 @@ const Navbar2 = () => {
                     />
                     <span
                       onClick={handleClick}
-                      className="outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold"
+                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${
+                        !dateSearchParams ? "hidden" : ""
+                      }`}
                     >
-                      {startDate &&
+                      {dateSearchParams &&
+                      startDate &&
                       startDate.toDateString() === new Date().toDateString()
                         ? formattedDate
                         : moment(startDate).format("DD MMM,YYYY")}

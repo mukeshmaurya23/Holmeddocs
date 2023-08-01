@@ -1,13 +1,21 @@
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import loadingGif from "./images/icons/Loader.gif";
 import useOnline from "./hooks/useOnline";
 import { useSelector, useDispatch } from "react-redux";
 import UnderMaintenance from "./components/UnderMaintenance";
 
 import { fetchConditions, fetchSpecialties } from "./store/LocSpecSlice";
-import { fetchInsuranceData } from "./store/apiSlice";
+import {
+  fetchDoctorsData,
+  fetchInsuranceData,
+  fetchStateData,
+} from "./store/apiSlice";
+import {
+  fetchAllMedicalCondition,
+  fetchAllMedicalConditionList,
+} from "./store/healthConcernSlice";
 
 const Login = lazy(() => import("./components/Login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
@@ -87,37 +95,55 @@ function App() {
   const isOnline = useOnline();
   const isLoggedIn = useSelector((state) => state.login.remember_token);
   const dispatch = useDispatch();
- const location=useLocation();
+  const location = useLocation();
+  const selectedItem = useSelector((state) => state.healthConcern.selectedItem);
+  const conditionsDispatch = useDispatch();
+  const specialityDispatch = useDispatch();
+  const insuranceDispatch = useDispatch();
+  const doctorDispatch = useDispatch();
+  const medicalDispatch = useDispatch();
+  const stateDispatch = useDispatch();
+  const medicalListdispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchSpecialties("/patient/master/speciality"));
+  }, []);
+  useEffect(() => {
+    specialityDispatch(fetchSpecialties("/patient/master/speciality"));
+  }, []);
 
-
- const conditionsDispatch = useDispatch();
- const specialityDispatch = useDispatch();
- const insuranceDispatch = useDispatch();
-
- useEffect(() => {
-
-   dispatch(fetchSpecialties("/patient/master/speciality"));
-   }, []);
-   useEffect(() => {
-     specialityDispatch(fetchSpecialties("/patient/master/speciality"));
-   }, []);
- 
-   useEffect(() => {
-     conditionsDispatch(fetchConditions("/patient/master/condition"));
-   }, []);
-   useEffect(() => {
+  useEffect(() => {
+    conditionsDispatch(fetchConditions("/patient/master/condition"));
+  }, []);
+  useEffect(() => {
     insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
   }, [insuranceDispatch]);
 
- 
+  useEffect(() => {
+    doctorDispatch(
+      fetchDoctorsData({
+        url: "/patient/doctors",
+        featured: "1",
+      })
+    );
+  }, [doctorDispatch]);
+  useEffect(() => {
+    stateDispatch(fetchStateData("/patient/master/state"));
+  }, [stateDispatch]);
 
-    useEffect(()=>{
-        //scroll to top on every route change
-        window.scrollTo(0, 0);
-    },[location.pathname])
+  useEffect(() => {
+    medicalDispatch(fetchAllMedicalCondition());
+  }, []);
 
-    
+  useEffect(() => {
+    medicalListdispatch(fetchAllMedicalConditionList(selectedItem));
+  }, [selectedItem]);
+
+  useEffect(() => {
+    //scroll to top on every route change
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const commonRoutes = [
     {
       path: "/",
@@ -160,12 +186,12 @@ function App() {
   const routes = isLoggedIn
     ? [...commonRoutes, ...authenticatedRoutes]
     : [
-      ...commonRoutes,
-      { path: "/register", element: <Register /> },
-      { path: "/otp", element: <RegisterOtp /> },
-      { path: "/login", element: <Login /> },
-      { path: "/forgot-password", element: <ForgotPassword /> },
-    ];
+        ...commonRoutes,
+        { path: "/register", element: <Register /> },
+        { path: "/otp", element: <RegisterOtp /> },
+        { path: "/login", element: <Login /> },
+        { path: "/forgot-password", element: <ForgotPassword /> },
+      ];
 
   return (
     <>

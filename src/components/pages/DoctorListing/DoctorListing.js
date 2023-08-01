@@ -11,6 +11,7 @@ import Footer from "../../../UI/Footer";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import customAxios from "../../../axios/custom";
 import noDoctor from "../../../images/zerodoctor.png";
+import moment from "moment";
 const DoctorListing = () => {
   const [checkedIds, setCheckedIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +60,7 @@ const DoctorListing = () => {
   const specialityId = commonParams?.specialityParams?.split("_")[1];
   const conditionId = commonParams?.conditionParams?.split("_")[1];
   const insuranceId = commonParams?.insuranceParams?.split("_")[1];
-  console.log(checkedIds, "+++++++++++++++++++++CheckedIDS");
+  // console.log(checkedIds, "+++++++++++++++++++++CheckedIDS");
 
   const [viewAll, setViewAll] = useState(null);
 
@@ -70,7 +71,17 @@ const DoctorListing = () => {
       setViewAll(name);
     }
   };
-
+  const fetchAllDoctors = async () => {
+    try {
+      setStatus("loading");
+      const response = await customAxios.post("/patient/doctors");
+      const data = response?.data?.data?.result;
+      setDoctorsList(data);
+      setStatus("succeeded");
+    } catch (error) {
+      setStatus("failed");
+    }
+  };
   const fetchDoctorsData = async (day) => {
     setDay(day);
     setStatus("loading");
@@ -97,19 +108,51 @@ const DoctorListing = () => {
       setStatus("failed");
     }
   };
+  // useEffect(() => {
+  //   const fetchAllDoctors = async () => {
+  //     try {
+  //       setStatus("loading");
+  //       const response = await customAxios.post("/patient/doctors");
+  //       const data = response?.data?.data?.result;
+  //       setDoctorsList(data);
+  //       setStatus("succeeded");
+  //     } catch (error) {
+  //       setStatus("failed");
+  //     }
+  //   };
+  //   const currentDate = new Date();
+  //   if (!commonParams?.date || commonParams?.date <) {
+  //     fetchAllDoctors();
+  //   } else {
+  //     setStatus("succeeded");
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (shouldCallAPI) {
       const urlParams = new URLSearchParams(window.location.search);
       const dateParam = urlParams.get("date");
+
       if (dateParam) {
         const dateObject = new Date(dateParam);
-        const dayOfWeek = dateObject.toLocaleDateString("en-US", {
-          weekday: "long",
-        });
-        setTime_slot_day(dayOfWeek);
-        fetchDoctorsData(dayOfWeek);
-        setShouldCallAPI(true);
+        const date = moment(dateParam).format("YYYY-MM-DD");
+        const today = moment(new Date()).format("YYYY-MM-DD");
+        console.log(date, "dateObject");
+        console.log(today, "today");
+        console.log(date >= today);
+        if (date >= today) {
+          console.log("workinhg");
+          const dayOfWeek = dateObject.toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+          setTime_slot_day(dayOfWeek);
+          fetchDoctorsData(dayOfWeek);
+          setShouldCallAPI(true);
+        } else {
+          fetchAllDoctors();
+        }
+      } else {
+        fetchAllDoctors();
       }
     }
   }, [
@@ -172,6 +215,26 @@ const DoctorListing = () => {
     const ciphertext = CryptoJS.AES.encrypt(data, secretKey).toString();
     return ciphertext;
   };
+  const decryptData = (encryptedText, secretKey) => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedText, secretKey, {
+        padding: CryptoJS.pad.Pkcs7,
+      });
+      const originalText = bytes.toString(CryptoJS.enc.Utf8);
+      return originalText;
+    } catch (error) {
+      console.error("Decryption error:", error);
+      return null;
+    }
+  };
+
+  const encryptText =
+    "U2FsdGVkX18kLYTGbC%2BILay3V5Ue1SbrxVbTRyro%2FC88x0XdJu59ncCiMNV%2FEjCW";
+  const secretKey = "Mukesh@Maurya@2316#";
+
+  const decryptedText = decryptData(encryptText, secretKey);
+  console.log(decryptedText);
+
   const generateLabel = (data, category) => {
     const id = data.id;
     // const isChecked = checkedIds.includes(id);

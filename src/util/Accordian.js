@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getAllMedicalConditionList } from "../services/services";
-import useFetch from "../hooks/useFetch";
+import { setSelectedItem } from "../store/healthConcernSlice";
 import Spinner from "../UI/Spinner";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const Accordion = ({
   items,
@@ -10,48 +11,33 @@ const Accordion = ({
   image,
   className,
 }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [medicalConditionListData, setMedicalConditionListData] =
-    useState(null);
+  // const [selectedItem, setSelectedItem] = useState(null);
+  // const [medicalConditionListData, setMedicalConditionListData] =
+  //   useState(null);
+  const medicalConditionListData = useSelector(
+    (state) => state.healthConcern.medicalConditionListData
+  );
+  const loader = useSelector((state) => state.healthConcern.loader);
 
+  const selectedItem = useSelector((state) => state.healthConcern.selectedItem);
+  const dispatch = useDispatch();
   const [selectedItemList, setSelectedItemList] = useState({
     location: "",
     speciality: "",
   });
   const [getSpecialityId, setSpecialityId] = useState(null);
   const [getSpecialityName, setSpecialityName] = useState(null);
-  const [loader, setLoader] = useState(false);
-  const { loading } = useFetch("/patient/master/state");
-  console.log(loading, "loading");
+
   const handleItemClick = (id) => {
-    console.log(id, "id");
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem === id ? null : id
-    );
+    dispatch(setSelectedItem(id));
   };
-
-  useEffect(() => {
-    const getAllMedicalConditionListData = async () => {
-      try {
-        setLoader(true);
-        const res = await getAllMedicalConditionList(selectedItem);
-        setMedicalConditionListData(res);
-      } catch (error) {
-        console.log(error.message);
-      } finally {
-        setLoader(false);
-      }
-    };
-
-    getAllMedicalConditionListData();
-  }, [selectedItem]);
 
   const ref = useRef();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!ref?.current?.contains(event.target)) {
-        setSelectedItem(null);
+        dispatch(setSelectedItem(null));
       }
     };
 
@@ -60,7 +46,6 @@ const Accordion = ({
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
-
 
   const getSpeciality = (id, name) => () => {
     console.log(id, "im id");
@@ -74,7 +59,7 @@ const Accordion = ({
       const date = new Date();
 
       let url = "/doctor-listing?";
-      url += `speciality=${getSpecialityName}_${getSpecialityId}&date=${date.toISOString()}&`;
+      url += `selectedSpeciality=${getSpecialityName}_${getSpecialityId}&date=${date.toISOString()}&`;
       navigate(url);
     }
   }, [getSpecialityId]);

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import imageDefault from "../../../images/specialities/Ayurveda.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,7 +17,7 @@ const SpecialistCard = ({ specialistData }) => {
   useEffect(() => {
     if (selectedSpeciality) {
       navigate(
-        `/doctor-listing?speciality=${selectedSpeciality.name}_${selectedSpeciality.id}&date=${selectedSpeciality.date}`
+        `/doctor-listing?selectedSpeciality=${selectedSpeciality.name}_${selectedSpeciality.id}&date=${selectedSpeciality.date}`
       );
     }
   }, [selectedSpeciality, navigate]);

@@ -8,6 +8,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import apiSlice from "./apiSlice";
 import LocSpecSlice from "./LocSpecSlice";
 import searchSlice from "./searchSlice";
+import healthConcernSlice from "./healthConcernSlice";
 //import filterApiSlice from "./filterApiSlice";
 const persistConfig = {
   key: "root",
@@ -18,9 +19,10 @@ const rootReducer = combineReducers({
   login: loginSlice,
 
   api: apiSlice,
-  
+
   search: searchSlice,
   data: LocSpecSlice,
+  healthConcern: healthConcernSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -33,7 +35,6 @@ const store = configureStore({
 });
 
 export default store;
-
 
 // import { configureStore } from "@reduxjs/toolkit";
 // import mobileAppSlice from "./mobileAppSlice";
@@ -59,13 +60,12 @@ export default store;
 //   search: searchReducer,
 // });
 
-
 // const persistedLoginReducer = persistReducer(persistConfig, rootReducer.login);
 
 // const store = configureStore({
 //   reducer: {
 //     mobileApp: mobileAppSlice,
-//     login: persistedLoginReducer, 
+//     login: persistedLoginReducer,
 //     api: apiSlice,
 //     data: dataSlice,
 //     search: searchReducer,
