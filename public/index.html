@@ -27,7 +27,33 @@
         -webkit-appearance: none;
         margin: 0;
       }
+      #hideMyScrollbar::-webkit-scrollbar-track {
+        display: none;
+      }
+      #hideMyScrollbar::-webkit-scrollbar-thumb {
+        display: none;
+      }
 
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
       /* Firefox */
       input[type="number"] {
         -moz-appearance: textfield;
@@ -92,7 +118,7 @@
         font-weight: 600;
       }
       .placeHolderText2::-moz-placeholder {
-        letter-spacing:  3px;
+        letter-spacing: 3px;
         color: #292f33;
         font-weight: 600;
       }

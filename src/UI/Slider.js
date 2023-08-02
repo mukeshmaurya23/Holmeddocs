@@ -61,10 +61,10 @@ const Slider = () => {
                   <img
                     src="https://thumbs.dreamstime.com/b/indian-doctor-mature-male-medical-standing-isolated-white-background-handsome-model-portrait-31871541.jpg"
                     alt=""
-                    className="object-contain h-[120px] md:w-[170px] md:h-[150px] 2xl:h-[200px] 2xl:w-full w-[100px] xsm:w-full xsm:h-auto sm:w-[200px] xs:w-[200px] rounded-md"
+                    className="object-contain h-[120px] md:w-[170px] md:h-[150px] 2xl:h-[200px] 2xl:w-full w-[100px] xsm:w-full xsm:h-[200px] sm:w-[200px] sm:h-[200px] xs:w-[200px] xs:h-[200px] rounded-md"
                   />
 
-                  <div className="flex flex-col mt-5 px-4">
+                  <div className="flex flex-col mt-5 px-4 justify-center items-center md:justify-normal md:items-start">
                     <h1 className="text-[#0C0B0B] font-sansBold text-[1.3rem] 2xl:text-[1.5rem]">
                       {item?.doctor_name}
                     </h1>

@@ -365,7 +365,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3  rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 p-[1rem] md:p-0 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3  rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
           <div
             className="flex flex-col md:flex-row  justify-between "
             ref={ref}
@@ -397,7 +397,7 @@ const Holistic = () => {
             </div>
             {selectedItem === "location" && (
               <div
-                className="absolute top-[12.5rem] lg:top-[4rem] bg-white w-[85%] left-[1.5rem] md:left-2 md:w-[400px] p-0 md:p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                className="absolute top-[14rem] md:top-[12.5rem] lg:top-[4rem] bg-white w-[85%] left-[1.5rem] md:left-2 md:w-[400px] p-0 md:p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                 style={{
                   zIndex: 1,
                 }}
@@ -434,7 +434,7 @@ const Holistic = () => {
               </div>
               {selectedItem === "speciality" && (
                 <div
-                  className="absolute top-[2.5rem] md:top-[5rem] lg:top-[4rem] bg-white w-[110%] -left-[1.5rem] md:w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
+                  className="absolute top-[2.5rem] md:top-[5rem] lg:top-[4rem] bg-white w-[100%] left-0 md:-left-[1.5rem] md:w-[400px] p-5 rounded-lg max-h-[30vh] overflow-y-auto"
                   style={{
                     zIndex: 1,
                   }}
@@ -447,7 +447,7 @@ const Holistic = () => {
               <h1 className="ml-5">Speciality</h1>
               <img src={grayDropDown} alt="dropdown" className="h-3 w-3" />
             </div> */}
-            <div className="flex items-center mt-1 justify-between py-4 md:py-0 ">
+            <div className="flex items-center mt-1 justify-between py-4 md:py-0 relative ">
               <div
                 className="flex ml-0 md:ml-5 cursor-pointer items-center"
                 ref={calendarRef}
@@ -470,7 +470,7 @@ const Holistic = () => {
                 </span>
 
                 {isOpen && (
-                  <div className="absolute top-[5rem] 2xl:top-[6.4rem] lg:top-[5rem] right-10 z-[100] h-full">
+                  <div className="absolute top-[4rem] md:top-[5rem] 2xl:top-[6.4rem] lg:top-[5rem] right-10 z-[100] h-full">
                     <DatePickerComponent
                       handleChange={handleChange}
                       startDate={startDate}
@@ -483,7 +483,7 @@ const Holistic = () => {
                   onClick={handleClick}
                   className={`${
                     isOpen ? "rotate-180" : ""
-                  } h-3 w-3 mr-0 md:mr-8`}
+                  } h-3 w-3 mr-0 md:mr-8 absolute right-0 md:relative`}
                 />
               </div>
 
@@ -496,9 +496,9 @@ const Holistic = () => {
               </div>
             </div>
           </div>
-          <div className="md:hidden pb-6 pt-3 pr-6">
+          <div className="md:hidden pb-6 pt-3 flex items-center justify-center">
             <button
-              className="bg-verifiCation text-white w-full py-2 rounded-full font-sansRegular text-[1rem] font-semibold tracking-[1px]"
+              className="bg-verifiCation text-white w-1/2 py-2 rounded-full font-sansRegular text-[1rem] font-semibold tracking-[1px]"
               onClick={handleSearch}
             >
               Search

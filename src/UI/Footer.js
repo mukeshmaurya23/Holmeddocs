@@ -105,7 +105,7 @@ const Footer = () => {
                 Insurance Providers
               </h2>
 
-              {showAllInsurance
+              {showAllInsurance && insuranceData?.length > 3
                 ? insuranceData?.map((item, index) => (
                     <li
                       key={index}

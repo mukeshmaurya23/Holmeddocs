@@ -59,18 +59,26 @@ const DoctorsList = ({ doctorsList, status }) => {
                 {doctor?.education?.[0]}
               </h3>
 
-              <p className="gap-2 flex py-1 font-sansRegular font-bold text-[#000000] text-[13px] py-2">
+              <div className="gap-2 flex py-1 font-sansRegular font-bold text-[#000000] text-[13px] ">
                 <div className="bg-[#b9eeeb] px-2 rounded-full">
-                  <i class="fa fa-language  "></i>
+                  <i class="fa fa-language py-2 "></i>
                 </div>
-
-                {doctor?.languages_spoken?.map((language, index) => (
-                  <span key={language}>
-                    {language}
-                    {index !== doctor?.languages_spoken?.length - 1 && " ,"}
-                  </span>
-                ))}
-              </p>
+                <div className="block md:hidden">
+                  {doctor?.languages_spoken?.map((language, index) => (
+                    <span className="px-1" key={language}>
+                      {language}
+                    </span>
+                  ))}
+                </div>
+                <div className="hidden md:block">
+                  {doctor?.languages_spoken?.map((language, index) => (
+                    <span key={language}>
+                      {language}
+                      {index !== doctor?.languages_spoken?.length - 1 && " ,"}
+                    </span>
+                  ))}
+                </div>
+              </div>
               <div className="flex gap-3 py-1 px-2">
                 <i className="fa fa-user h-2 w-5" aria-hidden="true"></i>
                 <p className="text-sm font-sansRegular font-bold text-[#000000]">
@@ -84,11 +92,14 @@ const DoctorsList = ({ doctorsList, status }) => {
               </div>
             </div>
           </Link>
-          <div className="px-6 flex-1 space-x-16 ">
-            <h2 className="px-16 font-sansBold text-[1.2rem] cursor-pointer space-x-16">
+          <div className=" px-0 md:px-6 flex-1  ">
+            <h2 className="px-0 md:px-16 font-sansBold text-[1.2rem] cursor-pointer ">
               Availability
             </h2>
-            <div className="flex flex-row flex-wrap gap-3 mt-5 cursor-pointer ml-6">
+            <div
+              className="md:px-16 flex  gap-3 mt-5 cursor-pointer ml-0  md:ml-6 w-[330px] md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden "
+              id="hideMyScrollbar"
+            >
               {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
                 <div
                   onClick={() =>
@@ -115,7 +126,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                 </div>
               ))}
             </div>
-            <div className="flex gap-10 py-5  justify-between items-center">
+            <div className="flex gap-10 py-5  justify-between items-center md:px-16">
               <Link
                 to={`/doctor-listing/${doctor?.doctor_name
                   .replace(/ /g, "_")

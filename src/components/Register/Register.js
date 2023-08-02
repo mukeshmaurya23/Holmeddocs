@@ -13,8 +13,9 @@ import customAxios from "../../axios/custom";
 import { useNavigate } from "react-router-dom";
 import calendarSvg from "../../images/home/Calendar.svg";
 import { useSnackbar } from "notistack";
-import DatePickerComponent from "../../UI/DatePicker";
+
 import Spinner from "../../UI/Spinner";
+import moment from "moment";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -33,9 +34,9 @@ const Register = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!ref?.current?.contains(event.target)) {
-        setIsOpen(false);
-      }
+      // if (!ref?.current?.contains(event.target)) {
+      //   setIsOpen(false);
+      // }
     };
     document.addEventListener("click", handleClickOutside);
 
@@ -43,21 +44,22 @@ const Register = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
+  const [formattedDate, setFormattedDate] = useState("");
 
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState(new Date());
-  const [isOpen, setIsOpen] = useState(false);
-  const handleChange = (e) => {
-    setIsOpen(!isOpen);
-    setStartDate(e);
-  };
-  const handleClick = (e) => {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
-  const handleDateChange = (date) => {
-    setStartDate(date);
-  };
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [isOpen, setIsOpen] = useState(false);
+  // const handleChange = (e) => {
+  //   setIsOpen(!isOpen);
+  //   setStartDate(e);
+  // };
+  // const handleClick = (e) => {
+  //   e.preventDefault();
+  //   setIsOpen(!isOpen);
+  // };
+  // const handleDateChange = (date) => {
+  //   setStartDate(date);
+  // };
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -124,6 +126,18 @@ const Register = () => {
     },
   });
   console.log(formik.values);
+
+  const handleDateChange = (event) => {
+    const newDate = event.target.value;
+    console.log(newDate);
+
+    const replace = newDate.replace(/-/g, "/");
+    console.log(replace);
+    setFormattedDate(replace);
+    const dateObject = new Date(replace);
+    formik.setFieldValue("dob", moment(dateObject).format("YYYY/MM/DD"));
+    console.log(formik.values.dob);
+  };
 
   return (
     <>
@@ -215,7 +229,7 @@ const Register = () => {
                           Gender
                         </Label>
                         <select
-                          className="border border-verifiCation  rounded-md py-2 px-4 text-formLabel text-[12px] sm:text-[16px]"
+                          className="border border-verifiCation  p-[1px] rounded-md py-2 px-4 text-formLabel text-[12px] sm:text-[16px]"
                           id="gender"
                           name="gender"
                           value={formik.values.gender}
@@ -237,27 +251,35 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div
-                        className="flex flex-col w-1/2 p-[10px] relative"
-                        ref={ref}
-                      >
+                      <div className="flex flex-col w-1/2 p-[10px] relative">
                         <Label
                           htmlFor="dob"
                           className="font-sansRegular text-formLabel text-sm"
                         >
                           DOB
                         </Label>
-                        <Input
-                          type="text"
-                          name="dob"
-                          autoComplete="nope"
-                          id="dob"
-                          onFocus={handleClick}
-                          onChange={formik.handleChange}
-                          value={formik.values.dob}
-                          onBlur={formik.handleBlur}
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
-                        />
+                        <div className="flex border border-verifiCation rounded-md outline-verifiCation p-[1px]">
+                          <Input
+                            type="text"
+                            name="dob"
+                            autoComplete="nope"
+                            id="dob"
+                            onChange={formik.handleChange}
+                            value={formattedDate}
+                            onBlur={formik.handleBlur}
+                            className=" text-formLabel px-4 py-2 outline-verifiCation focus:outline-none  text-[12px] sm:text-[16px]"
+                          />
+
+                          <Input
+                            type="date"
+                            name="dob"
+                            autoComplete="nope"
+                            id="dob"
+                            onChange={handleDateChange}
+                            className=" w-[5rem] text-white  outline-verifiCation focus:outline-none py-2 px-4 text-[12px] sm:text-[16px]"
+                          />
+                        </div>
+
                         <div className="text-red-600 text-xs ">
                           {formik.touched.dob && formik.errors.dob ? (
                             formik.errors.dob
@@ -265,7 +287,8 @@ const Register = () => {
                             <>&nbsp;</>
                           )}
                         </div>
-                        <div className="absolute flex flex-row-reverse top-10 justify-evenly ">
+
+                        {/* <div className="absolute flex flex-row-reverse top-10 justify-evenly ">
                           <span className="outline-none px-3 text-[.7rem]  sm:text-[1rem] 2xl:text-[1.2rem] text-formLabel">
                             {startDate &&
                             startDate.toDateString() ===
@@ -273,16 +296,16 @@ const Register = () => {
                               ? "Today"
                               : startDate?.toLocaleDateString()}
                           </span>
-                        </div>
+                        </div> */}
 
-                        {isOpen && (
+                        {/* {isOpen && (
                           <div className="absolute top-[4.6rem] right-10 z-[100] h-full">
                             <DatePickerComponent
                               handleChange={handleChange}
                               startDate={startDate}
                             />
                           </div>
-                        )}
+                        )} */}
                       </div>
                       <div className="flex flex-col  w-1/2 p-[10px] relative">
                         <Label
@@ -302,7 +325,7 @@ const Register = () => {
                           value={formik.values.phone}
                           onBlur={formik.handleBlur}
                           placeholder="XXX XXX XXXX"
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-7 sm:px-8 text-[12px] sm:text-[16px]"
+                          className="border p-[1px] border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-7 sm:px-8 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.phone && formik.errors.phone ? (

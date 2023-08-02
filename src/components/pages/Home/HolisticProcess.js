@@ -25,7 +25,7 @@ const HolisticProcess = () => {
             Get onboarded and allow us to connect you a with a holistic
             practitioner near you!
           </p>
-          <div className="flex justify-evenly cursor-pointer w-[85%]  mt-10 sm:flex-col sm:items-center xs:flex-col xs:items-center xsm:flex-col xsm:items-center md:flex-row md:items-start lg:flex-row lg:items-start ">
+          <div className="flex justify-evenly cursor-pointer w-full  mt-10 sm:flex-col sm:items-center xs:flex-col xs:items-center xsm:flex-col xsm:items-center md:flex-row md:items-start lg:flex-row lg:items-start ">
             <div className="flex flex-col   sm:items-center xs:items-center xsm:items-center sm:space-y-3 sm:mb-2 xsm:space-y-2 xs:space-y-3">
               <div className=" relative mb-8">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">
@@ -38,7 +38,7 @@ const HolisticProcess = () => {
                 alt=""
                 className="w-[50px] mt-2 h-[100px] md:w-[70px] sm:w-[70px] lg:w-[70px] xl:w-[70px] 2xl:w-[70px]"
               />
-              <div className="py-4">
+              <div className="hidden md:block py-4">
                 <p className="text-[#292F33] text-[1rem] font-semibold font-sansRegular sm:hidden lg:block md:block xl:block ">
                   Find Holistic
                 </p>
@@ -50,8 +50,8 @@ const HolisticProcess = () => {
                 Find Holistic Practitioners
               </p>
             </div>
-            <div className="sm:hidden xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[300px] border-gray-300"></div>
-            <div className="sm:block xs:block xsm:block border-b w-full mt-3 border-gray-300 md:hidden"></div>
+            <div className="sm:hidden  xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[300px] border-gray-300"></div>
+            <div className="sm:block xs:block xsm:block border-b w-[150%] mt-3 border-gray-300 md:hidden"></div>
             {/* <div className="h-[900px]">|</div> */}
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center sm:space-y-3 xsm:space-y-2 xs:space-y-3 sm:mb-2 ">
               <div className=" relative mb-8">
@@ -70,7 +70,7 @@ const HolisticProcess = () => {
               </p>
             </div>
             <div className="sm:hidden xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[300px] border-gray-300"></div>
-            <div className="sm:block xs:block xsm:block border-b w-full mt-4 border-gray-300 md:hidden"></div>
+            <div className="sm:block xs:block xsm:block border-b w-[150%] mt-4 border-gray-300 md:hidden"></div>
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center xsm:space-y-2 xs:space-y-3 sm:space-y-3 sm:mb-2">
               <div className=" relative mb-8">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">

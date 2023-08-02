@@ -4,13 +4,17 @@ const mobileAppSlice = createSlice({
   name: "mobileApp",
   initialState: {
     isMenuOpen: false,
+    isMenuForFilter: false,
   },
   reducers: {
     toggleMenu: (state) => {
       state.isMenuOpen = !state.isMenuOpen;
     },
+    toggleFilterMenu :(state)=>{
+      state.isMenuForFilter = !state.isMenuForFilter;
+    }
   },
 });
 
-export const { toggleMenu } = mobileAppSlice.actions;
+export const { toggleMenu, toggleFilterMenu } = mobileAppSlice.actions;
 export default mobileAppSlice.reducer;

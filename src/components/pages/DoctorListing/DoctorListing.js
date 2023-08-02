@@ -5,13 +5,16 @@ import Pagination from "./Pagination";
 import useFetch from "../../../hooks/useFetch";
 
 import loadingGif from "../../../images/icons/Loader.gif";
-
+import searchIcon from "../../../images/home/SearchBarIcon.svg";
 import DoctorsList from "./DoctorsList";
 import Footer from "../../../UI/Footer";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import customAxios from "../../../axios/custom";
 import noDoctor from "../../../images/zerodoctor.png";
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import cross from "../../../images/icons/Cross.png";
+import { toggleFilterMenu } from "../../../store/mobileAppSlice";
 const DoctorListing = () => {
   const [checkedIds, setCheckedIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,13 +58,21 @@ const DoctorListing = () => {
     insuranceParams: searchParams.get("insurance"),
     appointment_type: searchParams.get("appointment_type"),
   };
+  const toggleFilterDispatch = useDispatch();
 
   const zipCode = commonParams?.locationParams?.split("_")[1];
   const specialityId = commonParams?.specialityParams?.split("_")[1];
   const conditionId = commonParams?.conditionParams?.split("_")[1];
   const insuranceId = commonParams?.insuranceParams?.split("_")[1];
-  // console.log(checkedIds, "+++++++++++++++++++++CheckedIDS");
 
+  const toggleFilterMenuHandler = () => {
+    toggleFilterDispatch(toggleFilterMenu());
+    window.scrollTo(0, 0);
+  };
+
+  const isMenuForFilter = useSelector(
+    (state) => state.mobileApp.isMenuForFilter
+  );
   const [viewAll, setViewAll] = useState(null);
 
   const openViewAll = (name) => {
@@ -237,17 +248,7 @@ const DoctorListing = () => {
 
   const generateLabel = (data, category) => {
     const id = data.id;
-    // const isChecked = checkedIds.includes(id);
-    // const isChecked =
-    //   commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
-    //   commonParams.conditionParams?.includes(data?.medical_condition_name) ||
-    //   commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
-    //   commonParams.appointment_type === data
 
-    // const filterCategoryKey = category.title.toLowerCase().replace(" ", "_");
-    // const isChecked = reqBodyfilterData.find(
-    //   (categoryData) => categoryData[filterCategoryKey]?.includes(data.id)
-    // );
     const filterCategoryKey = category.title
       .toLowerCase()
       .replace(" ", "_")
@@ -255,18 +256,6 @@ const DoctorListing = () => {
     const isChecked = reqBodyfilterData.find((categoryData) =>
       categoryData[filterCategoryKey]?.includes(data.id)
     );
-    // const isCheckedFromReqBody = reqBodyfilterData.find(
-    //   (categoryData) => categoryData[filterCategoryKey]?.includes(data.id)
-    // );
-
-    // Check if the data.id exists in the URL params
-    // const isCheckedFromURLParams = commonParams.specialityParams?.includes(data?.medical_speciality_name) ||
-    //   commonParams.conditionParams?.includes(data?.medical_condition_name) ||
-    //   commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
-    //   commonParams.appointment_type === data
-
-    // Set isChecked based on both reqBodyfilterData and URL params
-    // const isChecked = isCheckedFromReqBody || isCheckedFromURLParams
 
     const handleChange = async (e) => {
       const checked = e.target.checked;
@@ -280,45 +269,6 @@ const DoctorListing = () => {
         data.insurance_company_name;
 
       const appointment_type = data;
-
-      // if (checked) {
-      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, id]);
-      // } else {
-      //   setCheckedIds((prevCheckedIds) =>
-      //     prevCheckedIds.filter((checkedId) => checkedId !== id)
-      //   );
-      // }
-      // if (checked) {
-      //   // Use the originalId instead of data.id
-      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
-
-      //   // Update reqBodyfilterData
-      //   setReqBodyFilterData((prevData) => {
-      //     const updatedData = prevData.map((categoryData) => {
-      //       const key = Object.keys(categoryData)[0];
-      //       if (key === filterCategoryKey) {
-      //         return { [key]: [...categoryData[key], originalId] };
-      //       }
-      //       return categoryData;
-      //     });
-      //     return updatedData;
-      //   });
-      // } else {
-      //   // Use the originalId instead of data.id
-      //   setCheckedIds((prevCheckedIds) => prevCheckedIds.filter((checkedId) => checkedId !== originalId));
-
-      //   // Update reqBodyfilterData
-      //   setReqBodyFilterData((prevData) => {
-      //     const updatedData = prevData.map((categoryData) => {
-      //       const key = Object.keys(categoryData)[0];
-      //       if (key === filterCategoryKey) {
-      //         return { [key]: categoryData[key].filter((checkedId) => checkedId !== originalId) };
-      //       }
-      //       return categoryData;
-      //     });
-      //     return updatedData;
-      //   });
-      // }
 
       if (checked) {
         // Use the originalId instead of data.id
@@ -489,13 +439,115 @@ const DoctorListing = () => {
   return (
     <>
       <section className="px-[.3rem] max-w-[1580px] mx-auto">
-        <h2 className="px-10 font-sansBold text-[1.3rem] mt-5 text-[#292F33] tracking-[1px]">
+        <div className="md:hidden mt-5 px-2 flex">
+          <input
+            type="text"
+            className="w-full h-[50px] border-2 rounded border-r-0 border-gray-300 px-5 outline-none"
+          />
+          <img
+            onClick={console.log("abc")}
+            src={searchIcon}
+            alt="search"
+            className="h-auto w-[50px]  float-right bg-verifiCation cursor-pointer rounded-r-md justify-end"
+          />
+        </div>
+        <div class="md:hidden flex items-center mt-5 px-2 space-x-2">
+          <div class="w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ">
+            In Person
+          </div>
+          <div class="w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ">
+            Virtual
+          </div>
+          <div
+            class="w-full rounded-2xl border border-gray-500 text-gray-900 flex items-center justify-center h-7  tracking-[1px] "
+            onClick={toggleFilterMenuHandler}
+          >
+            Filters
+          </div>
+          {isMenuForFilter && (
+            <div
+              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+                isMenuForFilter ? "translate-x-0" : "translate-x-full"
+              }`}
+            >
+              <div className="relative">
+                <button
+                  onClick={toggleFilterMenuHandler}
+                  className="absolute top-5 right-5 h-10 w-10 bg-gray-200 flex justify-center items-center rounded-full rounded-full"
+                >
+                  <img src={cross} className=" h-4" />
+                </button>
+                <div className="absolute top-20 left-10 w-full">
+                  <aside className="flex flex-col  px-6 py-3">
+                    <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
+                      {filterData && "Filters"}
+                    </h2>
+                    {filterData === null ? (
+                      <>
+                        <div className="flex items-center justify-center w-[100vw] overflow-hidden">
+                          <img src={loadingGif} alt="loading" />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {filterData &&
+                          filterData?.data?.result?.map((item, index) => {
+                            return (
+                              <div
+                                className="mt-5 cursor-pointer w-[240px]"
+                                key={item.id}
+                                id={item.title}
+                              >
+                                <h2 className="font-sansBold text-[.8rem] 2xl:text-[1.1rem] text-[#292F33] mb-3">
+                                  {item.title}
+                                </h2>
+                                <div className="">
+                                  <div className="flex flex-col">
+                                    {generateLabels(item)}
+                                  </div>
+                                  {item.title !== "Appointment Type" &&
+                                    item.value.length > 3 && (
+                                      <label
+                                        onClick={() => openViewAll(item.title)}
+                                        id={item.title}
+                                        className="inline-flex items-center mt-3 text-[#CF8B15] underline cursor-pointer"
+                                      >
+                                        View all
+                                      </label>
+                                    )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </>
+                    )}
+                  </aside>
+                  <div className="flex mb-10 mt-5">
+                    <button
+                      className="bg-white text-verifiCation border border-verifiCation px-12 py-2 rounded-full"
+                      onClick={toggleFilterMenuHandler}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="bg-verifiCation text-white px-12 py-2 rounded-full ml-5"
+                      onClick={toggleFilterMenuHandler}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <h2 className=" px-2  md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
           {doctorsList.length > 0 &&
             `We have found ${totalCount} Doctors for your search criteria`}
         </h2>
-
-        <div className="flex mt-16">
-          <aside className="flex flex-col  px-6 py-3 border-r border-gray-300">
+        <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
+        <div className="flex mt-5 md:mt-16">
+          <aside className="hidden md:flex flex-col  px-6 py-3 border-r border-gray-300">
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               {filterData && "Filters"}
             </h2>
@@ -539,7 +591,7 @@ const DoctorListing = () => {
               </>
             )}
           </aside>
-          <main className="ml-5">
+          <main className=" ml-0 mb-5 md:ml-5">
             {renderDoctorsList()}
             {status === "loading"
               ? ""

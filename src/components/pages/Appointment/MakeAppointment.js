@@ -349,9 +349,10 @@ const MakeAppointment = () => {
 
   return (
     <>
-      <div class="relative  mb-10 ">
-        <div class="hidden md:block w-[35rem]   h-[17rem] lg:w-[50rem] lg:h-[25rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%] absolute left-1/2 transform -translate-x-1/2 mb-20"></div>
-        <div className=" bg-white shadow-none sm:shadow-2xl  absolute md:w-[34rem] rounded-xl    top-10  left-0 mx-auto right-0 ">
+      <div class="  mb-10">
+        <div class="hidden md:block w-[35rem] absolute z-[-10] h-[17rem] lg:w-[50rem] lg:h-[25rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%]  left-1/2 transform -translate-x-1/2 mb-20"></div>
+        <div className="pt-[5rem]" />
+        <div className=" bg-white shadow-none  sm:shadow-2xl   md:w-[34rem] rounded-xl     left-0 mx-auto right-0 ">
           <div className="px-7 py-4 sm:px-8 sm:py-14 ">
             <h2 className=" text-[#292F33] text-[1.5rem]  font-sansBold tracking-[2px] pt-4">
               Book Top Doctors Appointment
@@ -487,7 +488,7 @@ const MakeAppointment = () => {
               </Button> */}
               <Button
                 onClick={toggleButtonHandler}
-                className={`py-2 px-3 sm:px-16 ${
+                className={`py-2 px-[1.75rem] sm:px-16 ${
                   active === "InPerson"
                     ? "bg-[#008282] text-white"
                     : "text-black"
@@ -497,7 +498,7 @@ const MakeAppointment = () => {
               </Button>
               <Button
                 onClick={toggleButtonHandler}
-                className={`py-2 px-3 sm:px-16 ${
+                className={`py-2 px-[1.75rem] sm:px-16 ${
                   active === "Virtual"
                     ? "bg-[#008282] text-white"
                     : "text-black"
@@ -517,9 +518,7 @@ const MakeAppointment = () => {
           </div>
         </div>
       </div>
-      <div className="absolute  top-[140%] 2xl:top-[110%]">
-        <Footer />
-      </div>
+      <Footer />
     </>
   );
 };

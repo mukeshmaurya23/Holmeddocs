@@ -63,7 +63,7 @@ const AboutUs = () => {
           </h1>
           <img src={AboutUsBg} alt="" className="w-[100%] h-auto" />
         </section>
-        <section className="grid grid-cols-1 md:grid-cols-2 px-2 md:px-10 py-2 space-y-4 mb-[6rem]">
+        <section className="grid grid-cols-1 md:grid-cols-2 px-2 md:px-10 py-2 space-y-4 ">
           {/*second Div */}
           <div className="px-4 md:px-16">
             <div className="w-[100px] h-1 mb-4 bg-aboutUsBorder"></div>

@@ -169,7 +169,7 @@ const DoctorDetails = ({}) => {
           return (
             <section className="grid col-span-2  mb-10">
               <div className="mb-8 sm:pl-[3rem] p-5 col-span-1 md:px-24">
-                <div className="flex py-6 flex-col sm:flex-row ">
+                <div className="flex py-6 flex-col md:flex-row ">
                   <img
                     src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                     alt="doctor"
@@ -294,7 +294,7 @@ const DoctorDetails = ({}) => {
                         </button>
                       )}
                     </div>
-                    <div className="absolute top-[26rem] bottom-0 mx-auto">
+                    <div className="relative md:absolute md:top-[26rem] md:bottom-0 mx-auto">
                       <h1 className="font-Henriette py-3 text-[1.1rem] md:text-[1.4rem] tracking-[1px] text-[#292F33]">
                         Practise Location
                       </h1>
@@ -459,7 +459,7 @@ const DoctorDetails = ({}) => {
                       );
                     })}
                   </div>
-                  <div className="flex justify-center mr-[18rem] mt-10">
+                  <div className="flex md:justify-center md:mr-[18rem] mt-10">
                     <Button
                       className="bg-verifiCation rounded-full text-white  text-[13px] py-2 px-5 font-sansLight"
                       onClick={handleAppointment}

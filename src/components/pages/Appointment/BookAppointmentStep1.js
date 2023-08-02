@@ -19,8 +19,8 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   const [isDropDownInsurance, setIsDropDownInsurance] = useState(false);
   const [isDropdownCondition, setIsDropdownCondition] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [checked, setChecked] = useState(false)
-  const [errorCheckedMessage, setCheckedErrorMessage] = useState("")
+  const [checked, setChecked] = useState(false);
+  const [errorCheckedMessage, setCheckedErrorMessage] = useState("");
   const [searchQueryInsurance, setSearchQueryInsurance] = useState("");
   const [searchQueryCondition, setSearchQueryCondition] = useState("");
 
@@ -32,14 +32,11 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   const handleSelectedItem = (item, type) => {
     setSelectedItemList({ ...selectedItemList, [type]: item });
     if (type === "insurance") {
-      setIsDropDownInsurance(false)
+      setIsDropDownInsurance(false);
     }
     if (type === "conditions") {
-      setIsDropdownCondition(false)
-
-
+      setIsDropdownCondition(false);
     }
-
   };
   console.log(selectedItemList, "selectedItemList");
   const { bookAppointmentDoctorData, bookAppointmentDoctorDataStatus } =
@@ -154,14 +151,18 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   };
 
   const handleConditionSearch = () => {
-
-
-    const filteredInsurance = bookAppointmentDoctorData?.insurance?.filter((item) =>
-      item.insurance_company_name.toLowerCase().includes(searchQueryInsurance.toLowerCase())
+    const filteredInsurance = bookAppointmentDoctorData?.insurance?.filter(
+      (item) =>
+        item.insurance_company_name
+          .toLowerCase()
+          .includes(searchQueryInsurance.toLowerCase())
     );
 
-    const filteredConditions = bookAppointmentDoctorData?.conditions?.filter((item) =>
-      item.medical_condition_name.toLowerCase().includes(searchQueryCondition.toLowerCase())
+    const filteredConditions = bookAppointmentDoctorData?.conditions?.filter(
+      (item) =>
+        item.medical_condition_name
+          .toLowerCase()
+          .includes(searchQueryCondition.toLowerCase())
     );
 
     return {
@@ -169,7 +170,6 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
       filteredConditions,
     };
   };
-
 
   if (loading) {
     return (
@@ -180,7 +180,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   }
   return (
     <>
-      <div className="flex flex-col justify-center mt-[6rem] items-center py-10">
+      <div className="flex flex-col justify-center mt-0 md:mt-[6rem] items-center py-10">
         <h1 className="text-[1.6rem] font-sansBold text-center mt-4 mb-3 tracking-[3px]">
           Book Appointment
         </h1>
@@ -189,11 +189,11 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
           book an appointment.
         </p>
       </div>
-      <div className="flex flex-col flex-wrap max-w-[600px] mx-auto py-3">
+      <div className="flex flex-col overflow-hidden w-full md:max-w-[600px] mx-auto py-3 p-[1rem] md:p-0">
         {location?.state?.doctor?.map((item) => {
           return (
             <>
-              <div className="flex">
+              <div className="flex p-3 md:p-0">
                 <img
                   src="https://img.freepik.com/free-photo/portrait-smiling-young-woman-doctor-healthcare-medical-worker-pointing-fingers-left-showing-clini_1258-88108.jpg?w=2000"
                   alt="doctor"
@@ -217,21 +217,23 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 </Label>
                 <div
                   ref={insuranceRef}
-                  className=" relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center"
+                  className=" relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center"
                 >
                   <Input
                     type="text"
-                    value={selectedItemList.insurance.insurance_company_name || searchQueryInsurance}
+                    value={
+                      selectedItemList.insurance.insurance_company_name ||
+                      searchQueryInsurance
+                    }
                     onChange={(e) => setSearchQueryInsurance(e.target.value)}
-                    onFocus={
-                      () => setSelectedItemList({
-                        ...selectedItemList, insurance: {
+                    onFocus={() =>
+                      setSelectedItemList({
+                        ...selectedItemList,
+                        insurance: {
                           id: "",
                           insurance_company_name: "",
-
-                        }
+                        },
                       }) || setSearchQueryInsurance("")
-
                     }
                     placeholder="Select your Insurance"
                     className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677] font-sansRegular"
@@ -239,8 +241,9 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer ${isDropDownInsurance ? "rotate-180" : ""
-                      }  `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${
+                      isDropDownInsurance ? "rotate-180" : ""
+                    }  `}
                   />
                   <ul className="absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[35vh] overflow-y-auto">
                     {isDropDownInsurance &&
@@ -269,70 +272,86 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 </Label>
                 <div
                   ref={conditionRef}
-                  className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center"
+                  className="relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center"
                 >
                   <Input
                     type="text"
                     placeholder="Select condition"
-                    value={selectedItemList.conditions.medical_condition_name || searchQueryCondition}
+                    value={
+                      selectedItemList.conditions.medical_condition_name ||
+                      searchQueryCondition
+                    }
                     onChange={(e) => setSearchQueryCondition(e.target.value)}
-                    onFocus={
-                      () => setSelectedItemList({
-                        ...selectedItemList, conditions: {
+                    onFocus={() =>
+                      setSelectedItemList({
+                        ...selectedItemList,
+                        conditions: {
                           id: "",
                           medical_condition_name: "",
-
-                        }
+                        },
                       }) || setSearchQueryCondition("")
                     }
-                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem]  text-[#636677]  font-sansRegular"
+                    className="relative outline-none rounded-md px-3 py-2 text-[.9rem] w-full md:w-full text-[#636677]  font-sansRegular"
                   />
 
                   <img
                     src={greenArrowDown}
                     alt=""
-                    className={`w-3 h-3 mr-2 cursor-pointer ${isDropdownCondition ? "rotate-180" : ""
-                      }  `}
+                    className={`w-3 h-3 mr-2 cursor-pointer ${
+                      isDropdownCondition ? "rotate-180" : ""
+                    }  `}
                   />
-                  <ul className={` ${!isDropDownInsurance ? 'absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto' : ''} `}>
+                  <ul
+                    className={` ${
+                      !isDropDownInsurance
+                        ? "absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto"
+                        : ""
+                    } `}
+                  >
                     {isDropdownCondition &&
-                      handleConditionSearch().filteredConditions?.map((item) => (
-                        <li
-                          key={item.id}
-                          onClick={() =>
-                            handleSelectedItem(
-                              {
-                                id: item.id,
-                                medical_condition_name:
-                                  item.medical_condition_name,
-                              },
-                              "conditions"
-                            )
-                          }
-                          className="cursor-pointer px-5 font-sansRegular font-semibold text-[13px] py-1"
-                        >
-                          {item?.medical_condition_name}
-                        </li>
-                      ))}
+                      handleConditionSearch().filteredConditions?.map(
+                        (item) => (
+                          <li
+                            key={item.id}
+                            onClick={() =>
+                              handleSelectedItem(
+                                {
+                                  id: item.id,
+                                  medical_condition_name:
+                                    item.medical_condition_name,
+                                },
+                                "conditions"
+                              )
+                            }
+                            className="cursor-pointer px-5 font-sansRegular font-semibold text-[13px] py-1"
+                          >
+                            {item?.medical_condition_name}
+                          </li>
+                        )
+                      )}
                   </ul>
                 </div>
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-8">
                   Have you visited before?
                 </Label>
-                <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
+                <div className="border border-verifiCation px-2 md:px-0 w-full md:w-full py-1 md:py-2 rounded-sm flex justify-between md:justify-evenly ">
                   <Button
                     onClick={toggleButtonHandler}
-                    className={`${!isActive ? "bg-[#008282] " : ""
-                      } py-1 px-[8.2rem]  ${isActive ? "text-black" : "text-white"
-                      } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${
+                      !isActive ? "bg-[#008282] " : ""
+                    } py-1 px-[3rem] md:px-[8.2rem]  ${
+                      isActive ? "text-black" : "text-white"
+                    } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     Yes
                   </Button>
                   <Button
                     onClick={toggleButtonHandler}
-                    className={`${isActive ? "bg-[#008282] " : ""
-                      } py-1 px-[8.2rem] ${isActive ? "text-white" : "text-black"
-                      } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${
+                      isActive ? "bg-[#008282] " : ""
+                    } py-1 px-[3rem] md:px-[8.2rem] ${
+                      isActive ? "text-white" : "text-black"
+                    } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     No
                   </Button>
@@ -340,20 +359,22 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-4">
                   Type of Visit
                 </Label>
-                <div className="border border-verifiCation w-full py-2 rounded-sm flex justify-evenly ">
+                <div className="border px-2  md:px-0 border-verifiCation w-full md:w-full py-1 md:py-2 rounded-sm flex justify-between md:justify-evenly ">
                   <Button
-
-                    className={`${type == "InPerson" ? "bg-[#008282] " : ""
-                      } py-1 px-[7rem]   ${type == "InPerson" ? "text-white" : "text-black"
-                      } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${
+                      type == "InPerson" ? "bg-[#008282] " : ""
+                    } py-1 px-[3rem] md:px-[7rem]   ${
+                      type == "InPerson" ? "text-white" : "text-black"
+                    } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     InPerson
                   </Button>
                   <Button
-
-                    className={`${type == "Virtual" ? "bg-[#008282] " : ""
-                      } py-1 px-[7rem] ${type == "Virtual" ? "text-white" : "text-black"
-                      } text-[.9rem] tracking-[2px] font-sansRegular`}
+                    className={`${
+                      type == "Virtual" ? "bg-[#008282] " : ""
+                    } py-1 px-[3rem] md:px-[7rem] ${
+                      type == "Virtual" ? "text-white" : "text-black"
+                    } text-[.9rem] tracking-[2px] font-sansRegular`}
                   >
                     Virtual
                   </Button>
@@ -362,7 +383,7 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-4">
                   Clinic address
                 </Label>
-                <div className="relative border border-verifiCation rounded-sm w-full py-[7px] flex justify-between items-center">
+                <div className="relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center">
                   <Input
                     type="text"
                     placeholder="address"
@@ -407,53 +428,55 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   ))} */}
                   {type && type === "InPerson"
                     ? // Render for InPerson type
-                    item?.time_slots?.InPerson?.map((timeSlot, index) => (
-                      <div
-                        key={index}
-                        className={`${location.state.date === timeSlot.date
-                          ? "bg-verifiCation border-verifiCation text-white rounded-md"
-                          : "cursor-not-allowed disabled:opacity-50 "
+                      item?.time_slots?.InPerson?.map((timeSlot, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            location.state.date === timeSlot.date
+                              ? "bg-verifiCation border-verifiCation text-white rounded-md"
+                              : "cursor-not-allowed disabled:opacity-50 "
                           }`}
-                        onClick={() => {
-                          location.state.date === timeSlot.date &&
-                            handleDateSelection(
-                              timeSlot?.date,
-                              timeSlot.value
-                            );
-                        }}
-                      >
-                        <p className="px-3 text-[14px]">
-                          {timeSlot?.day?.slice(0, 3)}
-                        </p>
-                        <p className="px-3">
-                          <DateComp timeSlotDate={timeSlot?.date} />
-                        </p>
-                      </div>
-                    ))
+                          onClick={() => {
+                            location.state.date === timeSlot.date &&
+                              handleDateSelection(
+                                timeSlot?.date,
+                                timeSlot.value
+                              );
+                          }}
+                        >
+                          <p className="px-3 text-[14px]">
+                            {timeSlot?.day?.slice(0, 3)}
+                          </p>
+                          <p className="px-3">
+                            <DateComp timeSlotDate={timeSlot?.date} />
+                          </p>
+                        </div>
+                      ))
                     : // Render for Virtual type
-                    item?.time_slots?.Virtual?.map((timeSlot, index) => (
-                      <div
-                        key={index}
-                        className={`${location.state.date === timeSlot.date
-                          ? "bg-verifiCation border-verifiCation text-white rounded-md"
-                          : "cursor-not-allowed disabled:opacity-50 "
+                      item?.time_slots?.Virtual?.map((timeSlot, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            location.state.date === timeSlot.date
+                              ? "bg-verifiCation border-verifiCation text-white rounded-md"
+                              : "cursor-not-allowed disabled:opacity-50 "
                           }`}
-                        onClick={() => {
-                          location.state.date === timeSlot.date &&
-                            handleDateSelection(
-                              timeSlot?.date,
-                              timeSlot.value
-                            );
-                        }}
-                      >
-                        <p className="px-3 text-[14px]">
-                          {timeSlot?.day?.slice(0, 3)}
-                        </p>
-                        <p className="px-3">
-                          <DateComp timeSlotDate={timeSlot?.date} />
-                        </p>
-                      </div>
-                    ))}
+                          onClick={() => {
+                            location.state.date === timeSlot.date &&
+                              handleDateSelection(
+                                timeSlot?.date,
+                                timeSlot.value
+                              );
+                          }}
+                        >
+                          <p className="px-3 text-[14px]">
+                            {timeSlot?.day?.slice(0, 3)}
+                          </p>
+                          <p className="px-3">
+                            <DateComp timeSlotDate={timeSlot?.date} />
+                          </p>
+                        </div>
+                      ))}
 
                   <div className="w-[3rem] h-[2.3rem] outline-verifiCation border border-verifiCation rounded-sm flex justify-center items-center">
                     <img src={greenArrowRight} alt="" className="w-2 h-auto " />
@@ -461,45 +484,42 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 </div>
                 <p>{selectedDate}</p>
                 <ul className="flex flex-row flex-wrap gap-4 items-center py-7 cursor-pointer">
-                  {
-
-                    type == "InPerson" ? item?.time_slots?.InPerson?.map((timeSlot, index) =>
-                      timeSlot?.value?.map((timeSlot, index) => (
-                        <li
-                          key={index}
-                          className={` ${location.state.time === timeSlot.to
-                            ? "bg-verifiCation text-white"
-                            : ""
-                            } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
-                        >
-                          <TimeFormatter time={timeSlot?.to} />
-                        </li>
-                      ))
-                    ) : (
-                      item?.time_slots?.Virtual?.map((timeSlot, index) =>
+                  {type == "InPerson"
+                    ? item?.time_slots?.InPerson?.map((timeSlot, index) =>
                         timeSlot?.value?.map((timeSlot, index) => (
                           <li
                             key={index}
-                            className={` ${location.state.time === timeSlot.to
-                              ? "bg-verifiCation text-white"
-                              : ""
-                              } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
+                            className={` ${
+                              location.state.time === timeSlot.to
+                                ? "bg-verifiCation text-white"
+                                : ""
+                            } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
                           >
                             <TimeFormatter time={timeSlot?.to} />
                           </li>
                         ))
                       )
-                    )
-                  }
+                    : item?.time_slots?.Virtual?.map((timeSlot, index) =>
+                        timeSlot?.value?.map((timeSlot, index) => (
+                          <li
+                            key={index}
+                            className={` ${
+                              location.state.time === timeSlot.to
+                                ? "bg-verifiCation text-white"
+                                : ""
+                            } font-sansRegular py-2 px-5 text-[13px] bg-[#F2FCFE]   rounded-md`}
+                          >
+                            <TimeFormatter time={timeSlot?.to} />
+                          </li>
+                        ))
+                      )}
                 </ul>
 
                 <div className="flex mt-8">
                   <Input
                     type="checkbox"
                     name="checkbox"
-                    onClick={
-                      () => setChecked(!checked)
-                    }
+                    onClick={() => setChecked(!checked)}
                     className="rounded border-none outline-verifiCation  accent-verifiCation transition-all delay-200"
                   />
 
@@ -510,7 +530,6 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     I Certify that the information provided by me is accurate
                     for insurance and payment.
                   </Label>
-
                 </div>
                 {/* {!checked && (
                   <span className="text-red-500 text-xs font-sansRegular mt-3">
