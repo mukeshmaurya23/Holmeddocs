@@ -5,6 +5,8 @@ import Modal from "../UI/Modal";
 import { enqueueSnackbar } from "notistack";
 import customAxios from "../axios/custom";
 import { useDispatch } from "react-redux";
+import hamburegr from "../images/icons/Hamburger.png";
+import cross from "../images/icons/Cross.png";
 import { logout } from "../store/loginSlice";
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,44 +46,40 @@ const SideBar = () => {
     <div className="flex flex-col h-screen">
       <div className="flex flex-col md:flex-row h-screen">
         <div
-          className={`md:hidden ${isSidebarOpen ? "bg-verifiCation" : "bg-verifiCation "
-            }`}
+          className={`md:hidden ${
+            isSidebarOpen ? "bg-verifiCation" : "bg-verifiCation "
+          }`}
         >
           <div className="flex justify-between p-2">
-            <button
-              className={`   ${isSidebarOpen ? "text-white" : "text-black "}`}
-              onClick={toggleSidebar}
-              aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
-            >
+            {isSidebarOpen ? (
+              <img
+                src={cross}
+                onClick={toggleSidebar}
+                className="w-6 h-6 bg-white rounded-full p-1"
+              />
+            ) : (
               <svg
-                className="h-6 w-6"
+                className="h-6 w-6 bg-white rounded-full p-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                onClick={toggleSidebar}
               >
-                {isSidebarOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
-            </button>
+            )}
           </div>
         </div>
 
         <div
-          className={`${isSidebarOpen ? "block" : "hidden"
-            } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
+          className={`${
+            isSidebarOpen ? "block" : "hidden"
+          } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
         >
           <div className="p-10">
             <Link to="/">
@@ -101,11 +99,13 @@ const SideBar = () => {
             </Link> */}
             <Link
               to="/sidebar"
+              onClick={toggleSidebar}
               className={`w-full block px-12 py-2 text-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem] 
              
               `}
               style={
-                location.pathname === "/sidebar" || location.pathname === "/sidebar/update-profile"
+                location.pathname === "/sidebar" ||
+                location.pathname === "/sidebar/update-profile"
                   ? { backgroundColor: "#fff", color: "#008282" }
                   : null
               }
@@ -113,6 +113,7 @@ const SideBar = () => {
               My Profile
             </Link>
             <Link
+              onClick={toggleSidebar}
               to="appointment-list"
               className={`w-full block px-12 py-2 text-white cursor-pointer font-sansRegular text-xs 2xl:text-[17px] 2xl:py-[1.3rem] `}
               style={
@@ -152,7 +153,7 @@ const SideBar = () => {
           <Outlet />
         </main>
         {!isSidebarOpen ? (
-          <main className="block md:hidden flex-1 overflow-y-auto">
+          <main className="block md:hidden flex-1 overflow-y-auto ">
             <Outlet />
           </main>
         ) : null}

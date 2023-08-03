@@ -8,6 +8,7 @@ import UnderMaintenance from "./components/UnderMaintenance";
 
 import { fetchConditions, fetchSpecialties } from "./store/LocSpecSlice";
 import {
+  fetchData,
   fetchDoctorsData,
   fetchInsuranceData,
   fetchStateData,
@@ -104,6 +105,7 @@ function App() {
   const medicalDispatch = useDispatch();
   const stateDispatch = useDispatch();
   const medicalListdispatch = useDispatch();
+  const appointmentDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchSpecialties("/patient/master/speciality"));
@@ -118,6 +120,10 @@ function App() {
   useEffect(() => {
     insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
   }, [insuranceDispatch]);
+
+  useEffect(() => {
+    appointmentDispatch(fetchData("/patient/appointments"));
+  }, [appointmentDispatch]);
 
   useEffect(() => {
     doctorDispatch(

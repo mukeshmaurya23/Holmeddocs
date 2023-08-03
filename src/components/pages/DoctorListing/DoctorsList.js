@@ -132,7 +132,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                   .replace(/ /g, "_")
                   .toLowerCase()}/${doctor?.id}`}
               >
-                <button className="bg-verifiCation rounded-full font-sansSemibold text-[.9rem] mt-3 2xl:text-[1rem]  text-white px-5 py-2 2xl:py-3 2xl:px-8 2xl:mt-5">
+                <button className="bg-verifiCation rounded-full font-sansSemibold xsm:text-[.8rem] text-[.9rem] mt-3 2xl:text-[1rem]  text-white px-5 py-2 2xl:py-3 2xl:px-8 2xl:mt-5">
                   Schedule an Appointment
                 </button>
               </Link>

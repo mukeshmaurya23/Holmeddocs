@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import CryptoJS from "crypto-js";
+
 import Pagination from "./Pagination";
 
 import useFetch from "../../../hooks/useFetch";
@@ -15,10 +15,13 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import cross from "../../../images/icons/Cross.png";
 import { toggleFilterMenu } from "../../../store/mobileAppSlice";
+import { encryptData, decryptData, SECRET_KEY } from "../../../util/EncDec";
 const DoctorListing = () => {
   const [checkedIds, setCheckedIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [doctorsList, setDoctorsList] = useState([]);
+  const [filterDoctorList, setFilterDoctorList] = useState([]);
+  const [filterDoctorSearchTerm, setFilterDoctorSearchTerm] = useState("");
   const [status, setStatus] = useState("idle");
 
   const [reqBodyfilterData, setReqBodyFilterData] = useState([
@@ -56,12 +59,17 @@ const DoctorListing = () => {
     specialityParams: searchParams.get("selectedSpeciality"),
     conditionParams: searchParams.get("conditions"),
     insuranceParams: searchParams.get("insurance"),
+    speciality: decryptData(searchParams.get("speciality"), SECRET_KEY),
     appointment_type: searchParams.get("appointment_type"),
   };
   const toggleFilterDispatch = useDispatch();
 
   const zipCode = commonParams?.locationParams?.split("_")[1];
-  const specialityId = commonParams?.specialityParams?.split("_")[1];
+  const specialityId =
+    commonParams?.specialityParams?.split("_")[1] ||
+    commonParams?.speciality?.split("_")[1];
+
+  console.log(specialityId, "specialityId");
   const conditionId = commonParams?.conditionParams?.split("_")[1];
   const insuranceId = commonParams?.insuranceParams?.split("_")[1];
 
@@ -82,17 +90,38 @@ const DoctorListing = () => {
       setViewAll(name);
     }
   };
+
   const fetchAllDoctors = async () => {
     try {
       setStatus("loading");
       const response = await customAxios.post("/patient/doctors");
       const data = response?.data?.data?.result;
       setDoctorsList(data);
+
       setStatus("succeeded");
     } catch (error) {
       setStatus("failed");
     }
   };
+
+  const handleMobileDoctorSearch = (e) => {
+    console.log(e.target.value);
+    setFilterDoctorSearchTerm(e.target.value);
+    const filteredDoctors = doctorsList?.filter((doctor) => {
+      return (
+        doctor?.doctor_name
+          ?.trim()
+          ?.toLowerCase()
+          .includes(e.target.value.toLowerCase()) ||
+        doctor?.medical_speciality?.[0]
+          ?.toLowerCase()
+          .includes(e.target.value.toLowerCase())
+      );
+    });
+    console.log(filteredDoctors, "filteredDoctors");
+    setFilterDoctorList(filteredDoctors);
+  };
+
   const fetchDoctorsData = async (day) => {
     setDay(day);
     setStatus("loading");
@@ -172,6 +201,7 @@ const DoctorListing = () => {
     commonParams?.conditionParams,
     commonParams?.insuranceParams,
     commonParams?.date,
+    commonParams?.speciality,
     commonParams?.appointment_type,
     shouldCallAPI,
   ]);
@@ -194,8 +224,17 @@ const DoctorListing = () => {
         </div>
       );
     }
-    if (doctorsList?.length > 0) {
-      const paginatedData = doctorsList?.slice(startIndex, endIndex);
+    // if (doctorsList?.length > 0 || filterDoctorList?.length > 0) {
+    //   const paginatedData =
+    //     doctorsList?.slice(startIndex, endIndex) || filterDoctorList;
+
+    //   return <DoctorsList doctorsList={paginatedData} />;
+    // }
+    const currentData =
+      filterDoctorList.length > 0 ? filterDoctorList : doctorsList;
+    const paginatedData = currentData.slice(startIndex, endIndex);
+
+    if (currentData.length > 0) {
       return <DoctorsList doctorsList={paginatedData} />;
     }
     return null;
@@ -218,34 +257,13 @@ const DoctorListing = () => {
 
     return displayedValues?.map((data) => generateLabel(data, category));
   };
-  const encryptData = (data, secretKey) => {
-    if (typeof data === "number") {
-      data = data.toString();
-    }
 
-    const ciphertext = CryptoJS.AES.encrypt(data, secretKey).toString();
-    return ciphertext;
-  };
-  const decryptData = (encryptedText, secretKey) => {
-    try {
-      const bytes = CryptoJS.AES.decrypt(encryptedText, secretKey, {
-        padding: CryptoJS.pad.Pkcs7,
-      });
-      const originalText = bytes.toString(CryptoJS.enc.Utf8);
-      return originalText;
-    } catch (error) {
-      console.error("Decryption error:", error);
-      return null;
-    }
-  };
+  const specilaityParamsMy = new URLSearchParams(window.location.search).get(
+    "speciality"
+  );
 
-  const encryptText =
-    "U2FsdGVkX18kLYTGbC%2BILay3V5Ue1SbrxVbTRyro%2FC88x0XdJu59ncCiMNV%2FEjCW";
-  const secretKey = "Mukesh@Maurya@2316#";
-
-  const decryptedText = decryptData(encryptText, secretKey);
-  console.log(decryptedText);
-
+  console.log(specilaityParamsMy, "specilaityParamsMy");
+  console.log(decryptData(specilaityParamsMy, SECRET_KEY));
   const generateLabel = (data, category) => {
     const id = data.id;
 
@@ -359,10 +377,10 @@ const DoctorListing = () => {
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
             : name
-            ? encryptData(`${name}_${id}`, "Mukesh@Maurya@2316#")
+            ? encryptData(`${name}_${id}`, SECRET_KEY)
             : // ? `${name}_${id}`
               // id;
-              encryptData(id, "Mukesh@Maurya@2316#");
+              encryptData(id, SECRET_KEY);
 
         searchParams.set(filterTitle, valueToAdd);
         // searchParams.set(
@@ -406,6 +424,7 @@ const DoctorListing = () => {
             commonParams.specialityParams?.includes(
               data?.medical_speciality_name
             ) ||
+            commonParams.speciality?.includes(data?.medical_speciality_name) ||
             commonParams.conditionParams?.includes(
               data?.medical_condition_name
             ) ||
@@ -425,6 +444,61 @@ const DoctorListing = () => {
       </label>
     );
   };
+  //Mobile FIlter For InPerson and Virtual
+  const [startDate] = useState(new Date());
+  const [activeMobileAppointMentType, setActiveMobileAppointMentType] =
+    useState({
+      InPerson: false,
+      Virtual: false,
+    });
+
+  const filterInPersonHandler = () => {
+    const newInPersonState = !activeMobileAppointMentType.InPerson;
+    setActiveMobileAppointMentType((prevState) => ({
+      ...prevState,
+      InPerson: newInPersonState,
+    }));
+
+    let url = `/doctor-listing?date=${moment(startDate).format("YYYY-MM-DD")}`;
+    if (newInPersonState && activeMobileAppointMentType.Virtual) {
+      url += "";
+      navigate(url);
+      return;
+    }
+    if (newInPersonState) {
+      url += "&appointment_type=InPerson";
+    } else if (activeMobileAppointMentType.Virtual) {
+      url += "&appointment_type=Virtual";
+    } else {
+      url += "";
+    }
+
+    navigate(url);
+  };
+
+  const filterVirtualHandler = () => {
+    const newVirtualState = !activeMobileAppointMentType.Virtual;
+    setActiveMobileAppointMentType((prevState) => ({
+      ...prevState,
+      Virtual: newVirtualState,
+    }));
+
+    let url = `/doctor-listing?date=${moment(startDate).format("YYYY-MM-DD")}`;
+    if (newVirtualState && activeMobileAppointMentType.InPerson) {
+      url += "";
+      navigate(url);
+      return;
+    }
+    if (newVirtualState) {
+      url += "&appointment_type=Virtual";
+    } else if (activeMobileAppointMentType.InPerson) {
+      url += "&appointment_type=InPerson";
+    } else {
+      url += "";
+    }
+
+    navigate(url);
+  };
 
   if (status === "failed" || !doctorsList) {
     return (
@@ -442,20 +516,35 @@ const DoctorListing = () => {
         <div className="md:hidden mt-5 px-2 flex">
           <input
             type="text"
+            onChange={handleMobileDoctorSearch}
+            value={filterDoctorSearchTerm}
             className="w-full h-[50px] border-2 rounded border-r-0 border-gray-300 px-5 outline-none"
           />
           <img
-            onClick={console.log("abc")}
             src={searchIcon}
             alt="search"
             className="h-auto w-[50px]  float-right bg-verifiCation cursor-pointer rounded-r-md justify-end"
           />
         </div>
         <div class="md:hidden flex items-center mt-5 px-2 space-x-2">
-          <div class="w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ">
+          <div
+            class={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+              activeMobileAppointMentType.InPerson
+                ? "bg-verifiCation text-white"
+                : ""
+            }`}
+            onClick={filterInPersonHandler}
+          >
             In Person
           </div>
-          <div class="w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ">
+          <div
+            class={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+              activeMobileAppointMentType.Virtual
+                ? "bg-verifiCation text-white"
+                : ""
+            } `}
+            onClick={filterVirtualHandler}
+          >
             Virtual
           </div>
           <div
@@ -541,10 +630,16 @@ const DoctorListing = () => {
             </div>
           )}
         </div>
-        <h2 className=" px-2  md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
-          {doctorsList.length > 0 &&
-            `We have found ${totalCount} Doctors for your search criteria`}
+        <h2 className="px-2 md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
+          {doctorsList.length > 0 || filterDoctorList.length > 0
+            ? `We have found ${
+                filterDoctorList.length > 0
+                  ? filterDoctorList.length
+                  : totalCount
+              } Doctors for your search criteria`
+            : ""}
         </h2>
+
         <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
         <div className="flex mt-5 md:mt-16">
           <aside className="hidden md:flex flex-col  px-6 py-3 border-r border-gray-300">

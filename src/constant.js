@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export const SCHEDULE_DUMMY_DATA = [
   {
     id: "0",
@@ -199,11 +200,11 @@ export const Footeritems = [
     list: [
       {
         id: 1,
-        title: "Home",
+        title: <button onClick={() => window.scrollTo(0, 0)}>Home</button>,
       },
       {
         id: 2,
-        title: "About Us",
+        title: <Link to="/about-us">About</Link>,
       },
     ],
   },
@@ -213,11 +214,11 @@ export const Footeritems = [
     list: [
       {
         id: 1,
-        title: "info@holmeddoc.com",
+        title: <a href="mailto:info@holmeddoc.com">info@holmeddoc.com</a>,
       },
       {
         id: 2,
-        title: "+1 000 000 0000",
+        title: <a href="tel:1-800-123-4567">1-800-123-4567</a>,
       },
     ],
   },

@@ -52,11 +52,11 @@ const ProfileDetails = () => {
     </div>
   ) : (
     <>
-      <div className="flex justify-center items-center flex-col py-10 h-screen">
+      <div className="flex justify-center items-center flex-col py-10 px-5 h-auto sm:h-screen">
         <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10">
           Profile Details
         </h2>
-        <div className="border border-verifiCation rounded-xl  p-[30px]">
+        <div className="border border-verifiCation rounded-xl p-5 sm:p-[30px] w-full sm:w-auto">
           <h2 className="text-center font-Henriette text-[20px] mb-5">
             {profileData?.patient_first_name}
           </h2>
@@ -90,9 +90,9 @@ const ProfileDetails = () => {
               </div>
             </div>
           </div> */}
-          <div class="w-[462px]">
-            <div class="flex flex-row">
-              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+          <div class="w-full sm:w-[450px]">
+            <div class="flex flex-col sm:flex-row">
+              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={genderImg}
                   alt=""
@@ -102,7 +102,7 @@ const ProfileDetails = () => {
                   {profileData?.patient_gender}
                 </span>
               </div>
-              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 {" "}
                 <p class="text-center mt-1 text-[10px] font-sansBold text-gray-600">
                   {calcularteDob(profileData.patient_dob)}
@@ -111,7 +111,7 @@ const ProfileDetails = () => {
                   Years Old
                 </p>
               </div>
-              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={phoneNo}
                   alt=""
@@ -122,7 +122,7 @@ const ProfileDetails = () => {
                   {profileData?.patient_phone}
                 </p>
               </div>
-              <div class="w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={mail}
                   alt=""

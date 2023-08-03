@@ -10,7 +10,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { SnackbarProvider } from "notistack";
-import DUMMYCOMPONENT from './DUMMYCOMPONENT'
+
 import ScrollToTop from "./util/ScrollToTop";
 const persistor = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -25,7 +25,6 @@ root.render(
       </PersistGate>
     </Provider>
   </Router>
- // <DUMMYCOMPONENT />
 );
 
 // If you want to start measuring performance in your app, pass a function

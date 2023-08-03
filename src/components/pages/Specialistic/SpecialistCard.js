@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import imageDefault from "../../../images/specialities/Ayurveda.png";
 import { Link, useNavigate } from "react-router-dom";
 import { ImageArray } from "../../../constant";
+import moment from "moment";
 
 const SpecialistCard = ({ specialistData }) => {
   const imageJuggad = (speciality_url) => {
@@ -38,7 +39,7 @@ const SpecialistCard = ({ specialistData }) => {
                 handleCardClick({
                   name: item?.medical_speciality_name,
                   id: item?.id,
-                  date: startDate?.toISOString(),
+                  date: moment(startDate).format("YYYY-MM-DD"),
                 })
               }
             >

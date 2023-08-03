@@ -7,17 +7,40 @@ import moment from "moment";
 //import minusIcon from "../images/icons/Minus.png";
 
 const Footer = () => {
-  const [isVisible, setIsVisible] = useState(1);
+  // const [isVisible, setIsVisible] = useState(1);
+  // const [startDate] = useState(new Date());
+  // const [selectedSpeciality, setSelectedSpeciality] = useState(null);
+  // const [selectedInsurance, setSelectedInsurance] = useState(null);
+  // const navigate = useNavigate();
+  // const navigateInsurance = useNavigate();
+  // const [showAllInsurance, setShowAllInsurance] = useState(false);
+  // const handleItemClick = (id) => {
+  //   setIsVisible((prevIsVisible) => (prevIsVisible === id ? null : id));
+  //   console.log(id);
+  // };
+  const [isVisible, setIsVisible] = useState([
+    true,
+    false,
+    false,
+    false,
+    false,
+  ]);
   const [startDate] = useState(new Date());
   const [selectedSpeciality, setSelectedSpeciality] = useState(null);
   const [selectedInsurance, setSelectedInsurance] = useState(null);
   const navigate = useNavigate();
   const navigateInsurance = useNavigate();
   const [showAllInsurance, setShowAllInsurance] = useState(false);
-  const handleItemClick = (id) => {
-    setIsVisible((prevIsVisible) => (prevIsVisible === id ? null : id));
-    console.log(id);
+
+  const handleItemClick = (index) => {
+    setIsVisible((prevIsVisible) => {
+      const updatedVisibility = prevIsVisible.map((value, idx) =>
+        idx === index ? !value : false
+      );
+      return updatedVisibility;
+    });
   };
+  console.log(isVisible);
   const { insuranceData } = useSelector((state) => state.api);
   const { specialties } = useSelector((state) => state.data);
   const handleCardClick = (speciality) => {
@@ -209,7 +232,7 @@ const Footer = () => {
         </div>
         {/**Mobile Footer */}
         <div className="block lg:hidden">
-          <section>
+          {/* <section>
             <ul>
               <li className="mb-10 p-3">
                 <section>
@@ -262,6 +285,64 @@ const Footer = () => {
                 </section>
               </li>
             </ul>
+          </section> */}
+
+          <section className="p-4">
+            {Footeritems?.map((item, index) => (
+              <ul className="font-sansRegular py-5" key={item.id}>
+                <div className="flex justify-between mr-6">
+                  <h6 className="white font-sansRegular font-semibold text-footerHeader text-[12px]">
+                    {item.title}
+                  </h6>
+                  <i
+                    className={`${
+                      isVisible[index] ? "fa fa-minus" : "fa fa-plus"
+                    } text-[16px] cursor-pointer`}
+                    aria-hidden="true"
+                    onClick={() => handleItemClick(index)}
+                  ></i>
+                </div>
+
+                {isVisible[index] && (
+                  <ul>
+                    {item.list.map((data) => {
+                      const isViewAll = data.id === "viewall";
+                      const linkStyle = isViewAll ? "underline" : "";
+
+                      return (
+                        <li
+                          key={data.id}
+                          className={`text-[13px] mt-3 ${linkStyle}`}
+                          onClick={() => {
+                            if (item.title === " Insurance Providers") {
+                              setSelectedInsurance({
+                                name: data.title,
+                                id: data.id,
+                                date: moment(startDate).format("YYYY-MM-DD"),
+                              });
+                            } else if (item.title === " Major Specialities") {
+                              setSelectedSpeciality({
+                                name: data.title,
+                                id: data.id,
+                                date: moment(startDate).format("YYYY-MM-DD"),
+                              });
+                            }
+                          }}
+                        >
+                          {isViewAll ? (
+                            <a href="/specialist" className="">
+                              {data.title}
+                            </a>
+                          ) : (
+                            data.title
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </ul>
+            ))}
           </section>
         </div>
         <p className=" px-20 py-10 text-gray-600 leading-6 font-sansRegular font-semibold text-[14px] hidden sm:block md:block lg:block xl:block 2xl:block">

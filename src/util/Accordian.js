@@ -4,6 +4,7 @@ import { setSelectedItem } from "../store/healthConcernSlice";
 import Spinner from "../UI/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 const Accordion = ({
   items,
 
@@ -59,7 +60,9 @@ const Accordion = ({
       const date = new Date();
 
       let url = "/doctor-listing?";
-      url += `selectedSpeciality=${getSpecialityName}_${getSpecialityId}&date=${date.toISOString()}&`;
+      url += `selectedSpeciality=${getSpecialityName}_${getSpecialityId}&date=${moment(
+        date
+      ).format("YYYY-MM-DD")}&`;
       navigate(url);
     }
   }, [getSpecialityId]);

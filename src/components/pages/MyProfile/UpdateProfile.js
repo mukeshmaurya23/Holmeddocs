@@ -272,7 +272,7 @@ const UpdateProfile = () => {
         Update Profile
       </h2>
       <form onSubmit={formik.handleSubmit}>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
           <div>
             <div className="flex flex-wrap px-4 sm:px-24 py-5">
               <div className="flex flex-col  w-1/2 sm:w-1/2 p-[10px]">
@@ -392,7 +392,7 @@ const UpdateProfile = () => {
                 >
                   Mobile Number
                 </Label>
-                <div className="absolute left-2 top-[2.3rem] sm:top-[2.86rem] w-3 pl-2  h-full text-md text-formLabel">
+                <div className="absolute left-4 sm:left-2 top-[2.9rem] lg:top-[2.3rem] sm:top-[2.86rem] w-3 pl-2 text-[10px] sm:text-[14px]  h-full text-md font-semibold text-black">
                   +1
                 </div>
                 <Input
@@ -483,7 +483,7 @@ const UpdateProfile = () => {
                   onClick={() => {
                     setIsInsuranceDropDown(!isInsuranceDropdown);
                   }}
-                  className={`w-3 h-3 mr-2 cursor-pointer absolute right-4 top-[3.3rem] ${
+                  className={`w-3 h-3 mr-2 cursor-pointer absolute right-4  top-[3.3rem] ${
                     isInsuranceDropdown ? "rotate-180" : ""
                   } `}
                 />
