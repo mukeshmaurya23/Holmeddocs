@@ -122,7 +122,6 @@ const MakeAppointment = () => {
     }
   }, [zipCodeId]);
 
-  console.log(brosweData, "im browse data*********************");
   const handleChange = (e) => {
     setIsOpen(!isOpen);
     setStartDate(e);
@@ -349,8 +348,8 @@ const MakeAppointment = () => {
 
   return (
     <>
-      <div class="  mb-10">
-        <div class="hidden md:block w-[35rem] absolute z-[-10] h-[17rem] lg:w-[50rem] lg:h-[25rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%]  left-1/2 transform -translate-x-1/2 mb-20"></div>
+      <div className="  mb-10">
+        <div className="hidden md:block w-[35rem] absolute z-[-10] h-[17rem] lg:w-[50rem] lg:h-[25rem] rounded-br-full rounded-bl-full  bg-verifiCation/[17%]  left-1/2 transform -translate-x-1/2 mb-20"></div>
         <div className="pt-[5rem]" />
         <div className=" bg-white shadow-none  sm:shadow-2xl   md:w-[34rem] rounded-xl     left-0 mx-auto right-0 ">
           <div className="px-7 py-4 sm:px-8 sm:py-14 ">

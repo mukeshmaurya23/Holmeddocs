@@ -365,7 +365,7 @@ const Holistic = () => {
             Mind. Body. Soul
           </h1>
         </div>
-        <div className="mt-5 p-[1rem] md:p-0 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3  rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
+        <div className="mt-5 p-[1rem] xsm:rounded-xl  sm:rounded-md md:p-0 md:absolute 2xl:bottom-[2rem] md:bottom-10 right-0 left-0 mb-10 bg-white pl-3  rounded md:rounded-full mx-auto lg:w-[calc(100%_-_15%)] md:lg:w-[calc(100%_-_3%)] sm:w-[calc(100%_-_2%)] xsm:w-[calc(100%_-_2%)]">
           <div
             className="flex flex-col md:flex-row  justify-between "
             ref={ref}

@@ -165,7 +165,7 @@ const Register = () => {
                   Let's get you set up so that you can manage your profile and
                   start booking appointments.
                 </p>
-                <div class="flex-grow">
+                <div className="flex-grow">
                   <form className="" onSubmit={formik.handleSubmit}>
                     <div className="flex flex-wrap px-4 sm:px-24 py-2">
                       <div className="flex flex-col  w-1/2 sm:w-1/2 p-[10px]">

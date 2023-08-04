@@ -52,25 +52,27 @@ const DoctorsList = ({ doctorsList, status }) => {
                 {doctor?.doctor_name}
               </h2>
               <div className="flex gap-4 flex-row py-1 font-sansRegular font-bold text-[#000000]">
-                <h3 className=" text-sm">{doctor?.medical_speciality?.[0]}</h3>
+                <h3 className=" text-[0.85rem]">
+                  {doctor?.medical_speciality?.[0]}
+                </h3>
                 <h3 className="text-sm">{doctor?.country?.[0]}</h3>
               </div>
-              <h3 class="max-w-[200px] break-words text-sm font-sansRegular font-bold text-[#000000]">
+              <h3 className="max-w-[200px] break-words text-sm font-sansRegular font-bold text-[#000000]">
                 {doctor?.education?.[0]}
               </h3>
 
               <div className="gap-2 flex py-1 font-sansRegular font-bold text-[#000000] text-[13px] ">
                 <div className="bg-[#b9eeeb] px-2 rounded-full">
-                  <i class="fa fa-language py-2 "></i>
+                  <i className="fa fa-language py-2 "></i>
                 </div>
-                <div className="block md:hidden">
+                <div className="flex items-center md:hidden ">
                   {doctor?.languages_spoken?.map((language, index) => (
                     <span className="px-1" key={language}>
                       {language}
                     </span>
                   ))}
                 </div>
-                <div className="hidden md:block">
+                <div className="hidden  md:flex items-center">
                   {doctor?.languages_spoken?.map((language, index) => (
                     <span key={language}>
                       {language}

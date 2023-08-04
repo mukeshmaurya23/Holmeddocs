@@ -1,6 +1,8 @@
 const TimeFormatter = ({ time }) => {
   const formatTime = (inputTime) => {
-    const [hour, minute, second] = inputTime.split(":");
+    const [hour, minute, second] = inputTime
+      ? inputTime?.split(":")
+      : [0, 0, 0];
     const date = new Date();
     date.setHours(hour);
     date.setMinutes(minute);

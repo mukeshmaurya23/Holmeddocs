@@ -51,7 +51,7 @@ const HolisticProcess = () => {
               </p>
             </div>
             <div className="sm:hidden  xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[300px] border-gray-300"></div>
-            <div className="sm:block xs:block xsm:block border-b w-[150%] mt-3 border-gray-300 md:hidden"></div>
+            <div className="sm:block xs:block xsm:block border-b w-[80%] mt-3 border-gray-300 md:hidden"></div>
             {/* <div className="h-[900px]">|</div> */}
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center sm:space-y-3 xsm:space-y-2 xs:space-y-3 sm:mb-2 ">
               <div className=" relative mb-8">
@@ -70,7 +70,7 @@ const HolisticProcess = () => {
               </p>
             </div>
             <div className="sm:hidden xs:hidden xsm:hidden lg:block md:block xl:block 2xl:block border-l h-[300px] border-gray-300"></div>
-            <div className="sm:block xs:block xsm:block border-b w-[150%] mt-4 border-gray-300 md:hidden"></div>
+            <div className="sm:block xs:block xsm:block border-b w-[80%] mt-4 border-gray-300 md:hidden"></div>
             <div className="flex flex-col sm:items-center xs:items-center xsm:items-center xsm:space-y-2 xs:space-y-3 sm:space-y-3 sm:mb-2">
               <div className=" relative mb-8">
                 <h1 className="font-bold text-[45px] md:text-[35px] lg:text-[45px] px-2 tracking-[8px] font-basic-sans-regular">

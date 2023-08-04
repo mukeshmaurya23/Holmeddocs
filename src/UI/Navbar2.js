@@ -53,7 +53,11 @@ const Navbar2 = () => {
     useState(filterConditions);
 
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
-
+  const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
+  const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
+    useState(null);
+  const [clearConditionPlaceholder, setClearConditionPlaceholder] =
+    useState(null);
   const { locationSearchResults } = useSelector((state) => state.search);
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -76,16 +80,6 @@ const Navbar2 = () => {
   // const { specialties, status: specStatus } = useSelector(
   //   (state) => state.data
   // );
-  const decryptData = (data, secretKey) => {
-    if (data === null) {
-      return "";
-    }
-
-    const hexData = CryptoJS.enc.Hex.stringify(data);
-    const bytes = CryptoJS.AES.decrypt(hexData, secretKey);
-    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-    return decryptedData;
-  };
   const [searchValue, setSearchValue] = useState("");
 
   const locationSearchDispatch = useDispatch();
@@ -113,6 +107,10 @@ const Navbar2 = () => {
     });
     return data;
   };
+  let locationSearchParams = searchParams.get("location");
+  let specialitySearchParams = searchParams.get("selectedSpeciality");
+
+  let conditionSearchParams = searchParams.get("conditions");
 
   // useEffect(() => {
   //   return () => {
@@ -207,24 +205,140 @@ const Navbar2 = () => {
       setConditionId("");
     }
   }, [selectedItemList.conditions, conditionData]);
+
+  // useEffect(() => {
+  //   if (clearingPlaceholder === "") {
+  //     setSelectedItemList({
+  //       location: "",
+  //     });
+  //   } else if (clearSpecialityPlaceholder === "") {
+  //     setSelectedItemList({
+  //       speciality: "",
+  //     });
+  //   } else if (clearConditionPlaceholder === "") {
+  //     setSelectedItemList({
+  //       conditions: "",
+  //     });
+  //   }
+  // }, [
+  //   clearingPlaceholder,
+  //   clearSpecialityPlaceholder,
+  //   clearConditionPlaceholder,
+  // ]);
+
+  console.log(selectedItemList.location, "my self mukesh");
+
   const handleSearch = () => {
     let url = "/doctor-listing?";
+    let locationSearchParams = searchParams.get("location");
+    let specialitySearchParams = searchParams.get("selectedSpeciality");
+
+    let conditionSearchParams = searchParams.get("conditions");
+    let dateSearchParams = searchParams.get("date");
+
+    console.log(moment(startDate).format("YYYY-MM-DD"), "date1");
+    console.log(moment(dateSearchParams).format("YYYY-MM-DD"), "date2");
+
+    if (
+      (locationSearchParams ||
+        specialitySearchParams ||
+        conditionSearchParams ||
+        dateSearchParams) &&
+      selectedItemList.location.length === 0 &&
+      selectedItemList.speciality.length === 0 &&
+      selectedItemList.conditions.length === 0 &&
+      moment(startDate).format("YYYY-MM-DD") ===
+        moment(dateSearchParams).format("YYYY-MM-DD")
+    ) {
+      console.log("inside if");
+      if (selectedItemList.location.length === 0) {
+        console.log("clearning data");
+        if (specialitySearchParams) {
+          url += `selectedSpeciality=${specialitySearchParams}&`;
+        }
+        if (conditionSearchParams) {
+          url += `conditions=${conditionSearchParams}&`;
+        }
+        if (dateSearchParams) {
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+        }
+        // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+        navigate(url);
+        return;
+      }
+      if (selectedItemList.speciality.length === 0) {
+        console.log("clearning data");
+        if (locationSearchParams) {
+          url += `location=${locationSearchParams}&`;
+        }
+        if (conditionSearchParams) {
+          url += `conditions=${conditionSearchParams}&`;
+        }
+        if (dateSearchParams) {
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+        }
+        // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+        navigate(url);
+        return;
+      }
+      if (selectedItemList.conditions.length === 0) {
+        console.log("clearning data");
+        if (specialitySearchParams) {
+          url += `selectedSpeciality=${specialitySearchParams}&`;
+        }
+        if (locationSearchParams) {
+          url += `location=${locationSearchParams}&`;
+        }
+        if (dateSearchParams) {
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+        }
+        // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+        navigate(url);
+        return;
+      }
+      if (selectedItemList.location.length === 0) {
+        return;
+      }
+      return;
+    }
 
     if (selectedItemList.location) {
       url += `location=${selectedItemList.location}_${zip_code_id}&`;
+    } else if (locationSearchParams) {
+      url += `location=${locationSearchParams}&`;
     }
-    if (selectedItemList.speciality) {
-      url += `speciality=${selectedItemList.speciality}_${speciality_id}&`;
+
+    if (selectedItemList.speciality || selectedItemList.conditions) {
+      // let data = selectedItemList.conditions ?? selectedItemList.speciality;
+      // let id = condition_id ?? speciality_id;
+      if (selectedItemList.speciality) {
+        url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
+      } else if (selectedItemList.conditions) {
+        url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+      }
+      // url += `selectedSpeciality=${data}_${id}&`;
+    } else {
+      // let param = specialitySearchParams ?? conditionSearchParams;
+      if (specialitySearchParams) {
+        url += `selectedSpeciality=${specialitySearchParams}&`;
+      } else if (conditionSearchParams) {
+        url += `conditions=${conditionSearchParams}&`;
+      }
     }
-    if (selectedItemList.conditions) {
-      url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
-    }
+    // if (selectedItemList.conditions) {
+    //   url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+    // } else {
+    //   url += `conditions=${conditionSearchParams}&`;
+    // }
     //date=${startDate.toString()} see me make appointment
-    url += `date=${moment(startDate).format("YYYY-MM-DD")}`;
+    if (startDate !== dateSearchParams) {
+      url += `date=${moment(startDate).format("YYYY-MM-DD")}`;
+    } else {
+      url += `date=${dateSearchParams}`;
+    }
 
     navigate(url);
   };
-
   const locationItems = () => {
     return (
       locationSearchResults &&
@@ -366,13 +480,24 @@ const Navbar2 = () => {
 
   const locSpecConditionRef = useRef();
 
-  let locationSearchParams = searchParams.get("location");
-  let specialitySearchParams = searchParams.get("selectedSpeciality");
-
-  let conditionSearchParams = searchParams.get("conditions");
-
   const dateSearchParams = searchParams.get("date");
   console.log(dateSearchParams, "dateSearchParams");
+  // if (dateSearchParams) {
+  //   console.log(
+  //     "calujh7ul7uiedsmdksdamklcn",
+  //     new Date(moment(dateSearchParams).format("YYYY MM DD"))
+  //   );
+  //   let date = new Date(moment(dateSearchParams).format("YYYY MM DD"));
+  //   console.log(date.toDateString());
+  //   setStartDate(date);
+  // }
+
+  useEffect(() => {
+    if (dateSearchParams) {
+      const formattedDate = moment(dateSearchParams).toDate();
+      setStartDate(formattedDate);
+    }
+  }, [dateSearchParams]);
 
   const [formattedDate, setFormattedDate] = useState(dateSearchParams);
   useEffect(() => {
@@ -385,12 +510,6 @@ const Navbar2 = () => {
 
     setFormattedDate(newFormattedDate);
   }, [dateSearchParams, startDate]);
-
-  const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
-  const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
-    useState(null);
-  const [clearConditionPlaceholder, setClearConditionPlaceholder] =
-    useState(null);
 
   useEffect(() => {
     if (locationSearchParams) {
@@ -553,7 +672,7 @@ const Navbar2 = () => {
   return (
     <>
       <div
-        class={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
+        className={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
           location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
             ? "drop-shadow-lg"
@@ -567,7 +686,7 @@ const Navbar2 = () => {
           showShadow ? "drop-shadow-md" : ""
         } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
-        <div class="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
+        <div className="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
             <>
               <Link to="/">
@@ -585,7 +704,7 @@ const Navbar2 = () => {
                     </div>
                   </Link>
                 </div>
-                <div class="mx-2 text-gray-400">|</div>
+                <div className="mx-2 text-gray-400">|</div>
 
                 <div className="flex items-center">
                   {showModal && <PortalModal closeModal={closeModal} />}
@@ -595,14 +714,14 @@ const Navbar2 = () => {
                   >
                     Browse
                   </div>
-                  <div class=" text-gray-400">|</div>
+                  <div className=" text-gray-400">|</div>
 
                   <Link to="/about-us">
                     <div className="font-sansBold font-semibold text-sm lg:text-navbarLg uppercase tracking-[.15rem] cursor-pointer mx-4">
                       About Us
                     </div>
                   </Link>
-                  <div class="mx-2 text-gray-400">|</div>
+                  <div className="mx-2 text-gray-400">|</div>
 
                   {LoginSignup}
                 </div>
@@ -622,10 +741,10 @@ const Navbar2 = () => {
                 ref={locSpecConditionRef}
                 className="border-[2px] flex items-center rounded-lg border-gray-300  "
               >
-                <div className="flex items-center relative">
+                <div className="flex items-center relative w-[600px]">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 w-[250px] h-[40px] mr-1 2xl:w-[350px]   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[1rem] font-semibold"
                         : "text-[1rem]"
@@ -653,7 +772,7 @@ const Navbar2 = () => {
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 w-[250px] h-[40px] 2xl:w-[350px] pl-2 text-[#292F33] ${
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${
                       selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
@@ -690,7 +809,7 @@ const Navbar2 = () => {
                   </ul>
 
                   <div
-                    className="flex ml-0 md:ml-5 cursor-pointer items-center w-[180px] h-[40px] 2xl:w-[300px]"
+                    className="flex  md:ml-5 cursor-pointer items-center  h-[40px] mx-auto"
                     ref={calendarRef}
                   >
                     <img
@@ -735,24 +854,24 @@ const Navbar2 = () => {
             </>
           ) : (
             <>
-              <div class="flex items-center justify-between ">
+              <div className="flex items-center justify-between ">
                 <Link to="/make-appointment">
-                  <div class="font-sansBold  font-semibold text-sm lg:text-navText uppercase  tracking-[.15rem] cursor-pointer ">
+                  <div className="font-sansBold  font-semibold text-sm lg:text-navText uppercase  tracking-[.15rem] cursor-pointer ">
                     Make an Appointment
                   </div>
                 </Link>
                 {showModal && <PortalModal closeModal={closeModal} />}
-                <div class="xl:mx-6 mx-2 text-gray-400">|</div>
+                <div className="xl:mx-6 mx-2 text-gray-400">|</div>
 
                 <div
                   onClick={openModal}
-                  class="font-sansBold  font-semibold text-sm lg:text-navbarLg tracking-[.15rem] uppercase  cursor-pointer"
+                  className="font-sansBold  font-semibold text-sm lg:text-navbarLg tracking-[.15rem] uppercase  cursor-pointer"
                 >
                   Browse
                 </div>
               </div>
               <div
-                class="bg-white flex items-center justify-center rounded-full  h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]"
+                className="bg-white flex items-center justify-center rounded-full  h-[10rem] w-[10rem] md:h-[10rem] md:w-[10rem]  lg:h-[15rem] lg:w-[15rem]"
                 style={{
                   position: "absolute",
                   top: "100%",
@@ -762,29 +881,29 @@ const Navbar2 = () => {
               >
                 <Link to="/">
                   <img
-                    class="h-[8rem] md:h-[10rem]  lg:h-[15rem] cursor-pointer"
+                    className="h-[8rem] md:h-[10rem]  lg:h-[15rem] cursor-pointer"
                     alt="Logo"
                     src={logo}
                   />
                 </Link>
               </div>
-              <div class="flex items-center justify-between">
+              <div className="flex items-center justify-between">
                 <Link to="/about-us">
-                  <div class=" font-sansBold  font-semibold text-sm lg:text-navbarLg uppercase  tracking-[.15rem] cursor-pointer">
+                  <div className=" font-sansBold  font-semibold text-sm lg:text-navbarLg uppercase  tracking-[.15rem] cursor-pointer">
                     About Us
                   </div>
                 </Link>
-                <div class="xl:mx-6 mx-2 text-gray-400">|</div>
+                <div className="xl:mx-6 mx-2 text-gray-400">|</div>
                 {LoginSignup}
               </div>
             </>
           )}
         </div>
         {/* Mobile View */}
-        <div class="md:hidden flex  items-center text-gray-900 relative">
+        <div className="md:hidden flex  items-center text-gray-900 relative">
           <Link to="/">
             <img
-              class=" w-[105px] h-auto cursor-pointer mr-auto"
+              className=" w-[105px] h-auto cursor-pointer mr-auto"
               alt="Logo"
               src={logo}
             />
@@ -816,13 +935,16 @@ const Navbar2 = () => {
                     {/*checkLogged in in mobile */}
                     {isLoggedIn ? (
                       <>
-                        <Link to="/sidebar">
+                        <Link to="/sidebar" onClick={toggleMenuHandler}>
                           <h2 className="font-sansBold text-[14px]">
                             My Profile
                           </h2>
                         </Link>
                         <div className=" border-b " />
-                        <Link to="/sidebar/appointment-list">
+                        <Link
+                          to="/sidebar/appointment-list"
+                          onClick={toggleMenuHandler}
+                        >
                           <h2 className="font-sansBold text-[14px]">
                             My Appointment
                           </h2>

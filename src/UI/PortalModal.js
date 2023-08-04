@@ -41,7 +41,7 @@ const PortalModal = ({ closeModal }) => {
           className="fixed inset-0 bg-gray-900 opacity-50 cursor-pointer"
           onClick={closeModal}
         ></div>
-        <div className="relative bg-white rounded-none sm:rounded-lg shadow-lg w-full sm:w-3/4 h-auto">
+        <div className="relative bg-white rounded-none sm:rounded-lg shadow-lg w-full sm:w-3/4 h-[100vh] md:h-auto">
           <div className="bg-[#0082821C] px-8 py-4  relative rounded-lg  font-sansBold text-[1.2rem] text-[#292F33]">
             Browse Doctors near you
             <img

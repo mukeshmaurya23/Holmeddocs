@@ -13,9 +13,12 @@ import Success from "../../images/Login/Success.png";
 import { Link } from "react-router-dom";
 import customAxios from "../../axios/custom";
 import { enqueueSnackbar } from "notistack";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/loginSlice";
 import Spinner from "../../UI/Spinner";
+import { toggleMenu } from "../../store/mobileAppSlice";
+import MobileResposiveToogle from "../../util/MobileResposiveToogle";
+import hamburger from "../../images/icons/Hamburger.png";
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isoldPasswordVisible, setIsoldPasswordVisible] = useState(false);
@@ -79,7 +82,7 @@ const ChangePassword = () => {
         }
       } catch (err) {
         console.log(err);
-      }finally{
+      } finally {
         setLoading(false);
       }
     },
@@ -92,14 +95,21 @@ const ChangePassword = () => {
       confirmPassword: true,
     });
   };
+  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
 
+  const dispatchPassword = useDispatch();
+
+  const toggleMenuHandler = () => {
+    dispatchPassword(toggleMenu());
+  };
   return (
     <>
+      {isMenuOpen && <MobileResposiveToogle />}
       <div className="flex flex-col h-screen">
         <div className="flex flex-col lg:flex-row flex-1">
           <Aside image={ChangePasswordimg} />
           <main className="flex flex-1 flex-col relative overflow-y-auto">
-            <div className="flex justify-center sm:justify-end mt-8 sm:mr-[4rem]">
+            <div className="flex justify-between items-center  px-[1rem] md:px-0 md:justify-center sm:justify-end mt-8 sm:mr-[4rem]">
               <Link to="/">
                 <img
                   src={require("../../images/icons/Logo.png")}
@@ -107,15 +117,21 @@ const ChangePassword = () => {
                   className="w-24 h-24 mx-4 sm:mx-10"
                 />
               </Link>
+              <img
+                src={hamburger}
+                alt=""
+                onClick={toggleMenuHandler}
+                className="w-[25px] h-[25px] mb-5 float-left cursor-pointer block md:hidden"
+              />
             </div>
             <div className="flex-grow">
-              <div className="ml-5 max-w-[620px]">
+              <div className="ml-5 mt-5 max-w-[620px]">
                 <h2 className="text-3xl font-sansRegular tracking-[3px] pt-[2rem] sm:pt-0 px-4 py-2 sm:px-24">
                   Change password?
                 </h2>
 
                 <form className="mb-6" onSubmit={formik.handleSubmit}>
-                  <div className="flex flex-wrap  sm:px-24 py-4 ">
+                  <div className="flex flex-wrap px-3 sm:px-24 py-4  ">
                     <div className="flex flex-col space-y-2 w-full relative py-[16px]">
                       <Label
                         htmlFor="oldPassword"
@@ -236,9 +252,7 @@ const ChangePassword = () => {
                         onClick={handleContinue}
                         disabled={!(formik.isValid && formik.dirty)}
                       >
-                        {
-                          loading ? <Spinner /> : "Continue"
-                        }
+                        {loading ? <Spinner /> : "Continue"}
                       </Button>
                     </div>
                   </div>

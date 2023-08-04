@@ -15,9 +15,13 @@ import {
   fetchStateData,
   fetchZipCodeData,
 } from "../../../store/apiSlice";
-
+import hamburger from "../../../images/icons/Hamburger.png";
 import { filterFunctionality } from "../../../constant";
+import { toggleMenu } from "../../../store/mobileAppSlice";
+import MobileResposiveToogle from "../../../util/MobileResposiveToogle";
 const UpdateProfile = () => {
+  const location = useLocation();
+  const { profileData } = location?.state || {};
   const [isInsuranceDropdown, setIsInsuranceDropDown] = useState(false);
   const [isStateDropdown, setIsStateDropDown] = useState(false);
   const [selectedItemList, setSelectedItemList] = useState({
@@ -48,9 +52,7 @@ const UpdateProfile = () => {
     }
   };
   const [isStateSelected, setIsStateSelected] = useState(false);
-  const location = useLocation();
-  const { profileData } = location.state;
-  console.log(profileData, "im profile data************");
+
   console.log(selectedItemList);
   const insuranceRef = useRef();
   const stateRef = useRef();
@@ -230,16 +232,25 @@ const UpdateProfile = () => {
   console.log(filterCityData, "im filterCityData>>>>>>>>>>>>>>>");
   const handleStateSearch = (e) => {
     setStateSearchValue(e.target.value);
-    setFilterState(
-      filterFunctionality(stateSearchValue, filterStateData, "state_name")
-    );
+    if (e.target.value) {
+      setFilterState(
+        filterFunctionality(e.target.value, filterStateData, "state_name")
+      );
+    } else {
+      setFilterState(filterStateData);
+    }
   };
   //for city
   const handleCitySearch = (e) => {
     setCitySearchValue(e.target.value);
-    setFilterCity(
-      filterFunctionality(citySearchValue, filterCityData, "city_name")
-    );
+    if (e.target.value) {
+      setFilterCity(
+        filterFunctionality(e.target.value, filterCityData, "city_name")
+      );
+    } else {
+      console.log("dsjdhdhdsdhjsdjsdjsdhsjdjsdhsddd");
+      setFilterCity(filterCityData);
+    }
   };
 
   //for zip
@@ -257,20 +268,45 @@ const UpdateProfile = () => {
   const [insuranceSearchValue, setInsuranceSearchValue] = useState("");
   const handleInsuranceSearch = (e) => {
     setInsuranceSearchValue(e.target.value);
-    setFilterInsurance(
-      filterFunctionality(
-        insuranceSearchValue,
-        filterInsuranceData,
-        "insurance_company_name"
-      )
-    );
+
+    if (e.target.value) {
+      setFilterInsurance(
+        filterFunctionality(
+          insuranceSearchValue,
+          filterInsuranceData,
+          "insurance_company_name"
+        )
+      );
+    } else {
+      setFilterInsurance(filterInsuranceData);
+    }
+  };
+
+  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
+
+  const dispatch = useDispatch();
+
+  const toggleMenuHandler = () => {
+    dispatch(toggleMenu());
   };
 
   return (
     <>
-      <h2 className="text-[1.4rem] mt-14 font-sansRegular tracking-[2px] text-black  text-center">
+      {isMenuOpen && <MobileResposiveToogle />}
+      <h2 className="text-[1.4rem] mt-14 font-sansRegular tracking-[2px] text-black  text-center hidden md:block">
         Update Profile
       </h2>
+      <div className="flex justify-between px-[2rem] pt-[2rem] md:hidden">
+        <h2 className=" font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] ">
+          Update Profile
+        </h2>
+        <img
+          src={hamburger}
+          alt=""
+          onClick={toggleMenuHandler}
+          className="w-[25px] h-[25px] mb-5 float-left cursor-pointer"
+        />
+      </div>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div>
@@ -392,7 +428,7 @@ const UpdateProfile = () => {
                 >
                   Mobile Number
                 </Label>
-                <div className="absolute left-4 sm:left-2 top-[2.9rem] lg:top-[2.3rem] sm:top-[2.86rem] w-3 pl-2 text-[10px] sm:text-[14px]  h-full text-md font-semibold text-black">
+                <div className="absolute left-2 sm:left-2 top-[2.94rem] lg:top-[2.99rem] sm:top-[2.86rem] w-3 pl-2 text-[10px] sm:text-[14px]  h-full text-md font-semibold text-black">
                   +1
                 </div>
                 <Input
@@ -655,7 +691,7 @@ const UpdateProfile = () => {
                   {isStateDropdown
                     ? stateStatus === "loading"
                       ? "Loading..."
-                      : stateData &&
+                      : filterState &&
                         filterState?.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"
@@ -729,7 +765,7 @@ const UpdateProfile = () => {
                   >
                     {cityStatus === "loading"
                       ? "Loading..."
-                      : cityData &&
+                      : filterCity &&
                         filterCity?.map((item) => (
                           <li
                             className="text-formLabel text-[12px] cursor-pointer relative"

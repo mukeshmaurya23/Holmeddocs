@@ -46,42 +46,11 @@ const SideBar = () => {
     <div className="flex flex-col h-screen">
       <div className="flex flex-col md:flex-row h-screen">
         <div
-          className={`md:hidden ${
-            isSidebarOpen ? "bg-verifiCation" : "bg-verifiCation "
-          }`}
-        >
-          <div className="flex justify-between p-2">
-            {isSidebarOpen ? (
-              <img
-                src={cross}
-                onClick={toggleSidebar}
-                className="w-6 h-6 bg-white rounded-full p-1"
-              />
-            ) : (
-              <svg
-                className="h-6 w-6 bg-white rounded-full p-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                onClick={toggleSidebar}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            )}
-          </div>
-        </div>
-
-        <div
           className={`${
             isSidebarOpen ? "block" : "hidden"
           } md:block bg-verifiCation sm:w-[13rem] 2xl:w-[17rem] overflow-y-auto flex flex-col relative h-screen md:h-auto`}
         >
-          <div className="p-10">
+          <div className="flex justify-center items-center mx-auto mt-[2rem] w-full">
             <Link to="/">
               <img
                 src={profileLogo}

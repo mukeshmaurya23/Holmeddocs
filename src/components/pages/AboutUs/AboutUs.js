@@ -94,7 +94,7 @@ const AboutUs = () => {
         <section className="px-2 md:px-10 py-2 space-y-4 mb-1 md:mb-16">
           {" "}
           {/*Third Div */}
-          <div className="px-4 md:px-16">
+          <div className="px-4 md:px-16 mt-12">
             <div className="w-[100px] h-1 mb-4 bg-aboutUsBorder"></div>
             <h2 className="text-[#292F33] font-sansBold text-2xl xl:text-4xl tracking-[2px]">
               Our approach to healthcare
@@ -102,7 +102,10 @@ const AboutUs = () => {
           </div>
           <div className="flex flex-col sm:flex-row justify-evenly items-center mr-5 py-10 p-5">
             {ApproacData?.map((data) => (
-              <div className="flex flex-col items-center justify-center mb-10 cursor-pointer">
+              <div
+                className="flex flex-col items-center justify-center mb-10 cursor-pointer"
+                key={data.id}
+              >
                 <img
                   src={data.image}
                   alt=""
@@ -128,7 +131,10 @@ const AboutUs = () => {
           </div>
           <div className="flex justify-evenly flex-col md:flex-row">
             {StrengthData.map((data) => (
-              <div className="flex flex-col items-center justify-center mb-10">
+              <div
+                className="flex flex-col items-center justify-center mb-10"
+                key={data.id}
+              >
                 <img
                   src={data.image}
                   alt=""

@@ -18,7 +18,6 @@ export const decryptData = (encryptedText, secretKey) => {
     return originalText;
   } catch (error) {
     console.error("Decryption error:", error);
-    return null;
   }
 };
 

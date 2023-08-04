@@ -154,20 +154,20 @@ const DoctorDetails = ({}) => {
     setIsOpen(!isOpen);
   };
 
-  return status === "loading" ? (
+  return doctorsList?.data?.result.length === 0 ? (
     <div className="flex justify-center items-center">
       <img src={loadingGif} alt="loading" />
     </div>
   ) : (
     <>
-      <h1 className="font-sansBold sm:px-24 sm:py-3 xsm:p-3 text-[1rem] sm:text-[1.4rem] sm:tracking-[3px] mt-2 sm:mt-[10rem] md:text-[1.8rem]">
-        Medicine cure diseases but only doctors can cure patients.
-      </h1>
       {doctorsList?.data?.result
         ?.filter((doctor) => doctor.id == id)
         ?.map((doctor) => {
           return (
-            <section className="grid col-span-2  mb-10">
+            <section className="grid col-span-2  mb-10 max-w-[1580px] mx-auto">
+              <h1 className=" font-sansBold sm:px-24 sm:py-3 xsm:p-3 text-[1rem] sm:text-[1.4rem] sm:tracking-[3px] mt-2 sm:mt-[10rem] md:text-[1.8rem]">
+                Medicine cure diseases but only doctors can cure patients.
+              </h1>
               <div className="mb-8 sm:pl-[3rem] p-5 col-span-1 md:px-24">
                 <div className="flex py-6 flex-col md:flex-row ">
                   <img
@@ -176,7 +176,7 @@ const DoctorDetails = ({}) => {
                     className="sm:h-[22rem] sm:w-[19rem] h-[25rem] w-full rounded-lg object"
                   />
 
-                  <ul className="sm:pl-[2rem] xsm:mt-2">
+                  <ul className="sm:pl-[2rem] xsm:mt-2 sm:pr-[2rem]">
                     <li className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33] md:text-[1.4rem]">
                       {doctor?.doctor_name}
                     </li>
@@ -189,7 +189,7 @@ const DoctorDetails = ({}) => {
                     </li>
                     <p className="gap-2 flex py-2 font-sansSemibold text-[13px]">
                       <div className="bg-[#b9eeeb] px-2 rounded-full">
-                        <i class="fa fa-language  "></i>
+                        <i className="fa fa-language  "></i>
                       </div>
 
                       {doctor?.languages_spoken?.map((language, index) => (
@@ -232,7 +232,7 @@ const DoctorDetails = ({}) => {
                     </li>
                   </ul>
 
-                  <div className="flex-1 sm:mr-[4rem] py- sm:pl-[10rem] relative">
+                  <div className="flex-1 sm:mr-[4rem] py- sm:pl-[21rem] relative">
                     <h1 className="font-Henriette md:text-[1.4rem] tracking-[1px] text-[#292F33]">
                       About {doctor?.doctor_name}
                     </h1>
@@ -404,7 +404,8 @@ const DoctorDetails = ({}) => {
                   </div>
                   <div className="cursor-pointer mt-10">
                     <h2 className="font-Henriette text-[1.1rem] tracking-[1px] text-[#292F33]">
-                      {selectedDate}
+                      {selectDateTime.date &&
+                        moment(selectedDate).format("MMM DD, YYYY")}
                     </h2>
                     {slot_avialability.InPerson?.map((timeSlot, index) => {
                       const virtualData = doctor?.time_slots?.Virtual?.find(
@@ -415,7 +416,7 @@ const DoctorDetails = ({}) => {
                           {selectedDate === timeSlot.date && (
                             <div className="flex flex-wrap">
                               {timeSlot.value.length > 0 && (
-                                <div className="flex flex-wrap flex-col">
+                                <div className="flex flex-wrap flex-col p-[10px]">
                                   <p className="font-semibold py-2 font-sansRegular text-[13px]">
                                     InPerson
                                   </p>
@@ -434,7 +435,7 @@ const DoctorDetails = ({}) => {
                                 </div>
                               )}
                               {virtualData?.value.length > 0 && (
-                                <div className="flex flex-col flex-wrap">
+                                <div className="flex flex-col flex-wrap p-[10px]">
                                   <p className="font-semibold py-2 font-sansRegular text-[13px]">
                                     Virtual
                                   </p>

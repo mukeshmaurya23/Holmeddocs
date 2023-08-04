@@ -1,20 +1,32 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../util/Button";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import hamburger from "../../../images/icons/Hamburger.png";
 import customAxios from "../../../axios/custom";
 import loadingGif from "../../../images/icons/Loader.gif";
+import { useSelector, useDispatch } from "react-redux";
 import address from "../../../images/profile/Address.png";
 import genderImg from "../../../images/icons/Frame 265.png";
 import mail from "../../../images/profile/Mail.png";
 import phoneNo from "../../../images/profile/Number.png";
 import insuranceImg from "../../../images/profile/Insurance.png";
+import { toggleMenu } from "../../../store/mobileAppSlice";
+
+import MobileResposiveToogle from "../../../util/MobileResposiveToogle";
 const ProfileDetails = () => {
   // const getUserName = localStorage.getItem("userName");
   // const newName = JSON.parse(getUserName);
 
   // const user = useSelector((state) => state.login.user);
   // const dob = user.patient_dob;
+
+  const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
+
+  const dispatch = useDispatch();
+
+  const toggleMenuHandler = () => {
+    dispatch(toggleMenu());
+  };
 
   const [profileData, setProfileData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -52,47 +64,59 @@ const ProfileDetails = () => {
     </div>
   ) : (
     <>
-      <div className="flex justify-center items-center flex-col py-10 px-5 h-auto sm:h-screen">
-        <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10">
+      {isMenuOpen && <MobileResposiveToogle />}
+      <div className="flex justify-normal  md:justify-center md:items-center flex-col py-10 px-5 h-auto sm:h-screen">
+        <h2 className="text-center font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] mb-10 hidden md:block">
           Profile Details
         </h2>
+        <div className="flex justify-between  md:hidden">
+          <h2 className=" font-sansRegular font-semibold text-[#292F33] text-[20px] tracking-[3px] ">
+            Profile Details
+          </h2>
+          <img
+            src={hamburger}
+            alt=""
+            onClick={toggleMenuHandler}
+            className="w-[25px] h-[25px] mb-5 float-left cursor-pointer"
+          />
+        </div>
         <div className="border border-verifiCation rounded-xl p-5 sm:p-[30px] w-full sm:w-auto">
           <h2 className="text-center font-Henriette text-[20px] mb-5">
             {profileData?.patient_first_name}
           </h2>
-          {/* <div class="flex justify-between mx-3  mb-4 ">
-            <div class=" flex  text-center items-center border border-verifiCation mt-8  ">
-              <div class="border-r border-verifiCation p-6 ">
-                <i class="fa fa-snowflake-o text-center" aria-hidden="true"></i>
+          {/* <div className="flex justify-between mx-3  mb-4 ">
+            <div className=" flex  text-center items-center border border-verifiCation mt-8  ">
+              <div className="border-r border-verifiCation p-6 ">
+                <i className="fa fa-snowflake-o text-center" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600">
                   {profileData?.patient_gender}
                 </p>
               </div>
-              <div class=" border-r border-verifiCation p-7">
-                <p class="text-center text-[10px] font-sansBold text-gray-600">
+              <div className=" border-r border-verifiCation p-7">
+                <p className="text-center text-[10px] font-sansBold text-gray-600">
                   {calcularteDob(profileData.patient_dob)}
                 </p>
                 <p className="text-[10px] font-sansBold text-gray-600">
                   Years Old
                 </p>
               </div>
-              <div class=" border-r border-verifiCation p-6">
-                <i class="fa fa-phone" aria-hidden="true"></i>
+              <div className=" border-r border-verifiCation p-6">
+                <i className="fa fa-phone" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600">
                   {profileData?.patient_phone}
                 </p>
               </div>
-              <div class=" ">
-                <i class="fa fa-envelope-o" aria-hidden="true"></i>
+              <div className=" ">
+                <i className="fa fa-envelope-o" aria-hidden="true"></i>
                 <p className="text-[10px] font-sansBold text-gray-600 ml-2">
                   {profileData?.patient_email}
                 </p>
               </div>
             </div>
           </div> */}
-          <div class="w-full sm:w-[450px]">
-            <div class="flex flex-col sm:flex-row">
-              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+          <div className="w-full sm:w-[450px]">
+            <div className="flex flex-col sm:flex-row">
+              <div className="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={genderImg}
                   alt=""
@@ -102,16 +126,16 @@ const ProfileDetails = () => {
                   {profileData?.patient_gender}
                 </span>
               </div>
-              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div className="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 {" "}
-                <p class="text-center mt-1 text-[10px] font-sansBold text-gray-600">
+                <p className="text-center mt-1 text-[10px] font-sansBold text-gray-600">
                   {calcularteDob(profileData.patient_dob)}
                 </p>
                 <p className="text-[10px] font-sansBold text-gray-600 mt-1">
                   Years Old
                 </p>
               </div>
-              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div className="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={phoneNo}
                   alt=""
@@ -122,7 +146,7 @@ const ProfileDetails = () => {
                   {profileData?.patient_phone}
                 </p>
               </div>
-              <div class="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
+              <div className="w-full sm:w-1/4 py-2 border border-[#008282] flex flex-col items-center">
                 <img
                   src={mail}
                   alt=""
@@ -135,7 +159,7 @@ const ProfileDetails = () => {
             </div>
           </div>
 
-          <div class="border-b w-full"></div>
+          <div className="border-b w-full"></div>
           <div className="flex flex-col  p-5">
             <div className="flex  mt-5">
               <img
@@ -184,7 +208,7 @@ const ProfileDetails = () => {
             profileData,
           }}
         >
-          <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold">
+          <Button className="mt-10 bg-verifiCation px-8 uppercase py-2 text-[12px] rounded-full text-white tracking-[1px] font-semibold mx-auto flex items-center mt-[2rem]">
             Edit Profile
           </Button>
         </Link>

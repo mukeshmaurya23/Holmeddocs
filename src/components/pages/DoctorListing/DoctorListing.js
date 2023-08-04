@@ -518,17 +518,17 @@ const DoctorListing = () => {
             type="text"
             onChange={handleMobileDoctorSearch}
             value={filterDoctorSearchTerm}
-            className="w-full h-[50px] border-2 rounded border-r-0 border-gray-300 px-5 outline-none"
+            className="w-full h-[40px] border-2 rounded border-r-0 border-gray-300 px-5 outline-none"
           />
           <img
             src={searchIcon}
             alt="search"
-            className="h-auto w-[50px]  float-right bg-verifiCation cursor-pointer rounded-r-md justify-end"
+            className="h-auto w-[40px]  float-right bg-verifiCation cursor-pointer rounded-r-md justify-end"
           />
         </div>
-        <div class="md:hidden flex items-center mt-5 px-2 space-x-2">
+        <div className="md:hidden flex items-center mt-5 px-2 space-x-2">
           <div
-            class={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
               activeMobileAppointMentType.InPerson
                 ? "bg-verifiCation text-white"
                 : ""
@@ -538,7 +538,7 @@ const DoctorListing = () => {
             In Person
           </div>
           <div
-            class={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
               activeMobileAppointMentType.Virtual
                 ? "bg-verifiCation text-white"
                 : ""
@@ -548,7 +548,7 @@ const DoctorListing = () => {
             Virtual
           </div>
           <div
-            class="w-full rounded-2xl border border-gray-500 text-gray-900 flex items-center justify-center h-7  tracking-[1px] "
+            className="w-full rounded-2xl border border-gray-500 text-gray-900 flex items-center justify-center h-7  tracking-[1px] "
             onClick={toggleFilterMenuHandler}
           >
             Filters
@@ -572,11 +572,7 @@ const DoctorListing = () => {
                       {filterData && "Filters"}
                     </h2>
                     {filterData === null ? (
-                      <>
-                        <div className="flex items-center justify-center w-[100vw] overflow-hidden">
-                          <img src={loadingGif} alt="loading" />
-                        </div>
-                      </>
+                      <></>
                     ) : (
                       <>
                         {filterData &&
@@ -641,17 +637,17 @@ const DoctorListing = () => {
         </h2>
 
         <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
-        <div className="flex mt-5 md:mt-16">
-          <aside className="hidden md:flex flex-col  px-6 py-3 border-r border-gray-300">
+        <div className="flex mt-5">
+          <aside
+            className={`hidden md:flex flex-col  px-6 py-3 ${
+              filterData ? "border-r border-gray-300" : ""
+            } `}
+          >
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               {filterData && "Filters"}
             </h2>
             {filterData === null ? (
-              <>
-                <div className="flex items-center justify-center w-[100vw] overflow-hidden">
-                  <img src={loadingGif} alt="loading" />
-                </div>
-              </>
+              <></>
             ) : (
               <>
                 {filterData &&

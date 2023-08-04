@@ -14,16 +14,15 @@ const MainContainer = () => {
     <>
       <div className="overflow-hidden">
         <Holistic />
-      <div className="max-w-[1560px] mx-auto">
-      <Specialistic />
-        <HealthConcern />
-        <HolisticFeatured />
-        <HolisticProcess />
-        <HolPractise />
-        <HolMobApp />
-     
-      </div>
-      <Footer />
+        <div className="max-w-[1560px] mx-auto">
+          <Specialistic />
+          <HealthConcern />
+          <HolisticFeatured />
+          <HolisticProcess />
+          <HolPractise />
+          <HolMobApp />
+        </div>
+        <Footer />
       </div>
     </>
   );
