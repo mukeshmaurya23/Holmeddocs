@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import customAxios from "../axios/custom";
+
+
 const initialState = {
   loading: false,
   data: null,
@@ -26,6 +28,8 @@ const initialState = {
   getDoctorsData: null,
   getDoctorsDataStatus: "idle",
   getDoctorsDataError: "",
+  getAllDoctorsData: null,
+  getAllDoctorsDataStatus: "idle",
 };
 
 const fetchData = createAsyncThunk("api/fetchData", async (url) => {
@@ -124,6 +128,14 @@ export const fetchDoctorsData = createAsyncThunk(
   }
 );
 
+export const fetchAllDoctorsData = createAsyncThunk(
+  "api/fetchAllDoctorsData",
+  async (url) => {
+    const response = await customAxios.post(url);
+    const resData = await response.data
+    return resData;
+  }
+)
 export const book_appointment_DoctorData = createAsyncThunk(
   "api/book_appointment_DoctorData",
   async (id) => {
@@ -235,6 +247,14 @@ const apiSlice = createSlice({
     builder.addCase(fetchDoctorsData.rejected, (state, action) => {
       state.getDoctorsDataStatus = "failed";
       state.getDoctorsDataError = action.error.message;
+    });
+
+    builder.addCase(fetchAllDoctorsData.pending, (state, action) => {
+      state.getAllDoctorsDataStatus = "loading"
+    });
+    builder.addCase(fetchAllDoctorsData.fulfilled, (state, action) => {
+      state.getAllDoctorsDataStatus = "succeeded";
+      state.getAllDoctorsData = action.payload;
     });
   },
 });

@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import cross from "../../../images/icons/Cross.png";
 import { toggleFilterMenu } from "../../../store/mobileAppSlice";
 import { encryptData, decryptData, SECRET_KEY } from "../../../util/EncDec";
+let nameId = "";
+let specialityId = [];
 const DoctorListing = () => {
   const [checkedIds, setCheckedIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +25,8 @@ const DoctorListing = () => {
   const [filterDoctorList, setFilterDoctorList] = useState([]);
   const [filterDoctorSearchTerm, setFilterDoctorSearchTerm] = useState("");
   const [status, setStatus] = useState("idle");
+  //const [nameId, setNameId] = useState("");
+
 
   const [reqBodyfilterData, setReqBodyFilterData] = useState([
     {
@@ -43,6 +47,10 @@ const DoctorListing = () => {
 
     //appointment_type ://pending
   ]);
+
+  //testing encodeed url
+
+  // console.log(storeURL, "storeURL,,,,,,,,,,,,,,,,");
   const { data: filterData } = useFetch("/patient/filters");
   const [shouldCallAPI, setShouldCallAPI] = useState(true);
   const [time_slot_day, setTime_slot_day] = useState("");
@@ -60,16 +68,29 @@ const DoctorListing = () => {
     conditionParams: searchParams.get("conditions"),
     insuranceParams: searchParams.get("insurance"),
     speciality: decryptData(searchParams.get("speciality"), SECRET_KEY),
+    //speciality: searchParams.get("speciality"),
     appointment_type: searchParams.get("appointment_type"),
   };
   const toggleFilterDispatch = useDispatch();
 
   const zipCode = commonParams?.locationParams?.split("_")[1];
-  const specialityId =
-    commonParams?.specialityParams?.split("_")[1] ||
-    commonParams?.speciality?.split("_")[1];
+  console.log(commonParams?.speciality, "COMMON PARAM specialityId SUJIT MUKESH");
+  // Internal Medicine_27, Integrative Medicine_52 get me 27,52 and so on..
 
-  console.log(specialityId, "specialityId");
+  if (commonParams?.speciality) {
+    let specialityIdArray = commonParams?.speciality?.split(",");
+    specialityId = specialityIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+  console.log(specialityId, "specialityId  ARRAY Sujit");
+  //const specialityId =
+  // commonParams?.specialityParams?.split("_")[0] ||
+  // commonParams?.speciality?.split("_")[0];
+
+  console.log(commonParams?.speciality, "specialityParams Sujit");
+
+  console.log('sujit', specialityId, "specialityId");
   const conditionId = commonParams?.conditionParams?.split("_")[1];
   const insuranceId = commonParams?.insuranceParams?.split("_")[1];
 
@@ -262,21 +283,23 @@ const DoctorListing = () => {
     "speciality"
   );
 
-  console.log(specilaityParamsMy, "specilaityParamsMy");
+
   console.log(decryptData(specilaityParamsMy, SECRET_KEY));
   const generateLabel = (data, category) => {
-    const id = data.id;
+
 
     const filterCategoryKey = category.title
       .toLowerCase()
       .replace(" ", "_")
-      .replace("specialty", "speciality"); // Replace "specialty" with "speciality" in the filterCategoryKey
+      .replace("specialty", "speciality");
     const isChecked = reqBodyfilterData.find((categoryData) =>
       categoryData[filterCategoryKey]?.includes(data.id)
     );
 
+
     const handleChange = async (e) => {
       const checked = e.target.checked;
+
       const originalId = e.target.id.split("-")[1];
       const filterCategoryKey = category.title.toLowerCase().replace(" ", "_");
       setShouldCallAPI(false);
@@ -285,29 +308,76 @@ const DoctorListing = () => {
         data.medical_speciality_name ||
         data.medical_condition_name ||
         data.insurance_company_name;
+      let newNameId = `${name}_${id}`;
+      console.log(newNameId, "SUJIT B newNameId");
+      // setNameId((prevNameId) => {
+      //   if (prevNameId) {
+      //     return `${prevNameId}, ${newNameId}`;
+      //   } else {
+      //     return newNameId;
+      //   }
+      // });
+      console.log(nameId, "SUJIT B nameId");
+      if (nameId) {
+        nameId = nameId.concat(",", newNameId);
+      } else {
+        nameId = newNameId;
+      }
 
+      console.log(nameId, "SUJIT B nameId");
       const appointment_type = data;
 
       if (checked) {
         // Use the originalId instead of data.id
+        console.log("common params SUJIT after url copy", commonParams);
+        if (commonParams?.speciality) {
+          console.log("speciality already checked", commonParams?.speciality);
+          let specialityIdArray = commonParams?.speciality?.split(",");
+          specialityId = specialityIdArray.map((item) => {
+            return item.split("_")[1];
+          });
+        }
+
         setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
 
         // Update reqBodyfilterData
+        // setReqBodyFilterData((prevData) => {
+        //   const updatedData = prevData.map((categoryData) => {
+        //     const key = Object.keys(categoryData)[0];
+        //     // Replace "specialty" with "speciality" in the filterCategoryKey
+        //     const updatedFilterCategoryKey =
+        //       key === "specialty" ? "speciality" : key;
+
+        //     categoryData['speciality'] = [...specialityId];
+
+        //     if (updatedFilterCategoryKey === filterCategoryKey) {
+        //       return {
+        //         [updatedFilterCategoryKey]: [...categoryData[key], originalId],
+        //       };
+        //     }
+        //     return categoryData;
+        //   });
+        //   return updatedData;
+        // });
         setReqBodyFilterData((prevData) => {
-          const updatedData = prevData.map((categoryData) => {
+          return prevData.map((categoryData) => {
             const key = Object.keys(categoryData)[0];
             // Replace "specialty" with "speciality" in the filterCategoryKey
             const updatedFilterCategoryKey =
               key === "specialty" ? "speciality" : key;
 
             if (updatedFilterCategoryKey === filterCategoryKey) {
+              // Append both existing and new specialityId to the "speciality" key
               return {
-                [updatedFilterCategoryKey]: [...categoryData[key], originalId],
+                [updatedFilterCategoryKey]: [
+                  ...categoryData[key],
+                  ...specialityId,
+                  originalId,
+                ],
               };
             }
             return categoryData;
           });
-          return updatedData;
         });
       } else {
         // Use the originalId instead of data.id
@@ -334,6 +404,8 @@ const DoctorListing = () => {
           });
           return updatedData;
         });
+
+
       }
 
       let filterTitle = category.title.toLowerCase().replace(" ", "_");
@@ -358,8 +430,8 @@ const DoctorListing = () => {
           filterCategory[filterCategoryKey] = checked
             ? [...filterCategory[filterCategoryKey], id]
             : filterCategory[filterCategoryKey].filter(
-                (checkedId) => checkedId !== id
-              );
+              (checkedId) => checkedId !== id
+            );
         }
       }
 
@@ -373,15 +445,33 @@ const DoctorListing = () => {
       );
 
       if (checked) {
+        console.log(name, appointment_type, id, "name,appointment_type,id, SUJIT");
+        let SUJITDATA = nameId;
+
+        console.log(encryptData(SUJITDATA, SECRET_KEY));
+        console.log(encryptData(SUJITDATA, SECRET_KEY), "encryptData(id, SECRET_KEY) SUJIT");
+        //let valueToAdd = SUJITDATA;
+
+        let filterTitle = category.title.toLowerCase().replace(" ", "_");
+        filterTitle = filterTitle.replace("specialty", "speciality");
         const valueToAdd =
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
             : name
-            ? encryptData(`${name}_${id}`, SECRET_KEY)
-            : // ? `${name}_${id}`
+              ? encryptData(SUJITDATA, SECRET_KEY) //
+              : // ? `${name}_${id}`
               // id;
               encryptData(id, SECRET_KEY);
-
+        // const valueToAdd =
+        //   filterTitle.toLowerCase() === "appointment_type"
+        //     ? appointment_type
+        //     : name
+        //       ? encryptData(`${name}_${id}`, SECRET_KEY) //
+        //       : // ? `${name}_${id}`
+        //       // id;
+        //       encryptData(id, SECRET_KEY);
+        console.log(filterTitle, "filterTitle SUjit");
+        console.log(valueToAdd, "valueToAdd Sujit");
         searchParams.set(filterTitle, valueToAdd);
         // searchParams.set(
         //   filterTitle,
@@ -415,9 +505,8 @@ const DoctorListing = () => {
       <label className="inline-flex items-center mt-3" key={data.id}>
         <input
           type="checkbox"
-          className={`form-checkbox h-3 w-3 text-gray-600 ${
-            isChecked ? "checked" : ""
-          }`}
+          className={`form-checkbox h-3 w-3 text-gray-600 ${isChecked ? "checked" : ""
+            }`}
           onChange={handleChange}
           checked={
             isChecked ||
@@ -444,6 +533,8 @@ const DoctorListing = () => {
       </label>
     );
   };
+
+
   //Mobile FIlter For InPerson and Virtual
   const [startDate] = useState(new Date());
   const [activeMobileAppointMentType, setActiveMobileAppointMentType] =
@@ -528,21 +619,19 @@ const DoctorListing = () => {
         </div>
         <div className="md:hidden flex items-center mt-5 px-2 space-x-2">
           <div
-            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
-              activeMobileAppointMentType.InPerson
-                ? "bg-verifiCation text-white"
-                : ""
-            }`}
+            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.InPerson
+              ? "bg-verifiCation text-white"
+              : ""
+              }`}
             onClick={filterInPersonHandler}
           >
             In Person
           </div>
           <div
-            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
-              activeMobileAppointMentType.Virtual
-                ? "bg-verifiCation text-white"
-                : ""
-            } `}
+            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.Virtual
+              ? "bg-verifiCation text-white"
+              : ""
+              } `}
             onClick={filterVirtualHandler}
           >
             Virtual
@@ -555,9 +644,8 @@ const DoctorListing = () => {
           </div>
           {isMenuForFilter && (
             <div
-              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
-                isMenuForFilter ? "translate-x-0" : "translate-x-full"
-              }`}
+              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuForFilter ? "translate-x-0" : "translate-x-full"
+                }`}
             >
               <div className="relative">
                 <button
@@ -628,20 +716,18 @@ const DoctorListing = () => {
         </div>
         <h2 className="px-2 md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
           {doctorsList.length > 0 || filterDoctorList.length > 0
-            ? `We have found ${
-                filterDoctorList.length > 0
-                  ? filterDoctorList.length
-                  : totalCount
-              } Doctors for your search criteria`
+            ? `We have found ${filterDoctorList.length > 0
+              ? filterDoctorList.length
+              : totalCount
+            } Doctors for your search criteria`
             : ""}
         </h2>
 
         <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
         <div className="flex mt-5">
           <aside
-            className={`hidden md:flex flex-col  px-6 py-3 ${
-              filterData ? "border-r border-gray-300" : ""
-            } `}
+            className={`hidden md:flex flex-col  px-6 py-3 ${filterData ? "border-r border-gray-300" : ""
+              } `}
           >
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               {filterData && "Filters"}
@@ -687,19 +773,19 @@ const DoctorListing = () => {
             {status === "loading"
               ? ""
               : doctorsList.length === 0 && (
-                  <div className="flex justify-center items-center">
-                    <div className="flex flex-col justify-center items-center">
-                      <img
-                        src={noDoctor}
-                        alt="no doctors"
-                        className="w-[25%] h-auto object-contain"
-                      />
-                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
-                        No doctors found.
-                      </h2>
-                    </div>
+                <div className="flex justify-center items-center">
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={noDoctor}
+                      alt="no doctors"
+                      className="w-[25%] h-auto object-contain"
+                    />
+                    <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
+                      No doctors found.
+                    </h2>
                   </div>
-                )}
+                </div>
+              )}
 
             <div className="mt-10">
               <Pagination

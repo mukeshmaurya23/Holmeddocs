@@ -7,6 +7,7 @@ import { toggleMenu } from "../store/mobileAppSlice";
 import Modal from "../UI/Modal";
 import { logout } from "../store/loginSlice";
 import customAxios from "../axios/custom";
+import { enqueueSnackbar } from "notistack";
 const MobileResposiveToogle = () => {
   const isMenuOpen = useSelector((state) => state.mobileApp.isMenuOpen);
   const isLoggedIn = useSelector((state) => state.login.remember_token);
@@ -45,9 +46,8 @@ const MobileResposiveToogle = () => {
   return (
     <>
       <div
-        className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="relative">
           <button

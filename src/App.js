@@ -8,6 +8,7 @@ import UnderMaintenance from "./components/UnderMaintenance";
 
 import { fetchConditions, fetchSpecialties } from "./store/LocSpecSlice";
 import {
+  fetchAllDoctorsData,
   fetchData,
   fetchDoctorsData,
   fetchInsuranceData,
@@ -106,6 +107,7 @@ function App() {
   const stateDispatch = useDispatch();
   const medicalListdispatch = useDispatch();
   const appointmentDispatch = useDispatch();
+  const doctorDispatch2 = useDispatch();
 
   useEffect(() => {
     dispatch(fetchSpecialties("/patient/master/speciality"));
@@ -145,6 +147,10 @@ function App() {
     medicalListdispatch(fetchAllMedicalConditionList(selectedItem));
   }, [selectedItem]);
 
+
+  useEffect(() => {
+    doctorDispatch2(fetchAllDoctorsData())
+  }, []);
   useEffect(() => {
     //scroll to top on every route change
     window.scrollTo(0, 0);
@@ -192,12 +198,12 @@ function App() {
   const routes = isLoggedIn
     ? [...commonRoutes, ...authenticatedRoutes]
     : [
-        ...commonRoutes,
-        { path: "/register", element: <Register /> },
-        { path: "/otp", element: <RegisterOtp /> },
-        { path: "/login", element: <Login /> },
-        { path: "/forgot-password", element: <ForgotPassword /> },
-      ];
+      ...commonRoutes,
+      { path: "/register", element: <Register /> },
+      { path: "/otp", element: <RegisterOtp /> },
+      { path: "/login", element: <Login /> },
+      { path: "/forgot-password", element: <ForgotPassword /> },
+    ];
 
   return (
     <>

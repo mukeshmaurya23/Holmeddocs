@@ -248,9 +248,28 @@ const Navbar2 = () => {
       selectedItemList.speciality.length === 0 &&
       selectedItemList.conditions.length === 0 &&
       moment(startDate).format("YYYY-MM-DD") ===
-        moment(dateSearchParams).format("YYYY-MM-DD")
+      moment(dateSearchParams).format("YYYY-MM-DD")
     ) {
-      console.log("inside if");
+
+
+      if (clearingPlaceholder !== "") {
+        if (locationSearchParams) {
+          url += `location=${locationSearchParams}&`
+        }
+        if (specialitySearchParams) {
+          url += `selectedSpeciality=${specialitySearchParams}&`;
+        }
+        if (conditionSearchParams) {
+          url += `conditions=${conditionSearchParams}&`;
+        }
+        if (dateSearchParams) {
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+        }
+
+        navigate(url);
+        return;
+      }
+
       if (selectedItemList.location.length === 0) {
         console.log("clearning data");
         if (specialitySearchParams) {
@@ -672,19 +691,16 @@ const Navbar2 = () => {
   return (
     <>
       <div
-        className={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
-          location.pathname === "/make-appointment" ||
+        className={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
-            ? "drop-shadow-lg"
-            : "lg:py-5"
-        } grid grid-col-12 py-1  ${
-          location.pathname === "/make-appointment" ||
-          location.pathname === "/doctor-listing"
+          ? "drop-shadow-lg"
+          : "lg:py-5"
+          } grid grid-col-12 py-1  ${location.pathname === "/make-appointment" ||
+            location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-        } ${
-          showShadow ? "drop-shadow-md" : ""
-        } bg-white z-10  h-[7rem] relative cursor-pointer`}
+          } ${showShadow ? "drop-shadow-md" : ""
+          } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
         <div className="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -744,11 +760,10 @@ const Navbar2 = () => {
                 <div className="flex items-center relative w-[600px]">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
-                      selectedItemList.location || locationSearchParams
-                        ? "text-[1rem] font-semibold"
-                        : "text-[1rem]"
-                    }`}
+                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${selectedItemList.location || locationSearchParams
+                      ? "text-[1rem] font-semibold"
+                      : "text-[1rem]"
+                      }`}
                     placeholder={clearingPlaceholder || "Location"}
                     value={selectedItemList.location || searchValue}
                     onChange={handleLocationSearch}
@@ -762,24 +777,22 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${
-                      selectedItem === "location"
-                        ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                        : ""
-                    }`}
+                    className={`${selectedItem === "location"
+                      ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                      }`}
                   >
                     {selectedItem === "location" && locationItems()}
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${
-                      selectedItemList.speciality ||
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
                       conditionSearchParams
-                        ? "text-[1rem] font-semibold"
-                        : "text-[1rem]"
-                    }`}
+                      ? "text-[1rem] font-semibold"
+                      : "text-[1rem]"
+                      }`}
                     placeholder={
                       clearSpecialityPlaceholder ||
                       clearConditionPlaceholder ||
@@ -799,11 +812,10 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${
-                      selectedItem === "speciality"
-                        ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                        : ""
-                    }`}
+                    className={`${selectedItem === "speciality"
+                      ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      : ""
+                      }`}
                   >
                     {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
@@ -821,13 +833,12 @@ const Navbar2 = () => {
                     />
                     <span
                       onClick={handleClick}
-                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${
-                        !dateSearchParams ? "hidden" : ""
-                      }`}
+                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${!dateSearchParams ? "hidden" : ""
+                        }`}
                     >
                       {dateSearchParams &&
-                      startDate &&
-                      startDate.toDateString() === new Date().toDateString()
+                        startDate &&
+                        startDate.toDateString() === new Date().toDateString()
                         ? formattedDate
                         : moment(startDate).format("DD MMM,YYYY")}
                     </span>
@@ -918,9 +929,8 @@ const Navbar2 = () => {
 
           {isMenuOpen && (
             <div
-              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
-                isMenuOpen ? "translate-x-0" : "translate-x-full"
-              }`}
+              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+                }`}
             >
               <div className="relative">
                 <button

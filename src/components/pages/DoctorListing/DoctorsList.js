@@ -99,7 +99,7 @@ const DoctorsList = ({ doctorsList, status }) => {
               Availability
             </h2>
             <div
-              className="md:px-16 flex  gap-3 mt-5 cursor-pointer ml-0  md:ml-6 w-[330px] md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden "
+              className="md:px-5 flex  gap-3 mt-5 cursor-pointer ml-0  md:ml-6 w-[330px] md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden "
               id="hideMyScrollbar"
             >
               {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
@@ -113,11 +113,10 @@ const DoctorsList = ({ doctorsList, status }) => {
                     )
                   }
                   key={index}
-                  className={` ${
-                    timeSlot.value.length > 0
+                  className={` ${timeSlot.value.length > 0
                       ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
                       : "bg-[#ecf0f1] cursor-not-allowed"
-                  }    rounded p-1`}
+                    }    rounded p-1`}
                 >
                   <p className="px-3 text-[12px] ">
                     {timeSlot?.day?.slice(0, 3)}
