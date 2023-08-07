@@ -23,7 +23,7 @@ const DoctorsList = ({ doctorsList, status }) => {
   };
   const naviagte = useNavigate();
   return doctorsList.length === 0 ? (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-screen">
       <img src={loadingGif} alt="loading" />
     </div>
   ) : (
@@ -113,10 +113,11 @@ const DoctorsList = ({ doctorsList, status }) => {
                     )
                   }
                   key={index}
-                  className={` ${timeSlot.value.length > 0
+                  className={` ${
+                    timeSlot.value.length > 0
                       ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
                       : "bg-[#ecf0f1] cursor-not-allowed"
-                    }    rounded p-1`}
+                  }    rounded p-1`}
                 >
                   <p className="px-3 text-[12px] ">
                     {timeSlot?.day?.slice(0, 3)}

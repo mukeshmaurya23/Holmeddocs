@@ -11,11 +11,12 @@ import Modal from "../../../UI/Modal";
 import DatePickerComponent from "../../../UI/DatePicker";
 import moment from "moment";
 import TimeSlotsComponent from "./TimeSlotsComponent";
-const DoctorDetails = ({ }) => {
+const DoctorDetails = ({}) => {
   const { id } = useParams();
 
   const timeSlotDispatch = useDispatch();
-  const { getAllDoctorsData: doctorsList, getAllDoctorsDataStatus } = useSelector((state) => state.api);
+  const { getAllDoctorsData: doctorsList, getAllDoctorsDataStatus } =
+    useSelector((state) => state.api);
   const [startDate, setStartDate] = useState(new Date());
   //step 1 slot_avialability:{ InPerson:[{..}] ,Virtual:[{..}] }
   const { slot_avialability, slot_avialability_status } = useSelector(
@@ -41,8 +42,6 @@ const DoctorDetails = ({ }) => {
   const handleSelectedTypeChange = (type) => {
     setSelectedType(type);
   };
-
-
 
   const handleDateSelection = (date, timeSlots, formatedDate) => {
     // const dateObj = new Date(date);
@@ -82,8 +81,6 @@ const DoctorDetails = ({ }) => {
     setModal(false);
   };
 
-
-
   // useEffect(() => {
 
   // }, [timeSlotDispatch, formattedDate, id]);
@@ -102,16 +99,16 @@ const DoctorDetails = ({ }) => {
     }
     return isLoggedIn
       ? navigate("/book-appointment", {
-        state: {
-          doctor: doctorsList?.data?.result?.filter(
-            (doctor) => doctor.id == id
-          ),
-          date: selectDateTime.date,
-          time: selectDateTime.time,
-          timeSlotId: timeSlotId,
-          type: selectedType,
-        },
-      })
+          state: {
+            doctor: doctorsList?.data?.result?.filter(
+              (doctor) => doctor.id == id
+            ),
+            date: selectDateTime.date,
+            time: selectDateTime.time,
+            timeSlotId: timeSlotId,
+            type: selectedType,
+          },
+        })
       : openModal();
   };
 
@@ -153,7 +150,7 @@ const DoctorDetails = ({ }) => {
   };
 
   return getAllDoctorsDataStatus === "loading" ? (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-screen">
       <img src={loadingGif} alt="loading" />
     </div>
   ) : (
@@ -267,8 +264,9 @@ const DoctorDetails = ({ }) => {
 
                     <div className=" max-h-[250px] overflow-auto">
                       <span
-                        className={`mt-[1rem] text-sm text-[#545871] md:text-[1rem] overflow-hidden ${showFullBio ? "" : "line-clamp-3"
-                          }`}
+                        className={`mt-[1rem] text-sm text-[#545871] md:text-[1rem] overflow-hidden ${
+                          showFullBio ? "" : "line-clamp-3"
+                        }`}
                       >
                         {doctor?.doctor_bio}
                       </span>
@@ -335,14 +333,16 @@ const DoctorDetails = ({ }) => {
                             <>
                               <div
                                 key={index}
-                                className={`${timeSlot.value.length > 0 ||
+                                className={`${
+                                  timeSlot.value.length > 0 ||
                                   virtualData?.value.length > 0
-                                  ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
-                                  : "bg-[#ecf0f1] cursor-not-allowed"
-                                  } flex justify-center items-center rounded
-                            ${selectDateTime.date === timeSlot.date &&
-                                  "bg-verifiCation text-white"
-                                  }
+                                    ? "bg-[#dcf9ff] hover:bg-verifiCation cursor-pointer hover:text-white"
+                                    : "bg-[#ecf0f1] cursor-not-allowed"
+                                } flex justify-center items-center rounded
+                            ${
+                              selectDateTime.date === timeSlot.date &&
+                              "bg-verifiCation text-white"
+                            }
                             `}
                                 onClick={() => {
                                   if (timeSlot.value.length > 0) {

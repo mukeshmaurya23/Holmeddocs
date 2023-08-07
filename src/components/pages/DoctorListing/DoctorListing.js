@@ -8,7 +8,7 @@ import loadingGif from "../../../images/icons/Loader.gif";
 import searchIcon from "../../../images/home/SearchBarIcon.svg";
 import DoctorsList from "./DoctorsList";
 import Footer from "../../../UI/Footer";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import customAxios from "../../../axios/custom";
 import noDoctor from "../../../images/zerodoctor.png";
 import moment from "moment";
@@ -18,6 +18,9 @@ import { toggleFilterMenu } from "../../../store/mobileAppSlice";
 import { encryptData, decryptData, SECRET_KEY } from "../../../util/EncDec";
 let nameId = "";
 let specialityId = [];
+let conditionId = [];
+let insuranceId = [];
+let langaugeId = [];
 const DoctorListing = () => {
   const [checkedIds, setCheckedIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +29,6 @@ const DoctorListing = () => {
   const [filterDoctorSearchTerm, setFilterDoctorSearchTerm] = useState("");
   const [status, setStatus] = useState("idle");
   //const [nameId, setNameId] = useState("");
-
 
   const [reqBodyfilterData, setReqBodyFilterData] = useState([
     {
@@ -61,38 +63,104 @@ const DoctorListing = () => {
 
   const searchParams = new URLSearchParams(location.search);
 
+  console.log(specialityId, "specialityId");
+
   const commonParams = {
     date: searchParams.get("date"),
     locationParams: searchParams.get("location"),
     specialityParams: searchParams.get("selectedSpeciality"),
-    conditionParams: searchParams.get("conditions"),
-    insuranceParams: searchParams.get("insurance"),
+    conditionParams: searchParams.get("selectedConditions"),
+    insuranceParams: searchParams.get("selectedInsurance"),
     speciality: decryptData(searchParams.get("speciality"), SECRET_KEY),
+    conditions: decryptData(searchParams.get("conditions"), SECRET_KEY),
+    insurance: decryptData(searchParams.get("insurance"), SECRET_KEY),
+    language: decryptData(searchParams.get("language"), SECRET_KEY),
     //speciality: searchParams.get("speciality"),
     appointment_type: searchParams.get("appointment_type"),
   };
   const toggleFilterDispatch = useDispatch();
 
   const zipCode = commonParams?.locationParams?.split("_")[1];
-  console.log(commonParams?.speciality, "COMMON PARAM specialityId SUJIT MUKESH");
-  // Internal Medicine_27, Integrative Medicine_52 get me 27,52 and so on..
 
+  // Internal Medicine_27, Integrative Medicine_52 get me 27,52 and so on..
+  console.log(specialityId, "specialityId Mukesh");
+  console.log(commonParams.speciality, "commonParams Mukesh");
   if (commonParams?.speciality) {
     let specialityIdArray = commonParams?.speciality?.split(",");
     specialityId = specialityIdArray.map((item) => {
       return item.split("_")[1];
     });
   }
-  console.log(specialityId, "specialityId  ARRAY Sujit");
+
+  // useEffect(() => {
+  //   if (commonParams?.speciality) {
+  //     let specialityIdArray = commonParams?.speciality?.split(",");
+  //     specialityId = specialityIdArray.map((item) => {
+  //       return item.split("_")[1];
+  //     });
+  //     setReqBodyFilterData((prev) => {
+  //       return {
+  //         ...prev,
+  //         speciality: specialityId,
+  //       };
+  //     });
+  //   }
+  // }, [commonParams?.speciality]);
+
+  if (commonParams.specialityParams) {
+    let specialityIdArray = commonParams?.specialityParams?.split(",");
+    specialityId = specialityIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+
+  if (commonParams?.conditions) {
+    let conditionIdArray = commonParams?.conditions?.split(",");
+
+    conditionId = conditionIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+
+  if (commonParams?.conditionParams) {
+    let conditionIdArray = commonParams?.conditionParams?.split(",");
+    conditionId = conditionIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+
+  if (commonParams?.insuranceParams) {
+    let insuranceIdArray = commonParams?.insuranceParams?.split(",");
+    insuranceId = insuranceIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+  if (commonParams?.insurance) {
+    let insuranceIdArray = commonParams?.insurance?.split(",");
+    insuranceId = insuranceIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+
+  if (commonParams?.language) {
+    let languageIdArray = commonParams?.language?.split(",");
+    langaugeId = languageIdArray.map((item) => {
+      return item.split("_")[1];
+    });
+  }
+  // if (commonParams?.conditionParams) {
+  //   let conditionIdArray = commonParams?.conditionParams?.split(",");
+  //   conditionId = conditionIdArray.map((item) => {
+  //     return item.split("_")[1];
+  //   });
+  // }
+
   //const specialityId =
   // commonParams?.specialityParams?.split("_")[0] ||
   // commonParams?.speciality?.split("_")[0];
 
-  console.log(commonParams?.speciality, "specialityParams Sujit");
-
-  console.log('sujit', specialityId, "specialityId");
-  const conditionId = commonParams?.conditionParams?.split("_")[1];
-  const insuranceId = commonParams?.insuranceParams?.split("_")[1];
+  //const conditionId = commonParams?.conditionParams?.split("_")[1];
+  // const insuranceId = commonParams?.insuranceParams?.split("_")[1];
 
   const toggleFilterMenuHandler = () => {
     toggleFilterDispatch(toggleFilterMenu());
@@ -159,6 +227,7 @@ const DoctorListing = () => {
         speciality: specialityId,
         conditions: conditionId,
         insurance: insuranceId,
+        language: langaugeId,
         appointment_type: commonParams?.appointment_type,
       });
 
@@ -212,17 +281,17 @@ const DoctorListing = () => {
         } else {
           fetchAllDoctors();
         }
-      } else {
-        fetchAllDoctors();
       }
     }
   }, [
     commonParams?.locationParams,
     commonParams?.specialityParams,
     commonParams?.conditionParams,
+
     commonParams?.insuranceParams,
     commonParams?.date,
     commonParams?.speciality,
+    commonParams?.language,
     commonParams?.appointment_type,
     shouldCallAPI,
   ]);
@@ -279,15 +348,7 @@ const DoctorListing = () => {
     return displayedValues?.map((data) => generateLabel(data, category));
   };
 
-  const specilaityParamsMy = new URLSearchParams(window.location.search).get(
-    "speciality"
-  );
-
-
-  console.log(decryptData(specilaityParamsMy, SECRET_KEY));
   const generateLabel = (data, category) => {
-
-
     const filterCategoryKey = category.title
       .toLowerCase()
       .replace(" ", "_")
@@ -295,7 +356,6 @@ const DoctorListing = () => {
     const isChecked = reqBodyfilterData.find((categoryData) =>
       categoryData[filterCategoryKey]?.includes(data.id)
     );
-
 
     const handleChange = async (e) => {
       const checked = e.target.checked;
@@ -307,9 +367,9 @@ const DoctorListing = () => {
       const name =
         data.medical_speciality_name ||
         data.medical_condition_name ||
-        data.insurance_company_name;
+        data.insurance_company_name ||
+        data.language_title;
       let newNameId = `${name}_${id}`;
-      console.log(newNameId, "SUJIT B newNameId");
       // setNameId((prevNameId) => {
       //   if (prevNameId) {
       //     return `${prevNameId}, ${newNameId}`;
@@ -317,19 +377,16 @@ const DoctorListing = () => {
       //     return newNameId;
       //   }
       // });
-      console.log(nameId, "SUJIT B nameId");
+
       if (nameId) {
         nameId = nameId.concat(",", newNameId);
       } else {
         nameId = newNameId;
       }
 
-      console.log(nameId, "SUJIT B nameId");
       const appointment_type = data;
 
       if (checked) {
-        // Use the originalId instead of data.id
-        console.log("common params SUJIT after url copy", commonParams);
         if (commonParams?.speciality) {
           console.log("speciality already checked", commonParams?.speciality);
           let specialityIdArray = commonParams?.speciality?.split(",");
@@ -337,48 +394,52 @@ const DoctorListing = () => {
             return item.split("_")[1];
           });
         }
-
+        if (commonParams.conditions) {
+          console.log("conditions already checked", commonParams?.conditions);
+          let conditionsIdArray = commonParams?.conditions?.split(",");
+          conditionId = conditionsIdArray.map((item) => {
+            return item.split("_")[1];
+          });
+        }
         setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
 
         // Update reqBodyfilterData
-        // setReqBodyFilterData((prevData) => {
-        //   const updatedData = prevData.map((categoryData) => {
-        //     const key = Object.keys(categoryData)[0];
-        //     // Replace "specialty" with "speciality" in the filterCategoryKey
-        //     const updatedFilterCategoryKey =
-        //       key === "specialty" ? "speciality" : key;
-
-        //     categoryData['speciality'] = [...specialityId];
-
-        //     if (updatedFilterCategoryKey === filterCategoryKey) {
-        //       return {
-        //         [updatedFilterCategoryKey]: [...categoryData[key], originalId],
-        //       };
-        //     }
-        //     return categoryData;
-        //   });
-        //   return updatedData;
-        // });
         setReqBodyFilterData((prevData) => {
-          return prevData.map((categoryData) => {
+          const updatedData = prevData.map((categoryData) => {
             const key = Object.keys(categoryData)[0];
             // Replace "specialty" with "speciality" in the filterCategoryKey
             const updatedFilterCategoryKey =
               key === "specialty" ? "speciality" : key;
 
             if (updatedFilterCategoryKey === filterCategoryKey) {
-              // Append both existing and new specialityId to the "speciality" key
               return {
-                [updatedFilterCategoryKey]: [
-                  ...categoryData[key],
-                  ...specialityId,
-                  originalId,
-                ],
+                [updatedFilterCategoryKey]: [...categoryData[key], originalId],
               };
             }
             return categoryData;
           });
+          return updatedData;
         });
+        // setReqBodyFilterData((prevData) => {
+        //   return prevData.map((categoryData) => {
+        //     const key = Object.keys(categoryData)[0];
+        //     // Replace "specialty" with "speciality" in the filterCategoryKey
+        //     const updatedFilterCategoryKey =
+        //       key === "specialty" ? "speciality" : key;
+
+        //     if (updatedFilterCategoryKey === filterCategoryKey) {
+        //       // Append both existing and new specialityId to the "speciality" key
+        //       return {
+        //         [updatedFilterCategoryKey]: [
+        //           ...categoryData[key],
+        //           ...specialityId,
+        //           originalId,
+        //         ],
+        //       };
+        //     }
+        //     return categoryData;
+        //   });
+        // });
       } else {
         // Use the originalId instead of data.id
         setCheckedIds((prevCheckedIds) =>
@@ -404,8 +465,6 @@ const DoctorListing = () => {
           });
           return updatedData;
         });
-
-
       }
 
       let filterTitle = category.title.toLowerCase().replace(" ", "_");
@@ -430,8 +489,8 @@ const DoctorListing = () => {
           filterCategory[filterCategoryKey] = checked
             ? [...filterCategory[filterCategoryKey], id]
             : filterCategory[filterCategoryKey].filter(
-              (checkedId) => checkedId !== id
-            );
+                (checkedId) => checkedId !== id
+              );
         }
       }
 
@@ -445,23 +504,26 @@ const DoctorListing = () => {
       );
 
       if (checked) {
-        console.log(name, appointment_type, id, "name,appointment_type,id, SUJIT");
-        let SUJITDATA = nameId;
+        console.log(name, appointment_type, id, "name,appointment_type,id");
+        let encryptedData = nameId;
+        console.log(encryptedData, "encryptedData");
+        console.log(encryptData(encryptedData, SECRET_KEY), "Mukesh Condition");
 
-        console.log(encryptData(SUJITDATA, SECRET_KEY));
-        console.log(encryptData(SUJITDATA, SECRET_KEY), "encryptData(id, SECRET_KEY) SUJIT");
         //let valueToAdd = SUJITDATA;
-
+        console.log(
+          category.title.toLowerCase(),
+          "category.title toLowercase()"
+        );
         let filterTitle = category.title.toLowerCase().replace(" ", "_");
         filterTitle = filterTitle.replace("specialty", "speciality");
         const valueToAdd =
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
             : name
-              ? encryptData(SUJITDATA, SECRET_KEY) //
-              : // ? `${name}_${id}`
+            ? encryptData(encryptedData, SECRET_KEY) //
+            : // ? `${name}_${id}`
               // id;
-              encryptData(id, SECRET_KEY);
+              encryptData(encryptedData, SECRET_KEY);
         // const valueToAdd =
         //   filterTitle.toLowerCase() === "appointment_type"
         //     ? appointment_type
@@ -470,8 +532,7 @@ const DoctorListing = () => {
         //       : // ? `${name}_${id}`
         //       // id;
         //       encryptData(id, SECRET_KEY);
-        console.log(filterTitle, "filterTitle SUjit");
-        console.log(valueToAdd, "valueToAdd Sujit");
+
         searchParams.set(filterTitle, valueToAdd);
         // searchParams.set(
         //   filterTitle,
@@ -500,27 +561,32 @@ const DoctorListing = () => {
         setStatus("failed");
       }
     };
-
+    console.log(data.language_title, "data.language_title Mukeshhhhhhhhh");
     return (
       <label className="inline-flex items-center mt-3" key={data.id}>
         <input
           type="checkbox"
-          className={`form-checkbox h-3 w-3 text-gray-600 ${isChecked ? "checked" : ""
-            }`}
+          className={`form-checkbox h-3 w-3 text-gray-600 ${
+            isChecked ? "checked" : ""
+          }`}
           onChange={handleChange}
           checked={
             isChecked ||
-            commonParams.specialityParams?.includes(
-              data?.medical_speciality_name
-            ) ||
+            (commonParams.specialityParams &&
+              commonParams.specialityParams?.includes(
+                data?.medical_speciality_name
+              )) ||
             commonParams.speciality?.includes(data?.medical_speciality_name) ||
             commonParams.conditionParams?.includes(
               data?.medical_condition_name
             ) ||
+            commonParams.conditions?.includes(data?.medical_condition_name) ||
             commonParams.insuranceParams?.includes(
               data?.insurance_company_name
             ) ||
-            commonParams.appointment_type === data
+            commonParams.insurance?.includes(data?.insurance_company_name) ||
+            commonParams.appointment_type === data ||
+            commonParams.language?.includes(data?.language_title)
           }
         />
         <span className="ml-2 text-gray-700 text-[.8rem] 2xl:text-[1rem] font-sansSemibold ">
@@ -533,7 +599,6 @@ const DoctorListing = () => {
       </label>
     );
   };
-
 
   //Mobile FIlter For InPerson and Virtual
   const [startDate] = useState(new Date());
@@ -619,19 +684,21 @@ const DoctorListing = () => {
         </div>
         <div className="md:hidden flex items-center mt-5 px-2 space-x-2">
           <div
-            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.InPerson
-              ? "bg-verifiCation text-white"
-              : ""
-              }`}
+            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+              activeMobileAppointMentType.InPerson
+                ? "bg-verifiCation text-white"
+                : ""
+            }`}
             onClick={filterInPersonHandler}
           >
             In Person
           </div>
           <div
-            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.Virtual
-              ? "bg-verifiCation text-white"
-              : ""
-              } `}
+            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
+              activeMobileAppointMentType.Virtual
+                ? "bg-verifiCation text-white"
+                : ""
+            } `}
             onClick={filterVirtualHandler}
           >
             Virtual
@@ -644,8 +711,9 @@ const DoctorListing = () => {
           </div>
           {isMenuForFilter && (
             <div
-              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuForFilter ? "translate-x-0" : "translate-x-full"
-                }`}
+              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+                isMenuForFilter ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <div className="relative">
                 <button
@@ -716,18 +784,20 @@ const DoctorListing = () => {
         </div>
         <h2 className="px-2 md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
           {doctorsList.length > 0 || filterDoctorList.length > 0
-            ? `We have found ${filterDoctorList.length > 0
-              ? filterDoctorList.length
-              : totalCount
-            } Doctors for your search criteria`
+            ? `We have found ${
+                filterDoctorList.length > 0
+                  ? filterDoctorList.length
+                  : totalCount
+              } Doctors for your search criteria`
             : ""}
         </h2>
 
         <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
         <div className="flex mt-5">
           <aside
-            className={`hidden md:flex flex-col  px-6 py-3 ${filterData ? "border-r border-gray-300" : ""
-              } `}
+            className={`hidden md:flex flex-col  px-6 py-3 ${
+              filterData ? "border-r border-gray-300" : ""
+            } `}
           >
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               {filterData && "Filters"}
@@ -773,19 +843,19 @@ const DoctorListing = () => {
             {status === "loading"
               ? ""
               : doctorsList.length === 0 && (
-                <div className="flex justify-center items-center">
-                  <div className="flex flex-col justify-center items-center">
-                    <img
-                      src={noDoctor}
-                      alt="no doctors"
-                      className="w-[25%] h-auto object-contain"
-                    />
-                    <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
-                      No doctors found.
-                    </h2>
+                  <div className="flex justify-center items-center">
+                    <div className="flex flex-col justify-center items-center">
+                      <img
+                        src={noDoctor}
+                        alt="no doctors"
+                        className="w-[25%] h-auto object-contain"
+                      />
+                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
+                        No doctors found.
+                      </h2>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
             <div className="mt-10">
               <Pagination

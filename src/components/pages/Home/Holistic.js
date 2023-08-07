@@ -13,6 +13,7 @@ import Spinner from "../../../UI/Spinner";
 import DatePickerComponent from "../../../UI/DatePicker";
 import { searchLocation } from "../../../store/searchSlice";
 import moment from "moment";
+import { SECRET_KEY, encryptData } from "../../../util/EncDec";
 
 const Holistic = () => {
   const [zip_code_id, setZipCodeId] = useState("");
@@ -217,7 +218,7 @@ const Holistic = () => {
       url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
     if (selectedItemList.conditions) {
-      url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+      url += `selectedConditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
     url += `date=${moment(startDate).format("YYYY-MM-DD")}`;

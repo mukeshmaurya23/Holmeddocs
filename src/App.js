@@ -147,9 +147,8 @@ function App() {
     medicalListdispatch(fetchAllMedicalConditionList(selectedItem));
   }, [selectedItem]);
 
-
   useEffect(() => {
-    doctorDispatch2(fetchAllDoctorsData())
+    doctorDispatch2(fetchAllDoctorsData("/patient/doctors"));
   }, []);
   useEffect(() => {
     //scroll to top on every route change
@@ -198,18 +197,18 @@ function App() {
   const routes = isLoggedIn
     ? [...commonRoutes, ...authenticatedRoutes]
     : [
-      ...commonRoutes,
-      { path: "/register", element: <Register /> },
-      { path: "/otp", element: <RegisterOtp /> },
-      { path: "/login", element: <Login /> },
-      { path: "/forgot-password", element: <ForgotPassword /> },
-    ];
+        ...commonRoutes,
+        { path: "/register", element: <Register /> },
+        { path: "/otp", element: <RegisterOtp /> },
+        { path: "/login", element: <Login /> },
+        { path: "/forgot-password", element: <ForgotPassword /> },
+      ];
 
   return (
     <>
       <Suspense
         fallback={
-          <div className="loader flex justify-center items-center mt-24">
+          <div className="loader flex justify-center items-center h-screen">
             <img src={loadingGif} alt="loading" className="w-full h-auto" />
           </div>
         }

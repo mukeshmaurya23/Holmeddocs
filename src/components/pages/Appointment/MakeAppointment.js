@@ -63,12 +63,16 @@ const MakeAppointment = () => {
     speciality: "",
     conditions: "",
   });
+  const [error, setError] = useState({
+    locationError: false,
+    specialityError: false,
+  });
 
   const [brosweData, setBrowseData] = useState();
   const locationSearchDispatch = useDispatch();
 
   const zipCodeId = searchParams.get("city");
-  console.log(zipCodeId, "im zip code id");
+
   const handleLocationSearch = (e) => {
     const value = e.target.value;
     setSearchValue(value);
@@ -170,14 +174,17 @@ const MakeAppointment = () => {
           speciality: "",
           conditions: "",
         };
+
         setSelectedItem(null);
       } else if (type === "speciality") {
         updatedItemList = {
           ...updatedItemList,
           speciality: name,
           speciality_id: id,
+
           conditions: "", // Clear the selected conditions when selecting a specialty
         };
+
         setSelectedItem(null);
       } else if (type === "conditions") {
         updatedItemList = {
@@ -187,11 +194,23 @@ const MakeAppointment = () => {
           condition_id: id,
           speciality: "",
         };
+
         setSelectedItem(null);
       }
 
+      let updatedError = { ...error };
+
+      if (type === "location") {
+        updatedError.locationError = false;
+      } else if (type === "speciality") {
+        updatedError.specialityError = false;
+      }
+
+      setError(updatedError);
+
       return updatedItemList;
     });
+
     if (type === "location") {
       const selectedItem = locationSearchResults.find(
         (item) => item.city === name
@@ -223,8 +242,20 @@ const MakeAppointment = () => {
       setConditionId("");
     }
   }, [selectedItemList.conditions, conditionData]);
-
+  console.log(error);
   const handleSearch = () => {
+    if (
+      selectedItemList.location === "" &&
+      selectedItemList.speciality === ""
+    ) {
+      setError({
+        locationError: selectedItemList.location === "",
+        specialityError: selectedItemList.speciality === "",
+      });
+
+      return;
+    }
+
     let url = "/doctor-listing?";
     if (zipCodeId) {
       url += `location=${brosweData}_${zipCodeId}&`;
@@ -236,7 +267,7 @@ const MakeAppointment = () => {
       url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
     }
     if (selectedItemList.conditions) {
-      url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+      url += `selectedConditions=${selectedItemList.conditions}_${condition_id}&`;
     }
 
     if (active === "InPerson") {
@@ -362,7 +393,9 @@ const MakeAppointment = () => {
             </p>
             <div
               ref={ref}
-              className="border relative border-verifiCation w-full py-4 rounded mt-7 flex justify-between items-center px-2"
+              className={`border relative ${
+                error.locationError ? "border-red-500" : "border-verifiCation"
+              } w-full py-4 rounded mt-7 flex justify-between items-center px-2`}
             >
               <input
                 type="text"
@@ -382,7 +415,8 @@ const MakeAppointment = () => {
                   }) || setSearchValue("")
                 }
                 // value={selectedItemList.location}
-                className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText"
+                className={`outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText `}
+                // className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText"
               />
               <img
                 src={greenArrowDown}
@@ -391,6 +425,7 @@ const MakeAppointment = () => {
                   selectedItem === "location" ? "rotate-180" : ""
                 }`}
               />
+
               <ul
                 className={`${
                   selectedItem === "location"
@@ -402,9 +437,16 @@ const MakeAppointment = () => {
                 {selectedItem === "location" && locationItems()}
               </ul>
             </div>
+            {error.locationError && (
+              <p className="text-red-500 text-xs mt-1 font-semibold">
+                Location is required
+              </p>
+            )}
             <div
               ref={ref}
-              className="relative border border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2"
+              className={`relative border ${
+                error.specialityError ? "border-red-500" : "border-verifiCation"
+              } w-full py-4 mt-8 flex justify-between items-center rounded px-2`}
             >
               <input
                 placeholder="Specialty/Condition"
@@ -434,7 +476,11 @@ const MakeAppointment = () => {
                 {selectedItem === "speciality" && SpecialityAndCondition()}
               </ul>
             </div>
-
+            {error.specialityError && (
+              <p className="text-red-500 text-xs mt-1 font-semibold">
+                Speciality/Condition is required
+              </p>
+            )}
             <div
               ref={calendarRef}
               className="border relative border-verifiCation w-full py-4 mt-8 flex justify-between items-center rounded px-2 cursor-pointer"

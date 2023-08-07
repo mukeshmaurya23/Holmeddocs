@@ -62,7 +62,7 @@ const Footer = () => {
   useEffect(() => {
     if (selectedInsurance) {
       navigateInsurance(
-        `/doctor-listing?insurance=${selectedInsurance.name}_${selectedInsurance.id}&date=${selectedInsurance.date}`
+        `/doctor-listing?selectedInsurance=${selectedInsurance.name}_${selectedInsurance.id}&date=${selectedInsurance.date}`
       );
     }
   }, [selectedInsurance, navigateInsurance]);

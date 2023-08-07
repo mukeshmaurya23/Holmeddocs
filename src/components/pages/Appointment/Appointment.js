@@ -82,7 +82,7 @@ const Appointment = () => {
     <>
       {isMenuOpen && <MobileResposiveToogle />}
       {status === "loading" ? (
-        <div className="flex justify-center  ">
+        <div className="flex justify-center h-screen  ">
           <img src={loadingGif} alt="" />
         </div>
       ) : appointmentData?.data?.result?.length === 0 ? (

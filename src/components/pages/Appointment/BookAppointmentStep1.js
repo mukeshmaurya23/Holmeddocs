@@ -19,14 +19,23 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
   const [isDropDownInsurance, setIsDropDownInsurance] = useState(false);
   const [isDropdownCondition, setIsDropdownCondition] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [errorCheckedMessage, setCheckedErrorMessage] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 3;
   const [searchQueryInsurance, setSearchQueryInsurance] = useState("");
   const [searchQueryCondition, setSearchQueryCondition] = useState("");
-
+  const [isChecked, setIsChecked] = useState(false);
   const [selectedItemList, setSelectedItemList] = useState({
     insurance: "",
     conditions: "",
+  });
+  const checkHandler = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const [error, setError] = useState({
+    insuranceError: "",
+    conditionError: "",
+    checkedError: "",
   });
 
   const handleSelectedItem = (item, type) => {
@@ -37,7 +46,17 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
     if (type === "conditions") {
       setIsDropdownCondition(false);
     }
+    let updatedError = { ...error };
+    if (type === "insurance") {
+      updatedError.insuranceError = false;
+    }
+    if (type === "conditions") {
+      updatedError.conditionError = false;
+    }
+
+    setError(updatedError);
   };
+
   console.log(selectedItemList, "selectedItemList");
   const { bookAppointmentDoctorData, bookAppointmentDoctorDataStatus } =
     useSelector((state) => state.api);
@@ -111,10 +130,18 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!checked) {
-    //   //setCheckedErrorMessage("Please Confirm the Checkbox")
-    //   return
-    // }
+    if (
+      selectedItemList.insurance === "" &&
+      selectedItemList.conditions === "" &&
+      isChecked === false
+    ) {
+      setError({
+        insuranceError: selectedItemList.insurance === "",
+        conditionError: selectedItemList.conditions === "",
+        checkedError: "Please confirm the terms and conditions",
+      });
+      return;
+    }
     const data = {
       doctor_id: location?.state?.doctor?.[0]?.id,
       insurance_id: selectedItemList.insurance.id,
@@ -173,11 +200,12 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center h-screen">
         <img src={imageGif} alt="loading" />
       </div>
     );
   }
+
   return (
     <>
       <div className="flex flex-col justify-center mt-0 md:mt-[6rem] items-center py-10">
@@ -217,7 +245,11 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                 </Label>
                 <div
                   ref={insuranceRef}
-                  className=" relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center"
+                  className={` relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center ${
+                    error.insuranceError
+                      ? "border-red-500"
+                      : "border-verifiCation"
+                  }`}
                 >
                   <Input
                     type="text"
@@ -245,7 +277,14 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                       isDropDownInsurance ? "rotate-180" : ""
                     }  `}
                   />
-                  <ul className="absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[35vh] overflow-y-auto">
+                  <div className="absolute top-[3rem]">
+                    {error.insuranceError && (
+                      <p className="text-red-500 text-xs mt-1 font-semibold">
+                        Insurance is required
+                      </p>
+                    )}
+                  </div>
+                  <ul className="absolute top-[3.7rem]  px-3  bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[35vh] overflow-y-auto">
                     {isDropDownInsurance &&
                       handleConditionSearch().filteredInsurance?.map((item) => (
                         <li
@@ -267,12 +306,17 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                       ))}
                   </ul>
                 </div>
+
                 <Label className="text-[#757993] font-sansRegular text-[13px] mb-1 mt-8">
                   What’s the reason for your visit?
                 </Label>
                 <div
                   ref={conditionRef}
-                  className="relative border border-verifiCation rounded-sm w-full md:w-full py-[7px] flex justify-between items-center"
+                  className={`relative border ${
+                    error.conditionError
+                      ? "border-red-500"
+                      : "border-verifiCation"
+                  } rounded-sm w-full md:w-full py-[7px] flex justify-between items-center`}
                 >
                   <Input
                     type="text"
@@ -301,10 +345,17 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                       isDropdownCondition ? "rotate-180" : ""
                     }  `}
                   />
+                  <div className="absolute top-[3rem]">
+                    {error.conditionError && (
+                      <p className="text-red-500 text-xs mt-1 font-semibold">
+                        Condition is required
+                      </p>
+                    )}
+                  </div>
                   <ul
                     className={` ${
                       !isDropDownInsurance
-                        ? "absolute top-[3.7rem]  p-2 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto"
+                        ? "absolute top-[3.7rem]  px-3 bg-white w-[103%] -right-1 z-10 rounded-lg max-h-[30vh] overflow-y-auto"
                         : ""
                     } `}
                   >
@@ -406,26 +457,11 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   Select date time availability
                 </Label>
 
-                <div className="flex flex-row flex-wrap gap-4 items-center  py-3 cursor-pointer">
+                <div className=" flex-row flex-wrap gap-4 items-center  py-3 cursor-pointer hidden sm:flex">
                   <div className="w-[3rem] h-[2.3rem] outline-verifiCation border border-verifiCation rounded-sm flex justify-center items-center">
                     <img src={greenArrowLeft} alt="" className="w-2 h-auto " />
                   </div>
-                  {/* {item?.time_slots?.InPerson?.map((timeSlot, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#F2FCFE]"
-                      onClick={() => {
-                        setAppointmentTime(timeSlot);
-                      }}
-                    >
-                      <p className="px-3 text-[14px]">
-                        {timeSlot?.day?.slice(0, 3)}
-                      </p>
-                      <p className="px-3">
-                        <DateComp timeSlotDate={timeSlot?.date} />
-                      </p>
-                    </div>
-                  ))} */}
+
                   {type && type === "InPerson"
                     ? // Render for InPerson type
                       item?.time_slots?.InPerson?.map((timeSlot, index) => (
@@ -482,7 +518,109 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     <img src={greenArrowRight} alt="" className="w-2 h-auto " />
                   </div>
                 </div>
-                <p>{selectedDate}</p>
+                <div className=" flex flex-row flex-wrap gap-4 items-center px-4 py-3 cursor-pointer  sm:hidden">
+                  <div className="w-[3rem] h-[2.3rem] outline-verifiCation border border-verifiCation rounded-sm flex justify-center items-center">
+                    <img
+                      src={greenArrowLeft}
+                      alt=""
+                      className="w-2 h-auto "
+                      onClick={() =>
+                        setCurrentIndex(
+                          currentIndex === 0 ? 0 : currentIndex - 1
+                        )
+                      }
+                      style={{ opacity: currentIndex === 0 ? 0.5 : 1 }}
+                    />
+                  </div>
+
+                  {type && type === "InPerson"
+                    ? // Render for InPerson type
+                      item?.time_slots?.InPerson?.slice(
+                        currentIndex,
+                        currentIndex + itemsPerPage
+                      )?.map((timeSlot, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            location.state.date === timeSlot.date
+                              ? "bg-verifiCation border-verifiCation text-white rounded-md"
+                              : "cursor-not-allowed disabled:opacity-50 "
+                          }`}
+                          onClick={() => {
+                            location.state.date === timeSlot.date &&
+                              handleDateSelection(
+                                timeSlot?.date,
+                                timeSlot.value
+                              );
+                          }}
+                        >
+                          <p className="px-3 text-[14px]">
+                            {timeSlot?.day?.slice(0, 3)}
+                          </p>
+                          <p className="px-3">
+                            <DateComp timeSlotDate={timeSlot?.date} />
+                          </p>
+                        </div>
+                      ))
+                    : // Render for Virtual type
+                      item?.time_slots?.Virtual?.slice(
+                        currentIndex,
+                        currentIndex + itemsPerPage
+                      )?.map((timeSlot, index) => (
+                        <div
+                          key={index}
+                          className={`${
+                            location.state.date === timeSlot.date
+                              ? "bg-verifiCation border-verifiCation text-white rounded-md"
+                              : "cursor-not-allowed disabled:opacity-50 "
+                          }`}
+                          onClick={() => {
+                            location.state.date === timeSlot.date &&
+                              handleDateSelection(
+                                timeSlot?.date,
+                                timeSlot.value
+                              );
+                          }}
+                        >
+                          <p className="px-3 text-[14px]">
+                            {timeSlot?.day?.slice(0, 3)}
+                          </p>
+                          <p className="px-3">
+                            <DateComp timeSlotDate={timeSlot?.date} />
+                          </p>
+                        </div>
+                      ))}
+
+                  <div className="w-[3rem] h-[2.3rem] outline-verifiCation border border-verifiCation rounded-sm flex justify-center items-center">
+                    <img
+                      src={greenArrowRight}
+                      alt=""
+                      className="w-2 h-auto "
+                      onClick={() =>
+                        setCurrentIndex(
+                          currentIndex >=
+                            (type === "InPerson"
+                              ? item?.time_slots?.InPerson?.length -
+                                itemsPerPage
+                              : item?.time_slots?.Virtual?.length -
+                                itemsPerPage)
+                            ? currentIndex
+                            : currentIndex + 1
+                        )
+                      }
+                      style={{
+                        opacity:
+                          currentIndex >=
+                          (type === "InPerson"
+                            ? item?.time_slots?.InPerson?.length - itemsPerPage
+                            : item?.time_slots?.Virtual?.length - itemsPerPage)
+                            ? 0.5
+                            : 1,
+                      }}
+                    />
+                  </div>
+                </div>
+                {/* <p>{selectedDate}</p> */}
                 <ul className="flex flex-row flex-wrap gap-4 items-center py-7 cursor-pointer">
                   {type == "InPerson"
                     ? item?.time_slots?.InPerson?.map((timeSlot, index) =>
@@ -519,8 +657,11 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                   <Input
                     type="checkbox"
                     name="checkbox"
-                    onClick={() => setChecked(!checked)}
-                    className="rounded border-none outline-verifiCation  accent-verifiCation transition-all delay-200"
+                    checked={isChecked}
+                    onChange={checkHandler}
+                    className={`rounded border-none ${
+                      !isChecked ? "border-red-500" : "border-verifiCation"
+                    } accent-verifiCation transition-all delay-200`}
                   />
 
                   <Label
@@ -531,6 +672,12 @@ const BookAppointmentStep1 = ({ handleNextStep }) => {
                     for insurance and payment.
                   </Label>
                 </div>
+
+                {!isChecked && (
+                  <p className="text-red-500 text-xs mt-1 font-semibold">
+                    {error.checkedError}
+                  </p>
+                )}
                 {/* {!checked && (
                   <span className="text-red-500 text-xs font-sansRegular mt-3">
                     {errorCheckedMessage}

@@ -53,11 +53,11 @@ const Navbar2 = () => {
     useState(filterConditions);
 
   const [SpecCondSearchValue, setCondSpecSearchValue] = useState("");
-  const [clearingPlaceholder, setClearingPlaceholder] = useState(null);
+  const [clearingPlaceholder, setClearingPlaceholder] = useState("");
   const [clearSpecialityPlaceholder, setClearSpecialityPlaceholder] =
-    useState(null);
+    useState("");
   const [clearConditionPlaceholder, setClearConditionPlaceholder] =
-    useState(null);
+    useState("");
   const { locationSearchResults } = useSelector((state) => state.search);
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -110,7 +110,7 @@ const Navbar2 = () => {
   let locationSearchParams = searchParams.get("location");
   let specialitySearchParams = searchParams.get("selectedSpeciality");
 
-  let conditionSearchParams = searchParams.get("conditions");
+  let conditionSearchParams = searchParams.get("selectedConditions");
 
   // useEffect(() => {
   //   return () => {
@@ -226,14 +226,119 @@ const Navbar2 = () => {
   //   clearConditionPlaceholder,
   // ]);
 
-  console.log(selectedItemList.location, "my self mukesh");
+  // const handleSearch = () => {
+  //   let url = "/doctor-listing?";
+  //   let locationSearchParams = searchParams.get("location");
+  //   let specialitySearchParams = searchParams.get("selectedSpeciality");
+  //   let appointment_type = searchParams.get("appointment_type");
+
+  //   let conditionSearchParams = searchParams.get("conditions");
+  //   let dateSearchParams = searchParams.get("date");
+
+  //   if (
+  //     (locationSearchParams ||
+  //       specialitySearchParams ||
+  //       conditionSearchParams ||
+  //       dateSearchParams) &&
+  //     selectedItemList.location.length === 0 &&
+  //     selectedItemList.speciality.length === 0 &&
+  //     selectedItemList.conditions.length === 0 &&
+  //     moment(startDate).format("YYYY-MM-DD") ===
+  //       moment(dateSearchParams).format("YYYY-MM-DD")
+  //   ) {
+  //     if (selectedItemList.location.length === 0) {
+  //       console.log("clearning data");
+  //       if (specialitySearchParams) {
+  //         url += `selectedSpeciality=${specialitySearchParams}&`;
+  //       }
+  //       if (conditionSearchParams) {
+  //         url += `conditions=${conditionSearchParams}&`;
+  //       }
+  //       if (dateSearchParams) {
+  //         url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+  //       }
+  //       // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+  //       navigate(url);
+  //       return;
+  //     }
+  //     if (selectedItemList.speciality.length === 0) {
+  //       console.log("clearning data");
+  //       if (locationSearchParams) {
+  //         url += `location=${locationSearchParams}&`;
+  //       }
+  //       if (conditionSearchParams) {
+  //         url += `conditions=${conditionSearchParams}&`;
+  //       }
+  //       if (dateSearchParams) {
+  //         url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+  //       }
+  //       // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+  //       navigate(url);
+  //       return;
+  //     }
+  //     if (selectedItemList.conditions.length === 0) {
+  //       console.log("clearning data");
+  //       if (specialitySearchParams) {
+  //         url += `selectedSpeciality=${specialitySearchParams}&`;
+  //       }
+  //       if (locationSearchParams) {
+  //         url += `location=${locationSearchParams}&`;
+  //       }
+  //       if (dateSearchParams) {
+  //         url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+  //       }
+  //       // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
+  //       navigate(url);
+  //       return;
+  //     }
+
+  //     return;
+  //   }
+
+  //   if (selectedItemList.location) {
+  //     url += `location=${selectedItemList.location}_${zip_code_id}&`;
+  //   } else if (locationSearchParams) {
+  //     url += `location=${locationSearchParams}&`;
+  //   }
+
+  //   if (selectedItemList.speciality || selectedItemList.conditions) {
+  //     // let data = selectedItemList.conditions ?? selectedItemList.speciality;
+  //     // let id = condition_id ?? speciality_id;
+  //     if (selectedItemList.speciality) {
+  //       url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
+  //     } else if (selectedItemList.conditions) {
+  //       url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+  //     }
+  //     // url += `selectedSpeciality=${data}_${id}&`;
+  //   } else {
+  //     // let param = specialitySearchParams ?? conditionSearchParams;
+  //     if (specialitySearchParams) {
+  //       url += `selectedSpeciality=${specialitySearchParams}&`;
+  //     } else if (conditionSearchParams) {
+  //       url += `conditions=${conditionSearchParams}&`;
+  //     }
+  //   }
+  //   // if (selectedItemList.conditions) {
+  //   //   url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+  //   // } else {
+  //   //   url += `conditions=${conditionSearchParams}&`;
+  //   // }
+  //   //date=${startDate.toString()} see me make appointment
+  //   if (startDate !== dateSearchParams) {
+  //     url += `date=${moment(startDate).format("YYYY-MM-DD")}`;
+  //   } else {
+  //     url += `date=${dateSearchParams}`;
+  //   }
+
+  //   navigate(url);
+  // };
 
   const handleSearch = () => {
     let url = "/doctor-listing?";
     let locationSearchParams = searchParams.get("location");
     let specialitySearchParams = searchParams.get("selectedSpeciality");
 
-    let conditionSearchParams = searchParams.get("conditions");
+    let conditionSearchParams = searchParams.get("selectedConditions");
     let dateSearchParams = searchParams.get("date");
 
     console.log(moment(startDate).format("YYYY-MM-DD"), "date1");
@@ -244,64 +349,53 @@ const Navbar2 = () => {
         specialitySearchParams ||
         conditionSearchParams ||
         dateSearchParams) &&
-      selectedItemList.location.length === 0 &&
-      selectedItemList.speciality.length === 0 &&
-      selectedItemList.conditions.length === 0 &&
+      (selectedItemList.location.length === 0 ||
+        clearingPlaceholder.length === 0) &&
+      (selectedItemList.speciality.length === 0 ||
+        clearSpecialityPlaceholder.length === 0) &&
+      (selectedItemList.conditions.length === 0 ||
+        clearConditionPlaceholder.length === 0) &&
       moment(startDate).format("YYYY-MM-DD") ===
-      moment(dateSearchParams).format("YYYY-MM-DD")
+        moment(dateSearchParams).format("YYYY-MM-DD")
     ) {
-
-
-      if (clearingPlaceholder !== "") {
-        if (locationSearchParams) {
-          url += `location=${locationSearchParams}&`
-        }
+      console.log("inside if");
+      if (
+        selectedItemList.location?.length === 0 &&
+        clearingPlaceholder?.length === 0
+      ) {
         if (specialitySearchParams) {
           url += `selectedSpeciality=${specialitySearchParams}&`;
         }
         if (conditionSearchParams) {
-          url += `conditions=${conditionSearchParams}&`;
+          url += `selectedConditions=${conditionSearchParams}&`;
         }
         if (dateSearchParams) {
-          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
-        }
-
-        navigate(url);
-        return;
-      }
-
-      if (selectedItemList.location.length === 0) {
-        console.log("clearning data");
-        if (specialitySearchParams) {
-          url += `selectedSpeciality=${specialitySearchParams}&`;
-        }
-        if (conditionSearchParams) {
-          url += `conditions=${conditionSearchParams}&`;
-        }
-        if (dateSearchParams) {
-          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
         }
         // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
         navigate(url);
         return;
-      }
-      if (selectedItemList.speciality.length === 0) {
-        console.log("clearning data");
+      } else if (
+        selectedItemList.speciality?.length === 0 &&
+        clearSpecialityPlaceholder?.length === 0
+      ) {
+        console.log("inside the specilaity placeholder if");
         if (locationSearchParams) {
           url += `location=${locationSearchParams}&`;
         }
         if (conditionSearchParams) {
-          url += `conditions=${conditionSearchParams}&`;
+          url += `selectedConditions=${conditionSearchParams}&`;
         }
         if (dateSearchParams) {
-          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
         }
         // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
         navigate(url);
         return;
-      }
-      if (selectedItemList.conditions.length === 0) {
-        console.log("clearning data");
+      } else if (
+        selectedItemList.conditions.length === 0 &&
+        clearConditionPlaceholder === 0
+      ) {
         if (specialitySearchParams) {
           url += `selectedSpeciality=${specialitySearchParams}&`;
         }
@@ -309,15 +403,13 @@ const Navbar2 = () => {
           url += `location=${locationSearchParams}&`;
         }
         if (dateSearchParams) {
-          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}&`;
+          url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
         }
         // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
         navigate(url);
         return;
       }
-      if (selectedItemList.location.length === 0) {
-        return;
-      }
+
       return;
     }
 
@@ -333,7 +425,7 @@ const Navbar2 = () => {
       if (selectedItemList.speciality) {
         url += `selectedSpeciality=${selectedItemList.speciality}_${speciality_id}&`;
       } else if (selectedItemList.conditions) {
-        url += `conditions=${selectedItemList.conditions}_${condition_id}&`;
+        url += `selectedConditions=${selectedItemList.conditions}_${condition_id}&`;
       }
       // url += `selectedSpeciality=${data}_${id}&`;
     } else {
@@ -341,7 +433,7 @@ const Navbar2 = () => {
       if (specialitySearchParams) {
         url += `selectedSpeciality=${specialitySearchParams}&`;
       } else if (conditionSearchParams) {
-        url += `conditions=${conditionSearchParams}&`;
+        url += `selectedConditions=${conditionSearchParams}&`;
       }
     }
     // if (selectedItemList.conditions) {
@@ -456,8 +548,6 @@ const Navbar2 = () => {
   };
 
   const handleItemClick = (id) => {
-    console.log(id);
-
     if (id === "location") {
       handleLocationSelection();
     } else if (id === "speciality") {
@@ -500,7 +590,7 @@ const Navbar2 = () => {
   const locSpecConditionRef = useRef();
 
   const dateSearchParams = searchParams.get("date");
-  console.log(dateSearchParams, "dateSearchParams");
+
   // if (dateSearchParams) {
   //   console.log(
   //     "calujh7ul7uiedsmdksdamklcn",
@@ -691,16 +781,19 @@ const Navbar2 = () => {
   return (
     <>
       <div
-        className={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${location.pathname === "/make-appointment" ||
+        className={`px-6 md:px-2 lg:px-2 xl:px-4 text-slate-700  ${
+          location.pathname === "/make-appointment" ||
           location.pathname === "/doctor-listing"
-          ? "drop-shadow-lg"
-          : "lg:py-5"
-          } grid grid-col-12 py-1  ${location.pathname === "/make-appointment" ||
-            location.pathname === "/doctor-listing"
+            ? "drop-shadow-lg"
+            : "lg:py-5"
+        } grid grid-col-12 py-1  ${
+          location.pathname === "/make-appointment" ||
+          location.pathname === "/doctor-listing"
             ? ""
             : "md:py-3"
-          } ${showShadow ? "drop-shadow-md" : ""
-          } bg-white z-10  h-[7rem] relative cursor-pointer`}
+        } ${
+          showShadow ? "drop-shadow-md" : ""
+        } bg-white z-10  h-[7rem] relative cursor-pointer`}
       >
         <div className="md:flex flex-row justify-between items-center  hidden mx-10  text-gray-900 ">
           {location.pathname === "/make-appointment" ? (
@@ -760,10 +853,11 @@ const Navbar2 = () => {
                 <div className="flex items-center relative w-[600px]">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${selectedItemList.location || locationSearchParams
-                      ? "text-[1rem] font-semibold"
-                      : "text-[1rem]"
-                      }`}
+                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                      selectedItemList.location || locationSearchParams
+                        ? "text-[1rem] font-semibold"
+                        : "text-[1rem]"
+                    }`}
                     placeholder={clearingPlaceholder || "Location"}
                     value={selectedItemList.location || searchValue}
                     onChange={handleLocationSearch}
@@ -777,22 +871,24 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${selectedItem === "location"
-                      ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                      }`}
+                    className={`${
+                      selectedItem === "location"
+                        ? "absolute top-[2.5rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
                   >
                     {selectedItem === "location" && locationItems()}
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${selectedItemList.speciality ||
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${
+                      selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
                       conditionSearchParams
-                      ? "text-[1rem] font-semibold"
-                      : "text-[1rem]"
-                      }`}
+                        ? "text-[1rem] font-semibold"
+                        : "text-[1rem]"
+                    }`}
                     placeholder={
                       clearSpecialityPlaceholder ||
                       clearConditionPlaceholder ||
@@ -812,10 +908,11 @@ const Navbar2 = () => {
                     }
                   />
                   <ul
-                    className={`${selectedItem === "speciality"
-                      ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                      : ""
-                      }`}
+                    className={`${
+                      selectedItem === "speciality"
+                        ? "absolute top-[2.5rem] left-[15rem] mt-1 px-6 max-h-60 min-w-[20rem] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                        : ""
+                    }`}
                   >
                     {selectedItem === "speciality" && SpecialityAndCondition()}
                   </ul>
@@ -833,12 +930,13 @@ const Navbar2 = () => {
                     />
                     <span
                       onClick={handleClick}
-                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${!dateSearchParams ? "hidden" : ""
-                        }`}
+                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${
+                        !dateSearchParams ? "hidden" : ""
+                      }`}
                     >
                       {dateSearchParams &&
-                        startDate &&
-                        startDate.toDateString() === new Date().toDateString()
+                      startDate &&
+                      startDate.toDateString() === new Date().toDateString()
                         ? formattedDate
                         : moment(startDate).format("DD MMM,YYYY")}
                     </span>
@@ -929,8 +1027,9 @@ const Navbar2 = () => {
 
           {isMenuOpen && (
             <div
-              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-                }`}
+              className={`fixed overflow-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <div className="relative">
                 <button
