@@ -63,7 +63,7 @@ const DoctorListing = () => {
 
   const searchParams = new URLSearchParams(location.search);
 
-  console.log(specialityId, "specialityId");
+
 
   const commonParams = {
     date: searchParams.get("date"),
@@ -83,8 +83,7 @@ const DoctorListing = () => {
   const zipCode = commonParams?.locationParams?.split("_")[1];
 
   // Internal Medicine_27, Integrative Medicine_52 get me 27,52 and so on..
-  console.log(specialityId, "specialityId Mukesh");
-  console.log(commonParams.speciality, "commonParams Mukesh");
+
   if (commonParams?.speciality) {
     let specialityIdArray = commonParams?.speciality?.split(",");
     specialityId = specialityIdArray.map((item) => {
@@ -92,6 +91,9 @@ const DoctorListing = () => {
     });
   }
 
+  if (!commonParams?.speciality && !commonParams?.specialityParams) {
+    specialityId = []
+  }
   // useEffect(() => {
   //   if (commonParams?.speciality) {
   //     let specialityIdArray = commonParams?.speciality?.split(",");
@@ -194,7 +196,7 @@ const DoctorListing = () => {
   };
 
   const handleMobileDoctorSearch = (e) => {
-    console.log(e.target.value);
+
     setFilterDoctorSearchTerm(e.target.value);
     const filteredDoctors = doctorsList?.filter((doctor) => {
       return (
@@ -207,7 +209,7 @@ const DoctorListing = () => {
           .includes(e.target.value.toLowerCase())
       );
     });
-    console.log(filteredDoctors, "filteredDoctors");
+
     setFilterDoctorList(filteredDoctors);
   };
 
@@ -267,11 +269,9 @@ const DoctorListing = () => {
         const dateObject = new Date(dateParam);
         const date = moment(dateParam).format("YYYY-MM-DD");
         const today = moment(new Date()).format("YYYY-MM-DD");
-        console.log(date, "dateObject");
-        console.log(today, "today");
-        console.log(date >= today);
+
         if (date >= today) {
-          console.log("workinhg");
+
           const dayOfWeek = dateObject.toLocaleDateString("en-US", {
             weekday: "long",
           });
@@ -386,60 +386,92 @@ const DoctorListing = () => {
 
       const appointment_type = data;
 
+      // if (checked) {
+
+
+      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
+
+      //   // Update reqBodyfilterData
+      //   setReqBodyFilterData((prevData) => {
+      //     const updatedData = prevData.map((categoryData) => {
+      //       const key = Object.keys(categoryData)[0];
+      //       // Replace "specialty" with "speciality" in the filterCategoryKey
+      //       const updatedFilterCategoryKey =
+      //         key === "specialty" ? "speciality" : key;
+
+      //       if (updatedFilterCategoryKey === filterCategoryKey) {
+      //         return {
+      //           [updatedFilterCategoryKey]: [...categoryData[key], originalId],
+      //         };
+      //       }
+      //       return categoryData;
+      //     });
+      //     return updatedData;
+      //   });
+
+      // } else {
+      //   // Use the originalId instead of data.id
+      //   setCheckedIds((prevCheckedIds) =>
+      //     prevCheckedIds.filter((checkedId) => checkedId !== originalId)
+      //   );
+
+      //   // Update reqBodyfilterData
+      //   setReqBodyFilterData((prevData) => {
+      //     const updatedData = prevData.map((categoryData) => {
+      //       const key = Object.keys(categoryData)[0];
+      //       // Replace "specialty" with "speciality" in the filterCategoryKey
+      //       const updatedFilterCategoryKey =
+      //         key === "specialty" ? "speciality" : key;
+
+      //       if (updatedFilterCategoryKey === filterCategoryKey) {
+      //         return {
+      //           [updatedFilterCategoryKey]: categoryData[key].filter(
+      //             (checkedId) => checkedId !== originalId
+      //           ),
+      //         };
+      //       }
+      //       return categoryData;
+      //     });
+      //     return updatedData;
+      //   });
+      // }
       if (checked) {
-        if (commonParams?.speciality) {
-          console.log("speciality already checked", commonParams?.speciality);
-          let specialityIdArray = commonParams?.speciality?.split(",");
-          specialityId = specialityIdArray.map((item) => {
-            return item.split("_")[1];
-          });
-        }
-        if (commonParams.conditions) {
-          console.log("conditions already checked", commonParams?.conditions);
-          let conditionsIdArray = commonParams?.conditions?.split(",");
-          conditionId = conditionsIdArray.map((item) => {
-            return item.split("_")[1];
-          });
-        }
         setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
 
         // Update reqBodyfilterData
         setReqBodyFilterData((prevData) => {
           const updatedData = prevData.map((categoryData) => {
             const key = Object.keys(categoryData)[0];
-            // Replace "specialty" with "speciality" in the filterCategoryKey
             const updatedFilterCategoryKey =
-              key === "specialty" ? "speciality" : key;
+              key === 'specialty' ? 'speciality' : key;
 
             if (updatedFilterCategoryKey === filterCategoryKey) {
+              let updatedArray = [...categoryData[key]];
+              console.log(updatedArray, "hello updated array");
+
+              if (updatedFilterCategoryKey === 'speciality') {
+                updatedArray = [...updatedArray, ...specialityId];
+                console.log(updatedArray, "Mukesssssss");
+              } else if (updatedFilterCategoryKey === 'conditions') {
+                updatedArray = [...updatedArray, ...conditionId];
+              } else if (updatedFilterCategoryKey === 'insurance') {
+                updatedArray = [...updatedArray, ...insuranceId];
+              } else if (updatedFilterCategoryKey === 'language') {
+                updatedArray = [...updatedArray, ...langaugeId];
+              }
+
+              if (!updatedArray.includes(originalId)) {
+                updatedArray.push(originalId);
+              }
+
               return {
-                [updatedFilterCategoryKey]: [...categoryData[key], originalId],
+                [updatedFilterCategoryKey]: updatedArray,
               };
             }
             return categoryData;
           });
           return updatedData;
         });
-        // setReqBodyFilterData((prevData) => {
-        //   return prevData.map((categoryData) => {
-        //     const key = Object.keys(categoryData)[0];
-        //     // Replace "specialty" with "speciality" in the filterCategoryKey
-        //     const updatedFilterCategoryKey =
-        //       key === "specialty" ? "speciality" : key;
-
-        //     if (updatedFilterCategoryKey === filterCategoryKey) {
-        //       // Append both existing and new specialityId to the "speciality" key
-        //       return {
-        //         [updatedFilterCategoryKey]: [
-        //           ...categoryData[key],
-        //           ...specialityId,
-        //           originalId,
-        //         ],
-        //       };
-        //     }
-        //     return categoryData;
-        //   });
-        // });
       } else {
         // Use the originalId instead of data.id
         setCheckedIds((prevCheckedIds) =>
@@ -450,9 +482,8 @@ const DoctorListing = () => {
         setReqBodyFilterData((prevData) => {
           const updatedData = prevData.map((categoryData) => {
             const key = Object.keys(categoryData)[0];
-            // Replace "specialty" with "speciality" in the filterCategoryKey
             const updatedFilterCategoryKey =
-              key === "specialty" ? "speciality" : key;
+              key === 'specialty' ? 'speciality' : key;
 
             if (updatedFilterCategoryKey === filterCategoryKey) {
               return {
@@ -481,7 +512,7 @@ const DoctorListing = () => {
       if (filterCategoryIndex !== -1) {
         const filterCategory = newReqBodyFilterData[filterCategoryIndex];
         const filterCategoryKey = Object.keys(filterCategory)[0];
-        console.log(filterCategoryKey, "filterCategoryKey");
+
 
         if (filterCategoryKey === "appointment_type") {
           filterCategory[filterCategoryKey] = checked ? appointment_type : null;
@@ -489,8 +520,8 @@ const DoctorListing = () => {
           filterCategory[filterCategoryKey] = checked
             ? [...filterCategory[filterCategoryKey], id]
             : filterCategory[filterCategoryKey].filter(
-                (checkedId) => checkedId !== id
-              );
+              (checkedId) => checkedId !== id
+            );
         }
       }
 
@@ -504,10 +535,9 @@ const DoctorListing = () => {
       );
 
       if (checked) {
-        console.log(name, appointment_type, id, "name,appointment_type,id");
+
         let encryptedData = nameId;
-        console.log(encryptedData, "encryptedData");
-        console.log(encryptData(encryptedData, SECRET_KEY), "Mukesh Condition");
+
 
         //let valueToAdd = SUJITDATA;
         console.log(
@@ -520,8 +550,8 @@ const DoctorListing = () => {
           filterTitle.toLowerCase() === "appointment_type"
             ? appointment_type
             : name
-            ? encryptData(encryptedData, SECRET_KEY) //
-            : // ? `${name}_${id}`
+              ? encryptData(encryptedData, SECRET_KEY) //
+              : // ? `${name}_${id}`
               // id;
               encryptData(encryptedData, SECRET_KEY);
         // const valueToAdd =
@@ -561,14 +591,12 @@ const DoctorListing = () => {
         setStatus("failed");
       }
     };
-    console.log(data.language_title, "data.language_title Mukeshhhhhhhhh");
     return (
       <label className="inline-flex items-center mt-3" key={data.id}>
         <input
           type="checkbox"
-          className={`form-checkbox h-3 w-3 text-gray-600 ${
-            isChecked ? "checked" : ""
-          }`}
+          className={`form-checkbox h-3 w-3 text-gray-600 ${isChecked ? "checked" : ""
+            }`}
           onChange={handleChange}
           checked={
             isChecked ||
@@ -684,21 +712,19 @@ const DoctorListing = () => {
         </div>
         <div className="md:hidden flex items-center mt-5 px-2 space-x-2">
           <div
-            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
-              activeMobileAppointMentType.InPerson
-                ? "bg-verifiCation text-white"
-                : ""
-            }`}
+            className={`w-full rounded-2xl border border-verifiCation  text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.InPerson
+              ? "bg-verifiCation text-white"
+              : ""
+              }`}
             onClick={filterInPersonHandler}
           >
             In Person
           </div>
           <div
-            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${
-              activeMobileAppointMentType.Virtual
-                ? "bg-verifiCation text-white"
-                : ""
-            } `}
+            className={`w-full rounded-2xl border border-verifiCation text-gray-900 flex items-center justify-center h-7  tracking-[1px] ${activeMobileAppointMentType.Virtual
+              ? "bg-verifiCation text-white"
+              : ""
+              } `}
             onClick={filterVirtualHandler}
           >
             Virtual
@@ -711,9 +737,8 @@ const DoctorListing = () => {
           </div>
           {isMenuForFilter && (
             <div
-              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${
-                isMenuForFilter ? "translate-x-0" : "translate-x-full"
-              }`}
+              className={`fixed overflow-y-auto overflow-x-hidden top-0 right-0 w-screen h-screen bg-white z-10 transform transition-transform duration-300 ease-in-out ${isMenuForFilter ? "translate-x-0" : "translate-x-full"
+                }`}
             >
               <div className="relative">
                 <button
@@ -784,20 +809,18 @@ const DoctorListing = () => {
         </div>
         <h2 className="px-2 md:px-5 font-sansBold text-[1rem] md:text-[1.3rem] mt-8 text-[#292F33] tracking-[1px]">
           {doctorsList.length > 0 || filterDoctorList.length > 0
-            ? `We have found ${
-                filterDoctorList.length > 0
-                  ? filterDoctorList.length
-                  : totalCount
-              } Doctors for your search criteria`
+            ? `We have found ${filterDoctorList.length > 0
+              ? filterDoctorList.length
+              : totalCount
+            } Doctors for your search criteria`
             : ""}
         </h2>
 
         <hr className="md:hidden mt-5 border-[#E4E4E4] border-[1px] mx-[5px] " />
         <div className="flex mt-5">
           <aside
-            className={`hidden md:flex flex-col  px-6 py-3 ${
-              filterData ? "border-r border-gray-300" : ""
-            } `}
+            className={`hidden md:flex flex-col  px-6 py-3 ${filterData ? "border-r border-gray-300" : ""
+              } `}
           >
             <h2 className="font-sansBold text-[1rem] text-[#292F33] 2xl:text-[1.3rem]">
               {filterData && "Filters"}
@@ -843,19 +866,19 @@ const DoctorListing = () => {
             {status === "loading"
               ? ""
               : doctorsList.length === 0 && (
-                  <div className="flex justify-center items-center">
-                    <div className="flex flex-col justify-center items-center">
-                      <img
-                        src={noDoctor}
-                        alt="no doctors"
-                        className="w-[25%] h-auto object-contain"
-                      />
-                      <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
-                        No doctors found.
-                      </h2>
-                    </div>
+                <div className="flex justify-center items-center">
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      src={noDoctor}
+                      alt="no doctors"
+                      className="w-[25%] h-auto object-contain"
+                    />
+                    <h2 className="font-sansBold text-center ml-16 py-4 text-[1.3rem] text-[#8b9093] tracking-[2px]">
+                      No doctors found.
+                    </h2>
                   </div>
-                )}
+                </div>
+              )}
 
             <div className="mt-10">
               <Pagination

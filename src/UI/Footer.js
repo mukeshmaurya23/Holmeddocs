@@ -40,7 +40,7 @@ const Footer = () => {
       return updatedVisibility;
     });
   };
-  console.log(isVisible);
+
   const { insuranceData } = useSelector((state) => state.api);
   const { specialties } = useSelector((state) => state.data);
   const handleCardClick = (speciality) => {
@@ -130,35 +130,35 @@ const Footer = () => {
 
               {showAllInsurance && insuranceData?.length > 3
                 ? insuranceData?.map((item, index) => (
-                    <li
-                      key={index}
-                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
-                      onClick={() =>
-                        handleInsuranceCardClick({
-                          name: item?.insurance_company_name,
-                          id: item?.id,
-                          date: moment(startDate).format("YYYY-MM-DD"),
-                        })
-                      }
-                    >
-                      {item?.insurance_company_name}
-                    </li>
-                  ))
+                  <li
+                    key={index}
+                    className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                    onClick={() =>
+                      handleInsuranceCardClick({
+                        name: item?.insurance_company_name,
+                        id: item?.id,
+                        date: moment(startDate).format("YYYY-MM-DD"),
+                      })
+                    }
+                  >
+                    {item?.insurance_company_name}
+                  </li>
+                ))
                 : insuranceData?.slice(0, 3)?.map((item, index) => (
-                    <li
-                      key={index}
-                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
-                      onClick={() =>
-                        handleInsuranceCardClick({
-                          name: item?.insurance_company_name,
-                          id: item?.id,
-                          date: moment(startDate).format("YYYY-MM-DD"),
-                        })
-                      }
-                    >
-                      {item?.insurance_company_name}
-                    </li>
-                  ))}
+                  <li
+                    key={index}
+                    className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                    onClick={() =>
+                      handleInsuranceCardClick({
+                        name: item?.insurance_company_name,
+                        id: item?.id,
+                        date: moment(startDate).format("YYYY-MM-DD"),
+                      })
+                    }
+                  >
+                    {item?.insurance_company_name}
+                  </li>
+                ))}
 
               <li
                 className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black underline"
@@ -295,9 +295,8 @@ const Footer = () => {
                     {item.title}
                   </h6>
                   <i
-                    className={`${
-                      isVisible[index] ? "fa fa-minus" : "fa fa-plus"
-                    } text-[16px] cursor-pointer`}
+                    className={`${isVisible[index] ? "fa fa-minus" : "fa fa-plus"
+                      } text-[16px] cursor-pointer`}
                     aria-hidden="true"
                     onClick={() => handleItemClick(index)}
                   ></i>
