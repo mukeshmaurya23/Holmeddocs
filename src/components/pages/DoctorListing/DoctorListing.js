@@ -93,6 +93,7 @@ const DoctorListing = () => {
 
   if (!commonParams?.speciality && !commonParams?.specialityParams) {
     specialityId = []
+    console.log("specialityId heheh", specialityId);
   }
   // useEffect(() => {
   //   if (commonParams?.speciality) {
@@ -182,18 +183,7 @@ const DoctorListing = () => {
     }
   };
 
-  const fetchAllDoctors = async () => {
-    try {
-      setStatus("loading");
-      const response = await customAxios.post("/patient/doctors");
-      const data = response?.data?.data?.result;
-      setDoctorsList(data);
 
-      setStatus("succeeded");
-    } catch (error) {
-      setStatus("failed");
-    }
-  };
 
   const handleMobileDoctorSearch = (e) => {
 
@@ -278,8 +268,6 @@ const DoctorListing = () => {
           setTime_slot_day(dayOfWeek);
           fetchDoctorsData(dayOfWeek);
           setShouldCallAPI(true);
-        } else {
-          fetchAllDoctors();
         }
       }
     }
@@ -347,6 +335,134 @@ const DoctorListing = () => {
 
     return displayedValues?.map((data) => generateLabel(data, category));
   };
+  // const generateLabel = (data, category) => {
+  //   const filterCategoryKey = category.title
+  //     .toLowerCase()
+  //     .replace(/ /g, "_")
+  //     .replace("specialty", "speciality");
+  //   const id = data.id;
+  //   const name =
+  //     data.medical_speciality_name ||
+  //     data.medical_condition_name ||
+  //     data.insurance_company_name ||
+  //     data.language_title;
+  //   const isChecked = reqBodyfilterData.find(categoryData =>
+  //     categoryData[filterCategoryKey]?.includes(data.id)
+  //   );
+  //   let newNameId = `${name}_${id}`;
+  //   if (nameId) {
+  //     nameId = nameId.concat(",", newNameId);
+  //   } else {
+  //     nameId = newNameId;
+  //   }
+
+  //   const appointment_type = data;
+  //   const handleChange = async (e) => {
+  //     const checked = e.target.checked;
+  //     const originalId = e.target.id.split("-")[1];
+
+  //     const updatedCheckedIds = checked
+  //       ? [...checkedIds, originalId]
+  //       : checkedIds.filter(checkedId => checkedId !== originalId);
+  //     setCheckedIds(updatedCheckedIds);
+
+  //     const updatedReqBodyFilterData = reqBodyfilterData.map(categoryData => {
+  //       const key = Object.keys(categoryData)[0];
+  //       const updatedFilterCategoryKey = key === 'specialty' ? 'speciality' : key;
+
+  //       if (updatedFilterCategoryKey === filterCategoryKey) {
+  //         const updatedArray = [...categoryData[key]];
+
+  //         if (updatedFilterCategoryKey === 'speciality') {
+  //           updatedArray.push(...specialityId);
+  //         } else if (updatedFilterCategoryKey === 'conditions') {
+  //           updatedArray.push(...conditionId);
+  //         } else if (updatedFilterCategoryKey === 'insurance') {
+  //           updatedArray.push(...insuranceId);
+  //         } else if (updatedFilterCategoryKey === 'language') {
+  //           updatedArray.push(...langaugeId);
+  //         }
+
+  //         if (!updatedArray.includes(originalId)) {
+  //           updatedArray.push(originalId);
+  //         }
+
+  //         return {
+  //           [updatedFilterCategoryKey]: updatedArray,
+  //         };
+  //       }
+
+  //       return categoryData;
+  //     });
+  //     setReqBodyFilterData(updatedReqBodyFilterData);
+
+  //     const requestBody = updatedReqBodyFilterData.reduce(
+  //       (acc, cur) => ({ ...acc, ...cur }),
+  //       { time_slot_day: day }
+  //     );
+
+
+  //     let filterTitle = category.title.toLowerCase().replace(" ", "_");
+  //     filterTitle = filterTitle.replace("specialty", "speciality");
+  //     if (checked) {
+
+  //       let encryptedData = nameId;
+
+  //       const valueToAdd =
+  //         filterTitle.toLowerCase() === "appointment_type"
+  //           ? appointment_type
+  //           : name
+  //             ? encryptData(encryptedData, SECRET_KEY)
+  //             :
+  //             encryptData(encryptedData, SECRET_KEY);
+
+  //       searchParams.set(filterTitle, valueToAdd);
+
+  //     } else {
+  //       searchParams.delete(filterTitle);
+  //     }
+
+  //     try {
+  //       setStatus("loading");
+  //       const filterResponse = await customAxios.post("/patient/doctors", requestBody);
+  //       const filterData = filterResponse?.data?.data?.result;
+  //       setDoctorsList(filterData);
+  //       setStatus("succeeded");
+  //     } catch (error) {
+  //       setStatus("failed");
+  //     }
+  //   };
+  //   navigate(`?${searchParams.toString()}`);
+
+  //   return (
+  //     <label className="inline-flex items-center mt-3" key={data.id}>
+  //       <input
+  //         type="checkbox"
+  //         className={`form-checkbox h-3 w-3 text-gray-600 ${isChecked ? "checked" : ""}`}
+  //         onChange={handleChange}
+  //         checked={
+  //           isChecked ||
+  //           (commonParams.specialityParams &&
+  //             commonParams.specialityParams.includes(data?.medical_speciality_name)) ||
+  //           commonParams.speciality?.includes(data?.medical_speciality_name) ||
+  //           commonParams.conditionParams?.includes(data?.medical_condition_name) ||
+  //           commonParams.conditions?.includes(data?.medical_condition_name) ||
+  //           commonParams.insuranceParams?.includes(data?.insurance_company_name) ||
+  //           commonParams.insurance?.includes(data?.insurance_company_name) ||
+  //           commonParams.appointment_type === data ||
+  //           commonParams.language?.includes(data?.language_title)
+  //         }
+  //       />
+  //       <span className="ml-2 text-gray-700 text-[.8rem] 2xl:text-[1rem] font-sansSemibold">
+  //         {data.language_title ||
+  //           data.medical_speciality_name ||
+  //           data.medical_condition_name ||
+  //           data.insurance_company_name ||
+  //           data}
+  //       </span>
+  //     </label>
+  //   );
+  // };
 
   const generateLabel = (data, category) => {
     const filterCategoryKey = category.title
@@ -361,7 +477,7 @@ const DoctorListing = () => {
       const checked = e.target.checked;
 
       const originalId = e.target.id.split("-")[1];
-      const filterCategoryKey = category.title.toLowerCase().replace(" ", "_");
+
       setShouldCallAPI(false);
       const id = data.id;
       const name =
@@ -386,116 +502,66 @@ const DoctorListing = () => {
 
       const appointment_type = data;
 
-      // if (checked) {
-
-
-      //   setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
-
-      //   // Update reqBodyfilterData
-      //   setReqBodyFilterData((prevData) => {
-      //     const updatedData = prevData.map((categoryData) => {
-      //       const key = Object.keys(categoryData)[0];
-      //       // Replace "specialty" with "speciality" in the filterCategoryKey
-      //       const updatedFilterCategoryKey =
-      //         key === "specialty" ? "speciality" : key;
-
-      //       if (updatedFilterCategoryKey === filterCategoryKey) {
-      //         return {
-      //           [updatedFilterCategoryKey]: [...categoryData[key], originalId],
-      //         };
-      //       }
-      //       return categoryData;
-      //     });
-      //     return updatedData;
-      //   });
-
-      // } else {
-      //   // Use the originalId instead of data.id
-      //   setCheckedIds((prevCheckedIds) =>
-      //     prevCheckedIds.filter((checkedId) => checkedId !== originalId)
-      //   );
-
-      //   // Update reqBodyfilterData
-      //   setReqBodyFilterData((prevData) => {
-      //     const updatedData = prevData.map((categoryData) => {
-      //       const key = Object.keys(categoryData)[0];
-      //       // Replace "specialty" with "speciality" in the filterCategoryKey
-      //       const updatedFilterCategoryKey =
-      //         key === "specialty" ? "speciality" : key;
-
-      //       if (updatedFilterCategoryKey === filterCategoryKey) {
-      //         return {
-      //           [updatedFilterCategoryKey]: categoryData[key].filter(
-      //             (checkedId) => checkedId !== originalId
-      //           ),
-      //         };
-      //       }
-      //       return categoryData;
-      //     });
-      //     return updatedData;
-      //   });
-      // }
       if (checked) {
         setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
+        const updatedData = reqBodyfilterData.map((categoryData) => {
+          const key = Object.keys(categoryData)[0];
+          const updatedFilterCategoryKey =
+            key === 'specialty' ? 'speciality' : key;
+
+          if (updatedFilterCategoryKey === filterCategoryKey) {
+            let updatedArray = [...categoryData[key]];
+            console.log(updatedArray, "hello updated array");
+
+            if (updatedFilterCategoryKey === 'speciality') {
+              updatedArray = [...updatedArray, ...specialityId];
+              console.log(updatedArray, "Mukesssssss");
+            } else if (updatedFilterCategoryKey === 'conditions') {
+              updatedArray = [...updatedArray, ...conditionId];
+            } else if (updatedFilterCategoryKey === 'insurance') {
+              updatedArray = [...updatedArray, ...insuranceId];
+            } else if (updatedFilterCategoryKey === 'language') {
+              updatedArray = [...updatedArray, ...langaugeId];
+            }
+
+            if (!updatedArray.includes(originalId)) {
+              updatedArray.push(originalId);
+            }
+
+            return {
+              [updatedFilterCategoryKey]: updatedArray,
+            };
+          }
+          return categoryData;
+        });
 
         // Update reqBodyfilterData
-        setReqBodyFilterData((prevData) => {
-          const updatedData = prevData.map((categoryData) => {
-            const key = Object.keys(categoryData)[0];
-            const updatedFilterCategoryKey =
-              key === 'specialty' ? 'speciality' : key;
-
-            if (updatedFilterCategoryKey === filterCategoryKey) {
-              let updatedArray = [...categoryData[key]];
-              console.log(updatedArray, "hello updated array");
-
-              if (updatedFilterCategoryKey === 'speciality') {
-                updatedArray = [...updatedArray, ...specialityId];
-                console.log(updatedArray, "Mukesssssss");
-              } else if (updatedFilterCategoryKey === 'conditions') {
-                updatedArray = [...updatedArray, ...conditionId];
-              } else if (updatedFilterCategoryKey === 'insurance') {
-                updatedArray = [...updatedArray, ...insuranceId];
-              } else if (updatedFilterCategoryKey === 'language') {
-                updatedArray = [...updatedArray, ...langaugeId];
-              }
-
-              if (!updatedArray.includes(originalId)) {
-                updatedArray.push(originalId);
-              }
-
-              return {
-                [updatedFilterCategoryKey]: updatedArray,
-              };
-            }
-            return categoryData;
-          });
-          return updatedData;
-        });
+        setReqBodyFilterData(updatedData);
       } else {
         // Use the originalId instead of data.id
         setCheckedIds((prevCheckedIds) =>
           prevCheckedIds.filter((checkedId) => checkedId !== originalId)
         );
 
-        // Update reqBodyfilterData
-        setReqBodyFilterData((prevData) => {
-          const updatedData = prevData.map((categoryData) => {
-            const key = Object.keys(categoryData)[0];
-            const updatedFilterCategoryKey =
-              key === 'specialty' ? 'speciality' : key;
+        //remove the id from the soecialityId array
 
-            if (updatedFilterCategoryKey === filterCategoryKey) {
-              return {
-                [updatedFilterCategoryKey]: categoryData[key].filter(
-                  (checkedId) => checkedId !== originalId
-                ),
-              };
-            }
-            return categoryData;
-          });
-          return updatedData;
+        const updatedData = reqBodyfilterData.map((categoryData) => {
+          const key = Object.keys(categoryData)[0];
+          const updatedFilterCategoryKey =
+            key === 'specialty' ? 'speciality' : key;
+
+          if (updatedFilterCategoryKey === filterCategoryKey) {
+            return {
+              [updatedFilterCategoryKey]: categoryData[key].filter(
+                (checkedId) => checkedId !== originalId
+              ),
+            };
+          }
+          return categoryData;
         });
+
+        // Update reqBodyfilterData
+        setReqBodyFilterData(updatedData);
       }
 
       let filterTitle = category.title.toLowerCase().replace(" ", "_");
@@ -574,7 +640,9 @@ const DoctorListing = () => {
         //       ]
         // );
       } else {
-        searchParams.delete(filterTitle);
+        searchParams.delete(
+          filterTitle
+        );
       }
       navigate(`?${searchParams.toString()}`);
 
@@ -861,7 +929,7 @@ const DoctorListing = () => {
               </>
             )}
           </aside>
-          <main className=" ml-0 mb-5 md:ml-5">
+          <main className=" ml-0 mb-5 overflow-hidden w-auto md:w-full">
             {renderDoctorsList()}
             {status === "loading"
               ? ""

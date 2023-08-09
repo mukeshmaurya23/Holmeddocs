@@ -118,13 +118,13 @@ const MakeAppointment = () => {
       clearTimeout(timer);
     };
   }, [searchValue]);
-
+  const city = locationSearchResults?.[0]?.city
   useEffect(() => {
     if (zipCodeId) {
       locationSearchDispatch(searchLocation({ zip_code_id: zipCodeId }));
       setBrowseData(locationSearchResults?.[0]?.city);
     }
-  }, [zipCodeId]);
+  }, [zipCodeId, city]);
 
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -393,9 +393,8 @@ const MakeAppointment = () => {
             </p>
             <div
               ref={ref}
-              className={`border relative ${
-                error.locationError ? "border-red-500" : "border-verifiCation"
-              } w-full py-4 rounded mt-7 flex justify-between items-center px-2`}
+              className={`border relative ${error.locationError ? "border-red-500" : "border-verifiCation"
+                } w-full py-4 rounded mt-7 flex justify-between items-center px-2`}
             >
               <input
                 type="text"
@@ -416,22 +415,20 @@ const MakeAppointment = () => {
                 }
                 // value={selectedItemList.location}
                 className={`outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText `}
-                // className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText"
+              // className="outline-none relative px-3 text-[.7rem] sm:text-[.9rem] text-[#292f33] w-full  font-sansBold placeHolderText"
               />
               <img
                 src={greenArrowDown}
                 alt=""
-                className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${
-                  selectedItem === "location" ? "rotate-180" : ""
-                }`}
+                className={`w-3 h-3 mr-2 cursor-pointer  absolute right-0 top-[1.4rem] ${selectedItem === "location" ? "rotate-180" : ""
+                  }`}
               />
 
               <ul
-                className={`${
-                  selectedItem === "location"
+                className={`${selectedItem === "location"
                     ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     : ""
-                }`}
+                  }`}
               >
                 {/* {isLocationDropdown && */}
                 {selectedItem === "location" && locationItems()}
@@ -444,9 +441,8 @@ const MakeAppointment = () => {
             )}
             <div
               ref={ref}
-              className={`relative border ${
-                error.specialityError ? "border-red-500" : "border-verifiCation"
-              } w-full py-4 mt-8 flex justify-between items-center rounded px-2`}
+              className={`relative border ${error.specialityError ? "border-red-500" : "border-verifiCation"
+                } w-full py-4 mt-8 flex justify-between items-center rounded px-2`}
             >
               <input
                 placeholder="Specialty/Condition"
@@ -462,16 +458,14 @@ const MakeAppointment = () => {
               <img
                 src={greenArrowDown}
                 alt=""
-                className={`w-3 h-3 mr-2 cursor-pointer absolute right-0 top-[1.4rem] ${
-                  selectedItem === "speciality" ? "rotate-180" : ""
-                }`}
+                className={`w-3 h-3 mr-2 cursor-pointer absolute right-0 top-[1.4rem] ${selectedItem === "speciality" ? "rotate-180" : ""
+                  }`}
               />
               <ul
-                className={`${
-                  selectedItem === "speciality"
+                className={`${selectedItem === "speciality"
                     ? "absolute mt-1 top-[3rem] p-5 max-h-60 z-10 w-[103%] right-0 -left-1 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                     : ""
-                }`}
+                  }`}
               >
                 {selectedItem === "speciality" && SpecialityAndCondition()}
               </ul>
@@ -495,7 +489,7 @@ const MakeAppointment = () => {
                 className="outline-none px-3 text-[.7rem] mt-1 sm:text-[.9rem]  text-[#292f33] mr-20 font-sansBold"
               >
                 {startDate &&
-                startDate.toDateString() === new Date().toDateString()
+                  startDate.toDateString() === new Date().toDateString()
                   ? "Today"
                   : moment(startDate).format("DD MMM,YYYY")}
               </span>
@@ -533,21 +527,19 @@ const MakeAppointment = () => {
               </Button> */}
               <Button
                 onClick={toggleButtonHandler}
-                className={`py-2 px-[1.75rem] sm:px-16 ${
-                  active === "InPerson"
+                className={`py-2 px-[1.75rem] sm:px-16 ${active === "InPerson"
                     ? "bg-[#008282] text-white"
                     : "text-black"
-                } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
               >
                 InPerson
               </Button>
               <Button
                 onClick={toggleButtonHandler}
-                className={`py-2 px-[1.75rem] sm:px-16 ${
-                  active === "Virtual"
+                className={`py-2 px-[1.75rem] sm:px-16 ${active === "Virtual"
                     ? "bg-[#008282] text-white"
                     : "text-black"
-                } text-[1rem] tracking-[2px] font-sansRegular rounded`}
+                  } text-[1rem] tracking-[2px] font-sansRegular rounded`}
               >
                 Virtual
               </Button>
