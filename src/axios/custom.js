@@ -3,8 +3,7 @@ import { logout } from "../store/loginSlice";
 import store from "../store/store";
 const customAxios = axios.create({
   //baseURL: "http://192.168.1.35/holmeddoc",
-  baseURL:
-    "http://skyonliners.com/demo/holmeddoc" || "http://192.168.1.35/holmeddoc",
+  baseURL: "http://skyonliners.com/demo/holmeddoc",
   //"https://755b-110-227-197-199.ngrok-free.app/holemeddoc",
   headers: {
     "Content-Type": "application/json",
@@ -30,7 +29,7 @@ customAxios.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 404) {
+    if (error.response.status === 401) {
       store.dispatch(logout());
     }
 

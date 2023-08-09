@@ -349,12 +349,9 @@ const Navbar2 = () => {
         specialitySearchParams ||
         conditionSearchParams ||
         dateSearchParams) &&
-      (selectedItemList.location.length === 0 ||
-        clearingPlaceholder.length === 0) &&
-      (selectedItemList.speciality.length === 0 ||
-        clearSpecialityPlaceholder.length === 0) &&
-      (selectedItemList.conditions.length === 0 ||
-        clearConditionPlaceholder.length === 0) &&
+      selectedItemList.location?.length === 0 &&
+      selectedItemList.speciality?.length === 0 &&
+      selectedItemList.conditions?.length === 0 &&
       moment(startDate).format("YYYY-MM-DD") ===
         moment(dateSearchParams).format("YYYY-MM-DD")
     ) {
@@ -412,7 +409,6 @@ const Navbar2 = () => {
 
       return;
     }
-
     if (selectedItemList.location) {
       url += `location=${selectedItemList.location}_${zip_code_id}&`;
     } else if (locationSearchParams) {
@@ -853,7 +849,7 @@ const Navbar2 = () => {
                 <div className="flex items-center relative w-[600px]">
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative py-1 m-auto   outline-none border-r placeHolderText  border-[#b5b1b1] pl-2 ${
+                    className={`relative py-1    outline-none border-r placeHolderText  border-[#b5b1b1] ml-[10px] ${
                       selectedItemList.location || locationSearchParams
                         ? "text-[1rem] font-semibold"
                         : "text-[1rem]"
@@ -881,7 +877,7 @@ const Navbar2 = () => {
                   </ul>
                   <input
                     ref={locSpecConditionRef}
-                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] m-auto pl-2 text-[#292F33] ${
+                    className={`relative outline-none border-r placeHolderText  border-[#b5b1b1] py-1 h-[40px] ml-[10px] text-[#292F33] ${
                       selectedItemList.speciality ||
                       specialitySearchParams ||
                       selectedItemList.conditions ||
@@ -918,7 +914,7 @@ const Navbar2 = () => {
                   </ul>
 
                   <div
-                    className="flex  md:ml-5 cursor-pointer items-center  h-[40px] mx-auto"
+                    className="flex   cursor-pointer items-center  h-[40px] ml-[10px]"
                     ref={calendarRef}
                   >
                     <img
@@ -930,7 +926,7 @@ const Navbar2 = () => {
                     />
                     <span
                       onClick={handleClick}
-                      className={`outline-none pl-10 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${
+                      className={`outline-none pl-4 text-[.7rem] mt-1 sm:text-[.9rem] 2xl:text-[.9rem] text-black  font-sansRegular font-semibold ${
                         !dateSearchParams ? "hidden" : ""
                       }`}
                     >

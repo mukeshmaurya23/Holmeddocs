@@ -129,6 +129,13 @@ const Appointment = () => {
                     <InfiniteScroll
                       dataLength={appointmentData?.data?.result?.length}
                       loader={<Spinner />}
+                      next={
+                        appointmentData?.data?.result?.length >= 3
+                          ? () => {
+                              console.log("next");
+                            }
+                          : null
+                      }
                     >
                       <>
                         {appointmentData?.data?.result?.map((data, index) => {

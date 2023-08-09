@@ -16,6 +16,7 @@ import { useSnackbar } from "notistack";
 
 import Spinner from "../../UI/Spinner";
 import moment from "moment";
+import BirthDayDatePicker from "../../UI/BirthDayDatePicker";
 const Register = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -44,22 +45,14 @@ const Register = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
-  const [formattedDate, setFormattedDate] = useState("");
 
   const navigate = useNavigate();
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [isOpen, setIsOpen] = useState(false);
-  // const handleChange = (e) => {
-  //   setIsOpen(!isOpen);
-  //   setStartDate(e);
-  // };
-  // const handleClick = (e) => {
-  //   e.preventDefault();
-  //   setIsOpen(!isOpen);
-  // };
-  // const handleDateChange = (date) => {
-  //   setStartDate(date);
-  // };
+  const [userBirthDate, setUserBirthDate] = useState("");
+
+  const handleBirthDateChange = (date) => {
+    setUserBirthDate(date);
+  };
+
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -68,12 +61,11 @@ const Register = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      dob: "",
+
       gender: "",
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
-      console.log(values);
       console.log("Form Submitted");
       const {
         first_name,
@@ -82,7 +74,6 @@ const Register = () => {
         email,
         password,
 
-        dob,
         gender,
       } = values;
       const data = {
@@ -91,10 +82,12 @@ const Register = () => {
         phone,
         email,
         password,
-
-        dob,
+        dob: userBirthDate,
         gender,
       };
+
+      console.log(data);
+
       try {
         setLoading(true);
         const response = await customAxios.post("/patient/register", data);
@@ -125,19 +118,7 @@ const Register = () => {
       }
     },
   });
-  console.log(formik.values);
-
-  const handleDateChange = (event) => {
-    const newDate = event.target.value;
-    console.log(newDate);
-
-    const replace = newDate.replace(/-/g, "/");
-    console.log(replace);
-    setFormattedDate(replace);
-    const dateObject = new Date(replace);
-    formik.setFieldValue("dob", moment(dateObject).format("YYYY/MM/DD"));
-    console.log(formik.values.dob);
-  };
+  //console.log(formik.values);
 
   return (
     <>
@@ -168,7 +149,7 @@ const Register = () => {
                 <div className="flex-grow">
                   <form className="" onSubmit={formik.handleSubmit}>
                     <div className="flex flex-wrap px-4 sm:px-24 py-2">
-                      <div className="flex flex-col  w-1/2 sm:w-1/2 p-[10px]">
+                      <div className="flex flex-col  w-1/2 sm:w-1/2 p-[6px]">
                         <Label
                           htmlFor="first_name"
                           className="font-sansRegular text-formLabel text-sm"
@@ -182,8 +163,8 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.first_name}
                           onBlur={formik.handleBlur}
-                          placeholder="Enter your first name"
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
+                          placeholder="First Name"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.first_name &&
@@ -194,7 +175,7 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col w-1/2 sm:w-1/2 p-[10px]">
+                      <div className="flex flex-col w-1/2 sm:w-1/2 p-[6px]">
                         <Label
                           htmlFor="last_name"
                           className="font-sansRegular text-formLabel text-sm"
@@ -208,8 +189,8 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.last_name}
                           onBlur={formik.handleBlur}
-                          placeholder="Enter your last name"
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
+                          placeholder="Last Name"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.last_name &&
@@ -221,7 +202,7 @@ const Register = () => {
                         </div>
                       </div>
 
-                      <div className="flex flex-col  w-1/2 sm:w-1/2 p-[10px]">
+                      <div className="flex flex-col  w-1/2 sm:w-1/2 p-[6px]">
                         <Label
                           htmlFor="gender"
                           className="font-sansRegular text-formLabel text-sm"
@@ -229,15 +210,18 @@ const Register = () => {
                           Gender
                         </Label>
                         <select
-                          className="border border-verifiCation  p-[1px] rounded-md py-2 px-4 text-formLabel text-[12px] sm:text-[16px]"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 p-[1px] rounded-md py-2 px-4 text-formLabel text-[12px] sm:text-[16px] outline-verifiCation"
                           id="gender"
                           name="gender"
                           value={formik.values.gender}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         >
-                          <option value="" className="text-formLabel">
-                            Select
+                          <option
+                            value=""
+                            className="text-formLabel placeHolderText placeholder:text-gray-400"
+                          >
+                            Gender
                           </option>
                           <option value="Male">Male</option>
                           <option value="F">Female</option>
@@ -251,70 +235,20 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col w-1/2 p-[10px] relative">
-                        <Label
-                          htmlFor="dob"
-                          className="font-sansRegular text-formLabel text-sm"
-                        >
-                          DOB
-                        </Label>
-                        <div className="flex border border-verifiCation rounded-md outline-verifiCation p-[1px]">
-                          <Input
-                            type="text"
-                            name="dob"
-                            autoComplete="nope"
-                            id="dob"
-                            onChange={formik.handleChange}
-                            value={formattedDate}
-                            onBlur={formik.handleBlur}
-                            className=" text-formLabel px-4 py-2 outline-verifiCation focus:outline-none  text-[12px] sm:text-[16px]"
-                          />
-
-                          <Input
-                            type="date"
-                            name="dob"
-                            autoComplete="nope"
-                            id="dob"
-                            onChange={handleDateChange}
-                            className=" w-[5rem] text-white  outline-verifiCation focus:outline-none py-2 px-4 text-[12px] sm:text-[16px]"
-                          />
-                        </div>
-
-                        <div className="text-red-600 text-xs ">
-                          {formik.touched.dob && formik.errors.dob ? (
-                            formik.errors.dob
-                          ) : (
-                            <>&nbsp;</>
-                          )}
-                        </div>
-
-                        {/* <div className="absolute flex flex-row-reverse top-10 justify-evenly ">
-                          <span className="outline-none px-3 text-[.7rem]  sm:text-[1rem] 2xl:text-[1.2rem] text-formLabel">
-                            {startDate &&
-                            startDate.toDateString() ===
-                              new Date().toDateString()
-                              ? "Today"
-                              : startDate?.toLocaleDateString()}
-                          </span>
-                        </div> */}
-
-                        {/* {isOpen && (
-                          <div className="absolute top-[4.6rem] right-10 z-[100] h-full">
-                            <DatePickerComponent
-                              handleChange={handleChange}
-                              startDate={startDate}
-                            />
-                          </div>
-                        )} */}
+                      <div className="flex flex-col w-1/2 p-[6px] relative">
+                        <BirthDayDatePicker
+                          onBirthDateChange={handleBirthDateChange}
+                          marginTop="1.3rem"
+                        />
                       </div>
-                      <div className="flex flex-col  w-1/2 p-[10px] relative">
+                      <div className="flex flex-col  w-1/2 p-[6px] relative">
                         <Label
                           htmlFor="phone"
                           className="font-sansRegular text-formLabel text-sm"
                         >
                           Mobile Number
                         </Label>
-                        <div className="absolute left-2 top-[2.3rem] sm:top-[2.46rem] w-3 pl-2  h-full text-md text-formLabel">
+                        <div className="absolute left-2 top-[2.3rem] sm:top-[2.27rem] w-3 pl-2  h-full text-md placeHolderText placeholder:text-gray-400 text-formLabel">
                           +1
                         </div>
                         <Input
@@ -324,8 +258,8 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.phone}
                           onBlur={formik.handleBlur}
-                          placeholder="XXX XXX XXXX"
-                          className="border p-[1px] border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-7 sm:px-8 text-[12px] sm:text-[16px]"
+                          placeholder="xxx-xxx-xxxx"
+                          className="border p-[1px] border-verifiCation placeHolderText placeholder:text-gray-400 outline-verifiCation text-formLabel rounded-md py-2 px-7 sm:px-8 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.phone && formik.errors.phone ? (
@@ -335,7 +269,7 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col  w-1/2 p-[10px]">
+                      <div className="flex flex-col  w-1/2 p-[6px]">
                         <Label
                           htmlFor="email"
                           className="font-sansRegular text-formLabel text-sm"
@@ -350,7 +284,7 @@ const Register = () => {
                           value={formik.values.email}
                           onBlur={formik.handleBlur}
                           placeholder="email@domain.com"
-                          className="border border-verifiCation text-formLabel outline-verifiCation rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 text-formLabel outline-verifiCation rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.email && formik.errors.email ? (
@@ -360,7 +294,7 @@ const Register = () => {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-col  w-1/2 relative p-[10px]">
+                      <div className="flex flex-col  w-1/2 relative p-[6px]">
                         <Label
                           htmlFor="password"
                           className="font-sansRegular text-formLabel text-sm"
@@ -375,7 +309,7 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.password}
                           onBlur={formik.handleBlur}
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.password && formik.errors.password ? (
@@ -398,7 +332,7 @@ const Register = () => {
                           />
                         </Button>
                       </div>
-                      <div className="flex flex-col  w-1/2 relative p-[10px]">
+                      <div className="flex flex-col  w-1/2 relative p-[6px]">
                         <Label
                           htmlFor="confirmPassword"
                           className="font-sansRegular text-formLabel text-sm"
@@ -413,7 +347,7 @@ const Register = () => {
                           onChange={formik.handleChange}
                           value={formik.values.confirmPassword}
                           onBlur={formik.handleBlur}
-                          className="border border-verifiCation outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
+                          className="border border-verifiCation placeHolderText placeholder:text-gray-400 outline-verifiCation text-formLabel rounded-md py-2 px-4 text-[12px] sm:text-[16px]"
                         />
                         <div className="text-red-600 text-xs ">
                           {formik.touched.confirmPassword &&

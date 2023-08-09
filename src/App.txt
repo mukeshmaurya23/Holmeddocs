@@ -250,3 +250,13 @@
 
 // export default App;
 
+Today i will be fixing bugs in the url filtering prcoess so curently facing some issue in that try to resolve it by today
+once done connect for review
+
+tuesday
+fixed the ui issue in the main doctor listing page 
+after that i started on the url filtering prcoess so in that i facing some issue so for that i have implemented few solution 
+but somewhere i have half way completed that so currently im  working on that
+
+wed:
+start working on the new date picker component for update profile and register page

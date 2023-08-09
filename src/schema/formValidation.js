@@ -37,12 +37,12 @@ export const registerSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Please confirm your password"),
-  dob: Yup.string()
-    .required("Date of Birth is required")
-    .matches(
-      /^\d{4}\/\d{2}\/\d{2}$/,
-      "Invalid Date of Birth. Please use the format YYYY/MM/DD"
-    ),
+  // dob: Yup.string()
+  //   .required("Date of Birth is required")
+  //   .matches(
+  //     /^\d{4}\/\d{2}\/\d{2}$/,
+  //     "Invalid Date of Birth. Please use the format YYYY/MM/DD"
+  //   ),
   gender: Yup.string().required("Gender selection is required"),
 });
 
@@ -96,7 +96,7 @@ export const updateProfileSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/, "Invalid email"),
 
   patient_gender: Yup.string().required("Phone is required"),
-  patient_dob: Yup.string().required("Date of Birth is required"),
+  // patient_dob: Yup.string().required("Date of Birth is required"),
 
   // city_id: Yup.string().required("City is required"),
   // state_id: Yup.string().required("State is required"),

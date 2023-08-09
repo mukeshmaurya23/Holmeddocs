@@ -19,6 +19,7 @@ import hamburger from "../../../images/icons/Hamburger.png";
 import { filterFunctionality } from "../../../constant";
 import { toggleMenu } from "../../../store/mobileAppSlice";
 import MobileResposiveToogle from "../../../util/MobileResposiveToogle";
+import BirthDayDatePicker from "../../../UI/BirthDayDatePicker";
 const UpdateProfile = () => {
   const location = useLocation();
   const { profileData } = location?.state || {};
@@ -52,7 +53,11 @@ const UpdateProfile = () => {
     }
   };
   const [isStateSelected, setIsStateSelected] = useState(false);
+  const [userBirthDate, setUserBirthDate] = useState("");
 
+  const handleBirthDateChange = (date) => {
+    setUserBirthDate(date);
+  };
   console.log(selectedItemList);
   const insuranceRef = useRef();
   const stateRef = useRef();
@@ -65,7 +70,7 @@ const UpdateProfile = () => {
 
       patient_email: "",
       patient_gender: "",
-      patient_dob: "",
+
       city_id: "",
       state_id: "",
       zip_code_id: "",
@@ -115,7 +120,7 @@ const UpdateProfile = () => {
       apartment: formik.values.apartment || profileData?.apartment,
       patient_gender:
         formik.values.patient_gender || profileData?.patient_gender,
-      patient_dob: formik.values.patient_dob || profileData?.patient_dob,
+      patient_dob: userBirthDate || profileData?.patient_dob,
       city_id: selectedItemList.city_id.id,
       state_id: selectedItemList.state.id,
     };
@@ -398,14 +403,14 @@ const UpdateProfile = () => {
                     </div>
                   )}
               </div>
-              <div className="flex flex-col w-1/2 p-[10px]">
+              <div className="flex flex-col w-1/2 px-3 ">
                 <Label
                   htmlFor="patient_dob"
                   className="font-sansRegular text-formLabel text-sm py-1"
                 >
                   BirthDay
                 </Label>
-                <Input
+                {/* <Input
                   type="date"
                   name="patient_dob"
                   id="patient_dob"
@@ -419,7 +424,11 @@ const UpdateProfile = () => {
                   <div className="text-red-400 text-xs mt-1">
                     {formik.errors.patient_dob}
                   </div>
-                )}
+                )} */}
+                <BirthDayDatePicker
+                  onBirthDateChange={handleBirthDateChange}
+                  marginTop=".7rem"
+                />
               </div>
               <div className="flex flex-col  w-1/2 p-[10px] relative">
                 <Label

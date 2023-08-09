@@ -31,7 +31,9 @@ const MakeAppointment = () => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
-  const { locationAreas, status } = useSelector((state) => state.data);
+  const { locationAreas, status } = useSelector(
+    (state) => state.data.locationAreas
+  );
 
   const {
     specialties: specialistData,
@@ -72,7 +74,7 @@ const MakeAppointment = () => {
   const locationSearchDispatch = useDispatch();
 
   const zipCodeId = searchParams.get("city");
-
+  const city = locationSearchResults?.[0]?.city;
   const handleLocationSearch = (e) => {
     const value = e.target.value;
     setSearchValue(value);
@@ -124,7 +126,7 @@ const MakeAppointment = () => {
       locationSearchDispatch(searchLocation({ zip_code_id: zipCodeId }));
       setBrowseData(locationSearchResults?.[0]?.city);
     }
-  }, [zipCodeId]);
+  }, [city, zipCodeId]);
 
   const handleChange = (e) => {
     setIsOpen(!isOpen);
@@ -242,7 +244,7 @@ const MakeAppointment = () => {
       setConditionId("");
     }
   }, [selectedItemList.conditions, conditionData]);
-  console.log(error);
+
   const handleSearch = () => {
     if (
       selectedItemList.location === "" &&

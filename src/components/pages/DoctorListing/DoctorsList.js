@@ -37,7 +37,7 @@ const DoctorsList = ({ doctorsList, status }) => {
             to={`/doctor-listing/${doctor?.doctor_name
               .replace(/ /g, "_")
               .toLowerCase()}/${doctor?.id}`}
-            className="flex space-x-4"
+            className="flex space-x-4 w-full lg:w-[40%]"
           >
             {" "}
             <div className="rounded-md mb-3">
@@ -94,12 +94,12 @@ const DoctorsList = ({ doctorsList, status }) => {
               </div>
             </div>
           </Link>
-          <div className=" px-0 md:px-6 flex-1  ">
-            <h2 className="px-0 md:px-16 font-sansBold text-[1.2rem] cursor-pointer ">
+          <div className=" flex-1  ">
+            <h2 className="font-sansBold text-[1.2rem] cursor-pointer ">
               Availability
             </h2>
             <div
-              className="md:px-5 flex  gap-3 mt-5 cursor-pointer ml-0  md:ml-6 w-[330px] md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden "
+              className=" flex  gap-3 mt-5 cursor-pointer ml-0   w-[330px] md:w-full overflow-x-scroll overflow-y-hidden md:overflow-hidden "
               id="hideMyScrollbar"
             >
               {doctor?.time_slots?.InPerson?.map((timeSlot, index) => (
@@ -128,7 +128,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                 </div>
               ))}
             </div>
-            <div className="flex gap-10 py-5  justify-between items-center md:px-16">
+            <div className="flex gap-10 py-5  justify-between items-center ">
               <Link
                 to={`/doctor-listing/${doctor?.doctor_name
                   .replace(/ /g, "_")
@@ -144,7 +144,7 @@ const DoctorsList = ({ doctorsList, status }) => {
                   .replace(/ /g, "_")
                   .toLowerCase()}/${doctor?.id}`}
               >
-                <p className="text-[#CF8B15] cursor-pointer mt-3 underline 2xl:py-3 font-sansSemibold 2xl:mt-5">
+                <p className="text-[#CF8B15] cursor-pointer mt-3 underline 2xl:py-3 font-sansSemibold 2xl:mt-5 pr-0 md:pr-24">
                   View More
                 </p>
               </Link>
