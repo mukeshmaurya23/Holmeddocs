@@ -37,7 +37,7 @@ const DoctorsList = ({ doctorsList, status }) => {
             to={`/doctor-listing/${doctor?.doctor_name
               .replace(/ /g, "_")
               .toLowerCase()}/${doctor?.id}`}
-            className="flex space-x-4 w-full lg:w-[40%]"
+            className="flex space-x-4"
           >
             {" "}
             <div className="rounded-md mb-3">
@@ -94,8 +94,8 @@ const DoctorsList = ({ doctorsList, status }) => {
               </div>
             </div>
           </Link>
-          <div className=" flex-1  ">
-            <h2 className="font-sansBold text-[1.2rem] cursor-pointer ">
+          <div className=" px-0 md:px-6 flex-1  ">
+            <h2 className="px-0 md:px-16 font-sansBold text-[1.2rem] cursor-pointer ">
               Availability
             </h2>
             <div
