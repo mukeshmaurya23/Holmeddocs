@@ -31,7 +31,11 @@ const Footer = () => {
   const navigate = useNavigate();
   const navigateInsurance = useNavigate();
   const [showAllInsurance, setShowAllInsurance] = useState(false);
+  const { getFooterData, getFooterDataStatus } = useSelector(
+    (state) => state.api
+  );
 
+  console.log(getFooterData, "getFooterData");
   const handleItemClick = (index) => {
     setIsVisible((prevIsVisible) => {
       const updatedVisibility = prevIsVisible.map((value, idx) =>
@@ -129,36 +133,38 @@ const Footer = () => {
               </h2>
 
               {showAllInsurance && insuranceData?.length > 3
-                ? insuranceData?.map((item, index) => (
-                  <li
-                    key={index}
-                    className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
-                    onClick={() =>
-                      handleInsuranceCardClick({
-                        name: item?.insurance_company_name,
-                        id: item?.id,
-                        date: moment(startDate).format("YYYY-MM-DD"),
-                      })
-                    }
-                  >
-                    {item?.insurance_company_name}
-                  </li>
-                ))
-                : insuranceData?.slice(0, 3)?.map((item, index) => (
-                  <li
-                    key={index}
-                    className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
-                    onClick={() =>
-                      handleInsuranceCardClick({
-                        name: item?.insurance_company_name,
-                        id: item?.id,
-                        date: moment(startDate).format("YYYY-MM-DD"),
-                      })
-                    }
-                  >
-                    {item?.insurance_company_name}
-                  </li>
-                ))}
+                ? insuranceData &&
+                  insuranceData?.map((item, index) => (
+                    <li
+                      key={index}
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={() =>
+                        handleInsuranceCardClick({
+                          name: item?.insurance_company_name,
+                          id: item?.id,
+                          date: moment(startDate).format("YYYY-MM-DD"),
+                        })
+                      }
+                    >
+                      {item?.insurance_company_name}
+                    </li>
+                  ))
+                : insuranceData &&
+                  insuranceData?.slice(0, 3)?.map((item, index) => (
+                    <li
+                      key={index}
+                      className="hidden sm:block font-semibold font-sansRegular text-sm text-[11px] text-black"
+                      onClick={() =>
+                        handleInsuranceCardClick({
+                          name: item?.insurance_company_name,
+                          id: item?.id,
+                          date: moment(startDate).format("YYYY-MM-DD"),
+                        })
+                      }
+                    >
+                      {item?.insurance_company_name}
+                    </li>
+                  ))}
 
               <li
                 className="hidden sm:block  font-semibold font-sansRegular text-sm text-[11px] text-black underline"
@@ -295,8 +301,9 @@ const Footer = () => {
                     {item.title}
                   </h6>
                   <i
-                    className={`${isVisible[index] ? "fa fa-minus" : "fa fa-plus"
-                      } text-[16px] cursor-pointer`}
+                    className={`${
+                      isVisible[index] ? "fa fa-minus" : "fa fa-plus"
+                    } text-[16px] cursor-pointer`}
                     aria-hidden="true"
                     onClick={() => handleItemClick(index)}
                   ></i>
@@ -371,13 +378,13 @@ const Footer = () => {
             >
               <ul className="flex flex-col items-center md:flex-row md:space-x-4 lg:space-x-8 text-sm font-light  md:font-medium text-size-4 md:text-[14px]  text-gray-900">
                 <li className="cursor-pointer">
-                  <a href="#">Our Terms</a>
+                  <Link to="/our-terms">Our Terms</Link>
                 </li>
                 <li className="cursor-pointer">
-                  <a href="#">Our Privacy Policy</a>
+                  <Link to="/our-policy">Our Privacy Policy</Link>
                 </li>
                 <li className="cursor-pointer">
-                  <a href="#">User Agreement</a>
+                  <Link to="/user-aggrement">User Agreement</Link>
                 </li>
               </ul>
             </div>

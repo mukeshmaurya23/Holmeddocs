@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import customAxios from "../axios/custom";
-
+import { create } from "@mui/material/styles/createTransitions";
 
 const initialState = {
   loading: false,
@@ -30,21 +30,56 @@ const initialState = {
   getDoctorsDataError: "",
   getAllDoctorsData: null,
   getAllDoctorsDataStatus: "idle",
+  getFooterData: null,
+  getFooterDataStatus: "idle",
 };
 
-const fetchData = createAsyncThunk("api/fetchData", async (url) => {
-  try {
-    const response = await customAxios.post(url);
-    console.log(response, "im response from apiSlice");
-    const resData = await response.data;
-    console.log(resData, "im resData from apiSlice");
-    return resData;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return error.message;
-  }
-});
+// const fetchData = createAsyncThunk(
+//   "api/fetchData",
+//   async ({ url, paginate, page }) => {
+//     try {
+//       const response = await customAxios.post(url, { paginate, page });
+//       console.log(response, "im response from apiSlice");
+//       const resData = await response.data;
+//       console.log(resData, "im resData from apiSlice");
+//       return resData;
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//       return error.message;
+//     }
+//   }
+// );
+const fetchData = createAsyncThunk(
+  "api/fetchData",
+  async ({ url, paginate, page }) => {
+    try {
+      let requestData = {};
 
+      if (paginate !== undefined && page !== undefined) {
+        requestData = { paginate, page };
+      }
+
+      const response = await customAxios.post(url, requestData);
+      console.log(response, "im response from apiSlice");
+
+      const resData = await response.data;
+      console.log(resData, "im resData from apiSlice");
+
+      return resData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return error.message;
+    }
+  }
+);
+export const fetchFootersApi = createAsyncThunk(
+  "api/fetchFootersApi",
+  async (url) => {
+    const response = await customAxios.post(url);
+    const resData = await response?.data?.data?.result;
+    return resData;
+  }
+);
 const fetchInsuranceData = createAsyncThunk(
   "api/fetchInsuranceData",
   async (url) => {
@@ -132,10 +167,10 @@ export const fetchAllDoctorsData = createAsyncThunk(
   "api/fetchAllDoctorsData",
   async (url) => {
     const response = await customAxios.post(url);
-    const resData = await response.data
+    const resData = await response.data;
     return resData;
   }
-)
+);
 export const book_appointment_DoctorData = createAsyncThunk(
   "api/book_appointment_DoctorData",
   async (id) => {
@@ -250,11 +285,18 @@ const apiSlice = createSlice({
     });
 
     builder.addCase(fetchAllDoctorsData.pending, (state, action) => {
-      state.getAllDoctorsDataStatus = "loading"
+      state.getAllDoctorsDataStatus = "loading";
     });
     builder.addCase(fetchAllDoctorsData.fulfilled, (state, action) => {
-      state.getAllDoctorsDataStatus = "succeeded";
+      state.getFooterDataStatus = "succeeded";
       state.getAllDoctorsData = action.payload;
+    });
+    builder.addCase(fetchFootersApi.pending, (state) => {
+      state.getFooterDataStatus = "loading";
+    });
+    builder.addCase(fetchFootersApi.fulfilled, (state, action) => {
+      state.getFooterDataStatus = "succeeded";
+      state.getFooterData = action.payload;
     });
   },
 });

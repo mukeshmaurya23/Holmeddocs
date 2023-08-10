@@ -79,11 +79,8 @@ const DoctorListing = () => {
   }
 
   if (!commonParams?.speciality && !commonParams?.specialityParams) {
-<<<<<<< HEAD
     specialityId = [];
-=======
-    specialityId = []
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
+
     console.log("specialityId heheh", specialityId);
   }
 
@@ -160,11 +157,6 @@ const DoctorListing = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
   const handleMobileDoctorSearch = (e) => {
     setFilterDoctorSearchTerm(e.target.value);
     const filteredDoctors = doctorsList?.filter((doctor) => {
@@ -350,10 +342,6 @@ const DoctorListing = () => {
   //       { time_slot_day: day }
   //     );
 
-<<<<<<< HEAD
-=======
-
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
   //     let filterTitle = category.title.toLowerCase().replace(" ", "_");
   //     filterTitle = filterTitle.replace("specialty", "speciality");
   //     if (checked) {
@@ -420,7 +408,8 @@ const DoctorListing = () => {
     const filterCategoryKey = category.title
       .toLowerCase()
       .replace(" ", "_")
-      .replace("specialty", "speciality");
+      .replace("specialty", "speciality")
+      .replace("appointment type", "appointment_type");
     const isChecked = reqBodyfilterData.find((categoryData) =>
       categoryData[filterCategoryKey]?.includes(data.id)
     );
@@ -429,11 +418,7 @@ const DoctorListing = () => {
       const checked = e.target.checked;
 
       const originalId = e.target.id.split("-")[1];
-<<<<<<< HEAD
-      console.log(originalId, "originalId");
-=======
 
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
       setShouldCallAPI(false);
       const id = data.id;
       const name =
@@ -460,24 +445,16 @@ const DoctorListing = () => {
 
       if (checked) {
         setCheckedIds((prevCheckedIds) => [...prevCheckedIds, originalId]);
-<<<<<<< HEAD
         console.log(specialityId, "specialityId");
         const updatedData = reqBodyfilterData.map((categoryData) => {
           const key = Object.keys(categoryData)[0];
           const updatedFilterCategoryKey =
             key === "specialty" ? "speciality" : key;
-=======
-        const updatedData = reqBodyfilterData.map((categoryData) => {
-          const key = Object.keys(categoryData)[0];
-          const updatedFilterCategoryKey =
-            key === 'specialty' ? 'speciality' : key;
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
 
           if (updatedFilterCategoryKey === filterCategoryKey) {
             let updatedArray = [...categoryData[key]];
             console.log(updatedArray, "hello updated array");
 
-<<<<<<< HEAD
             if (updatedFilterCategoryKey === "speciality") {
               updatedArray = [...specialityId, id];
               console.log(updatedArray, "Mukesssssss");
@@ -486,16 +463,6 @@ const DoctorListing = () => {
             } else if (updatedFilterCategoryKey === "insurance") {
               updatedArray = [...updatedArray, ...insuranceId];
             } else if (updatedFilterCategoryKey === "language") {
-=======
-            if (updatedFilterCategoryKey === 'speciality') {
-              updatedArray = [...updatedArray, ...specialityId];
-              console.log(updatedArray, "Mukesssssss");
-            } else if (updatedFilterCategoryKey === 'conditions') {
-              updatedArray = [...updatedArray, ...conditionId];
-            } else if (updatedFilterCategoryKey === 'insurance') {
-              updatedArray = [...updatedArray, ...insuranceId];
-            } else if (updatedFilterCategoryKey === 'language') {
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
               updatedArray = [...updatedArray, ...langaugeId];
             }
 
@@ -523,13 +490,17 @@ const DoctorListing = () => {
         const updatedData = reqBodyfilterData.map((categoryData) => {
           const key = Object.keys(categoryData)[0];
           const updatedFilterCategoryKey =
-<<<<<<< HEAD
             key === "specialty" ? "speciality" : key;
-=======
-            key === 'specialty' ? 'speciality' : key;
->>>>>>> e2ddfc2735908ce5265bdb0b61fed7089f6f8063
+          if (updatedFilterCategoryKey === "appointment_type") {
+            // Check if the value is "appointment"
+            if (categoryData[key] === "appointment_type") {
+              return {
+                [updatedFilterCategoryKey]: null,
+              };
+            }
 
-          if (updatedFilterCategoryKey === filterCategoryKey) {
+            return categoryData;
+          } else if (updatedFilterCategoryKey === filterCategoryKey) {
             return {
               [updatedFilterCategoryKey]: categoryData[key].filter(
                 (checkedId) => checkedId !== originalId
@@ -593,19 +564,15 @@ const DoctorListing = () => {
             : encryptData(encryptedData, SECRET_KEY);
 
         searchParams.set(filterTitle, valueToAdd);
-        // searchParams.set(
-        //   filterTitle,
-
-        //   filterTitle.toLowerCase() === "appointment_type"
-        //     ? appointment_type
-        //     : [
-        //         ` ${name} ? ${name}_${id} :${id}`,
-        //       ]
-        // );
       } else {
-        searchParams.delete(
-          filterTitle
-        );
+        console.log("im inside the abhi test");
+        if (searchParams.get("selectedSpeciality")) {
+          searchParams.delete("selectedSpeciality");
+        } else if (searchParams.get("selectedInsurance")) {
+          searchParams.delete("selectedInsurance");
+        } else {
+          searchParams.delete(filterTitle);
+        }
       }
       navigate(`?${searchParams.toString()}`);
 

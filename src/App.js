@@ -11,6 +11,7 @@ import {
   fetchAllDoctorsData,
   fetchData,
   fetchDoctorsData,
+  fetchFootersApi,
   fetchInsuranceData,
   fetchStateData,
 } from "./store/apiSlice";
@@ -18,6 +19,10 @@ import {
   fetchAllMedicalCondition,
   fetchAllMedicalConditionList,
 } from "./store/healthConcernSlice";
+import DummyTest from "./components/pages/Appointment/DummyTest";
+import OurTerms from "./components/Footer/OurTerms";
+import OurPolicy from "./components/Footer/OurPolicy";
+import UserAggrement from "./components/Footer/UserAggrement";
 
 const Login = lazy(() => import("./components/Login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
@@ -106,7 +111,7 @@ function App() {
   const medicalDispatch = useDispatch();
   const stateDispatch = useDispatch();
   const medicalListdispatch = useDispatch();
-  const appointmentDispatch = useDispatch();
+  const footerDispatch = useDispatch();
   const doctorDispatch2 = useDispatch();
 
   useEffect(() => {
@@ -122,10 +127,6 @@ function App() {
   useEffect(() => {
     insuranceDispatch(fetchInsuranceData("/patient/master/insurance"));
   }, [insuranceDispatch]);
-
-  useEffect(() => {
-    appointmentDispatch(fetchData("/patient/appointments"));
-  }, [appointmentDispatch]);
 
   useEffect(() => {
     doctorDispatch(
@@ -149,6 +150,10 @@ function App() {
 
   useEffect(() => {
     doctorDispatch2(fetchAllDoctorsData("/patient/doctors"));
+  }, []);
+
+  useEffect(() => {
+    footerDispatch(fetchFootersApi("/patient/footers"));
   }, []);
   useEffect(() => {
     //scroll to top on every route change
@@ -176,6 +181,18 @@ function App() {
           element: <UnderMaintenance />,
         },
       ],
+    },
+    {
+      path: "/our-terms",
+      element: <OurTerms />,
+    },
+    {
+      path: "/our-policy",
+      element: <OurPolicy />,
+    },
+    {
+      path: "/user-aggrement",
+      element: <UserAggrement />,
     },
 
     // { path: "/special", element: <Specialistic /> },

@@ -9,14 +9,15 @@ const BirthDayDatePicker = ({ onBirthDateChange, marginTop }) => {
   const [value, setValue] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [birthDate, setBirthDate] = useState("");
-  const [selectedDate, setDate] = useState();
+
   const maxVal = new Date();
   maxVal.setFullYear(maxVal.getFullYear() - 18);
 
   const minVal = new Date();
-  minVal.setFullYear(minVal.getFullYear() - 80);
-
-  console.log(moment(maxVal).format("L"));
+  minVal.setFullYear(minVal.getFullYear());
+  //minVal.setMonth(minVal.getFullYear() - 80);
+  console.log(moment(minVal).format("L"));
+  console.log(moment(maxVal).format("L"), "Hello Calendar");
   const displayValue = value?.["_i"];
   useEffect(() => {
     const hideDropdown = (e) => {
@@ -32,7 +33,6 @@ const BirthDayDatePicker = ({ onBirthDateChange, marginTop }) => {
   }, []);
 
   const handleDateChange = (date) => {
-    setDate(date);
     const formattedDate = moment(date).format("L");
     setBirthDate(formattedDate);
 

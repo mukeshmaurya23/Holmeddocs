@@ -12,6 +12,7 @@ import { persistStore } from "redux-persist";
 import { SnackbarProvider } from "notistack";
 
 import ScrollToTop from "./util/ScrollToTop";
+import DummyTest from "./components/pages/Appointment/DummyTest";
 const persistor = persistStore(store);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

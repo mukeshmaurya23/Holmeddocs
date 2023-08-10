@@ -48,7 +48,7 @@ const SpecialistCard = ({ specialistData }) => {
                   <img
                     src={imageJuggad(item?.speciality_url) || imageDefault}
                     alt=""
-                    className="xs:h-[100px] xs:w-[100px] sm:h-[120px] sm:w-[134px] xsm:h-[80px] xsm:w-[80px] 2xl:w-[200px] 2xl:h-[170px] object-contain"
+                    className="xs:h-[100px] w-full sm:h-[120px]  xsm:h-[80px]  2xl:w-[200px] md:w-[150px] 2xl:h-[170px] object-contain"
                   />
                 </div>
                 <div className="md:h-[80px] sm:h-[80px] xs:h-[40px] xsm:h-[30px]">

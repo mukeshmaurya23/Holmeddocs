@@ -15,6 +15,7 @@
     "axios": "^1.4.0",
     "crypto-js": "^4.1.1",
     "formik": "^2.4.2",
+    "html-react-parser": "^4.2.1",
     "moment": "^2.29.4",
     "notistack": "^3.0.1",
     "react": "^18.2.0",

@@ -337,7 +337,7 @@ const Navbar2 = () => {
     let url = "/doctor-listing?";
     let locationSearchParams = searchParams.get("location");
     let specialitySearchParams = searchParams.get("selectedSpeciality");
-
+    let appointment_typeParams = searchParams.get("appointment_type");
     let conditionSearchParams = searchParams.get("selectedConditions");
     let dateSearchParams = searchParams.get("date");
 
@@ -366,9 +366,13 @@ const Navbar2 = () => {
         if (conditionSearchParams) {
           url += `selectedConditions=${conditionSearchParams}&`;
         }
+        if (appointment_typeParams) {
+          url += `appointment_type=${appointment_typeParams}&`;
+        }
         if (dateSearchParams) {
           url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
         }
+
         // url += `date=${moment(startDate).format("YYYY-MM-DD")}&`;
         navigate(url);
         return;
@@ -382,6 +386,9 @@ const Navbar2 = () => {
         }
         if (conditionSearchParams) {
           url += `selectedConditions=${conditionSearchParams}&`;
+        }
+        if (appointment_typeParams) {
+          url += `appointment_type=${appointment_typeParams}&`;
         }
         if (dateSearchParams) {
           url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
@@ -398,6 +405,9 @@ const Navbar2 = () => {
         }
         if (locationSearchParams) {
           url += `location=${locationSearchParams}&`;
+        }
+        if (appointment_typeParams) {
+          url += `appointment_type=${appointment_typeParams}&`;
         }
         if (dateSearchParams) {
           url += `date=${moment(dateSearchParams).format("YYYY-MM-DD")}`;
